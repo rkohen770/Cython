@@ -1,68 +1,7 @@
 // BasicLoop
 
-
-    // bootstrap
-    @256                //  A = 256
-    D=A                 //  D = 256
-    @SP                 //  A = 0
-    M=D                 //  ram[0] = 256
-    
-    // call Sys.init 0
-    @Sys.init.returnAdd
-    D=A
-    @SP
-    A=M
-    M=D
-    @SP
-    M=M+1
-
-    @LCL
-    D=M
-    @SP
-    A=M
-    M=D
-    @SP
-    M=M+1
-
-    @ARG
-    D=M
-    @SP
-    A=M
-    M=D
-    @SP
-    M=M+1
-
-    @THIS
-    D=M
-    @SP
-    A=M
-    M=D
-    @SP
-    M=M+1
-
-    @THAT
-    D=M
-    @SP
-    A=M
-    M=D
-    @SP
-    M=M+1
-
-    @SP
-    D=M
-    @5
-    D=D-A
-    @ARG
-    M=D
-    @SP
-    D=M
-    @LCL
-    M=D
-
-    @Sys.init.returnAdd
-    0;JMP
-    (Sys.init.returnAdd)
-    // push constant 0    
+// push constant 0    
+//------ start of push ------
 
     @0                //  A = 0
     D=A                 //  D = A
@@ -72,20 +11,31 @@
     @SP                 //  A = 0
     M=M+1               //  ram[0] = ram[0] + 1
 
+//------ end of push ------
+
 // pop local 0         // initializes sum = 0
+//------ start of pop ------
 
     @SP                     //  A = 0
-    AM=M-1                  //  A = ram[0] - 1 , ram[0] = ram[0] - 1
+    A=M-1                   //  A = ram[0] - 1
     D=M                     //  D = ram[A]
     @LCL              //  A = LCL
     A=M                     //  A = ram[LCL]
-                  //  A = ram[LCL] + 0
+    A=A+1               //  A = A + 1              
     M=D                     //  ram[A] = D
+    @SP                     //  A = 0
+    M=M-1                   //  ram[0] = ram[0] - 1
+
+//------ end of pop ------
 
 // label LOOP_START
+//------ start of label ------
 (BasicLoop.LOOP_START)
 
+//------ end of label ------
+
 // push argument 0    
+//------ start of push ------
 
     @0                    //  A = 0
     D=A                     //  D = 0
@@ -98,7 +48,10 @@
     @SP                     //  A = 0
     M=M+1                   //  ram[0] = ram[0] + 1
 
+//------ end of push ------
+
 // push local 0
+//------ start of push ------
 
     @0                    //  A = 0
     D=A                     //  D = 0
@@ -111,28 +64,40 @@
     @SP                     //  A = 0
     M=M+1                   //  ram[0] = ram[0] + 1
 
+//------ end of push ------
+
 // add
+//------ start of add ------
 
     @SP                 //  A = 0
     AM=M-1              //  A = ram[0] - 1 , ram[0] = ram[0] - 1
     D=M                 //  D = ram[A]
     @SP                 //  A = 0
     AM=M-1              //  A = ram[0] - 1 , ram[0] = ram[0] - 1
-    M=M+D               //  ram[A] = ram[A] + D
+    D=M+D               //  D = ram[A] + D
+    M=D                 //  ram[A] = D
     @SP                 //  A = 0
     M=M+1               //  ram[0] = ram[0] + 1
 
+//------ end of add ------
+
 // pop local 0	        // sum = sum + counter
+//------ start of pop ------
 
     @SP                     //  A = 0
-    AM=M-1                  //  A = ram[0] - 1 , ram[0] = ram[0] - 1
+    A=M-1                   //  A = ram[0] - 1
     D=M                     //  D = ram[A]
     @LCL              //  A = LCL
     A=M                     //  A = ram[LCL]
-                  //  A = ram[LCL] + 0
+    A=A+1               //  A = A + 1              
     M=D                     //  ram[A] = D
+    @SP                     //  A = 0
+    M=M-1                   //  ram[0] = ram[0] - 1
+
+//------ end of pop ------
 
 // push argument 0
+//------ start of push ------
 
     @0                    //  A = 0
     D=A                     //  D = 0
@@ -145,7 +110,10 @@
     @SP                     //  A = 0
     M=M+1                   //  ram[0] = ram[0] + 1
 
+//------ end of push ------
+
 // push constant 1
+//------ start of push ------
 
     @1                //  A = 1
     D=A                 //  D = A
@@ -155,7 +123,10 @@
     @SP                 //  A = 0
     M=M+1               //  ram[0] = ram[0] + 1
 
+//------ end of push ------
+
 // sub
+//------ start of sub ------
 
     @SP                 //  A = 0
     AM=M-1              //  A = ram[0] - 1 , ram[0] = ram[0] - 1
@@ -166,17 +137,25 @@
     @SP                 //  A = 0
     M=M+1               //  ram[0] = ram[0] + 1
 
+//------ end of sub ------
+
 // pop argument 0      // counter--
+//------ start of pop ------
 
     @SP                     //  A = 0
-    AM=M-1                  //  A = ram[0] - 1 , ram[0] = ram[0] - 1
+    A=M-1                   //  A = ram[0] - 1
     D=M                     //  D = ram[A]
     @ARG              //  A = ARG
     A=M                     //  A = ram[ARG]
-                  //  A = ram[ARG] + 0
+    A=A+1               //  A = A + 1              
     M=D                     //  ram[A] = D
+    @SP                     //  A = 0
+    M=M-1                   //  ram[0] = ram[0] - 1
+
+//------ end of pop ------
 
 // push argument 0
+//------ start of push ------
 
     @0                    //  A = 0
     D=A                     //  D = 0
@@ -189,15 +168,21 @@
     @SP                     //  A = 0
     M=M+1                   //  ram[0] = ram[0] + 1
 
+//------ end of push ------
+
 // if-goto LOOP_START  // If counter != 0, goto LOOP_START
+//------ start of if-goto ------
 
     @SP                     //  A = 0
     AM=M-1                  //  A = ram[0] - 1 , ram[0] = ram[0] - 1
     D=M                     //  D = ram[A]
-    @BasicLoop.LOOP_START    //  A = BasicLoop.LOOP_START
+    @BasicLoop.LOOP_START
     D;JNE                   //  if D != 0 goto BasicLoop.LOOP_START
 
+//------ end of if-goto ------
+
 // push local 0
+//------ start of push ------
 
     @0                    //  A = 0
     D=A                     //  D = 0
@@ -209,4 +194,6 @@
     M=D                     //  ram[A] = D
     @SP                     //  A = 0
     M=M+1                   //  ram[0] = ram[0] + 1
+
+//------ end of push ------
 

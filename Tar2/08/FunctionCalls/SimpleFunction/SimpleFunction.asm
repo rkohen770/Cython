@@ -1,87 +1,34 @@
 // SimpleFunction
 
+// function SimpleFunction.test 2
+//------ start of function ------
 
-    // bootstrap
-    @256                //  A = 256
-    D=A                 //  D = 256
-    @SP                 //  A = 0
-    M=D                 //  ram[0] = 256
+    (SimpleFunction.test)
+
+    // Initialize local variables
+    @2            //  A = 2
+    D=A                     //  D = 2
+    @SimpleFunction.test_END
+    D;JEQ                   //  if numLocals == 0 goto SimpleFunction.test_END
+
+    (SimpleFunction.test_LOOP)
+    @SP                     //  A = 0
+    A=M                     //  A = ram[0]
+    M=0                     //  ram[A] = 0
+    @SP                     //  A = 0
+    M=M+1                   //  ram[0] = ram[0] + 1
+    @SimpleFunction.test_LOOP
+    D=D-1                   //  D = D - 1
+    D;JNE                   //  if D != 0 goto SimpleFunction.test_LOOP
+
+    (SimpleFunction.test_END)
+
     
-    // call Sys.init 0
-    @Sys.init.returnAdd
-    D=A
-    @SP
-    A=M
-    M=D
-    @SP
-    M=M+1
 
-    @LCL
-    D=M
-    @SP
-    A=M
-    M=D
-    @SP
-    M=M+1
-
-    @ARG
-    D=M
-    @SP
-    A=M
-    M=D
-    @SP
-    M=M+1
-
-    @THIS
-    D=M
-    @SP
-    A=M
-    M=D
-    @SP
-    M=M+1
-
-    @THAT
-    D=M
-    @SP
-    A=M
-    M=D
-    @SP
-    M=M+1
-
-    @SP
-    D=M
-    @5
-    D=D-A
-    @ARG
-    M=D
-    @SP
-    D=M
-    @LCL
-    M=D
-
-    @Sys.init.returnAdd
-    0;JMP
-    (Sys.init.returnAdd)
-    // function SimpleFunction.test 2
-
-    (SimpleFunction.SimpleFunction.test)
-    
-    @0                //  A = 0
-    D=A                 //  D = A
-    @SP                 //  A = 0
-    A=M                 //  A = ram[0]
-    M=D                 //  ram[A] = D
-    @SP                 //  A = 0
-    M=M+1               //  ram[0] = ram[0] + 1
-    @0                //  A = 0
-    D=A                 //  D = A
-    @SP                 //  A = 0
-    A=M                 //  A = ram[0]
-    M=D                 //  ram[A] = D
-    @SP                 //  A = 0
-    M=M+1               //  ram[0] = ram[0] + 1         //  push 0 2 times
+//------ end of function ------
 
 // push local 0
+//------ start of push ------
 
     @0                    //  A = 0
     D=A                     //  D = 0
@@ -94,7 +41,10 @@
     @SP                     //  A = 0
     M=M+1                   //  ram[0] = ram[0] + 1
 
+//------ end of push ------
+
 // push local 1
+//------ start of push ------
 
     @1                    //  A = 1
     D=A                     //  D = 1
@@ -107,18 +57,25 @@
     @SP                     //  A = 0
     M=M+1                   //  ram[0] = ram[0] + 1
 
+//------ end of push ------
+
 // add
+//------ start of add ------
 
     @SP                 //  A = 0
     AM=M-1              //  A = ram[0] - 1 , ram[0] = ram[0] - 1
     D=M                 //  D = ram[A]
     @SP                 //  A = 0
     AM=M-1              //  A = ram[0] - 1 , ram[0] = ram[0] - 1
-    M=M+D               //  ram[A] = ram[A] + D
+    D=M+D               //  D = ram[A] + D
+    M=D                 //  ram[A] = D
     @SP                 //  A = 0
     M=M+1               //  ram[0] = ram[0] + 1
 
+//------ end of add ------
+
 // not
+//------ start of not ------
 
     @SP                 //  A = 0
     AM=M-1              //  A = ram[0] - 1 , ram[0] = ram[0] - 1
@@ -126,7 +83,10 @@
     @SP                 //  A = 0
     M=M+1               //  ram[0] = ram[0] + 1
 
+//------ end of not ------
+
 // push argument 0
+//------ start of push ------
 
     @0                    //  A = 0
     D=A                     //  D = 0
@@ -139,18 +99,25 @@
     @SP                     //  A = 0
     M=M+1                   //  ram[0] = ram[0] + 1
 
+//------ end of push ------
+
 // add
+//------ start of add ------
 
     @SP                 //  A = 0
     AM=M-1              //  A = ram[0] - 1 , ram[0] = ram[0] - 1
     D=M                 //  D = ram[A]
     @SP                 //  A = 0
     AM=M-1              //  A = ram[0] - 1 , ram[0] = ram[0] - 1
-    M=M+D               //  ram[A] = ram[A] + D
+    D=M+D               //  D = ram[A] + D
+    M=D                 //  ram[A] = D
     @SP                 //  A = 0
     M=M+1               //  ram[0] = ram[0] + 1
 
+//------ end of add ------
+
 // push argument 1
+//------ start of push ------
 
     @1                    //  A = 1
     D=A                     //  D = 1
@@ -163,7 +130,10 @@
     @SP                     //  A = 0
     M=M+1                   //  ram[0] = ram[0] + 1
 
+//------ end of push ------
+
 // sub
+//------ start of sub ------
 
     @SP                 //  A = 0
     AM=M-1              //  A = ram[0] - 1 , ram[0] = ram[0] - 1
@@ -174,7 +144,10 @@
     @SP                 //  A = 0
     M=M+1               //  ram[0] = ram[0] + 1
 
+//------ end of sub ------
+
 // return
+//------ start of return ------
 
     // FRAME = LCL
     @LCL
@@ -239,4 +212,8 @@
     @13
     A=M
     0; JMP
+    
+    
+
+//------ end of return ------
 

@@ -1,73 +1,34 @@
 // Sys
 
+// function Sys.init 0
+//------ start of function ------
 
-    // bootstrap
-    @256                //  A = 256
-    D=A                 //  D = 256
-    @SP                 //  A = 0
-    M=D                 //  ram[0] = 256
+    (Sys.init)
+
+    // Initialize local variables
+    @0            //  A = 0
+    D=A                     //  D = 0
+    @Sys.init_END
+    D;JEQ                   //  if numLocals == 0 goto Sys.init_END
+
+    (Sys.init_LOOP)
+    @SP                     //  A = 0
+    A=M                     //  A = ram[0]
+    M=0                     //  ram[A] = 0
+    @SP                     //  A = 0
+    M=M+1                   //  ram[0] = ram[0] + 1
+    @Sys.init_LOOP
+    D=D-1                   //  D = D - 1
+    D;JNE                   //  if D != 0 goto Sys.init_LOOP
+
+    (Sys.init_END)
+
     
-    // call Sys.init 0
-    @Sys.init.returnAdd
-    D=A
-    @SP
-    A=M
-    M=D
-    @SP
-    M=M+1
 
-    @LCL
-    D=M
-    @SP
-    A=M
-    M=D
-    @SP
-    M=M+1
-
-    @ARG
-    D=M
-    @SP
-    A=M
-    M=D
-    @SP
-    M=M+1
-
-    @THIS
-    D=M
-    @SP
-    A=M
-    M=D
-    @SP
-    M=M+1
-
-    @THAT
-    D=M
-    @SP
-    A=M
-    M=D
-    @SP
-    M=M+1
-
-    @SP
-    D=M
-    @5
-    D=D-A
-    @ARG
-    M=D
-    @SP
-    D=M
-    @LCL
-    M=D
-
-    @Sys.init.returnAdd
-    0;JMP
-    (Sys.init.returnAdd)
-    // function Sys.init 0
-
-    (NestedCall.Sys.init)
-             //  push 0 0 times
+//------ end of function ------
 
 // push constant 4000 // test THIS and THAT context save
+//------ start of push ------
 
     @4000                //  A = 4000
     D=A                 //  D = A
@@ -77,15 +38,23 @@
     @SP                 //  A = 0
     M=M+1               //  ram[0] = ram[0] + 1
 
+//------ end of push ------
+
 // pop pointer 0
+//------ start of pop ------
 
     @SP                 //  A = 0
-    AM=M-1              //  A = ram[0] - 1 , ram[0] = ram[0] - 1
+    A=M-1               //  A = ram[0] - 1
     D=M                 //  D = ram[A]
     @THIS                //  A = THIS
     M=D                 //  ram[A] = D
+    @SP                 //  A = 0
+    M=M-1               //  ram[0] = ram[0] - 1
+
+//------ end of pop ------
 
 // push constant 5000
+//------ start of push ------
 
     @5000                //  A = 5000
     D=A                 //  D = A
@@ -95,24 +64,32 @@
     @SP                 //  A = 0
     M=M+1               //  ram[0] = ram[0] + 1
 
+//------ end of push ------
+
 // pop pointer 1
+//------ start of pop ------
 
     @SP                 //  A = 0
-    AM=M-1              //  A = ram[0] - 1 , ram[0] = ram[0] - 1
+    A=M-1               //  A = ram[0] - 1
     D=M                 //  D = ram[A]
     @THAT                //  A = THAT
     M=D                 //  ram[A] = D
+    @SP                 //  A = 0
+    M=M-1               //  ram[0] = ram[0] - 1
+
+//------ end of pop ------
 
 // call Sys.main 0
+//------ start of call ------
 
-    // push return-address
-    @RETURN.Sys.main.1  //  A = RETURN.Sys.main.1
-    D=A                             //  D = RETURN.Sys.main.1
-    @SP                             //  A = 0
-    A=M                             //  A = ram[0]
-    M=D                             //  ram[A] = D
-    @SP                             //  A = 0
-    M=M+1                           //  ram[0] = ram[0] + 1
+    // push return-address Sys.main.1
+    @Sys.main.1.ReturnAddress   
+    D=A
+    @SP
+    A=M
+    M=D
+    @SP
+    M=M+1
 
     // push LCL
     @LCL                            //  A = LCL
@@ -167,74 +144,72 @@
     M=D                             //  LCL = ram[0]
 
     // goto functionName
-    @RETURN.Sys.main.1  //  A = RETURN.Sys.main.1
+    @Sys.main  //  A = Sys.main.1.ReturnAddress
     0;JMP                           //  goto Sys.main
 
     // (return-address)
-    (RETURN.Sys.main.1)
+    (Sys.main.1.ReturnAddress)
     
+
+//------ end of call ------
 
 // pop temp 1
+//------ start of pop ------
 
     @SP                 //  A = 0
-    AM=M-1              //  A = ram[0] - 1 , ram[0] = ram[0] - 1
+    A=M-1               //  A = ram[0] - 1
+    D=M                 //  D = ram[A]
     @5                  //  A = 5
-    A=A+1              //  A = A + 1
-          //  A = 5 + 1
+    A=A+1               //  A = A + 1          
     M=D                 //  ram[A] = D
+    @SP                 //  A = 0
+    M=M-1               //  ram[0] = ram[0] - 1
+
+//------ end of pop ------
 
 // label LOOP
+//------ start of label ------
 (NestedCall.LOOP)
 
+//------ end of label ------
+
 // goto LOOP
+//------ start of goto ------
 
     @NestedCall.LOOP
-    //  A = NestedCall.LOOP
-
     0;JMP                   //  goto NestedCall.LOOP
 
+//------ end of goto ------
 
 // function Sys.main 5
+//------ start of function ------
 
-    (NestedCall.Sys.main)
+    (Sys.main)
+
+    // Initialize local variables
+    @5            //  A = 5
+    D=A                     //  D = 5
+    @Sys.main_END
+    D;JEQ                   //  if numLocals == 0 goto Sys.main_END
+
+    (Sys.main_LOOP)
+    @SP                     //  A = 0
+    A=M                     //  A = ram[0]
+    M=0                     //  ram[A] = 0
+    @SP                     //  A = 0
+    M=M+1                   //  ram[0] = ram[0] + 1
+    @Sys.main_LOOP
+    D=D-1                   //  D = D - 1
+    D;JNE                   //  if D != 0 goto Sys.main_LOOP
+
+    (Sys.main_END)
+
     
-    @0                //  A = 0
-    D=A                 //  D = A
-    @SP                 //  A = 0
-    A=M                 //  A = ram[0]
-    M=D                 //  ram[A] = D
-    @SP                 //  A = 0
-    M=M+1               //  ram[0] = ram[0] + 1
-    @0                //  A = 0
-    D=A                 //  D = A
-    @SP                 //  A = 0
-    A=M                 //  A = ram[0]
-    M=D                 //  ram[A] = D
-    @SP                 //  A = 0
-    M=M+1               //  ram[0] = ram[0] + 1
-    @0                //  A = 0
-    D=A                 //  D = A
-    @SP                 //  A = 0
-    A=M                 //  A = ram[0]
-    M=D                 //  ram[A] = D
-    @SP                 //  A = 0
-    M=M+1               //  ram[0] = ram[0] + 1
-    @0                //  A = 0
-    D=A                 //  D = A
-    @SP                 //  A = 0
-    A=M                 //  A = ram[0]
-    M=D                 //  ram[A] = D
-    @SP                 //  A = 0
-    M=M+1               //  ram[0] = ram[0] + 1
-    @0                //  A = 0
-    D=A                 //  D = A
-    @SP                 //  A = 0
-    A=M                 //  A = ram[0]
-    M=D                 //  ram[A] = D
-    @SP                 //  A = 0
-    M=M+1               //  ram[0] = ram[0] + 1         //  push 0 5 times
+
+//------ end of function ------
 
 // push constant 4001
+//------ start of push ------
 
     @4001                //  A = 4001
     D=A                 //  D = A
@@ -244,15 +219,23 @@
     @SP                 //  A = 0
     M=M+1               //  ram[0] = ram[0] + 1
 
+//------ end of push ------
+
 // pop pointer 0
+//------ start of pop ------
 
     @SP                 //  A = 0
-    AM=M-1              //  A = ram[0] - 1 , ram[0] = ram[0] - 1
+    A=M-1               //  A = ram[0] - 1
     D=M                 //  D = ram[A]
     @THIS                //  A = THIS
     M=D                 //  ram[A] = D
+    @SP                 //  A = 0
+    M=M-1               //  ram[0] = ram[0] - 1
+
+//------ end of pop ------
 
 // push constant 5001
+//------ start of push ------
 
     @5001                //  A = 5001
     D=A                 //  D = A
@@ -262,15 +245,23 @@
     @SP                 //  A = 0
     M=M+1               //  ram[0] = ram[0] + 1
 
+//------ end of push ------
+
 // pop pointer 1
+//------ start of pop ------
 
     @SP                 //  A = 0
-    AM=M-1              //  A = ram[0] - 1 , ram[0] = ram[0] - 1
+    A=M-1               //  A = ram[0] - 1
     D=M                 //  D = ram[A]
     @THAT                //  A = THAT
     M=D                 //  ram[A] = D
+    @SP                 //  A = 0
+    M=M-1               //  ram[0] = ram[0] - 1
+
+//------ end of pop ------
 
 // push constant 200
+//------ start of push ------
 
     @200                //  A = 200
     D=A                 //  D = A
@@ -280,18 +271,25 @@
     @SP                 //  A = 0
     M=M+1               //  ram[0] = ram[0] + 1
 
+//------ end of push ------
+
 // pop local 1
+//------ start of pop ------
 
     @SP                     //  A = 0
-    AM=M-1                  //  A = ram[0] - 1 , ram[0] = ram[0] - 1
+    A=M-1                   //  A = ram[0] - 1
     D=M                     //  D = ram[A]
     @LCL              //  A = LCL
     A=M                     //  A = ram[LCL]
-    A=A+1              //  A = A + 1
-              //  A = ram[LCL] + 1
+    A=A+1               //  A = A + 1              
     M=D                     //  ram[A] = D
+    @SP                     //  A = 0
+    M=M-1                   //  ram[0] = ram[0] - 1
+
+//------ end of pop ------
 
 // push constant 40
+//------ start of push ------
 
     @40                //  A = 40
     D=A                 //  D = A
@@ -301,19 +299,26 @@
     @SP                 //  A = 0
     M=M+1               //  ram[0] = ram[0] + 1
 
+//------ end of push ------
+
 // pop local 2
+//------ start of pop ------
 
     @SP                     //  A = 0
-    AM=M-1                  //  A = ram[0] - 1 , ram[0] = ram[0] - 1
+    A=M-1                   //  A = ram[0] - 1
     D=M                     //  D = ram[A]
     @LCL              //  A = LCL
     A=M                     //  A = ram[LCL]
-    A=A+1              //  A = A + 1
-A=A+1              //  A = A + 1
-              //  A = ram[LCL] + 2
+    A=A+1               //  A = A + 1
+A=A+1               //  A = A + 1              
     M=D                     //  ram[A] = D
+    @SP                     //  A = 0
+    M=M-1                   //  ram[0] = ram[0] - 1
+
+//------ end of pop ------
 
 // push constant 6
+//------ start of push ------
 
     @6                //  A = 6
     D=A                 //  D = A
@@ -323,20 +328,27 @@ A=A+1              //  A = A + 1
     @SP                 //  A = 0
     M=M+1               //  ram[0] = ram[0] + 1
 
+//------ end of push ------
+
 // pop local 3
+//------ start of pop ------
 
     @SP                     //  A = 0
-    AM=M-1                  //  A = ram[0] - 1 , ram[0] = ram[0] - 1
+    A=M-1                   //  A = ram[0] - 1
     D=M                     //  D = ram[A]
     @LCL              //  A = LCL
     A=M                     //  A = ram[LCL]
-    A=A+1              //  A = A + 1
-A=A+1              //  A = A + 1
-A=A+1              //  A = A + 1
-              //  A = ram[LCL] + 3
+    A=A+1               //  A = A + 1
+A=A+1               //  A = A + 1
+A=A+1               //  A = A + 1              
     M=D                     //  ram[A] = D
+    @SP                     //  A = 0
+    M=M-1                   //  ram[0] = ram[0] - 1
+
+//------ end of pop ------
 
 // push constant 123
+//------ start of push ------
 
     @123                //  A = 123
     D=A                 //  D = A
@@ -346,16 +358,19 @@ A=A+1              //  A = A + 1
     @SP                 //  A = 0
     M=M+1               //  ram[0] = ram[0] + 1
 
-// call Sys.add12 1
+//------ end of push ------
 
-    // push return-address
-    @RETURN.Sys.add12.2  //  A = RETURN.Sys.add12.2
-    D=A                             //  D = RETURN.Sys.add12.2
-    @SP                             //  A = 0
-    A=M                             //  A = ram[0]
-    M=D                             //  ram[A] = D
-    @SP                             //  A = 0
-    M=M+1                           //  ram[0] = ram[0] + 1
+// call Sys.add12 1
+//------ start of call ------
+
+    // push return-address Sys.add12.2
+    @Sys.add12.2.ReturnAddress   
+    D=A
+    @SP
+    A=M
+    M=D
+    @SP
+    M=M+1
 
     // push LCL
     @LCL                            //  A = LCL
@@ -410,22 +425,31 @@ A=A+1              //  A = A + 1
     M=D                             //  LCL = ram[0]
 
     // goto functionName
-    @RETURN.Sys.add12.2  //  A = RETURN.Sys.add12.2
+    @Sys.add12  //  A = Sys.add12.2.ReturnAddress
     0;JMP                           //  goto Sys.add12
 
     // (return-address)
-    (RETURN.Sys.add12.2)
+    (Sys.add12.2.ReturnAddress)
     
 
+//------ end of call ------
+
 // pop temp 0
+//------ start of pop ------
 
     @SP                 //  A = 0
-    AM=M-1              //  A = ram[0] - 1 , ram[0] = ram[0] - 1
+    A=M-1               //  A = ram[0] - 1
+    D=M                 //  D = ram[A]
     @5                  //  A = 5
-              //  A = 5 + 0
+    A=A+1               //  A = A + 1          
     M=D                 //  ram[A] = D
+    @SP                 //  A = 0
+    M=M-1               //  ram[0] = ram[0] - 1
+
+//------ end of pop ------
 
 // push local 0
+//------ start of push ------
 
     @0                    //  A = 0
     D=A                     //  D = 0
@@ -438,7 +462,10 @@ A=A+1              //  A = A + 1
     @SP                     //  A = 0
     M=M+1                   //  ram[0] = ram[0] + 1
 
+//------ end of push ------
+
 // push local 1
+//------ start of push ------
 
     @1                    //  A = 1
     D=A                     //  D = 1
@@ -451,7 +478,10 @@ A=A+1              //  A = A + 1
     @SP                     //  A = 0
     M=M+1                   //  ram[0] = ram[0] + 1
 
+//------ end of push ------
+
 // push local 2
+//------ start of push ------
 
     @2                    //  A = 2
     D=A                     //  D = 2
@@ -464,7 +494,10 @@ A=A+1              //  A = A + 1
     @SP                     //  A = 0
     M=M+1                   //  ram[0] = ram[0] + 1
 
+//------ end of push ------
+
 // push local 3
+//------ start of push ------
 
     @3                    //  A = 3
     D=A                     //  D = 3
@@ -477,7 +510,10 @@ A=A+1              //  A = A + 1
     @SP                     //  A = 0
     M=M+1                   //  ram[0] = ram[0] + 1
 
+//------ end of push ------
+
 // push local 4
+//------ start of push ------
 
     @4                    //  A = 4
     D=A                     //  D = 4
@@ -490,51 +526,70 @@ A=A+1              //  A = A + 1
     @SP                     //  A = 0
     M=M+1                   //  ram[0] = ram[0] + 1
 
+//------ end of push ------
+
 // add
+//------ start of add ------
 
     @SP                 //  A = 0
     AM=M-1              //  A = ram[0] - 1 , ram[0] = ram[0] - 1
     D=M                 //  D = ram[A]
     @SP                 //  A = 0
     AM=M-1              //  A = ram[0] - 1 , ram[0] = ram[0] - 1
-    M=M+D               //  ram[A] = ram[A] + D
+    D=M+D               //  D = ram[A] + D
+    M=D                 //  ram[A] = D
     @SP                 //  A = 0
     M=M+1               //  ram[0] = ram[0] + 1
 
+//------ end of add ------
+
 // add
+//------ start of add ------
 
     @SP                 //  A = 0
     AM=M-1              //  A = ram[0] - 1 , ram[0] = ram[0] - 1
     D=M                 //  D = ram[A]
     @SP                 //  A = 0
     AM=M-1              //  A = ram[0] - 1 , ram[0] = ram[0] - 1
-    M=M+D               //  ram[A] = ram[A] + D
+    D=M+D               //  D = ram[A] + D
+    M=D                 //  ram[A] = D
     @SP                 //  A = 0
     M=M+1               //  ram[0] = ram[0] + 1
 
+//------ end of add ------
+
 // add
+//------ start of add ------
 
     @SP                 //  A = 0
     AM=M-1              //  A = ram[0] - 1 , ram[0] = ram[0] - 1
     D=M                 //  D = ram[A]
     @SP                 //  A = 0
     AM=M-1              //  A = ram[0] - 1 , ram[0] = ram[0] - 1
-    M=M+D               //  ram[A] = ram[A] + D
+    D=M+D               //  D = ram[A] + D
+    M=D                 //  ram[A] = D
     @SP                 //  A = 0
     M=M+1               //  ram[0] = ram[0] + 1
 
+//------ end of add ------
+
 // add
+//------ start of add ------
 
     @SP                 //  A = 0
     AM=M-1              //  A = ram[0] - 1 , ram[0] = ram[0] - 1
     D=M                 //  D = ram[A]
     @SP                 //  A = 0
     AM=M-1              //  A = ram[0] - 1 , ram[0] = ram[0] - 1
-    M=M+D               //  ram[A] = ram[A] + D
+    D=M+D               //  D = ram[A] + D
+    M=D                 //  ram[A] = D
     @SP                 //  A = 0
     M=M+1               //  ram[0] = ram[0] + 1
+
+//------ end of add ------
 
 // return
+//------ start of return ------
 
     // FRAME = LCL
     @LCL
@@ -599,13 +654,40 @@ A=A+1              //  A = A + 1
     @13
     A=M
     0; JMP
+    
+    
+
+//------ end of return ------
 
 // function Sys.add12 0
+//------ start of function ------
 
-    (NestedCall.Sys.add12)
-             //  push 0 0 times
+    (Sys.add12)
+
+    // Initialize local variables
+    @0            //  A = 0
+    D=A                     //  D = 0
+    @Sys.add12_END
+    D;JEQ                   //  if numLocals == 0 goto Sys.add12_END
+
+    (Sys.add12_LOOP)
+    @SP                     //  A = 0
+    A=M                     //  A = ram[0]
+    M=0                     //  ram[A] = 0
+    @SP                     //  A = 0
+    M=M+1                   //  ram[0] = ram[0] + 1
+    @Sys.add12_LOOP
+    D=D-1                   //  D = D - 1
+    D;JNE                   //  if D != 0 goto Sys.add12_LOOP
+
+    (Sys.add12_END)
+
+    
+
+//------ end of function ------
 
 // push constant 4002
+//------ start of push ------
 
     @4002                //  A = 4002
     D=A                 //  D = A
@@ -615,15 +697,23 @@ A=A+1              //  A = A + 1
     @SP                 //  A = 0
     M=M+1               //  ram[0] = ram[0] + 1
 
+//------ end of push ------
+
 // pop pointer 0
+//------ start of pop ------
 
     @SP                 //  A = 0
-    AM=M-1              //  A = ram[0] - 1 , ram[0] = ram[0] - 1
+    A=M-1               //  A = ram[0] - 1
     D=M                 //  D = ram[A]
     @THIS                //  A = THIS
     M=D                 //  ram[A] = D
+    @SP                 //  A = 0
+    M=M-1               //  ram[0] = ram[0] - 1
+
+//------ end of pop ------
 
 // push constant 5002
+//------ start of push ------
 
     @5002                //  A = 5002
     D=A                 //  D = A
@@ -633,15 +723,23 @@ A=A+1              //  A = A + 1
     @SP                 //  A = 0
     M=M+1               //  ram[0] = ram[0] + 1
 
+//------ end of push ------
+
 // pop pointer 1
+//------ start of pop ------
 
     @SP                 //  A = 0
-    AM=M-1              //  A = ram[0] - 1 , ram[0] = ram[0] - 1
+    A=M-1               //  A = ram[0] - 1
     D=M                 //  D = ram[A]
     @THAT                //  A = THAT
     M=D                 //  ram[A] = D
+    @SP                 //  A = 0
+    M=M-1               //  ram[0] = ram[0] - 1
+
+//------ end of pop ------
 
 // push argument 0
+//------ start of push ------
 
     @0                    //  A = 0
     D=A                     //  D = 0
@@ -654,7 +752,10 @@ A=A+1              //  A = A + 1
     @SP                     //  A = 0
     M=M+1                   //  ram[0] = ram[0] + 1
 
+//------ end of push ------
+
 // push constant 12
+//------ start of push ------
 
     @12                //  A = 12
     D=A                 //  D = A
@@ -664,18 +765,25 @@ A=A+1              //  A = A + 1
     @SP                 //  A = 0
     M=M+1               //  ram[0] = ram[0] + 1
 
+//------ end of push ------
+
 // add
+//------ start of add ------
 
     @SP                 //  A = 0
     AM=M-1              //  A = ram[0] - 1 , ram[0] = ram[0] - 1
     D=M                 //  D = ram[A]
     @SP                 //  A = 0
     AM=M-1              //  A = ram[0] - 1 , ram[0] = ram[0] - 1
-    M=M+D               //  ram[A] = ram[A] + D
+    D=M+D               //  D = ram[A] + D
+    M=D                 //  ram[A] = D
     @SP                 //  A = 0
     M=M+1               //  ram[0] = ram[0] + 1
 
+//------ end of add ------
+
 // return
+//------ start of return ------
 
     // FRAME = LCL
     @LCL
@@ -740,4 +848,8 @@ A=A+1              //  A = A + 1
     @13
     A=M
     0; JMP
+    
+    
+
+//------ end of return ------
 

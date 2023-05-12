@@ -92,7 +92,7 @@ cdef class CodeWriter:
                 
         elif command == 'pop':
             if segment == 'static':
-                cmd = constants.PopStatic(index)
+                cmd = constants.PopStatic(f'''{self.currentFileName}.{index}''')
             elif segment in self.segment_dict:
                 cmd = constants.PopSegment( index, self.segment_dict[segment])
             elif segment == 'temp':
@@ -112,20 +112,20 @@ cdef class CodeWriter:
 
     # writes to the output file the assembly code that implements the given label command.
     cpdef writeLabel(self, str label):
-        return constants.Label(self.currentFileName, label)
+        return constants.Label(f'''{self.currentFileName}.{label}''')
 
 
     # writes to the output file the assembly code that implements the given goto command.
     cpdef writeGoto(self, str label):
-        return constants.Goto(self.currentFileName, label)
+        return constants.Goto(f'''{self.currentFileName}.{label}''')
 
     # writes to the output file the assembly code that implements the given if-goto command.
     cpdef writeIfGoto(self, str label):
-        return constants.IfGoto(self.currentFileName, label)
+        return constants.IfGoto(f'''{self.currentFileName}.{label}''')
 
     # writes to the output file the assembly code that implements the given function command.
     cpdef writeFunction(self, str functionName, int numLocals):
-        return constants.Function(self.currentFileName, functionName, numLocals)
+        return constants.Function(functionName, numLocals)
 
     # writes to the output file the assembly code that implements the given return command.
     cpdef writeReturn(self):
@@ -135,6 +135,11 @@ cdef class CodeWriter:
     cpdef writeCall(self, str functionName, int numArgs):
         self.label_counter += 1
         return constants.Call(functionName, numArgs, self.label_counter)
+
+    
+    # init bootstrap code
+    cpdef writeInit(self):
+        return constants.Init()
 
     
     # Emit comment in the output file

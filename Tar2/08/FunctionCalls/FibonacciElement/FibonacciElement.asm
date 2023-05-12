@@ -1,73 +1,34 @@
 // Sys
 
+// function Sys.init 0
+//------ start of function ------
 
-    // bootstrap
-    @256                //  A = 256
-    D=A                 //  D = 256
-    @SP                 //  A = 0
-    M=D                 //  ram[0] = 256
+    (Sys.init)
+
+    // Initialize local variables
+    @0            //  A = 0
+    D=A                     //  D = 0
+    @Sys.init_END
+    D;JEQ                   //  if numLocals == 0 goto Sys.init_END
+
+    (Sys.init_LOOP)
+    @SP                     //  A = 0
+    A=M                     //  A = ram[0]
+    M=0                     //  ram[A] = 0
+    @SP                     //  A = 0
+    M=M+1                   //  ram[0] = ram[0] + 1
+    @Sys.init_LOOP
+    D=D-1                   //  D = D - 1
+    D;JNE                   //  if D != 0 goto Sys.init_LOOP
+
+    (Sys.init_END)
+
     
-    // call Sys.init 0
-    @Sys.init.returnAdd
-    D=A
-    @SP
-    A=M
-    M=D
-    @SP
-    M=M+1
 
-    @LCL
-    D=M
-    @SP
-    A=M
-    M=D
-    @SP
-    M=M+1
-
-    @ARG
-    D=M
-    @SP
-    A=M
-    M=D
-    @SP
-    M=M+1
-
-    @THIS
-    D=M
-    @SP
-    A=M
-    M=D
-    @SP
-    M=M+1
-
-    @THAT
-    D=M
-    @SP
-    A=M
-    M=D
-    @SP
-    M=M+1
-
-    @SP
-    D=M
-    @5
-    D=D-A
-    @ARG
-    M=D
-    @SP
-    D=M
-    @LCL
-    M=D
-
-    @Sys.init.returnAdd
-    0;JMP
-    (Sys.init.returnAdd)
-    // function Sys.init 0
-
-    (FibonacciElement.Sys.init)
-             //  push 0 0 times
+//------ end of function ------
 
 // push constant 4
+//------ start of push ------
 
     @4                //  A = 4
     D=A                 //  D = A
@@ -77,16 +38,19 @@
     @SP                 //  A = 0
     M=M+1               //  ram[0] = ram[0] + 1
 
-// call Main.fibonacci 1   // computes the 4'th fibonacci element
+//------ end of push ------
 
-    // push return-address
-    @RETURN.Main.fibonacci.1  //  A = RETURN.Main.fibonacci.1
-    D=A                             //  D = RETURN.Main.fibonacci.1
-    @SP                             //  A = 0
-    A=M                             //  A = ram[0]
-    M=D                             //  ram[A] = D
-    @SP                             //  A = 0
-    M=M+1                           //  ram[0] = ram[0] + 1
+// call Main.fibonacci 1   // computes the 4'th fibonacci element
+//------ start of call ------
+
+    // push return-address Main.fibonacci.1
+    @Main.fibonacci.1.ReturnAddress   
+    D=A
+    @SP
+    A=M
+    M=D
+    @SP
+    M=M+1
 
     // push LCL
     @LCL                            //  A = LCL
@@ -141,18 +105,26 @@
     M=D                             //  LCL = ram[0]
 
     // goto functionName
-    @RETURN.Main.fibonacci.1  //  A = RETURN.Main.fibonacci.1
+    @Main.fibonacci  //  A = Main.fibonacci.1.ReturnAddress
     0;JMP                           //  goto Main.fibonacci
 
     // (return-address)
-    (RETURN.Main.fibonacci.1)
+    (Main.fibonacci.1.ReturnAddress)
     
 
+//------ end of call ------
+
 // label WHILE
+//------ start of label ------
 (FibonacciElement.WHILE)
 
-// goto WHILE              // loops infinitely
+//------ end of label ------
 
-    @FibonacciElement.WHILE    //  A = FibonacciElement.WHILE
+// goto WHILE              // loops infinitely
+//------ start of goto ------
+
+    @FibonacciElement.WHILE
     0;JMP                   //  goto FibonacciElement.WHILE
+
+//------ end of goto ------
 

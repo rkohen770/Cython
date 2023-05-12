@@ -12,9 +12,11 @@ cdef  prs = None
 
 # recursive function to process each file in the folder
 cpdef recursive_div(file_path):
+    cdef str init= ""
     global writer
     for entry in os.scandir(file_path):
         print(entry.path)
+        
         if entry.is_file() and entry.name.endswith('.vm'):
             # Extract the name of the last folder in the path without the extension
             folder_name = os.path.basename(file_path)
@@ -25,9 +27,16 @@ cpdef recursive_div(file_path):
         
             # Open the output file for writing
             output_file = open(output_file_name, 'w')
-
+            output_file.write(init)
             process_file(entry.path, output_file)
         elif entry.is_dir():
+            # if has two or more .vm files, then bootstrap
+            count = 0
+            for f in os.scandir(entry.path):
+                if f.is_file() and f.name.endswith('.vm'):
+                    count += 1
+            if count > 1:
+                init = constants.Bootstrap()
             recursive_div(entry.path)
 
 cdef process_file(str file_path, output_file):
@@ -38,7 +47,7 @@ cdef process_file(str file_path, output_file):
     # Write the file name to the output file
     output_file.write(f"// {file_name}\n\n")
 
-    output_file.write(constants.Bootstrap())
+    
 
     # Open the VM file for reading
     with open(file_path, 'r') as input_file:
@@ -65,12 +74,13 @@ cpdef str translateVmFile(str comd):
 
     line += writer.emitComment(comd)
     comndTp = comd.split(' ')[0].strip()
+    line += "//------ start of " + comndTp + " ------\n"
     if comndTp == 'push' or comndTp == 'pop':
         line += writer.writePushPop(comndTp, prs.arg1(), prs.arg2()) + "\n\n"
     elif comndTp == 'add' or comndTp == 'sub' or comndTp == 'neg' or comndTp == 'eq' or comndTp == 'gt' or comndTp == 'lt' or comndTp == 'and' or comndTp == 'or' or comndTp == 'not':
         line += writer.writeArithmetic(comndTp) + "\n\n"
     elif comndTp == 'label':
-        line += writer.writeLabel(prs.arg1().strip()) + "\n\n"
+        line += writer.writeLabel(prs.arg1()) + "\n\n"
     elif comndTp == 'goto':
         line += writer.writeGoto(prs.arg1()) + "\n\n"
     elif comndTp == 'if-goto':
@@ -84,21 +94,6 @@ cpdef str translateVmFile(str comd):
     else:
         print("Error: Invalid command type: " + comndTp)
         exit(1)
+    line += "//------ end of " + comndTp + " ------\n\n"
     return line
 
-
-
-# # handle a single .vm file.
-# cdef void handleSingleFile( str vmFile, writer,  prs):
-#     writer.setCurrentFileName(vmFile.getName())
-#     translateVmFile(vmFile, writer, prs)
-#     writer.close()
-
-
-# # handle a directory of .vm files.
-# cdef void handleDir(str dir, writer,  prs):
-#     cdef str filename
-#     for filename in dir.listFiles():
-#         if filename.endswith(".vm"):
-#             translateVmFile(filename, writer, prs)
-#     writer.close()
