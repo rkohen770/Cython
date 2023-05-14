@@ -1,9 +1,71 @@
-// Sys
+
+    // bootstrap
+    @256                //  A = 256
+    D=A                 //  D = 256
+    @SP                 //  A = 0
+    M=D                 //  ram[0] = 256
+    
+    // call Sys.init 0
+    @Sys.init.returnAdd
+    D=A
+    @SP
+    A=M
+    M=D
+    @SP
+    M=M+1
+
+    @LCL
+    D=M
+    @SP
+    A=M
+    M=D
+    @SP
+    M=M+1
+
+    @ARG
+    D=M
+    @SP
+    A=M
+    M=D
+    @SP
+    M=M+1
+
+    @THIS
+    D=M
+    @SP
+    A=M
+    M=D
+    @SP
+    M=M+1
+
+    @THAT
+    D=M
+    @SP
+    A=M
+    M=D
+    @SP
+    M=M+1
+
+    @SP
+    D=M
+    @5
+    D=D-A
+    @ARG
+    M=D
+    @SP
+    D=M
+    @LCL
+    M=D
+
+    @Sys.init.returnAdd
+    0;JMP
+(Sys.init.returnAdd)
+    //Sys
 
 // function Sys.init 0
 //------ start of function ------
 
-    (Sys.init)
+(Sys.init)
 
     // Initialize local variables
     @0            //  A = 0
@@ -11,7 +73,7 @@
     @Sys.init_END
     D;JEQ                   //  if numLocals == 0 goto Sys.init_END
 
-    (Sys.init_LOOP)
+(Sys.init_LOOP)
     @SP                     //  A = 0
     A=M                     //  A = ram[0]
     M=0                     //  ram[A] = 0
@@ -21,7 +83,7 @@
     D=D-1                   //  D = D - 1
     D;JNE                   //  if D != 0 goto Sys.init_LOOP
 
-    (Sys.init_END)
+(Sys.init_END)
 
     
 
@@ -122,7 +184,7 @@
     0;JMP                           //  goto Class1.set
 
     // (return-address)
-    (Class1.set.1.ReturnAddress)
+(Class1.set.1.ReturnAddress)
     
 
 //------ end of call ------
@@ -236,7 +298,7 @@
     0;JMP                           //  goto Class2.set
 
     // (return-address)
-    (Class2.set.2.ReturnAddress)
+(Class2.set.2.ReturnAddress)
     
 
 //------ end of call ------
@@ -324,7 +386,7 @@
     0;JMP                           //  goto Class1.get
 
     // (return-address)
-    (Class1.get.3.ReturnAddress)
+(Class1.get.3.ReturnAddress)
     
 
 //------ end of call ------
@@ -398,7 +460,7 @@
     0;JMP                           //  goto Class2.get
 
     // (return-address)
-    (Class2.get.4.ReturnAddress)
+(Class2.get.4.ReturnAddress)
     
 
 //------ end of call ------

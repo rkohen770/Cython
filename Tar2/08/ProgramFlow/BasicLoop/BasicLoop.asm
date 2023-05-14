@@ -1,4 +1,4 @@
-// BasicLoop
+//BasicLoop
 
 // push constant 0    
 //------ start of push ------
@@ -16,15 +16,18 @@
 // pop local 0         // initializes sum = 0
 //------ start of pop ------
 
-    @SP                     //  A = 0
-    A=M-1                   //  A = ram[0] - 1
-    D=M                     //  D = ram[A]
-    @LCL              //  A = LCL
-    A=M                     //  A = ram[LCL]
-    A=A+1               //  A = A + 1              
-    M=D                     //  ram[A] = D
-    @SP                     //  A = 0
-    M=M-1                   //  ram[0] = ram[0] - 1
+    @LCL            //  A = LCL
+    D=M                 //  D = ram[LCL]
+    @0                //  A = 0
+    D=D+A               //  D = ram[LCL] + 0
+    @R13                //  A = 13
+    M=D                 //  ram[13] = D
+    @SP                 //  A = 0
+    AM=M-1              //  A = ram[0] - 1 , ram[0] = ram[0] - 1
+    D=M                 //  D = ram[A]
+    @R13                //  A = 13
+    A=M                 //  A = ram[13]
+    M=D                 //  ram[A] = D
 
 //------ end of pop ------
 
@@ -74,8 +77,7 @@
     D=M                 //  D = ram[A]
     @SP                 //  A = 0
     AM=M-1              //  A = ram[0] - 1 , ram[0] = ram[0] - 1
-    D=M+D               //  D = ram[A] + D
-    M=D                 //  ram[A] = D
+    M=M+D               //  ram[A] = ram[A] + D
     @SP                 //  A = 0
     M=M+1               //  ram[0] = ram[0] + 1
 
@@ -84,15 +86,18 @@
 // pop local 0	        // sum = sum + counter
 //------ start of pop ------
 
-    @SP                     //  A = 0
-    A=M-1                   //  A = ram[0] - 1
-    D=M                     //  D = ram[A]
-    @LCL              //  A = LCL
-    A=M                     //  A = ram[LCL]
-    A=A+1               //  A = A + 1              
-    M=D                     //  ram[A] = D
-    @SP                     //  A = 0
-    M=M-1                   //  ram[0] = ram[0] - 1
+    @LCL            //  A = LCL
+    D=M                 //  D = ram[LCL]
+    @0                //  A = 0
+    D=D+A               //  D = ram[LCL] + 0
+    @R13                //  A = 13
+    M=D                 //  ram[13] = D
+    @SP                 //  A = 0
+    AM=M-1              //  A = ram[0] - 1 , ram[0] = ram[0] - 1
+    D=M                 //  D = ram[A]
+    @R13                //  A = 13
+    A=M                 //  A = ram[13]
+    M=D                 //  ram[A] = D
 
 //------ end of pop ------
 
@@ -142,15 +147,18 @@
 // pop argument 0      // counter--
 //------ start of pop ------
 
-    @SP                     //  A = 0
-    A=M-1                   //  A = ram[0] - 1
-    D=M                     //  D = ram[A]
-    @ARG              //  A = ARG
-    A=M                     //  A = ram[ARG]
-    A=A+1               //  A = A + 1              
-    M=D                     //  ram[A] = D
-    @SP                     //  A = 0
-    M=M-1                   //  ram[0] = ram[0] - 1
+    @ARG            //  A = ARG
+    D=M                 //  D = ram[ARG]
+    @0                //  A = 0
+    D=D+A               //  D = ram[ARG] + 0
+    @R13                //  A = 13
+    M=D                 //  ram[13] = D
+    @SP                 //  A = 0
+    AM=M-1              //  A = ram[0] - 1 , ram[0] = ram[0] - 1
+    D=M                 //  D = ram[A]
+    @R13                //  A = 13
+    A=M                 //  A = ram[13]
+    M=D                 //  ram[A] = D
 
 //------ end of pop ------
 

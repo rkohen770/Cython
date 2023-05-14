@@ -43,15 +43,18 @@ cpdef PushSegment(int x, str segment):
 # pop local X / argument X / this X / that X
 cpdef PopSegment(int x, str segment):
     return f'''
-    @SP                     //  A = 0
-    A=M-1                   //  A = ram[0] - 1
-    D=M                     //  D = ram[A]
-    @{segment}              //  A = {segment}
-    A=M                     //  A = ram[{segment}]'''+ f'''
-    {repit(x)}              
-    M=D                     //  ram[A] = D
-    @SP                     //  A = 0
-    M=M-1                   //  ram[0] = ram[0] - 1'''
+    @{segment}            //  A = {segment}
+    D=M                 //  D = ram[{segment}]
+    @{x}                //  A = {x}
+    D=D+A               //  D = ram[{segment}] + {x}
+    @R13                //  A = 13
+    M=D                 //  ram[13] = D
+    @SP                 //  A = 0
+    AM=M-1              //  A = ram[0] - 1 , ram[0] = ram[0] - 1
+    D=M                 //  D = ram[A]
+    @R13                //  A = 13
+    A=M                 //  A = ram[13]
+    M=D                 //  ram[A] = D'''
 
 
 #----- endregion: group 1 (local, argument, this, that) -----#
@@ -163,8 +166,7 @@ cpdef Add():
     D=M                 //  D = ram[A]
     @SP                 //  A = 0
     AM=M-1              //  A = ram[0] - 1 , ram[0] = ram[0] - 1
-    D=M+D               //  D = ram[A] + D
-    M=D                 //  ram[A] = D
+    M=M+D               //  ram[A] = ram[A] + D
     @SP                 //  A = 0
     M=M+1               //  ram[0] = ram[0] + 1'''
 
@@ -183,11 +185,10 @@ cpdef Sub():
 # neg
 cpdef Neg():
     return '''
+    D=0                 //  D = 0
     @SP                 //  A = 0
-    AM=M-1              //  A = ram[0] - 1 , ram[0] = ram[0] - 1
-    M=-M                //  ram[A] = -ram[A]
-    @SP                 //  A = 0
-    M=M+1               //  ram[0] = ram[0] + 1'''
+    A=M-1               //  A = ram[0] - 1
+    M=D-M               //  ram[A] = D - ram[A]'''
 
 # eq
 cpdef Eq(int index):
@@ -252,7 +253,7 @@ cpdef Lt(int index):
     A=M                 //  A = ram[0]
     M=0                 //  ram[A] = 0
     @LT.{index}_END
-    D;JMP               //  goto LT.{index}_END
+    0;JMP               //  goto LT.{index}_END
 (LT.{index}_TRUE)
     @SP                 //  A = 0
     A=M                 //  A = ram[0]
@@ -289,10 +290,8 @@ cpdef Or():
 cpdef Not():
     return '''
     @SP                 //  A = 0
-    AM=M-1              //  A = ram[0] - 1 , ram[0] = ram[0] - 1
-    M=!M                //  ram[A] = !ram[A]
-    @SP                 //  A = 0
-    M=M+1               //  ram[0] = ram[0] + 1'''
+    M=M-1               //  ram[0] = ram[0] - 1
+    M=!M                //  ram[A] = !ram[A]'''
 
 #----- endregion: group 6 (add, sub, neg, eq, gt, lt, and, or, not) -----#
 
@@ -420,7 +419,8 @@ cpdef Call( str functionName, int numArgs, int index):
     
 # return
 cpdef Return ():
-    return '''
+    return '''//return function
+
     // FRAME = LCL
     @LCL
     D=M

@@ -8,16 +8,20 @@ import parser
 
 
 cdef  prs = None
-
-
+cdef init = 0
+cdef count = 0
 # recursive function to process each file in the folder
 cpdef recursive_div(file_path):
-    cdef str init= ""
+    
     global writer
+    global count
+    global init
+    text = ""
+    
     for entry in os.scandir(file_path):
         print(entry.path)
-        
         if entry.is_file() and entry.name.endswith('.vm'):
+            
             # Extract the name of the last folder in the path without the extension
             folder_name = os.path.basename(file_path)
             writer = codeWriter.CodeWriter(folder_name)    
@@ -27,25 +31,31 @@ cpdef recursive_div(file_path):
         
             # Open the output file for writing
             output_file = open(output_file_name, 'w')
-            output_file.write(init)
+            if init == 1:
+                init = 0
+                print("bootstrap")
+                text = writer.writeInit()
+            output_file.write(text )
             process_file(entry.path, output_file)
         elif entry.is_dir():
-            # if has two or more .vm files, then bootstrap
             count = 0
+            # if has two or more .vm files, then bootstrap
             for f in os.scandir(entry.path):
                 if f.is_file() and f.name.endswith('.vm'):
                     count += 1
             if count > 1:
-                init = constants.Bootstrap()
+                init = 1
             recursive_div(entry.path)
+            # # Close the output file
+            # output_file.close()
 
-cdef process_file(str file_path, output_file):
+cpdef process_file(str file_path, output_file):
 
     # Extract the name of the file without the extension
     file_name = os.path.splitext(os.path.basename(file_path))[0]
-
+    print(file_name)
     # Write the file name to the output file
-    output_file.write(f"// {file_name}\n\n")
+    output_file.write(f"//{file_name}\n\n")
 
     
 
@@ -59,8 +69,7 @@ cdef process_file(str file_path, output_file):
                 output_file.write(translateVmFile(line))
 
     
-    # Close the output file
-    output_file.close()
+    
 
 
 

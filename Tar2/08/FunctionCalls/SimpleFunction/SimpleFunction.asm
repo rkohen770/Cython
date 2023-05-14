@@ -1,9 +1,9 @@
-// SimpleFunction
+//SimpleFunction
 
 // function SimpleFunction.test 2
 //------ start of function ------
 
-    (SimpleFunction.test)
+(SimpleFunction.test)
 
     // Initialize local variables
     @2            //  A = 2
@@ -11,7 +11,7 @@
     @SimpleFunction.test_END
     D;JEQ                   //  if numLocals == 0 goto SimpleFunction.test_END
 
-    (SimpleFunction.test_LOOP)
+(SimpleFunction.test_LOOP)
     @SP                     //  A = 0
     A=M                     //  A = ram[0]
     M=0                     //  ram[A] = 0
@@ -21,7 +21,7 @@
     D=D-1                   //  D = D - 1
     D;JNE                   //  if D != 0 goto SimpleFunction.test_LOOP
 
-    (SimpleFunction.test_END)
+(SimpleFunction.test_END)
 
     
 
@@ -67,8 +67,7 @@
     D=M                 //  D = ram[A]
     @SP                 //  A = 0
     AM=M-1              //  A = ram[0] - 1 , ram[0] = ram[0] - 1
-    D=M+D               //  D = ram[A] + D
-    M=D                 //  ram[A] = D
+    M=M+D               //  ram[A] = ram[A] + D
     @SP                 //  A = 0
     M=M+1               //  ram[0] = ram[0] + 1
 
@@ -78,10 +77,8 @@
 //------ start of not ------
 
     @SP                 //  A = 0
-    AM=M-1              //  A = ram[0] - 1 , ram[0] = ram[0] - 1
+    M=M-1               //  ram[0] = ram[0] - 1
     M=!M                //  ram[A] = !ram[A]
-    @SP                 //  A = 0
-    M=M+1               //  ram[0] = ram[0] + 1
 
 //------ end of not ------
 
@@ -109,8 +106,7 @@
     D=M                 //  D = ram[A]
     @SP                 //  A = 0
     AM=M-1              //  A = ram[0] - 1 , ram[0] = ram[0] - 1
-    D=M+D               //  D = ram[A] + D
-    M=D                 //  ram[A] = D
+    M=M+D               //  ram[A] = ram[A] + D
     @SP                 //  A = 0
     M=M+1               //  ram[0] = ram[0] + 1
 
@@ -148,6 +144,7 @@
 
 // return
 //------ start of return ------
+//return function
 
     // FRAME = LCL
     @LCL

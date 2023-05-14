@@ -1,4 +1,4 @@
-// FibonacciSeries
+//FibonacciSeries
 
 // push argument 1
 //------ start of push ------
@@ -45,15 +45,18 @@
 // pop that 0              // first element in the series = 0
 //------ start of pop ------
 
-    @SP                     //  A = 0
-    A=M-1                   //  A = ram[0] - 1
-    D=M                     //  D = ram[A]
-    @THAT              //  A = THAT
-    A=M                     //  A = ram[THAT]
-    A=A+1               //  A = A + 1              
-    M=D                     //  ram[A] = D
-    @SP                     //  A = 0
-    M=M-1                   //  ram[0] = ram[0] - 1
+    @THAT            //  A = THAT
+    D=M                 //  D = ram[THAT]
+    @0                //  A = 0
+    D=D+A               //  D = ram[THAT] + 0
+    @R13                //  A = 13
+    M=D                 //  ram[13] = D
+    @SP                 //  A = 0
+    AM=M-1              //  A = ram[0] - 1 , ram[0] = ram[0] - 1
+    D=M                 //  D = ram[A]
+    @R13                //  A = 13
+    A=M                 //  A = ram[13]
+    M=D                 //  ram[A] = D
 
 //------ end of pop ------
 
@@ -73,15 +76,18 @@
 // pop that 1              // second element in the series = 1
 //------ start of pop ------
 
-    @SP                     //  A = 0
-    A=M-1                   //  A = ram[0] - 1
-    D=M                     //  D = ram[A]
-    @THAT              //  A = THAT
-    A=M                     //  A = ram[THAT]
-    A=A+1               //  A = A + 1              
-    M=D                     //  ram[A] = D
-    @SP                     //  A = 0
-    M=M-1                   //  ram[0] = ram[0] - 1
+    @THAT            //  A = THAT
+    D=M                 //  D = ram[THAT]
+    @1                //  A = 1
+    D=D+A               //  D = ram[THAT] + 1
+    @R13                //  A = 13
+    M=D                 //  ram[13] = D
+    @SP                 //  A = 0
+    AM=M-1              //  A = ram[0] - 1 , ram[0] = ram[0] - 1
+    D=M                 //  D = ram[A]
+    @R13                //  A = 13
+    A=M                 //  A = ram[13]
+    M=D                 //  ram[A] = D
 
 //------ end of pop ------
 
@@ -131,15 +137,18 @@
 // pop argument 0          // num_of_elements -= 2 (first 2 elements are set)
 //------ start of pop ------
 
-    @SP                     //  A = 0
-    A=M-1                   //  A = ram[0] - 1
-    D=M                     //  D = ram[A]
-    @ARG              //  A = ARG
-    A=M                     //  A = ram[ARG]
-    A=A+1               //  A = A + 1              
-    M=D                     //  ram[A] = D
-    @SP                     //  A = 0
-    M=M-1                   //  ram[0] = ram[0] - 1
+    @ARG            //  A = ARG
+    D=M                 //  D = ram[ARG]
+    @0                //  A = 0
+    D=D+A               //  D = ram[ARG] + 0
+    @R13                //  A = 13
+    M=D                 //  ram[13] = D
+    @SP                 //  A = 0
+    AM=M-1              //  A = ram[0] - 1 , ram[0] = ram[0] - 1
+    D=M                 //  D = ram[A]
+    @R13                //  A = 13
+    A=M                 //  A = ram[13]
+    M=D                 //  ram[A] = D
 
 //------ end of pop ------
 
@@ -230,8 +239,7 @@
     D=M                 //  D = ram[A]
     @SP                 //  A = 0
     AM=M-1              //  A = ram[0] - 1 , ram[0] = ram[0] - 1
-    D=M+D               //  D = ram[A] + D
-    M=D                 //  ram[A] = D
+    M=M+D               //  ram[A] = ram[A] + D
     @SP                 //  A = 0
     M=M+1               //  ram[0] = ram[0] + 1
 
@@ -240,16 +248,18 @@
 // pop that 2              // that[2] = that[0] + that[1]
 //------ start of pop ------
 
-    @SP                     //  A = 0
-    A=M-1                   //  A = ram[0] - 1
-    D=M                     //  D = ram[A]
-    @THAT              //  A = THAT
-    A=M                     //  A = ram[THAT]
-    A=A+1               //  A = A + 1
-A=A+1               //  A = A + 1              
-    M=D                     //  ram[A] = D
-    @SP                     //  A = 0
-    M=M-1                   //  ram[0] = ram[0] - 1
+    @THAT            //  A = THAT
+    D=M                 //  D = ram[THAT]
+    @2                //  A = 2
+    D=D+A               //  D = ram[THAT] + 2
+    @R13                //  A = 13
+    M=D                 //  ram[13] = D
+    @SP                 //  A = 0
+    AM=M-1              //  A = ram[0] - 1 , ram[0] = ram[0] - 1
+    D=M                 //  D = ram[A]
+    @R13                //  A = 13
+    A=M                 //  A = ram[13]
+    M=D                 //  ram[A] = D
 
 //------ end of pop ------
 
@@ -287,8 +297,7 @@ A=A+1               //  A = A + 1
     D=M                 //  D = ram[A]
     @SP                 //  A = 0
     AM=M-1              //  A = ram[0] - 1 , ram[0] = ram[0] - 1
-    D=M+D               //  D = ram[A] + D
-    M=D                 //  ram[A] = D
+    M=M+D               //  ram[A] = ram[A] + D
     @SP                 //  A = 0
     M=M+1               //  ram[0] = ram[0] + 1
 
@@ -353,15 +362,18 @@ A=A+1               //  A = A + 1
 // pop argument 0          // num_of_elements--
 //------ start of pop ------
 
-    @SP                     //  A = 0
-    A=M-1                   //  A = ram[0] - 1
-    D=M                     //  D = ram[A]
-    @ARG              //  A = ARG
-    A=M                     //  A = ram[ARG]
-    A=A+1               //  A = A + 1              
-    M=D                     //  ram[A] = D
-    @SP                     //  A = 0
-    M=M-1                   //  ram[0] = ram[0] - 1
+    @ARG            //  A = ARG
+    D=M                 //  D = ram[ARG]
+    @0                //  A = 0
+    D=D+A               //  D = ram[ARG] + 0
+    @R13                //  A = 13
+    M=D                 //  ram[13] = D
+    @SP                 //  A = 0
+    AM=M-1              //  A = ram[0] - 1 , ram[0] = ram[0] - 1
+    D=M                 //  D = ram[A]
+    @R13                //  A = 13
+    A=M                 //  A = ram[13]
+    M=D                 //  ram[A] = D
 
 //------ end of pop ------
 

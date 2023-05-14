@@ -93,10 +93,6 @@ cdef class CodeWriter:
         elif command == 'pop':
             if segment == 'static':
                 cmd = constants.PopStatic(f'''{self.currentFileName}.{index}''')
-            elif segment in self.segment_dict:
-                cmd = constants.PopSegment( index, self.segment_dict[segment])
-            elif segment == 'temp':
-                cmd = constants.PopTemp(index)
             elif segment == 'pointer':
                 if index == 0:
                     cmd = constants.PopPointer('THIS')
@@ -104,6 +100,11 @@ cdef class CodeWriter:
                     cmd = constants.PopPointer('THAT')
                 else:
                     raise Exception('Unknown index: ' + str(index))
+            elif segment in self.segment_dict:
+                cmd = constants.PopSegment( index, self.segment_dict[segment])
+            elif segment == 'temp':
+                cmd = constants.PopTemp(index)
+            
             else:
                 raise Exception('Unknown segment: ' + segment)
         else:
@@ -139,7 +140,7 @@ cdef class CodeWriter:
     
     # init bootstrap code
     cpdef writeInit(self):
-        return constants.Init()
+        return constants.Bootstrap()
 
     
     # Emit comment in the output file
