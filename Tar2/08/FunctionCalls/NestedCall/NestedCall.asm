@@ -1,4 +1,5 @@
- // bootstrap
+
+    // bootstrap
     @256                //  A = 256
     D=A                 //  D = 256
     @SP                 //  A = 0
@@ -73,8 +74,8 @@
 
     // (return-address)
 (Sys.init.0.ReturnAddress)
-
-//Sys
+    
+    //Sys
 
 // function Sys.init 0
 //------ start of function ------
