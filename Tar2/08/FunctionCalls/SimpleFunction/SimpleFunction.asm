@@ -8,8 +8,8 @@
     // Initialize local variables
     @2            //  A = 2
     D=A                     //  D = 2
-    @SimpleFunction.test_END
-    D;JEQ                   //  if numLocals == 0 goto SimpleFunction.test_END
+    @SimpleFunction.test_FALSE
+    D;JEQ                   //  if numLocals == 0 goto SimpleFunction.test_FALSE
 
 (SimpleFunction.test_LOOP)
     @SP                     //  A = 0
@@ -21,7 +21,7 @@
     D=D-1                   //  D = D - 1
     D;JNE                   //  if D != 0 goto SimpleFunction.test_LOOP
 
-(SimpleFunction.test_END)
+(SimpleFunction.test_FALSE)
 
     
 
@@ -30,32 +30,32 @@
 // push local 0
 //------ start of push ------
 
-    @0                    //  A = 0
-    D=A                     //  D = 0
-    @LCL              //  A = LCL
-    A=M+D                   //  A = ram[LCL] + D
-    D=M                     //  D = ram[A]
-    @SP                     //  A = 0
-    A=M                     //  A = ram[0]
-    M=D                     //  ram[A] = D
-    @SP                     //  A = 0
-    M=M+1                   //  ram[0] = ram[0] + 1
+    @LCL           //  A = LCL
+    D=M                 //  D = ram[LCL]
+    @0                //  A = 0
+    A=D+A               //  A = ram[LCL] + 0
+    D=M                 //  D = ram[A]
+    @SP                 //  A = 0
+    A=M                 //  A = ram[0]
+    M=D                 //  ram[A] = D
+    @SP                 //  A = 0
+    M=M+1               //  ram[0] = ram[0] + 1
 
 //------ end of push ------
 
 // push local 1
 //------ start of push ------
 
-    @1                    //  A = 1
-    D=A                     //  D = 1
-    @LCL              //  A = LCL
-    A=M+D                   //  A = ram[LCL] + D
-    D=M                     //  D = ram[A]
-    @SP                     //  A = 0
-    A=M                     //  A = ram[0]
-    M=D                     //  ram[A] = D
-    @SP                     //  A = 0
-    M=M+1                   //  ram[0] = ram[0] + 1
+    @LCL           //  A = LCL
+    D=M                 //  D = ram[LCL]
+    @1                //  A = 1
+    A=D+A               //  A = ram[LCL] + 1
+    D=M                 //  D = ram[A]
+    @SP                 //  A = 0
+    A=M                 //  A = ram[0]
+    M=D                 //  ram[A] = D
+    @SP                 //  A = 0
+    M=M+1               //  ram[0] = ram[0] + 1
 
 //------ end of push ------
 
@@ -77,7 +77,7 @@
 //------ start of not ------
 
     @SP                 //  A = 0
-    M=M-1               //  ram[0] = ram[0] - 1
+    A=M-1               //  A = ram[0] - 1
     M=!M                //  ram[A] = !ram[A]
 
 //------ end of not ------
@@ -85,16 +85,16 @@
 // push argument 0
 //------ start of push ------
 
-    @0                    //  A = 0
-    D=A                     //  D = 0
-    @ARG              //  A = ARG
-    A=M+D                   //  A = ram[ARG] + D
-    D=M                     //  D = ram[A]
-    @SP                     //  A = 0
-    A=M                     //  A = ram[0]
-    M=D                     //  ram[A] = D
-    @SP                     //  A = 0
-    M=M+1                   //  ram[0] = ram[0] + 1
+    @ARG           //  A = ARG
+    D=M                 //  D = ram[ARG]
+    @0                //  A = 0
+    A=D+A               //  A = ram[ARG] + 0
+    D=M                 //  D = ram[A]
+    @SP                 //  A = 0
+    A=M                 //  A = ram[0]
+    M=D                 //  ram[A] = D
+    @SP                 //  A = 0
+    M=M+1               //  ram[0] = ram[0] + 1
 
 //------ end of push ------
 
@@ -115,16 +115,16 @@
 // push argument 1
 //------ start of push ------
 
-    @1                    //  A = 1
-    D=A                     //  D = 1
-    @ARG              //  A = ARG
-    A=M+D                   //  A = ram[ARG] + D
-    D=M                     //  D = ram[A]
-    @SP                     //  A = 0
-    A=M                     //  A = ram[0]
-    M=D                     //  ram[A] = D
-    @SP                     //  A = 0
-    M=M+1                   //  ram[0] = ram[0] + 1
+    @ARG           //  A = ARG
+    D=M                 //  D = ram[ARG]
+    @1                //  A = 1
+    A=D+A               //  A = ram[ARG] + 1
+    D=M                 //  D = ram[A]
+    @SP                 //  A = 0
+    A=M                 //  A = ram[0]
+    M=D                 //  ram[A] = D
+    @SP                 //  A = 0
+    M=M+1               //  ram[0] = ram[0] + 1
 
 //------ end of push ------
 
@@ -144,7 +144,8 @@
 
 // return
 //------ start of return ------
-//return function
+
+    //return function
 
     // FRAME = LCL
     @LCL

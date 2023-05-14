@@ -70,8 +70,8 @@
     // Initialize local variables
     @0            //  A = 0
     D=A                     //  D = 0
-    @Sys.init_END
-    D;JEQ                   //  if numLocals == 0 goto Sys.init_END
+    @Sys.init_FALSE
+    D;JEQ                   //  if numLocals == 0 goto Sys.init_FALSE
 
 (Sys.init_LOOP)
     @SP                     //  A = 0
@@ -83,7 +83,7 @@
     D=D-1                   //  D = D - 1
     D;JNE                   //  if D != 0 goto Sys.init_LOOP
 
-(Sys.init_END)
+(Sys.init_FALSE)
 
     
 
@@ -153,10 +153,10 @@
     // ARG = SP-n-5
     @SP                             //  A = 0
     D=M                             //  D = ram[0]
-    @1                      //  A = 1
-    D=D-A                           //  D = ram[0] - 1
     @5                              //  A = 5
     D=D-A                           //  D = ram[0] - 1 - 5
+    @1                      //  A = 1
+    D=D-A                           //  D = ram[0] - 1
     @ARG                            //  A = ARG
     M=D                             //  ARG = ram[0] - 1 - 5
 
@@ -167,7 +167,7 @@
     M=D                             //  LCL = ram[0]
 
     // goto functionName
-    @Main.fibonacci  //  A = Main.fibonacci.1.ReturnAddress
+    @Main.fibonacci                 //  A = Main.fibonacci.1.ReturnAddress
     0;JMP                           //  goto Main.fibonacci
 
     // (return-address)
@@ -190,23 +190,6 @@
 
 //------ end of goto ------
 
-   // THAT = *(FRAM-1)
-    @LCL
-    M=M-1
-    A=M
-    D=M
-    @THAT
-    M=D
-    
-    // THIS = *(FRAM-2) 
-    @LCL
-    M=M-1
-    A=M
-    D=M
-    @THIS
-    M=D
-
-    // ARG = *(FRAM-3)
     @LCL
     M=M-1
     A=M
@@ -240,16 +223,16 @@
 // push argument 0
 //------ start of push ------
 
-    @0                    //  A = 0
-    D=A                     //  D = 0
-    @ARG              //  A = ARG
-    A=M+D                   //  A = ram[ARG] + D
-    D=M                     //  D = ram[A]
-    @SP                     //  A = 0
-    A=M                     //  A = ram[0]
-    M=D                     //  ram[A] = D
-    @SP                     //  A = 0
-    M=M+1                   //  ram[0] = ram[0] + 1
+    @ARG           //  A = ARG
+    D=M                 //  D = ram[ARG]
+    @0                //  A = 0
+    A=D+A               //  A = ram[ARG] + 0
+    D=M                 //  D = ram[A]
+    @SP                 //  A = 0
+    A=M                 //  A = ram[0]
+    M=D                 //  ram[A] = D
+    @SP                 //  A = 0
+    M=M+1               //  ram[0] = ram[0] + 1
 
 //------ end of push ------
 
@@ -331,10 +314,10 @@
     // ARG = SP-n-5
     @SP                             //  A = 0
     D=M                             //  D = ram[0]
-    @1                      //  A = 1
-    D=D-A                           //  D = ram[0] - 1
     @5                              //  A = 5
     D=D-A                           //  D = ram[0] - 1 - 5
+    @1                      //  A = 1
+    D=D-A                           //  D = ram[0] - 1
     @ARG                            //  A = ARG
     M=D                             //  ARG = ram[0] - 1 - 5
 
@@ -345,7 +328,7 @@
     M=D                             //  LCL = ram[0]
 
     // goto functionName
-    @Main.fibonacci  //  A = Main.fibonacci.1.ReturnAddress
+    @Main.fibonacci                 //  A = Main.fibonacci.1.ReturnAddress
     0;JMP                           //  goto Main.fibonacci
 
     // (return-address)
@@ -357,16 +340,16 @@
 // push argument 0
 //------ start of push ------
 
-    @0                    //  A = 0
-    D=A                     //  D = 0
-    @ARG              //  A = ARG
-    A=M+D                   //  A = ram[ARG] + D
-    D=M                     //  D = ram[A]
-    @SP                     //  A = 0
-    A=M                     //  A = ram[0]
-    M=D                     //  ram[A] = D
-    @SP                     //  A = 0
-    M=M+1                   //  ram[0] = ram[0] + 1
+    @ARG           //  A = ARG
+    D=M                 //  D = ram[ARG]
+    @0                //  A = 0
+    A=D+A               //  A = ram[ARG] + 0
+    D=M                 //  D = ram[A]
+    @SP                 //  A = 0
+    A=M                 //  A = ram[0]
+    M=D                 //  ram[A] = D
+    @SP                 //  A = 0
+    M=M+1               //  ram[0] = ram[0] + 1
 
 //------ end of push ------
 
@@ -448,10 +431,10 @@
     // ARG = SP-n-5
     @SP                             //  A = 0
     D=M                             //  D = ram[0]
-    @1                      //  A = 1
-    D=D-A                           //  D = ram[0] - 1
     @5                              //  A = 5
     D=D-A                           //  D = ram[0] - 1 - 5
+    @1                      //  A = 1
+    D=D-A                           //  D = ram[0] - 1
     @ARG                            //  A = ARG
     M=D                             //  ARG = ram[0] - 1 - 5
 
@@ -462,7 +445,7 @@
     M=D                             //  LCL = ram[0]
 
     // goto functionName
-    @Main.fibonacci  //  A = Main.fibonacci.2.ReturnAddress
+    @Main.fibonacci                 //  A = Main.fibonacci.2.ReturnAddress
     0;JMP                           //  goto Main.fibonacci
 
     // (return-address)
@@ -487,7 +470,8 @@
 
 // return
 //------ start of return ------
-//return function
+
+    //return function
 
     // FRAME = LCL
     @LCL

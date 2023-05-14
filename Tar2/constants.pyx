@@ -28,16 +28,16 @@ cdef str repit2(int x):
 # push local X / argument X / this X / that X
 cpdef PushSegment(int x, str segment):
     return f'''
-    @{x}                    //  A = {x}
-    D=A                     //  D = {x}
-    @{segment}              //  A = {segment}
-    A=M+D                   //  A = ram[{segment}] + D
-    D=M                     //  D = ram[A]
-    @SP                     //  A = 0
-    A=M                     //  A = ram[0]
-    M=D                     //  ram[A] = D
-    @SP                     //  A = 0
-    M=M+1                   //  ram[0] = ram[0] + 1'''
+    @{segment}           //  A = {segment}
+    D=M                 //  D = ram[{segment}]
+    @{x}                //  A = {x}
+    A=D+A               //  A = ram[{segment}] + {x}
+    D=M                 //  D = ram[A]
+    @SP                 //  A = 0
+    A=M                 //  A = ram[0]
+    M=D                 //  ram[A] = D
+    @SP                 //  A = 0
+    M=M+1               //  ram[0] = ram[0] + 1'''
 
 
 # pop local X / argument X / this X / that X
@@ -107,10 +107,15 @@ cpdef PushStatic(x):
 # pop static X
 cpdef PopStatic(x):
     return f'''
+    @{x}                //  A = {x}
+    D=A                 //  D = A
+    @R13                //  A = 13
+    M=D                 //  ram[13] = D
     @SP                 //  A = 0
     AM=M-1              //  A = ram[0] - 1 , ram[0] = ram[0] - 1
     D=M                 //  D = ram[A]
-    @{x}                //  A = {x}
+    @R13                //  A = 13
+    A=M                 //  A = ram[13]
     M=D                 //  ram[A] = D'''
 
 #----- endregion: group 3 (static) -----#
@@ -196,23 +201,21 @@ cpdef Eq(int index):
     @SP                 //  A = 0
     AM=M-1              //  A = ram[0] - 1 , ram[0] = ram[0] - 1
     D=M                 //  D = ram[A]
-    @SP                 //  A = 0
-    AM=M-1              //  A = ram[0] - 1 , ram[0] = ram[0] - 1
+    A=A-1               //  A = A - 1
     D=M-D               //  D = ram[A] - D
-    @EQ.{index}_TRUE
-    D;JEQ               //  if D == 0 goto EQ.{index}_TRUE
-    @SP                 //  A = 0
-    A=M                 //  A = ram[0]
-    M=0                 //  ram[A] = 0
     @EQ.{index}_FALSE
-    0;JMP               //  goto EQ.{index}_END
-(EQ.{index}_TRUE)
+    D;JNE               //  if D != 0 goto EQ.{index}_FALSE
     @SP                 //  A = 0
-    A=M                 //  A = ram[0]
-    M=-1                //  D = -1
+    A=M-1               //  A = ram[0] - 1
+    M=-1                //  ram[A] = -1
+    @EQ.{index}_END
+    0;JMP               //  goto EQ.{index}_END
 (EQ.{index}_FALSE)
     @SP                 //  A = 0
-    M=M+1               //  ram[0] = ram[0] + 1'''
+    A=M-1               //  A = ram[0] - 1
+    M=0                 //  ram[A] = 0
+(EQ.{index}_END)
+    '''
 
 # gt
 cpdef Gt(int index):
@@ -220,59 +223,52 @@ cpdef Gt(int index):
     @SP                 //  A = 0
     AM=M-1              //  A = ram[0] - 1 , ram[0] = ram[0] - 1
     D=M                 //  D = ram[A]
-    @SP                 //  A = 0
-    AM=M-1              //  A = ram[0] - 1 , ram[0] = ram[0] - 1
+    A=A-1               //  A = A - 1
     D=M-D               //  D = ram[A] - D
-    @GT.{index}_TRUE
-    D;JGT               //  if D > 0 goto GT.{index}_TRUE
+    @GT.{index}_FALSE 
+    D;JLE               //  if D <= 0 goto GT.{index}_FALSE
     @SP                 //  A = 0
-    A=M                 //  A = ram[0]
-    M=0                 //  ram[A] = 0
+    A=M-1               //  A = ram[0] - 1
+    M=-1                //  ram[A] = -1
     @GT.{index}_END
     0;JMP               //  goto GT.{index}_END
-(GT.{index}_TRUE)
+(GT.{index}_FALSE)
     @SP                 //  A = 0
-    A=M                 //  A = ram[0]
-    M=-1                //  D = -1
+    A=M-1               //  A = ram[0] - 1
+    M=0                 //  ram[A] = 0
 (GT.{index}_END)
-    @SP                 //  A = 0
-    M=M+1               //  ram[0] = ram[0] + 1'''
-
+    '''
+    
 # lt
 cpdef Lt(int index):
     return f'''
     @SP                 //  A = 0
     AM=M-1              //  A = ram[0] - 1 , ram[0] = ram[0] - 1
     D=M                 //  D = ram[A]
-    @SP                 //  A = 0
-    AM=M-1              //  A = ram[0] - 1 , ram[0] = ram[0] - 1
+    A=A-1               //  A = A - 1
     D=M-D               //  D = ram[A] - D
-    @LT.{index}_TRUE
-    D;JLT               //  if D < 0 goto LT.{index}_TRUE
+    @LT.{index}_FALSE 
+    D;JGE               //  if D >= 0 goto LT.{index}_FALSE
     @SP                 //  A = 0
-    A=M                 //  A = ram[0]
-    M=0                 //  ram[A] = 0
+    A=M-1               //  A = ram[0] - 1
+    M=-1                //  ram[A] = -1
     @LT.{index}_END
     0;JMP               //  goto LT.{index}_END
-(LT.{index}_TRUE)
+(LT.{index}_FALSE)
     @SP                 //  A = 0
-    A=M                 //  A = ram[0]
-    M=-1                //  ram[A] = -1
+    A=M-1               //  A = ram[0] - 1
+    M=0                 //  ram[A] = 0
 (LT.{index}_END)
-    @SP                 //  A = 0
-    M=M+1               //  ram[0] = ram[0] + 1'''
-
+    '''
+    
 # and
 cpdef And():
     return '''
     @SP                 //  A = 0
     AM=M-1              //  A = ram[0] - 1 , ram[0] = ram[0] - 1
     D=M                 //  D = ram[A]
-    @SP                 //  A = 0
-    AM=M-1              //  A = ram[0] - 1 , ram[0] = ram[0] - 1
-    M=D&M               //  ram[A] = D && ram[A]
-    @SP                 //  A = 0
-    M=M+1               //  ram[0] = ram[0] + 1'''
+    A=A-1               //  A = A - 1
+    M=D&M               //  ram[A] = D && ram[A]'''
 
 # or
 cpdef Or():
@@ -280,17 +276,14 @@ cpdef Or():
     @SP                 //  A = 0
     AM=M-1              //  A = ram[0] - 1 , ram[0] = ram[0] - 1
     D=M                 //  D = ram[A]
-    @SP                 //  A = 0
-    AM=M-1              //  A = ram[0] - 1 , ram[0] = ram[0] - 1
-    M=D|M               //  ram[A] = D || ram[A]
-    @SP                 //  A = 0
-    M=M+1               //  ram[0] = ram[0] + 1'''
+    A=A-1               //  A = A - 1
+    M=D|M               //  ram[A] = D || ram[A]'''
 
 # not
 cpdef Not():
     return '''
     @SP                 //  A = 0
-    M=M-1               //  ram[0] = ram[0] - 1
+    A=M-1               //  A = ram[0] - 1
     M=!M                //  ram[A] = !ram[A]'''
 
 #----- endregion: group 6 (add, sub, neg, eq, gt, lt, and, or, not) -----#
@@ -328,8 +321,8 @@ cpdef Function(str functionName, int numLocals):
     // Initialize local variables
     @{numLocals}            //  A = {numLocals}
     D=A                     //  D = {numLocals}
-    @{functionName}_END
-    D;JEQ                   //  if numLocals == 0 goto {functionName}_END
+    @{functionName}_FALSE
+    D;JEQ                   //  if numLocals == 0 goto {functionName}_FALSE
 
 ({functionName}_LOOP)
     @SP                     //  A = 0
@@ -341,7 +334,7 @@ cpdef Function(str functionName, int numLocals):
     D=D-1                   //  D = D - 1
     D;JNE                   //  if D != 0 goto {functionName}_LOOP
 
-({functionName}_END)
+({functionName}_FALSE)
 
     '''
 
@@ -396,10 +389,10 @@ cpdef Call( str functionName, int numArgs, int index):
     // ARG = SP-n-5
     @SP                             //  A = 0
     D=M                             //  D = ram[0]
-    @{numArgs}                      //  A = {numArgs}
-    D=D-A                           //  D = ram[0] - {numArgs}
     @5                              //  A = 5
     D=D-A                           //  D = ram[0] - {numArgs} - 5
+    @{numArgs}                      //  A = {numArgs}
+    D=D-A                           //  D = ram[0] - {numArgs}
     @ARG                            //  A = ARG
     M=D                             //  ARG = ram[0] - {numArgs} - 5
 
@@ -410,7 +403,7 @@ cpdef Call( str functionName, int numArgs, int index):
     M=D                             //  LCL = ram[0]
 
     // goto functionName
-    @{functionName}  //  A = {functionName}.{index}.ReturnAddress
+    @{functionName}                 //  A = {functionName}.{index}.ReturnAddress
     0;JMP                           //  goto {functionName}
 
     // (return-address)
@@ -419,7 +412,8 @@ cpdef Call( str functionName, int numArgs, int index):
     
 # return
 cpdef Return ():
-    return '''//return function
+    return f'''
+    //return function
 
     // FRAME = LCL
     @LCL

@@ -70,8 +70,8 @@
     // Initialize local variables
     @0            //  A = 0
     D=A                     //  D = 0
-    @Sys.init_END
-    D;JEQ                   //  if numLocals == 0 goto Sys.init_END
+    @Sys.init_FALSE
+    D;JEQ                   //  if numLocals == 0 goto Sys.init_FALSE
 
 (Sys.init_LOOP)
     @SP                     //  A = 0
@@ -83,7 +83,7 @@
     D=D-1                   //  D = D - 1
     D;JNE                   //  if D != 0 goto Sys.init_LOOP
 
-(Sys.init_END)
+(Sys.init_FALSE)
 
     
 
@@ -166,10 +166,10 @@
     // ARG = SP-n-5
     @SP                             //  A = 0
     D=M                             //  D = ram[0]
-    @2                      //  A = 2
-    D=D-A                           //  D = ram[0] - 2
     @5                              //  A = 5
     D=D-A                           //  D = ram[0] - 2 - 5
+    @2                      //  A = 2
+    D=D-A                           //  D = ram[0] - 2
     @ARG                            //  A = ARG
     M=D                             //  ARG = ram[0] - 2 - 5
 
@@ -180,7 +180,7 @@
     M=D                             //  LCL = ram[0]
 
     // goto functionName
-    @Class1.set  //  A = Class1.set.1.ReturnAddress
+    @Class1.set                 //  A = Class1.set.1.ReturnAddress
     0;JMP                           //  goto Class1.set
 
     // (return-address)
@@ -280,10 +280,10 @@
     // ARG = SP-n-5
     @SP                             //  A = 0
     D=M                             //  D = ram[0]
-    @2                      //  A = 2
-    D=D-A                           //  D = ram[0] - 2
     @5                              //  A = 5
     D=D-A                           //  D = ram[0] - 2 - 5
+    @2                      //  A = 2
+    D=D-A                           //  D = ram[0] - 2
     @ARG                            //  A = ARG
     M=D                             //  ARG = ram[0] - 2 - 5
 
@@ -294,7 +294,7 @@
     M=D                             //  LCL = ram[0]
 
     // goto functionName
-    @Class2.set  //  A = Class2.set.2.ReturnAddress
+    @Class2.set                 //  A = Class2.set.2.ReturnAddress
     0;JMP                           //  goto Class2.set
 
     // (return-address)
@@ -368,10 +368,10 @@
     // ARG = SP-n-5
     @SP                             //  A = 0
     D=M                             //  D = ram[0]
-    @0                      //  A = 0
-    D=D-A                           //  D = ram[0] - 0
     @5                              //  A = 5
     D=D-A                           //  D = ram[0] - 0 - 5
+    @0                      //  A = 0
+    D=D-A                           //  D = ram[0] - 0
     @ARG                            //  A = ARG
     M=D                             //  ARG = ram[0] - 0 - 5
 
@@ -382,7 +382,7 @@
     M=D                             //  LCL = ram[0]
 
     // goto functionName
-    @Class1.get  //  A = Class1.get.3.ReturnAddress
+    @Class1.get                 //  A = Class1.get.3.ReturnAddress
     0;JMP                           //  goto Class1.get
 
     // (return-address)
@@ -442,10 +442,10 @@
     // ARG = SP-n-5
     @SP                             //  A = 0
     D=M                             //  D = ram[0]
-    @0                      //  A = 0
-    D=D-A                           //  D = ram[0] - 0
     @5                              //  A = 5
     D=D-A                           //  D = ram[0] - 0 - 5
+    @0                      //  A = 0
+    D=D-A                           //  D = ram[0] - 0
     @ARG                            //  A = ARG
     M=D                             //  ARG = ram[0] - 0 - 5
 
@@ -456,7 +456,7 @@
     M=D                             //  LCL = ram[0]
 
     // goto functionName
-    @Class2.get  //  A = Class2.get.4.ReturnAddress
+    @Class2.get                 //  A = Class2.get.4.ReturnAddress
     0;JMP                           //  goto Class2.get
 
     // (return-address)
