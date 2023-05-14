@@ -76,10 +76,6 @@ cdef class CodeWriter:
                 cmd = constants.PushConstant(index)
             elif segment == 'static':
                 cmd = constants.PushStatic(index)
-            elif segment in self.segment_dict:
-                cmd = constants.PushSegment( index, self.segment_dict[segment])
-            elif segment == 'temp':
-                cmd = constants.PushTemp(index)
             elif segment == 'pointer':
                 if index == 0:
                     cmd = constants.PushPointer('THIS')
@@ -87,6 +83,10 @@ cdef class CodeWriter:
                     cmd = constants.PushPointer('THAT')
                 else:
                     raise Exception('Unknown index: ' + str(index))
+            elif segment in self.segment_dict:
+                cmd = constants.PushSegment( index, self.segment_dict[segment])
+            elif segment == 'temp':
+                cmd = constants.PushTemp(index)
             else:
                 raise Exception('Unknown segment: ' + segment)
                 

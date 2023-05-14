@@ -19,13 +19,16 @@
 // pop pointer 1           // that = argument[1]
 //------ start of pop ------
 
-    @SP                 //  A = 0
-    A=M-1               //  A = ram[0] - 1
-    D=M                 //  D = ram[A]
     @THAT                //  A = THAT
-    M=D                 //  ram[A] = D
+    D=A                 //  D = A
+    @R13                //  A = 13
+    M=D                 //  ram[13] = D
     @SP                 //  A = 0
-    M=M-1               //  ram[0] = ram[0] - 1
+    AM=M-1              //  A = ram[0] - 1 , ram[0] = ram[0] - 1
+    D=M                 //  D = ram[A]
+    @R13                //  A = 13
+    A=M                 //  A = ram[13]
+    M=D                 //  ram[A] = D
 
 //------ end of pop ------
 
@@ -306,13 +309,16 @@
 // pop pointer 1           // that += 1
 //------ start of pop ------
 
-    @SP                 //  A = 0
-    A=M-1               //  A = ram[0] - 1
-    D=M                 //  D = ram[A]
     @THAT                //  A = THAT
-    M=D                 //  ram[A] = D
+    D=A                 //  D = A
+    @R13                //  A = 13
+    M=D                 //  ram[13] = D
     @SP                 //  A = 0
-    M=M-1               //  ram[0] = ram[0] - 1
+    AM=M-1              //  A = ram[0] - 1 , ram[0] = ram[0] - 1
+    D=M                 //  D = ram[A]
+    @R13                //  A = 13
+    A=M                 //  A = ram[13]
+    M=D                 //  ram[A] = D
 
 //------ end of pop ------
 

@@ -64,11 +64,10 @@ cpdef PopSegment(int x, str segment):
 # push temp X
 cpdef PushTemp(x):
     return f'''
+    @R5                 //  A = 5
+    D=M                 //  D = ram[5]
     @{x}                //  A = {x}
-    D=A                 //  D = A
-    @5                  //  A = 5
-    D=A+D               //  D = 5 + D
-    A=D                 //  A = D
+    A=D+A               //  A = ram[5] + {x}
     D=M                 //  D = ram[A]
     @SP                 //  A = 0
     A=M                 //  A = ram[0]
@@ -79,14 +78,18 @@ cpdef PushTemp(x):
 # pop temp x
 cpdef PopTemp(x):
     return f'''
+    @R5                 //  A = 5
+    D=M                 //  D = ram[5]
+    @{x}                //  A = {x}
+    D=D+A               //  D = ram[5] + {x}
+    @R13                //  A = 13
+    M=D                 //  ram[13] = D
     @SP                 //  A = 0
-    A=M-1               //  A = ram[0] - 1
+    AM=M-1              //  A = ram[0] - 1 , ram[0] = ram[0] - 1
     D=M                 //  D = ram[A]
-    @5                  //  A = 5
-    {repit(x)}          
-    M=D                 //  ram[A] = D
-    @SP                 //  A = 0
-    M=M-1               //  ram[0] = ram[0] - 1'''
+    @R13                //  A = 13
+    A=M                 //  A = ram[13]
+    M=D                 //  ram[A] = D'''
     
 
 #----- endregion: group 2 (temp) -----#
@@ -136,13 +139,16 @@ cpdef PushPointer(x):
 # pop pointer X
 cpdef PopPointer(x):
     return f'''
-    @SP                 //  A = 0
-    A=M-1               //  A = ram[0] - 1
-    D=M                 //  D = ram[A]
     @{x}                //  A = {x}
-    M=D                 //  ram[A] = D
+    D=A                 //  D = A
+    @R13                //  A = 13
+    M=D                 //  ram[13] = D
     @SP                 //  A = 0
-    M=M-1               //  ram[0] = ram[0] - 1'''
+    AM=M-1              //  A = ram[0] - 1 , ram[0] = ram[0] - 1
+    D=M                 //  D = ram[A]
+    @R13                //  A = 13
+    A=M                 //  A = ram[13]
+    M=D                 //  ram[A] = D'''
 
 #----- endregion: group 4 (pointer 1, pointer 2) -----#
 
@@ -496,58 +502,5 @@ cpdef Bootstrap():
     M=D                 //  ram[0] = 256
     
     // call Sys.init 0
-    @Sys.init.returnAdd
-    D=A
-    @SP
-    A=M
-    M=D
-    @SP
-    M=M+1
-
-    @LCL
-    D=M
-    @SP
-    A=M
-    M=D
-    @SP
-    M=M+1
-
-    @ARG
-    D=M
-    @SP
-    A=M
-    M=D
-    @SP
-    M=M+1
-
-    @THIS
-    D=M
-    @SP
-    A=M
-    M=D
-    @SP
-    M=M+1
-
-    @THAT
-    D=M
-    @SP
-    A=M
-    M=D
-    @SP
-    M=M+1
-
-    @SP
-    D=M
-    @5
-    D=D-A
-    @ARG
-    M=D
-    @SP
-    D=M
-    @LCL
-    M=D
-
-    @Sys.init.returnAdd
-    0;JMP
-(Sys.init.returnAdd)
+    {Call('Sys.init', 0, 0)}
     '''

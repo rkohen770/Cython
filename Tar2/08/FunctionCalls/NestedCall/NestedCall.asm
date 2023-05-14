@@ -1,3 +1,79 @@
+ // bootstrap
+    @256                //  A = 256
+    D=A                 //  D = 256
+    @SP                 //  A = 0
+    M=D                 //  ram[0] = 256
+    
+    // call Sys.init 0
+    
+    // push return-address Sys.init.0
+    @Sys.init.0.ReturnAddress   
+    D=A
+    @SP
+    A=M
+    M=D
+    @SP
+    M=M+1
+
+    // push LCL
+    @LCL                            //  A = LCL
+    D=M                             //  D = LCL
+    @SP                             //  A = 0
+    A=M                             //  A = ram[0]
+    M=D                             //  ram[A] = D
+    @SP                             //  A = 0
+    M=M+1                           //  ram[0] = ram[0] + 1
+
+    // push ARG
+    @ARG                            //  A = ARG
+    D=M                             //  D = ARG
+    @SP                             //  A = 0
+    A=M                             //  A = ram[0]
+    M=D                             //  ram[A] = D
+    @SP                             //  A = 0
+    M=M+1                           //  ram[0] = ram[0] + 1
+    
+    // push THIS
+    @THIS                           //  A = THIS
+    D=M                             //  D = THIS
+    @SP                             //  A = 0
+    A=M                             //  A = ram[0]
+    M=D                             //  ram[A] = D
+    @SP                             //  A = 0
+    M=M+1                           //  ram[0] = ram[0] + 1
+
+    // push THAT
+    @THAT                           //  A = THAT
+    D=M                             //  D = THAT
+    @SP                             //  A = 0
+    A=M                             //  A = ram[0]
+    M=D                             //  ram[A] = D
+    @SP                             //  A = 0
+    M=M+1                           //  ram[0] = ram[0] + 1
+
+    // ARG = SP-n-5
+    @SP                             //  A = 0
+    D=M                             //  D = ram[0]
+    @5                              //  A = 5
+    D=D-A                           //  D = ram[0] - 0 - 5
+    @0                      //  A = 0
+    D=D-A                           //  D = ram[0] - 0
+    @ARG                            //  A = ARG
+    M=D                             //  ARG = ram[0] - 0 - 5
+
+    // LCL = SP
+    @SP                             //  A = 0
+    D=M                             //  D = ram[0]
+    @LCL                            //  A = LCL
+    M=D                             //  LCL = ram[0]
+
+    // goto functionName
+    @Sys.init                 //  A = Sys.init.0.ReturnAddress
+    0;JMP                           //  goto Sys.init
+
+    // (return-address)
+(Sys.init.0.ReturnAddress)
+
 //Sys
 
 // function Sys.init 0
@@ -43,13 +119,16 @@
 // pop pointer 0
 //------ start of pop ------
 
-    @SP                 //  A = 0
-    A=M-1               //  A = ram[0] - 1
-    D=M                 //  D = ram[A]
     @THIS                //  A = THIS
-    M=D                 //  ram[A] = D
+    D=A                 //  D = A
+    @R13                //  A = 13
+    M=D                 //  ram[13] = D
     @SP                 //  A = 0
-    M=M-1               //  ram[0] = ram[0] - 1
+    AM=M-1              //  A = ram[0] - 1 , ram[0] = ram[0] - 1
+    D=M                 //  D = ram[A]
+    @R13                //  A = 13
+    A=M                 //  A = ram[13]
+    M=D                 //  ram[A] = D
 
 //------ end of pop ------
 
@@ -69,13 +148,16 @@
 // pop pointer 1
 //------ start of pop ------
 
-    @SP                 //  A = 0
-    A=M-1               //  A = ram[0] - 1
-    D=M                 //  D = ram[A]
     @THAT                //  A = THAT
-    M=D                 //  ram[A] = D
+    D=A                 //  D = A
+    @R13                //  A = 13
+    M=D                 //  ram[13] = D
     @SP                 //  A = 0
-    M=M-1               //  ram[0] = ram[0] - 1
+    AM=M-1              //  A = ram[0] - 1 , ram[0] = ram[0] - 1
+    D=M                 //  D = ram[A]
+    @R13                //  A = 13
+    A=M                 //  A = ram[13]
+    M=D                 //  ram[A] = D
 
 //------ end of pop ------
 
@@ -156,14 +238,18 @@
 // pop temp 1
 //------ start of pop ------
 
+    @R5                 //  A = 5
+    D=M                 //  D = ram[5]
+    @1                //  A = 1
+    D=D+A               //  D = ram[5] + 1
+    @R13                //  A = 13
+    M=D                 //  ram[13] = D
     @SP                 //  A = 0
-    A=M-1               //  A = ram[0] - 1
+    AM=M-1              //  A = ram[0] - 1 , ram[0] = ram[0] - 1
     D=M                 //  D = ram[A]
-    @5                  //  A = 5
-    A=A+1               //  A = A + 1          
+    @R13                //  A = 13
+    A=M                 //  A = ram[13]
     M=D                 //  ram[A] = D
-    @SP                 //  A = 0
-    M=M-1               //  ram[0] = ram[0] - 1
 
 //------ end of pop ------
 
@@ -224,13 +310,16 @@
 // pop pointer 0
 //------ start of pop ------
 
-    @SP                 //  A = 0
-    A=M-1               //  A = ram[0] - 1
-    D=M                 //  D = ram[A]
     @THIS                //  A = THIS
-    M=D                 //  ram[A] = D
+    D=A                 //  D = A
+    @R13                //  A = 13
+    M=D                 //  ram[13] = D
     @SP                 //  A = 0
-    M=M-1               //  ram[0] = ram[0] - 1
+    AM=M-1              //  A = ram[0] - 1 , ram[0] = ram[0] - 1
+    D=M                 //  D = ram[A]
+    @R13                //  A = 13
+    A=M                 //  A = ram[13]
+    M=D                 //  ram[A] = D
 
 //------ end of pop ------
 
@@ -250,13 +339,16 @@
 // pop pointer 1
 //------ start of pop ------
 
-    @SP                 //  A = 0
-    A=M-1               //  A = ram[0] - 1
-    D=M                 //  D = ram[A]
     @THAT                //  A = THAT
-    M=D                 //  ram[A] = D
+    D=A                 //  D = A
+    @R13                //  A = 13
+    M=D                 //  ram[13] = D
     @SP                 //  A = 0
-    M=M-1               //  ram[0] = ram[0] - 1
+    AM=M-1              //  A = ram[0] - 1 , ram[0] = ram[0] - 1
+    D=M                 //  D = ram[A]
+    @R13                //  A = 13
+    A=M                 //  A = ram[13]
+    M=D                 //  ram[A] = D
 
 //------ end of pop ------
 
@@ -443,14 +535,18 @@
 // pop temp 0
 //------ start of pop ------
 
+    @R5                 //  A = 5
+    D=M                 //  D = ram[5]
+    @0                //  A = 0
+    D=D+A               //  D = ram[5] + 0
+    @R13                //  A = 13
+    M=D                 //  ram[13] = D
     @SP                 //  A = 0
-    A=M-1               //  A = ram[0] - 1
+    AM=M-1              //  A = ram[0] - 1 , ram[0] = ram[0] - 1
     D=M                 //  D = ram[A]
-    @5                  //  A = 5
-    A=A+1               //  A = A + 1          
+    @R13                //  A = 13
+    A=M                 //  A = ram[13]
     M=D                 //  ram[A] = D
-    @SP                 //  A = 0
-    M=M-1               //  ram[0] = ram[0] - 1
 
 //------ end of pop ------
 
@@ -706,13 +802,16 @@
 // pop pointer 0
 //------ start of pop ------
 
-    @SP                 //  A = 0
-    A=M-1               //  A = ram[0] - 1
-    D=M                 //  D = ram[A]
     @THIS                //  A = THIS
-    M=D                 //  ram[A] = D
+    D=A                 //  D = A
+    @R13                //  A = 13
+    M=D                 //  ram[13] = D
     @SP                 //  A = 0
-    M=M-1               //  ram[0] = ram[0] - 1
+    AM=M-1              //  A = ram[0] - 1 , ram[0] = ram[0] - 1
+    D=M                 //  D = ram[A]
+    @R13                //  A = 13
+    A=M                 //  A = ram[13]
+    M=D                 //  ram[A] = D
 
 //------ end of pop ------
 
@@ -732,13 +831,16 @@
 // pop pointer 1
 //------ start of pop ------
 
-    @SP                 //  A = 0
-    A=M-1               //  A = ram[0] - 1
-    D=M                 //  D = ram[A]
     @THAT                //  A = THAT
-    M=D                 //  ram[A] = D
+    D=A                 //  D = A
+    @R13                //  A = 13
+    M=D                 //  ram[13] = D
     @SP                 //  A = 0
-    M=M-1               //  ram[0] = ram[0] - 1
+    AM=M-1              //  A = ram[0] - 1 , ram[0] = ram[0] - 1
+    D=M                 //  D = ram[A]
+    @R13                //  A = 13
+    A=M                 //  A = ram[13]
+    M=D                 //  ram[A] = D
 
 //------ end of pop ------
 
