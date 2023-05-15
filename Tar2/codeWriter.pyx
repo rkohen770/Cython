@@ -126,7 +126,7 @@ cdef class CodeWriter:
 
     # writes to the output file the assembly code that implements the given function command.
     cpdef writeFunction(self, str functionName, int numLocals):
-        return constants.Function(functionName, numLocals)
+        return constants.Function(functionName , numLocals)
 
     # writes to the output file the assembly code that implements the given return command.
     cpdef writeReturn(self):

@@ -64,10 +64,11 @@ cpdef PopSegment(int x, str segment):
 # push temp X
 cpdef PushTemp(x):
     return f'''
-    @R5                 //  A = 5
-    D=M                 //  D = ram[5]
     @{x}                //  A = {x}
-    A=D+A               //  A = ram[5] + {x}
+    D=A                 //  D = A
+    @5                  //  A = 5
+    D=A+D               //  D = 5 + D
+    A=D                 //  A = D
     D=M                 //  D = ram[A]
     @SP                 //  A = 0
     A=M                 //  A = ram[0]
@@ -78,17 +79,10 @@ cpdef PushTemp(x):
 # pop temp x
 cpdef PopTemp(x):
     return f'''
-    @R5                 //  A = 5
-    D=M                 //  D = ram[5]
-    @{x}                //  A = {x}
-    D=D+A               //  D = ram[5] + {x}
-    @R13                //  A = 13
-    M=D                 //  ram[13] = D
     @SP                 //  A = 0
     AM=M-1              //  A = ram[0] - 1 , ram[0] = ram[0] - 1
-    D=M                 //  D = ram[A]
-    @R13                //  A = 13
-    A=M                 //  A = ram[13]
+    @5                  //  A = 5'''+ f'''
+    {repit(x)}          //  A = 5 + {x}
     M=D                 //  ram[A] = D'''
     
 
@@ -106,6 +100,7 @@ cpdef PushStatic(x):
     M=D                 //  ram[A] = D
     @SP                 //  A = 0
     M=M+1               //  ram[0] = ram[0] + 1'''
+
 
 # pop static X
 cpdef PopStatic(x):
@@ -312,6 +307,7 @@ cpdef IfGoto( str label ):
     @SP                     //  A = 0
     AM=M-1                  //  A = ram[0] - 1 , ram[0] = ram[0] - 1
     D=M                     //  D = ram[A]
+    A=A-1                   //  A = A - 1
     @{label}
     D;JNE                   //  if D != 0 goto {label}'''
 
@@ -322,31 +318,17 @@ cpdef IfGoto( str label ):
 # function X Y
 cpdef Function(str functionName, int numLocals):
     return f'''
-({functionName})
-
-    // Initialize local variables
-    @{numLocals}            //  A = {numLocals}
-    D=A                     //  D = {numLocals}
-    @{functionName}_FALSE
-    D;JEQ                   //  if numLocals == 0 goto {functionName}_FALSE
-
-({functionName}_LOOP)
-    @SP                     //  A = 0
-    A=M                     //  A = ram[0]
-    M=0                     //  ram[A] = 0
-    @SP                     //  A = 0
-    M=M+1                   //  ram[0] = ram[0] + 1
-    @{functionName}_LOOP
-    D=D-1                   //  D = D - 1
-    D;JNE                   //  if D != 0 goto {functionName}_LOOP
-
-({functionName}_FALSE)
-
+//***************start function {functionName}***************//
+    // function {functionName} {numLocals}
+    ({functionName})
+    {repit2(numLocals)}
+//***************end function {functionName}***************//
     '''
 
 # call functionName numArgs
 cpdef Call( str functionName, int numArgs, int index):
     return f'''
+    //-------start call {functionName} {numArgs}-------//
     // push return-address {functionName}.{index}
     @{functionName}.{index}.ReturnAddress   
     D=A
@@ -409,82 +391,82 @@ cpdef Call( str functionName, int numArgs, int index):
     M=D                             //  LCL = ram[0]
 
     // goto functionName
-    @{functionName}                 //  A = {functionName}.{index}.ReturnAddress
-    0;JMP                           //  goto {functionName}
+    @{functionName}         //  A = {functionName}
+    0;JMP                           //  goto {functionName}.{index}.ReturnAddress
 
     // (return-address)
 ({functionName}.{index}.ReturnAddress)
+
+    //-------end call {functionName} {numArgs}-------//
     '''
     
 # return
 cpdef Return ():
     return f'''
     //return function
-
     // FRAME = LCL
-    @LCL
-    D=M
+@LCL
+D=M
 
-    // RET = * (FRAME-5)
-    // RAM[13] = (LOCAL - 5)
-    @5
-    A=D-A
-    D=M
-    @13
-    M=D
+// RET = * (FRAME-5)
+// RAM[13] = (LOCAL - 5)
+@5
+A=D-A
+D=M
+@13
+M=D
 
-    // * ARG = pop()	
-    @SP
-    M=M-1
-    A=M
-    D=M
-    @ARG
-    A=M
-    M=D
+// * ARG = pop()	
+@SP
+M=M-1
+A=M
+D=M
+@ARG
+A=M
+M=D
+	
+// SP = ARG+1 
+@ARG
+D=M
+@SP
+M=D+1
+		
+// THAT = *(FRAM-1)
+@LCL
+M=M-1
+A=M
+D=M
+@THAT
+M=D
+		
+// THIS = *(FRAM-2) 
+@LCL
+M=M-1
+A=M
+D=M
+@THIS
+M=D
 
-    // SP = ARG+1 
-    @ARG
-    D=M
-    @SP
-    M=D+1
-    
-    // THAT = *(FRAM-1)
-    @LCL
-    M=M-1
-    A=M
-    D=M
-    @THAT
-    M=D
-    
-    // THIS = *(FRAM-2) 
-    @LCL
-    M=M-1
-    A=M
-    D=M
-    @THIS
-    M=D
+// ARG = *(FRAM-3)
+@LCL
+M=M-1
+A=M
+D=M
+@ARG
+M=D			
 
-    // ARG = *(FRAM-3)
-    @LCL
-    M=M-1
-    A=M
-    D=M
-    @ARG
-    M=D		
-
-    // LCL = *(FRAM-4)
-    @LCL
-    M=M-1
-    A=M
-    D=M
-    @LCL
-    M=D
-    
-    // goto RET
-    @13
-    A=M
-    0; JMP
-    
+// LCL = *(FRAM-4)
+@LCL
+M=M-1
+A=M
+D=M
+@LCL
+M=D
+		
+// goto RET
+@13
+A=M
+0; JMP
     '''
 
 #----- endregion: group 8 (function, call, return) -----#

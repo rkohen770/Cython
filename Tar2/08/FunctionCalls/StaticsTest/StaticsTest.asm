@@ -7,6 +7,7 @@
     
     // call Sys.init 0
     
+    //-------start call Sys.init 0-------//
     // push return-address Sys.init.0
     @Sys.init.0.ReturnAddress   
     D=A
@@ -69,37 +70,24 @@
     M=D                             //  LCL = ram[0]
 
     // goto functionName
-    @Sys.init                 //  A = Sys.init.0.ReturnAddress
-    0;JMP                           //  goto Sys.init
+    @Sys.init         //  A = Sys.init
+    0;JMP                           //  goto Sys.init.0.ReturnAddress
 
     // (return-address)
 (Sys.init.0.ReturnAddress)
+
+    //-------end call Sys.init 0-------//
     
     //Sys
 
 // function Sys.init 0
 //------ start of function ------
 
-(Sys.init)
-
-    // Initialize local variables
-    @0            //  A = 0
-    D=A                     //  D = 0
-    @Sys.init_FALSE
-    D;JEQ                   //  if numLocals == 0 goto Sys.init_FALSE
-
-(Sys.init_LOOP)
-    @SP                     //  A = 0
-    A=M                     //  A = ram[0]
-    M=0                     //  ram[A] = 0
-    @SP                     //  A = 0
-    M=M+1                   //  ram[0] = ram[0] + 1
-    @Sys.init_LOOP
-    D=D-1                   //  D = D - 1
-    D;JNE                   //  if D != 0 goto Sys.init_LOOP
-
-(Sys.init_FALSE)
-
+//***************start function Sys.init***************//
+    // function Sys.init 0
+    (Sys.init)
+    
+//***************end function Sys.init***************//
     
 
 //------ end of function ------
@@ -133,6 +121,7 @@
 // call Class1.set 2
 //------ start of call ------
 
+    //-------start call Class1.set 2-------//
     // push return-address Class1.set.1
     @Class1.set.1.ReturnAddress   
     D=A
@@ -195,11 +184,13 @@
     M=D                             //  LCL = ram[0]
 
     // goto functionName
-    @Class1.set                 //  A = Class1.set.1.ReturnAddress
-    0;JMP                           //  goto Class1.set
+    @Class1.set         //  A = Class1.set
+    0;JMP                           //  goto Class1.set.1.ReturnAddress
 
     // (return-address)
 (Class1.set.1.ReturnAddress)
+
+    //-------end call Class1.set 2-------//
     
 
 //------ end of call ------
@@ -207,17 +198,10 @@
 // pop temp 0 // Dumps the return value
 //------ start of pop ------
 
-    @R5                 //  A = 5
-    D=M                 //  D = ram[5]
-    @0                //  A = 0
-    D=D+A               //  D = ram[5] + 0
-    @R13                //  A = 13
-    M=D                 //  ram[13] = D
     @SP                 //  A = 0
     AM=M-1              //  A = ram[0] - 1 , ram[0] = ram[0] - 1
-    D=M                 //  D = ram[A]
-    @R13                //  A = 13
-    A=M                 //  A = ram[13]
+    @5                  //  A = 5
+    A=A+1               //  A = A + 1          //  A = 5 + 0
     M=D                 //  ram[A] = D
 
 //------ end of pop ------
@@ -251,6 +235,7 @@
 // call Class2.set 2
 //------ start of call ------
 
+    //-------start call Class2.set 2-------//
     // push return-address Class2.set.2
     @Class2.set.2.ReturnAddress   
     D=A
@@ -313,11 +298,13 @@
     M=D                             //  LCL = ram[0]
 
     // goto functionName
-    @Class2.set                 //  A = Class2.set.2.ReturnAddress
-    0;JMP                           //  goto Class2.set
+    @Class2.set         //  A = Class2.set
+    0;JMP                           //  goto Class2.set.2.ReturnAddress
 
     // (return-address)
 (Class2.set.2.ReturnAddress)
+
+    //-------end call Class2.set 2-------//
     
 
 //------ end of call ------
@@ -325,17 +312,10 @@
 // pop temp 0 // Dumps the return value
 //------ start of pop ------
 
-    @R5                 //  A = 5
-    D=M                 //  D = ram[5]
-    @0                //  A = 0
-    D=D+A               //  D = ram[5] + 0
-    @R13                //  A = 13
-    M=D                 //  ram[13] = D
     @SP                 //  A = 0
     AM=M-1              //  A = ram[0] - 1 , ram[0] = ram[0] - 1
-    D=M                 //  D = ram[A]
-    @R13                //  A = 13
-    A=M                 //  A = ram[13]
+    @5                  //  A = 5
+    A=A+1               //  A = A + 1          //  A = 5 + 0
     M=D                 //  ram[A] = D
 
 //------ end of pop ------
@@ -343,6 +323,7 @@
 // call Class1.get 0
 //------ start of call ------
 
+    //-------start call Class1.get 0-------//
     // push return-address Class1.get.3
     @Class1.get.3.ReturnAddress   
     D=A
@@ -405,11 +386,13 @@
     M=D                             //  LCL = ram[0]
 
     // goto functionName
-    @Class1.get                 //  A = Class1.get.3.ReturnAddress
-    0;JMP                           //  goto Class1.get
+    @Class1.get         //  A = Class1.get
+    0;JMP                           //  goto Class1.get.3.ReturnAddress
 
     // (return-address)
 (Class1.get.3.ReturnAddress)
+
+    //-------end call Class1.get 0-------//
     
 
 //------ end of call ------
@@ -417,6 +400,7 @@
 // call Class2.get 0
 //------ start of call ------
 
+    //-------start call Class2.get 0-------//
     // push return-address Class2.get.4
     @Class2.get.4.ReturnAddress   
     D=A
@@ -479,11 +463,13 @@
     M=D                             //  LCL = ram[0]
 
     // goto functionName
-    @Class2.get                 //  A = Class2.get.4.ReturnAddress
-    0;JMP                           //  goto Class2.get
+    @Class2.get         //  A = Class2.get
+    0;JMP                           //  goto Class2.get.4.ReturnAddress
 
     // (return-address)
 (Class2.get.4.ReturnAddress)
+
+    //-------end call Class2.get 0-------//
     
 
 //------ end of call ------

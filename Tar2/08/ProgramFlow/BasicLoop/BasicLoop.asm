@@ -184,6 +184,7 @@
     @SP                     //  A = 0
     AM=M-1                  //  A = ram[0] - 1 , ram[0] = ram[0] - 1
     D=M                     //  D = ram[A]
+    A=A-1                   //  A = A - 1
     @BasicLoop.LOOP_START
     D;JNE                   //  if D != 0 goto BasicLoop.LOOP_START
 

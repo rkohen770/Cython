@@ -4401,7 +4401,7 @@ static PyObject *__pyx_pf_10codeWriter_10CodeWriter_12writeIfGoto(struct __pyx_o
  * 
  *     # writes to the output file the assembly code that implements the given function command.
  *     cpdef writeFunction(self, str functionName, int numLocals):             # <<<<<<<<<<<<<<
- *         return constants.Function(functionName, numLocals)
+ *         return constants.Function(functionName , numLocals)
  * 
  */
 
@@ -4504,7 +4504,7 @@ static PyObject *__pyx_f_10codeWriter_10CodeWriter_writeFunction(CYTHON_UNUSED s
   /* "codeWriter.pyx":129
  *     # writes to the output file the assembly code that implements the given function command.
  *     cpdef writeFunction(self, str functionName, int numLocals):
- *         return constants.Function(functionName, numLocals)             # <<<<<<<<<<<<<<
+ *         return constants.Function(functionName , numLocals)             # <<<<<<<<<<<<<<
  * 
  *     # writes to the output file the assembly code that implements the given return command.
  */
@@ -4571,7 +4571,7 @@ static PyObject *__pyx_f_10codeWriter_10CodeWriter_writeFunction(CYTHON_UNUSED s
  * 
  *     # writes to the output file the assembly code that implements the given function command.
  *     cpdef writeFunction(self, str functionName, int numLocals):             # <<<<<<<<<<<<<<
- *         return constants.Function(functionName, numLocals)
+ *         return constants.Function(functionName , numLocals)
  * 
  */
 

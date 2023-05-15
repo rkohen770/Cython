@@ -3,26 +3,25 @@
 // function SimpleFunction.test 2
 //------ start of function ------
 
-(SimpleFunction.test)
-
-    // Initialize local variables
-    @2            //  A = 2
-    D=A                     //  D = 2
-    @SimpleFunction.test_FALSE
-    D;JEQ                   //  if numLocals == 0 goto SimpleFunction.test_FALSE
-
-(SimpleFunction.test_LOOP)
-    @SP                     //  A = 0
-    A=M                     //  A = ram[0]
-    M=0                     //  ram[A] = 0
-    @SP                     //  A = 0
-    M=M+1                   //  ram[0] = ram[0] + 1
-    @SimpleFunction.test_LOOP
-    D=D-1                   //  D = D - 1
-    D;JNE                   //  if D != 0 goto SimpleFunction.test_LOOP
-
-(SimpleFunction.test_FALSE)
-
+//***************start function SimpleFunction.test***************//
+    // function SimpleFunction.test 2
+    (SimpleFunction.test)
+    
+    @0                //  A = 0
+    D=A                 //  D = A
+    @SP                 //  A = 0
+    A=M                 //  A = ram[0]
+    M=D                 //  ram[A] = D
+    @SP                 //  A = 0
+    M=M+1               //  ram[0] = ram[0] + 1
+    @0                //  A = 0
+    D=A                 //  D = A
+    @SP                 //  A = 0
+    A=M                 //  A = ram[0]
+    M=D                 //  ram[A] = D
+    @SP                 //  A = 0
+    M=M+1               //  ram[0] = ram[0] + 1
+//***************end function SimpleFunction.test***************//
     
 
 //------ end of function ------
@@ -146,71 +145,66 @@
 //------ start of return ------
 
     //return function
-
     // FRAME = LCL
-    @LCL
-    D=M
+@LCL
+D=M
 
-    // RET = * (FRAME-5)
-    // RAM[13] = (LOCAL - 5)
-    @5
-    A=D-A
-    D=M
-    @13
-    M=D
+// RET = * (FRAME-5)
+// RAM[13] = (LOCAL - 5)
+@5
+A=D-A
+D=M
+@13
+M=D
 
-    // * ARG = pop()	
-    @SP
-    M=M-1
-    A=M
-    D=M
-    @ARG
-    A=M
-    M=D
-
-    // SP = ARG+1 
-    @ARG
-    D=M
-    @SP
-    M=D+1
-    
-    // THAT = *(FRAM-1)
-    @LCL
-    M=M-1
-    A=M
-    D=M
-    @THAT
-    M=D
-    
-    // THIS = *(FRAM-2) 
-    @LCL
-    M=M-1
-    A=M
-    D=M
-    @THIS
-    M=D
-
-    // ARG = *(FRAM-3)
-    @LCL
-    M=M-1
-    A=M
-    D=M
-    @ARG
-    M=D		
-
-    // LCL = *(FRAM-4)
-    @LCL
-    M=M-1
-    A=M
-    D=M
-    @LCL
-    M=D
-    
-    // goto RET
-    @13
-    A=M
-    0; JMP
-    
+// * ARG = pop()	
+@SP
+M=M-1
+A=M
+D=M
+@ARG
+A=M
+M=D
+		// SP = ARG+1 
+@ARG
+D=M
+@SP
+M=D+1
+		
+// THAT = *(FRAM-1)
+@LCL
+M=M-1
+A=M
+D=M
+@THAT
+M=D
+		
+// THIS = *(FRAM-2) 
+@LCL
+M=M-1
+A=M
+D=M
+@THIS
+M=D
+// ARG = *(FRAM-3)
+@LCL
+M=M-1
+A=M
+D=M
+@ARG
+M=D				
+// LCL = *(FRAM-4)
+@LCL
+M=M-1
+A=M
+D=M
+@LCL
+M=D
+		
+// goto RET
+@13
+A=M
+0; JMP
     
 
 //------ end of return ------

@@ -183,6 +183,7 @@
     @SP                     //  A = 0
     AM=M-1                  //  A = ram[0] - 1 , ram[0] = ram[0] - 1
     D=M                     //  D = ram[A]
+    A=A-1                   //  A = A - 1
     @FibonacciSeries.COMPUTE_ELEMENT
     D;JNE                   //  if D != 0 goto FibonacciSeries.COMPUTE_ELEMENT
 

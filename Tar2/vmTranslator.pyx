@@ -19,12 +19,12 @@ cpdef recursive_div(file_path):
     text = ""
     
      #if have Sys.vm, then bootstrap
-    if init == 0:
-        for entry in os.scandir(file_path):
-            if entry.is_file() and entry.name.endswith('.vm'):
-                if entry.name == "Sys.vm":
-                    init = 1
-                    break
+    # if init == 0:
+    #     for entry in os.scandir(file_path):
+    #         if entry.is_file() and entry.name.endswith('.vm'):
+    #             if entry.name == "Sys.vm":
+    #                 init = 1
+    #                 break
 
     for entry in os.scandir(file_path):
         print(entry.path)
@@ -48,6 +48,13 @@ cpdef recursive_div(file_path):
             output_file.write(text )
             process_file(entry.path, output_file)
         elif entry.is_dir():
+            count = 0
+            # if has two or more .vm files, then bootstrap
+            for f in os.scandir(entry.path):
+                if f.is_file() and f.name.endswith('.vm'):
+                    count += 1
+            if count > 1:
+                init = 1
             recursive_div(entry.path)
             # # Close the output file
             # output_file.close()
