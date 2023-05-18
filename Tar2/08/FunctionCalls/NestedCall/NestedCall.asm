@@ -631,7 +631,8 @@ D=M
 @ARG
 A=M
 M=D
-		// SP = ARG+1 
+	
+// SP = ARG+1 
 @ARG
 D=M
 @SP
@@ -652,13 +653,15 @@ A=M
 D=M
 @THIS
 M=D
+
 // ARG = *(FRAM-3)
 @LCL
 M=M-1
 A=M
 D=M
 @ARG
-M=D				
+M=D			
+
 // LCL = *(FRAM-4)
 @LCL
 M=M-1
@@ -812,7 +815,8 @@ D=M
 @ARG
 A=M
 M=D
-		// SP = ARG+1 
+	
+// SP = ARG+1 
 @ARG
 D=M
 @SP
@@ -833,13 +837,15 @@ A=M
 D=M
 @THIS
 M=D
+
 // ARG = *(FRAM-3)
 @LCL
 M=M-1
 A=M
 D=M
 @ARG
-M=D				
+M=D			
+
 // LCL = *(FRAM-4)
 @LCL
 M=M-1
