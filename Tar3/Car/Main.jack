@@ -1,0 +1,15 @@
+/** Initializes a new Car Dance game and starts running it. */
+class Main {
+    function void main() {
+        var Car car;
+        let car = Car.new(7, 5,10,10 );
+        do car.draw();
+        do car.dispose();
+
+        // var SquareGame game;
+        // let game = SquareGame.new();
+        // do game.run();
+        // do game.dispose();
+        return;
+    }
+}

@@ -1,0 +1,15 @@
+function Main.main 1
+push constant 7
+push constant 5
+push constant 10
+push constant 10
+call Car.new 4
+pop local 0
+push local 0
+call Car.draw 1
+pop temp 0
+push local 0
+call Car.dispose 1
+pop temp 0
+push constant 0
+return
