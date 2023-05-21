@@ -1,0 +1,88 @@
+/** Implements a graphical Circle. */
+
+class Circle {
+    field int x, y, radius; // center and radius of the circle
+
+    constructor Circle new(int Ax, int Ay, int Aradius) {
+        let x = Ax;
+        let y = Ay;
+        let radius = Aradius;
+        do draw();
+        return this;
+    }
+
+    /** Disposes this circle. */
+    method void dispose(){
+        do Memory.deAlloc(this);
+        return;
+    }
+
+    /** Draws this circle. */
+    method void draw() {
+        do Screen.setColor(true);
+        do Screen.drawCircle(x, y, radius);
+        return;
+    }
+
+    /** Erases this circle. */
+    method void erase(){
+        do Screen.setColor(false);
+        do Screen.drawCircle(x, y, radius);
+        return;
+    }
+
+    method void incSize(){
+        if (((y + radius + 5) < 510) & ((x + radius + 5) < 254)){
+            do erase();
+            let radius = radius + 5;
+            do draw();
+        }
+        return;
+    }
+
+    method void decSize(){
+        if (radius > 2){
+            do erase();
+            let radius = radius - 5;
+            do draw();
+        }
+        return;
+    }
+
+    method void moveUp(){
+        if((y - 5 - radius) > 1){
+            do erase();
+            let y = y - 5;
+            do draw();
+        }
+        return;
+    }
+
+    method void moveDown(){
+        if((y + radius + 5) < 254){
+            do erase();
+            let y = y + 5;
+            do draw();
+        }
+        return;
+    }
+
+    method void moveLeft(){
+        if((x - radius - 5) > 1){
+            do erase();
+            let x = x - 5;
+            do draw();
+        }
+        return;
+    }
+
+    method void moveRight(){
+        if((x + radius + 5) < 510){
+            do erase();
+            let x = x + 5;
+            do draw();
+        }
+        return;
+    }
+
+}

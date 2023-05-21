@@ -1,0 +1,74 @@
+/**
+* Implements the Circle Dance game.
+* This simple game allows the user to move a black circle around the screen
+* and change the circle's size during the movement.
+* When the game starts, a circle of (16,16) center and radius 15 is drawn at the
+* top-left corner of the screen. The user controls the circle as follows.
+* The 4 arrow keys are used to move the circle up, down, left, and right.
+* The 'z' and 'x' keys are used, respectively, to decrement and increment
+* the circle's size. The 'q' key is used to quit the game.
+*/
+
+class CircleGame {
+    field Circle circle; // the circle to be moved
+    field int direction; // the circle's current direction: 
+                        // 0=none, 1=up, 2=down, 3=left, 4=right
+    field int numMoves; // the number of moves made so far
+
+    /** constructor a new Circle Game with default values. */
+    constructor CircleGame new(int x, int y, int r){
+        let circle = Circle.new(x, y, r);
+        let direction = 0;
+        let numMoves = 0;
+        return this;
+    }  
+
+    /** Disposes this game. */
+    method void dispose() {
+        do circle.dispose();
+        do Memory.deAlloc(this);
+        return;
+    }
+
+    /** Moves the circle in the current direction. */
+    method void moveCircle() {
+        if (direction = 1) { do circle.moveUp(); }
+        if (direction = 2) { do circle.moveDown(); }
+        if (direction = 3) { do circle.moveLeft(); }
+        if (direction = 4) { do circle.moveRight(); }
+        do Sys.wait(5);
+        return;
+    }
+
+    /** Runs the game: handles the user's inputs and moves the square accordingly */
+    method void run() {
+        var int key; // the key the user has pressed
+        var boolean quit; // whether the user has asked to quit the game
+        let quit = false;
+
+        while (~quit) {
+            
+            //waits for the user to press a key
+            while(key  = 0) {
+                let key = Keyboard.keyPressed();
+                do moveCircle();
+            }
+            if (key = 81) { let quit = true; do Output.printString("You made "); do Output.printInt(numMoves); do Output.printString(" moves."); do Output.println(); do Output.printString("Bye!"); do Output.println(); do Sys.wait(1000);}
+            if (key = 90) { do circle.incSize(); let key  = 0; }
+            if (key = 88) { do circle.decSize(); let key  = 0;}
+            if (key = 131) { let direction = 1; let key  = 0;}
+            if (key = 133) { let direction = 2; let key  = 0;}
+            if (key = 130) { let direction = 3; let key  = 0;}
+            if (key = 132) { let direction = 4; let key  = 0;}
+            
+            // waits for the key to be released
+            while (~(key = 0)) {
+                let key = Keyboard.keyPressed();
+                do moveCircle();
+            }
+            let numMoves = numMoves + 1;
+
+        } // while
+        return;
+    } // method run
+} // class CircleGame

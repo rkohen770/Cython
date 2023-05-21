@@ -1,0 +1,87 @@
+
+/** Initializes a new Circle Dance game and starts running it. */
+class Main {
+    function void main() {
+
+        var SquareGame square;
+        var CircleGame circle;
+        var char key;
+        var int i;
+
+        let circle = CircleGame.new(230, 16, 15);
+        let square = SquareGame.new();
+        let i = 5;
+        /** output instructions to user */
+        while (i>0){
+            do Output.println();
+            let i = i-1;
+        }
+        let i = 5;
+        while (i > 0) {
+            do Output.printChar(32);
+            let i = i - 1;
+        }
+        do Output.printString("Welcome to the Dance Game!");
+        do Output.println();
+        let i = 5;
+        while (i > 0) {
+            do Output.printChar(32);
+            let i = i - 1;
+        }
+        do Output.printString("Press 's' to start the Square Dance Game");
+        do Output.println();
+        let i = 5;
+        while (i > 0) {
+            do Output.printChar(32);
+            let i = i - 1;
+        }
+        do Output.printString("Press 'c' to start the Circle Dance Game");
+        do Output.println();
+        let i = 5;
+        while (i > 0) {
+            do Output.printChar(32);
+            let i = i - 1;
+        }
+        do Output.printString("Press 'q' to quit the game");
+        let key = Keyboard.keyPressed();
+        while ((~(key = 81) & ~(key = 83))& ~(key = 67)) {
+            let key = Keyboard.keyPressed();
+        }
+        /** if q is pressed, quit the game */
+        if (key = 81) {
+            return;
+        }
+
+        /** if s is pressed, start square game */
+        if (key = 83) {
+            do square.run();
+            do square.dispose();
+        }
+
+        /** if c is pressed, start circle game */
+        if (key = 67) {
+            do circle.run();
+            do circle.dispose();
+        }
+
+
+        //do circle.run();
+        //do circle.dispose();
+
+       
+        // do square.run();
+        // do square.dispose();
+
+
+
+        return;
+    }
+
+    // function void printChar(int n) {
+    //     while (n > 0) {
+    //         do Output.printChar(32);
+    //         let n = n - 1;
+    //     }
+        
+    // }
+}
