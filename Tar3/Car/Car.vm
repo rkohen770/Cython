@@ -12,87 +12,102 @@ push argument 3
 pop argument 3
 push pointer 0
 return
-function Car.draw 0
+function Car.draw 1
 push argument 0
 pop pointer 0
 push constant 16384
-add
-pop static 0
+pop local 0
+push local 0
 push constant 0
 add
 push constant 0
 call Memory.poke 2
 pop temp 0
+push local 0
 push constant 32
 add
 push constant 0
 call Memory.poke 2
 pop temp 0
+push local 0
 push constant 64
 add
 push constant 0
 call Memory.poke 2
 pop temp 0
+push local 0
 push constant 96
 add
 push constant 0
 call Memory.poke 2
 pop temp 0
+push local 0
 push constant 128
 add
 push constant 0
 call Memory.poke 2
 pop temp 0
+push local 0
 push constant 160
 add
 push constant 0
 call Memory.poke 2
 pop temp 0
+push local 0
 push constant 192
 add
 push constant 8160
 call Memory.poke 2
 pop temp 0
+push local 0
 push constant 224
 add
 push constant 16368
 call Memory.poke 2
 pop temp 0
+push local 0
 push constant 256
 add
 push constant 29496
 call Memory.poke 2
 pop temp 0
+push local 0
 push constant 288
 add
 push constant 29502
 call Memory.poke 2
 pop temp 0
+push local 0
 push constant 320
 add
 push constant 32766
 call Memory.poke 2
 pop temp 0
+push local 0
 push constant 352
 add
 push constant 7800
 call Memory.poke 2
 pop temp 0
+push local 0
 push constant 384
 add
 push constant 3120
 call Memory.poke 2
 pop temp 0
+push local 0
 push constant 416
 add
 push constant 0
 call Memory.poke 2
 pop temp 0
+push local 0
 push constant 448
 add
 push constant 0
 call Memory.poke 2
 pop temp 0
+push local 0
 push constant 480
 add
 push constant 0
@@ -100,87 +115,102 @@ call Memory.poke 2
 pop temp 0
 push constant 0
 return
-function Car.dispose 0
+function Car.dispose 1
 push argument 0
 pop pointer 0
 push constant 16384
-add
-pop static 0
+pop local 0
+push local 0
 push constant 0
 add
 push constant 0
 call Memory.poke 2
 pop temp 0
+push local 0
 push constant 32
 add
 push constant 0
 call Memory.poke 2
 pop temp 0
+push local 0
 push constant 64
 add
 push constant 0
 call Memory.poke 2
 pop temp 0
+push local 0
 push constant 96
 add
 push constant 0
 call Memory.poke 2
 pop temp 0
+push local 0
 push constant 128
 add
 push constant 0
 call Memory.poke 2
 pop temp 0
+push local 0
 push constant 160
 add
 push constant 0
 call Memory.poke 2
 pop temp 0
+push local 0
 push constant 192
 add
 push constant 0
 call Memory.poke 2
 pop temp 0
+push local 0
 push constant 224
 add
 push constant 0
 call Memory.poke 2
 pop temp 0
+push local 0
 push constant 256
 add
 push constant 0
 call Memory.poke 2
 pop temp 0
+push local 0
 push constant 288
 add
 push constant 0
 call Memory.poke 2
 pop temp 0
+push local 0
 push constant 320
 add
 push constant 0
 call Memory.poke 2
 pop temp 0
+push local 0
 push constant 352
 add
 push constant 0
 call Memory.poke 2
 pop temp 0
+push local 0
 push constant 384
 add
 push constant 0
 call Memory.poke 2
 pop temp 0
+push local 0
 push constant 416
 add
 push constant 0
 call Memory.poke 2
 pop temp 0
+push local 0
 push constant 448
 add
 push constant 0
 call Memory.poke 2
 pop temp 0
+push local 0
 push constant 480
 add
 push constant 0

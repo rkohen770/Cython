@@ -1,0 +1,100 @@
+/** Implements a graphical number 9. */
+class Nine {
+
+   field int x, y; // screen location of the number's top-left corner
+   field int size; // size of the number
+
+   /** Constructs a new number with a given location and size. */
+   constructor Nine new(int Ax, int Ay, int Asize) {
+      let x = Ax;
+      let y = Ay;
+      let size = Asize;
+      do draw();
+      return this;
+   }
+
+   /** Disposes this number. */
+   method void dispose() {
+      do Memory.deAlloc(this);
+      return;
+   }
+
+   /** Draws the number on the screen. */
+   method void draw() {
+      do Screen.setColor(true);
+      // Draw the number 9 (example representation)
+      // Replace this with your own drawing logic
+      // You can use the Screen.drawRectangle() method to draw individual pixels
+      // based on the size and position of the number
+      // Example:
+      // do Screen.drawRectangle(x, y, x + size, y + size);
+      return;
+   }
+
+   /** Erases the number from the screen. */
+   method void erase() {
+      do Screen.setColor(false);
+      // Erase the number from the screen (opposite of draw())
+      return;
+   }
+
+   /** Moves the number up by 2 pixels. */
+   method void moveUp() {
+      if (y > 1) {
+         do erase();
+         let y = y - 2;
+         do draw();
+      }
+      return;
+   }
+
+   /** Moves the number down by 2 pixels. */
+   method void moveDown() {
+      if ((y + size) < 254) {
+         do erase();
+         let y = y + 2;
+         do draw();
+      }
+      return;
+   }
+
+   /** Moves the number left by 2 pixels. */
+   method void moveLeft() {
+      if (x > 1) {
+         do erase();
+         let x = x - 2;
+         do draw();
+      }
+      return;
+   }
+
+   /** Moves the number right by 2 pixels. */
+   method void moveRight() {
+      if ((x + size) < 510) {
+         do erase();
+         let x = x + 2;
+         do draw();
+      }
+      return;
+   }
+
+   /** Zooms in the number by 2 pixels. */
+   method void zoomIn() {
+      if (size < 254) {
+         do erase();
+         let size = size + 2;
+         do draw();
+      }
+      return;
+   }
+
+   /** Zooms out the number by 2 pixels. */
+   method void zoomOut() {
+      if (size > 2) {
+         do erase();
+         let size = size - 2;
+         do draw();
+      }
+      return;
+   }
+}

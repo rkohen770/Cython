@@ -1,0 +1,8 @@
+class Main {
+    function void main() {
+        var Nine game;
+        let game = Nine.new(7, 5,10);
+        do game.draw();
+        return;
+    }
+}

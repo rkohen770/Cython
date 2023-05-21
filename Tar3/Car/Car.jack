@@ -19,7 +19,8 @@ class Car {
 
     // methods
     method void draw() {
-		let memAddress = 16384 + location;
+		var int memAddress;
+        let memAddress = 16384;
 		do Memory.poke(memAddress + 0, 0);
 		do Memory.poke(memAddress + 32, 0);
 		do Memory.poke(memAddress + 64, 0);
@@ -40,7 +41,8 @@ class Car {
     }
 
     method void dispose() {
-        let memAddress = 16384 + location;
+        var int memAddress;
+        let memAddress = 16384;
         do Memory.poke(memAddress + 0, 0);
         do Memory.poke(memAddress + 32, 0);
         do Memory.poke(memAddress + 64, 0);
