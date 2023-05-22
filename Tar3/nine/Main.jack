@@ -1,8 +1,21 @@
+/**
+ * The main class of the Nine Game.
+ * This class initializes the game and starts the game loop.
+ */
+
 class Main {
     function void main() {
-        var Nine game;
-        let game = Nine.new(7, 5,10);
-        do game.draw();
+        var NineGame game;
+
+        // Initializes the game
+        let game = NineGame.new(230, 16, 15);
+
+        // Runs the game loop
+        do game.run();
+
+        // Cleans up resources
+        do game.dispose();
+
         return;
     }
 }
