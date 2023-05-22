@@ -5,13 +5,15 @@
 
 class Nine {
     field int x, y; // screen location of the number 9's top-left corner
-    field int size; // size of the number 9
+    field int radius; // radius of the number 9
+    field int radius2; // radius of the number 9
 
-    /** Constructs a new Nine object with a given location and size. */
-    constructor Nine new(int Ax, int Ay, int Asize) {
+    /** Constructs a new Nine object with a given location and radius. */
+    constructor Nine new(int Ax, int Ay, int Aradius) {
         let x = Ax;
         let y = Ay;
-        let size = Asize;
+        let radius = Aradius;
+        let radius2 = Aradius*2/3;
         do draw();
         return this;
     }
@@ -19,95 +21,87 @@ class Nine {
    /** Draws the number 9 on the screen. */
 method void draw() {
     // Draw the number 9 using drawing commands
-    // Adjust the coordinates and size as needed
+    // Adjust the coordinates and radius as needed
     // Example commands:
     do Screen.setColor(true);
-    let startX = x + (size / 4);
-    let endX = x + (size * 3 / 4);
-    let midY = y + (size / 2);
-    let bottomY = y + size;
-    
-    // Draw the top half of the number 9
-    do Screen.drawRectangle(startX, y, endX - startX, size / 2);
-    do Screen.drawRectangle(startX, y, size / 4, midY - y);
-    do Screen.drawRectangle(startX, midY, endX - startX, size / 2);
-    
-    // Draw the bottom half of the number 9
-    do Screen.drawRectangle(startX, midY, size / 2, bottomY - midY);
-    do Screen.drawRectangle(endX - size / 4, midY, size / 4, bottomY - midY);
-    
+    do Screen.drawCircle(x, y, radius);
+    do Screen.setColor(false);
+    do Screen.drawCircle(x, y, radius2);
+    do Screen.setColor(true);
+    do Screen.drawRectangle(x + radius2, y-1 , x + radius, y + radius*2);
     return;
 }
 
 /** Erases the number 9 from the screen. */
 method void erase() {
-    // Erase the number 9 from the screen using erasing commands
-    // Adjust the coordinates and size as needed
+    // Erase the number 9 using drawing commands
+    // Adjust the coordinates and radius as needed
     // Example commands:
     do Screen.setColor(false);
-    let startX = x + (size / 4);
-    let endX = x + (size * 3 / 4);
-    let midY = y + (size / 2);
-    let bottomY = y + size;
-    
-    // Erase the top half of the number 9
-    do Screen.drawRectangle(startX, y, endX - startX, size / 2);
-    do Screen.drawRectangle(startX, y, size / 4, midY - y);
-    do Screen.drawRectangle(startX, midY, endX - startX, size / 2);
-    
-    // Erase the bottom half of the number 9
-    do Screen.drawRectangle(startX, midY, size / 2, bottomY - midY);
-    do Screen.drawRectangle(endX - size / 4, midY, size / 4, bottomY - midY);
-    
-    return;
+    do Screen.drawCircle(x, y, radius);
+    do Screen.drawRectangle(x + radius2, y , x + radius, y + radius2);
+
+    return; 
 }
 
 
     /** Moves the number 9 up by a given number of pixels. */
     method void moveUp(int pixels) {
-        do erase();
-        let y = y - pixels;
-        do draw();
+        if (y - pixels - radius2 > 1){
+            do erase();
+            let y = y - pixels;
+            do draw();
+        }
         return;
     }
 
     /** Moves the number 9 down by a given number of pixels. */
     method void moveDown(int pixels) {
-        do erase();
-        let y = y + pixels;
-        do draw();
+        if (y + pixels + radius2 < 254) { 
+            do erase();
+            let y = y + pixels;
+            do draw();
+        }
         return;
     }
 
     /** Moves the number 9 to the left by a given number of pixels. */
     method void moveLeft(int pixels) {
-        do erase();
-        let x = x - pixels;
-        do draw();
+        if (x - pixels - radius > 1){
+            do erase();
+            let x = x - pixels;
+            do draw();
+        }
         return;
     }
 
     /** Moves the number 9 to the right by a given number of pixels. */
     method void moveRight(int pixels) {
-        do erase();
-        let x = x + pixels;
-        do draw();
+        if (x + pixels + radius < 510){
+            do erase();
+            let x = x + pixels;
+            do draw();
+        }
         return;
     }
 
-    /** Increases the size of the number 9 by a given number of pixels. */
-    method void increaseSize(int pixels) {
-        do erase();
-        let size = size + pixels;
-        do draw();
+    /** Increases the radius of the number 9 by a given number of pixels. */
+    method void increaseradius(int pixels) {
+        if ((y+ radius + pixels < 254)&(x+ radius + pixels < 510)&(y- radius - pixels > 1)&(x- radius - pixels > 1)){
+            do erase();
+            let radius = radius + pixels;
+            do draw();
+        }
         return;
     }
 
-    /** Decreases the size of the number 9 by a given number of pixels. */
-    method void decreaseSize(int pixels) {
-        do erase();
-        let size = size - pixels;
-        do draw();
+    /** Decreases the radius of the number 9 by a given number of pixels. */
+    method void decreaseradius(int pixels) {
+        if ((y+ radius - pixels < 254)&(x+ radius - pixels < 510)&(y- radius + pixels > 1)&(x- radius + pixels > 1)){
+            do erase();
+            let radius = radius - pixels;
+            do draw();
+        }
         return;
     }
 
