@@ -44,8 +44,8 @@ class CircleGame {
     method void run() {
         var int key; // the key the user has pressed
         var boolean quit; // whether the user has asked to quit the game
-        let quit = false;
-
+        let quit = false; 
+        do circle.draw();
         while (~quit) {
             
             //waits for the user to press a key
@@ -53,7 +53,14 @@ class CircleGame {
                 let key = Keyboard.keyPressed();
                 do moveCircle();
             }
-            if (key = 81) { let quit = true; do Output.printString("You made "); do Output.printInt(numMoves); do Output.printString(" moves."); do Output.println(); do Output.printString("Bye!"); do Output.println(); do Sys.wait(1000);}
+            if (key = 81) {
+                let quit = true;
+                do Screen.clearScreen();
+                do Output.printString("You made ");
+                do Output.printInt(numMoves);
+                do Output.printString(" moves.");
+                do Sys.wait(1000);
+                }
             if (key = 90) { do circle.incSize(); let key  = 0; }
             if (key = 88) { do circle.decSize(); let key  = 0;}
             if (key = 131) { let direction = 1; let key  = 0;}

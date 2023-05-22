@@ -1,0 +1,86 @@
+/**
+ * Implements the number Game.
+ * This simple game allows the user to move a number "9" around the screen
+ * and change its size during the movement.
+ * When the game starts, a number "9" of size 30 by 30 pixels is shown at the
+ * top-left corner of the screen. The user controls the number as follows:
+ * - The 4 arrow keys are used to move the number up, down, left, and right.
+ * - The 'z' and 'x' keys are used to decrease and increase the number's size.
+ * - The 'q' key is used to quit the game.
+ */
+
+class NineGame {
+    field Nine nine; // the number "9" in the game
+    field int direction; // the number's current direction:
+    field int numMoves;                    // 0=none, 1=up, 2=down, 3=left, 4=right
+
+    /** Constructs a new number Game. */
+    constructor NineGame new(int x, int y, int size) {
+        // Creates a number "9" of size 30 by 30 pixels and positions it at the top-left
+        // of the screen.
+        let nine = Nine.new(x, y, size);
+        let direction = 0;  // initial state is no movement
+        let numMoves = 0;
+        return this;
+    }
+
+    /** Disposes this game. */
+    method void dispose() {
+        do nine.dispose();
+        do Memory.deAlloc(this);
+        return;
+    }
+
+    /** Moves the number in the current direction. */
+    method void moveNumber() {
+        if (direction = 1) { do nine.moveUp(5); }
+        if (direction = 2) { do nine.moveDown(5); }
+        if (direction = 3) { do nine.moveLeft(5); }
+        if (direction = 4) { do nine.moveRight(5); }
+        do Sys.wait(5);  // delays the next movement
+        return;
+    }
+
+    /** Runs the game: handles the user's inputs and moves the number accordingly */
+    method void run() {
+        
+        var int key; // the key currently pressed by the user
+        var boolean quit;
+        let quit = false;
+        do nine.draw();
+        while (~quit) {
+            // waits for a key to be pressed
+            while (key = 0) {
+                let key = Keyboard.keyPressed();
+                do moveNumber();
+            }
+            if (key = 81) 
+                {
+                    let quit = true;
+                    do Screen.clearScreen();
+                    do Output.printString("You made ");
+                    do Output.printInt(numMoves);
+                    do Output.printString(" moves.");
+                    do Sys.wait(1000);
+                }
+            if (key = 90) { do nine.increaseradius(5); let key  = 0; }
+            if (key = 88) { do nine.decreaseradius(5); let key  = 0;}
+            if (key = 131) { let direction = 1; let key  = 0;}
+            if (key = 133) { let direction = 2; let key  = 0;}
+            if (key = 130) { let direction = 3; let key  = 0;}
+            if (key = 132) { let direction = 4; let key  = 0;}
+
+            // waits for the key to be released
+            while (~(key = 0)) {
+                let key = Keyboard.keyPressed();
+                do moveNumber();
+            }
+            let numMoves = numMoves + 1;
+        } // while
+        return;
+    }
+}
+
+
+/**
+ * Implements a graphical number "9

@@ -3,14 +3,14 @@
 class Main {
     function void main() {
 
-        var SquareGame square;
+        var NineGame nine;
         var CircleGame circle;
         var char key;
         var int i;
 
-        let circle = CircleGame.new(230, 16, 15);
-        let square = SquareGame.new();
-        let i = 5;
+        let circle = CircleGame.new(260, 16, 15);
+        let nine = NineGame.new(200, 16, 15);
+        let i = 7;
         /** output instructions to user */
         while (i>0){
             do Output.println();
@@ -28,34 +28,42 @@ class Main {
             do Output.printChar(32);
             let i = i - 1;
         }
-        do Output.printString("Press 's' to start the Square Dance Game");
+        do Output.printString("Press 'N' to start the Nine Dance Game");
         do Output.println();
         let i = 5;
         while (i > 0) {
             do Output.printChar(32);
             let i = i - 1;
         }
-        do Output.printString("Press 'c' to start the Circle Dance Game");
+        do Output.printString("Press 'C' to start the Circle Dance Game");
         do Output.println();
         let i = 5;
         while (i > 0) {
             do Output.printChar(32);
             let i = i - 1;
         }
-        do Output.printString("Press 'q' to quit the game");
+        do Output.printString("Press 'Q' to quit the game");
         let key = Keyboard.keyPressed();
-        while ((~(key = 81) & ~(key = 83))& ~(key = 67)) {
+        while (~(key = 81) & ~(key = 78)& ~(key = 67)) {
             let key = Keyboard.keyPressed();
         }
+
+        /** Clear the screen */
+        do Screen.clearScreen();
+
         /** if q is pressed, quit the game */
         if (key = 81) {
+            do nine.dispose();
+            do circle.dispose();
+            do Screen.clearScreen();
+            do Output.printString("Thanks for playing! Bye!");
             return;
         }
 
-        /** if s is pressed, start square game */
-        if (key = 83) {
-            do square.run();
-            do square.dispose();
+        /** if n is pressed, start nine game */
+        if (key = 78) {
+            do nine.run();
+            do nine.dispose();
         }
 
         /** if c is pressed, start circle game */
@@ -69,11 +77,15 @@ class Main {
         //do circle.dispose();
 
        
-        // do square.run();
-        // do square.dispose();
+        // do nine.run();
+        // do nine.dispose();
 
-
-
+        let i = 5;
+        while (i > 0) {
+            do Output.printChar(32);
+            let i = i - 1;
+        }
+        do Output.printString("Bye!");
         return;
     }
 
