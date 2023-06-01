@@ -6,10 +6,10 @@
 # It is not compiled to C.
 
 import hello
-import Token as jt
-import jack_tokenizer
+import jackTokenizer
 
 hello.say_hello()
-Token.__init__("C:\\Users\\hoday\\source\\repos\\Cython\\Cython\\Tar4")
-jack_tokenizer.JackTokenizer("C:\\Users\\rache\\PycharmProjects\\Cython\\Tar4\\10")
-# jt.recursive_process("C:\\Users\\rache\\PycharmProjects\\Cython\\Tar4\\10")
+
+jt = jackTokenizer.JackTokenizer()
+jt.recursive_process("C:\\Users\\rache\\PycharmProjects\\Cython\\Tar4\\10")
+# jt.recursive_process("C:\\Users\\hoday\\source\\repos\\Cython\\Cython\\Tar4\\10")
