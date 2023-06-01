@@ -22,7 +22,7 @@ cdef class JackTokenizer:
     cdef str current_token_type
 
     # recursive function to process each file in the folder
-    cdef recursive_process(self, file_path):
+    def recursive_process(self, file_path):
         for entry in os.scandir(file_path):
             print(entry.path)
             if entry.is_file() and entry.name.endswith('.jack'):
