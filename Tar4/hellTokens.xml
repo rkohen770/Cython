@@ -1,0 +1,28 @@
+<tokens>
+<identifier> # </identifier>
+<identifier> hello </identifier>
+<symbol> . </symbol>
+<identifier> pyx </identifier>
+<symbol> - </symbol>
+<identifier> Python </identifier>
+<identifier> Module </identifier>
+<symbol> , </symbol>
+<keyword> this </keyword>
+<identifier> code </identifier>
+<identifier> will </identifier>
+<identifier> be </identifier>
+<identifier> translated </identifier>
+<identifier> to </identifier>
+<identifier> C </identifier>
+<identifier> by </identifier>
+<identifier> Cython </identifier>
+<symbol> . </symbol>
+<identifier> def </identifier>
+<identifier> say_hello </identifier>
+<symbol> ( </symbol>
+<symbol> ) </symbol>
+<identifier> print </identifier>
+<symbol> ( </symbol>
+<stringConstant> Hello World! </stringConstant>
+<symbol> ) </symbol>
+</tokens>
