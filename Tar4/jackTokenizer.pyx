@@ -3,7 +3,6 @@
 
 
 import os
-# import compilationEngine
 
 cdef class JackTokenizer:
 
