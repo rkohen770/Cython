@@ -5,10 +5,8 @@
 # This code is always interpreted, like normal Python.
 # It is not compiled to C.
 
-from hashlib import new
 import hello
-from jackTokenizer import JackTokenizer
+import Token
 
 hello.say_hello()
-Jack = new()
-
+Token.__init__("C:\\Users\\hoday\\source\\repos\\Cython\\Cython\\Tar4")
