@@ -3,6 +3,7 @@
 
 
 import os
+from jackAnalyzer import JackAnalyzer
 
 cdef class JackTokenizer:
 
@@ -39,6 +40,13 @@ cdef class JackTokenizer:
                 
                 self.process_file(entry.path, output_file)
                 output_file.close()
+
+                # Create an instance of the JackAnalyzer class
+                analyzer = JackAnalyzer()
+
+                # Call the compile method on the analyzer instance, passing the output file and directory as arguments
+                analyzer.compile(output_file, file_path , file_name)
+
             elif entry.is_dir():
                 self.recursive_process(entry.path)
 
