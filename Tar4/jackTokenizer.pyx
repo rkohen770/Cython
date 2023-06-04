@@ -45,7 +45,7 @@ cdef class JackTokenizer:
                 analyzer = JackAnalyzer()
 
                 # Call the compile method on the analyzer instance, passing the output file and directory as arguments
-                analyzer.compile(output_file, file_path , file_name)
+                analyzer.compile(output_file_name, file_path , file_name)
 
             elif entry.is_dir():
                 self.recursive_process(entry.path)
@@ -91,7 +91,6 @@ cdef class JackTokenizer:
 
     # process each line
     cdef processLine(self, line, output_file):
-        print(line)
         token = ''
         flag = False
         for sign in line:

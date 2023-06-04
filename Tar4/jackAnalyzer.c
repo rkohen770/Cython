@@ -1349,7 +1349,7 @@ static int __Pyx_check_binary_version(void);
 /* InitStrings.proto */
 static int __Pyx_InitStrings(__Pyx_StringTabEntry *t);
 
-static PyObject *__pyx_f_12jackAnalyzer_12JackAnalyzer_compile(CYTHON_UNUSED struct __pyx_obj_12jackAnalyzer_JackAnalyzer *__pyx_v_self, CYTHON_UNUSED PyObject *__pyx_v_input_file, PyObject *__pyx_v_directory, PyObject *__pyx_v_output_file_name, int __pyx_skip_dispatch); /* proto*/
+static PyObject *__pyx_f_12jackAnalyzer_12JackAnalyzer_compile(CYTHON_UNUSED struct __pyx_obj_12jackAnalyzer_JackAnalyzer *__pyx_v_self, PyObject *__pyx_v_xxxT, PyObject *__pyx_v_directory, PyObject *__pyx_v_output_file_name, int __pyx_skip_dispatch); /* proto*/
 
 /* Module declarations from 'jackAnalyzer' */
 static PyTypeObject *__pyx_ptype_12jackAnalyzer_JackAnalyzer = 0;
@@ -1371,6 +1371,7 @@ static const char __pyx_k_name[] = "__name__";
 static const char __pyx_k_open[] = "open";
 static const char __pyx_k_path[] = "path";
 static const char __pyx_k_test[] = "__test__";
+static const char __pyx_k_xxxT[] = "xxxT";
 static const char __pyx_k_import[] = "__import__";
 static const char __pyx_k_pickle[] = "pickle";
 static const char __pyx_k_reduce[] = "__reduce__";
@@ -1384,7 +1385,6 @@ static const char __pyx_k_splitext[] = "splitext";
 static const char __pyx_k_directory[] = "directory";
 static const char __pyx_k_pyx_state[] = "__pyx_state";
 static const char __pyx_k_reduce_ex[] = "__reduce_ex__";
-static const char __pyx_k_input_file[] = "input_file";
 static const char __pyx_k_pyx_result[] = "__pyx_result";
 static const char __pyx_k_pyx_vtable[] = "__pyx_vtable__";
 static const char __pyx_k_PickleError[] = "PickleError";
@@ -1413,7 +1413,6 @@ static PyObject *__pyx_n_s_dict;
 static PyObject *__pyx_n_s_directory;
 static PyObject *__pyx_n_s_getstate;
 static PyObject *__pyx_n_s_import;
-static PyObject *__pyx_n_s_input_file;
 static PyObject *__pyx_n_s_jackAnalyzer;
 static PyObject *__pyx_n_s_join;
 static PyObject *__pyx_n_s_main;
@@ -1442,7 +1441,8 @@ static PyObject *__pyx_n_s_test;
 static PyObject *__pyx_n_s_update;
 static PyObject *__pyx_n_s_w;
 static PyObject *__pyx_kp_s_xml;
-static PyObject *__pyx_pf_12jackAnalyzer_12JackAnalyzer_compile(struct __pyx_obj_12jackAnalyzer_JackAnalyzer *__pyx_v_self, PyObject *__pyx_v_input_file, PyObject *__pyx_v_directory, PyObject *__pyx_v_output_file_name); /* proto */
+static PyObject *__pyx_n_s_xxxT;
+static PyObject *__pyx_pf_12jackAnalyzer_12JackAnalyzer_compile(struct __pyx_obj_12jackAnalyzer_JackAnalyzer *__pyx_v_self, PyObject *__pyx_v_xxxT, PyObject *__pyx_v_directory, PyObject *__pyx_v_output_file_name); /* proto */
 static PyObject *__pyx_pf_12jackAnalyzer_12JackAnalyzer_2__reduce_cython__(struct __pyx_obj_12jackAnalyzer_JackAnalyzer *__pyx_v_self); /* proto */
 static PyObject *__pyx_pf_12jackAnalyzer_12JackAnalyzer_4__setstate_cython__(struct __pyx_obj_12jackAnalyzer_JackAnalyzer *__pyx_v_self, PyObject *__pyx_v___pyx_state); /* proto */
 static PyObject *__pyx_pf_12jackAnalyzer___pyx_unpickle_JackAnalyzer(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v___pyx_type, long __pyx_v___pyx_checksum, PyObject *__pyx_v___pyx_state); /* proto */
@@ -1458,15 +1458,17 @@ static PyObject *__pyx_codeobj__3;
 /* "jackAnalyzer.pyx":14
  * 
  *     # get the base name of the file and the directory it is in and create new file for output in the same directory
- *     cpdef compile(self, input_file, directory, output_file_name):             # <<<<<<<<<<<<<<
+ *     cpdef compile(self, xxxT, directory, output_file_name):             # <<<<<<<<<<<<<<
  * 
  *         # Extract the name of the file in the path without the 'T' extension
  */
 
 static PyObject *__pyx_pw_12jackAnalyzer_12JackAnalyzer_1compile(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static PyObject *__pyx_f_12jackAnalyzer_12JackAnalyzer_compile(CYTHON_UNUSED struct __pyx_obj_12jackAnalyzer_JackAnalyzer *__pyx_v_self, CYTHON_UNUSED PyObject *__pyx_v_input_file, PyObject *__pyx_v_directory, PyObject *__pyx_v_output_file_name, int __pyx_skip_dispatch) {
+static PyObject *__pyx_f_12jackAnalyzer_12JackAnalyzer_compile(CYTHON_UNUSED struct __pyx_obj_12jackAnalyzer_JackAnalyzer *__pyx_v_self, PyObject *__pyx_v_xxxT, PyObject *__pyx_v_directory, PyObject *__pyx_v_output_file_name, int __pyx_skip_dispatch) {
   CYTHON_UNUSED PyObject *__pyx_v_file_name = NULL;
-  CYTHON_UNUSED PyObject *__pyx_v_output_file = NULL;
+  PyObject *__pyx_v_output_file = NULL;
+  PyObject *__pyx_v_xxx = NULL;
+  CYTHON_UNUSED PyObject *__pyx_v_compilation_engine = NULL;
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
@@ -1479,7 +1481,6 @@ static PyObject *__pyx_f_12jackAnalyzer_12JackAnalyzer_compile(CYTHON_UNUSED str
   const char *__pyx_filename = NULL;
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("compile", 0);
-  __Pyx_INCREF(__pyx_v_output_file_name);
   /* Check if called by wrapper */
   if (unlikely(__pyx_skip_dispatch)) ;
   /* Check if overridden in Python */
@@ -1508,7 +1509,7 @@ static PyObject *__pyx_f_12jackAnalyzer_12JackAnalyzer_compile(CYTHON_UNUSED str
         }
         #if CYTHON_FAST_PYCALL
         if (PyFunction_Check(__pyx_t_3)) {
-          PyObject *__pyx_temp[4] = {__pyx_t_4, __pyx_v_input_file, __pyx_v_directory, __pyx_v_output_file_name};
+          PyObject *__pyx_temp[4] = {__pyx_t_4, __pyx_v_xxxT, __pyx_v_directory, __pyx_v_output_file_name};
           __pyx_t_2 = __Pyx_PyFunction_FastCall(__pyx_t_3, __pyx_temp+1-__pyx_t_5, 3+__pyx_t_5); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 14, __pyx_L1_error)
           __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
           __Pyx_GOTREF(__pyx_t_2);
@@ -1516,7 +1517,7 @@ static PyObject *__pyx_f_12jackAnalyzer_12JackAnalyzer_compile(CYTHON_UNUSED str
         #endif
         #if CYTHON_FAST_PYCCALL
         if (__Pyx_PyFastCFunction_Check(__pyx_t_3)) {
-          PyObject *__pyx_temp[4] = {__pyx_t_4, __pyx_v_input_file, __pyx_v_directory, __pyx_v_output_file_name};
+          PyObject *__pyx_temp[4] = {__pyx_t_4, __pyx_v_xxxT, __pyx_v_directory, __pyx_v_output_file_name};
           __pyx_t_2 = __Pyx_PyCFunction_FastCall(__pyx_t_3, __pyx_temp+1-__pyx_t_5, 3+__pyx_t_5); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 14, __pyx_L1_error)
           __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
           __Pyx_GOTREF(__pyx_t_2);
@@ -1528,9 +1529,9 @@ static PyObject *__pyx_f_12jackAnalyzer_12JackAnalyzer_compile(CYTHON_UNUSED str
           if (__pyx_t_4) {
             __Pyx_GIVEREF(__pyx_t_4); PyTuple_SET_ITEM(__pyx_t_6, 0, __pyx_t_4); __pyx_t_4 = NULL;
           }
-          __Pyx_INCREF(__pyx_v_input_file);
-          __Pyx_GIVEREF(__pyx_v_input_file);
-          PyTuple_SET_ITEM(__pyx_t_6, 0+__pyx_t_5, __pyx_v_input_file);
+          __Pyx_INCREF(__pyx_v_xxxT);
+          __Pyx_GIVEREF(__pyx_v_xxxT);
+          PyTuple_SET_ITEM(__pyx_t_6, 0+__pyx_t_5, __pyx_v_xxxT);
           __Pyx_INCREF(__pyx_v_directory);
           __Pyx_GIVEREF(__pyx_v_directory);
           PyTuple_SET_ITEM(__pyx_t_6, 1+__pyx_t_5, __pyx_v_directory);
@@ -1623,7 +1624,7 @@ static PyObject *__pyx_f_12jackAnalyzer_12JackAnalyzer_compile(CYTHON_UNUSED str
   /* "jackAnalyzer.pyx":20
  * 
  *         # Build the output file name
- *         output_file_name = os.path.join(directory, output_file_name  + '.xml')             # <<<<<<<<<<<<<<
+ *         output_file = os.path.join(directory, output_file_name  + '.xml')             # <<<<<<<<<<<<<<
  * 
  *         # Open the output file for writing
  */
@@ -1684,34 +1685,89 @@ static PyObject *__pyx_f_12jackAnalyzer_12JackAnalyzer_compile(CYTHON_UNUSED str
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
   }
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __Pyx_DECREF_SET(__pyx_v_output_file_name, __pyx_t_2);
+  __pyx_v_output_file = __pyx_t_2;
   __pyx_t_2 = 0;
 
   /* "jackAnalyzer.pyx":23
  * 
  *         # Open the output file for writing
- *         output_file = open(output_file_name, 'w')             # <<<<<<<<<<<<<<
+ *         xxx = open(output_file, 'w')             # <<<<<<<<<<<<<<
  * 
  *         # Create a CompilationEngine object
  */
   __pyx_t_2 = PyTuple_New(2); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 23, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  __Pyx_INCREF(__pyx_v_output_file_name);
-  __Pyx_GIVEREF(__pyx_v_output_file_name);
-  PyTuple_SET_ITEM(__pyx_t_2, 0, __pyx_v_output_file_name);
+  __Pyx_INCREF(__pyx_v_output_file);
+  __Pyx_GIVEREF(__pyx_v_output_file);
+  PyTuple_SET_ITEM(__pyx_t_2, 0, __pyx_v_output_file);
   __Pyx_INCREF(__pyx_n_s_w);
   __Pyx_GIVEREF(__pyx_n_s_w);
   PyTuple_SET_ITEM(__pyx_t_2, 1, __pyx_n_s_w);
   __pyx_t_1 = __Pyx_PyObject_Call(__pyx_builtin_open, __pyx_t_2, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 23, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  __pyx_v_output_file = __pyx_t_1;
+  __pyx_v_xxx = __pyx_t_1;
+  __pyx_t_1 = 0;
+
+  /* "jackAnalyzer.pyx":26
+ * 
+ *         # Create a CompilationEngine object
+ *         compilation_engine =  CompilationEngine(xxxT, xxx)             # <<<<<<<<<<<<<<
+ */
+  __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_CompilationEngine); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 26, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
+  __pyx_t_4 = NULL;
+  __pyx_t_5 = 0;
+  if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_2))) {
+    __pyx_t_4 = PyMethod_GET_SELF(__pyx_t_2);
+    if (likely(__pyx_t_4)) {
+      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
+      __Pyx_INCREF(__pyx_t_4);
+      __Pyx_INCREF(function);
+      __Pyx_DECREF_SET(__pyx_t_2, function);
+      __pyx_t_5 = 1;
+    }
+  }
+  #if CYTHON_FAST_PYCALL
+  if (PyFunction_Check(__pyx_t_2)) {
+    PyObject *__pyx_temp[3] = {__pyx_t_4, __pyx_v_xxxT, __pyx_v_xxx};
+    __pyx_t_1 = __Pyx_PyFunction_FastCall(__pyx_t_2, __pyx_temp+1-__pyx_t_5, 2+__pyx_t_5); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 26, __pyx_L1_error)
+    __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
+    __Pyx_GOTREF(__pyx_t_1);
+  } else
+  #endif
+  #if CYTHON_FAST_PYCCALL
+  if (__Pyx_PyFastCFunction_Check(__pyx_t_2)) {
+    PyObject *__pyx_temp[3] = {__pyx_t_4, __pyx_v_xxxT, __pyx_v_xxx};
+    __pyx_t_1 = __Pyx_PyCFunction_FastCall(__pyx_t_2, __pyx_temp+1-__pyx_t_5, 2+__pyx_t_5); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 26, __pyx_L1_error)
+    __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
+    __Pyx_GOTREF(__pyx_t_1);
+  } else
+  #endif
+  {
+    __pyx_t_3 = PyTuple_New(2+__pyx_t_5); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 26, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_3);
+    if (__pyx_t_4) {
+      __Pyx_GIVEREF(__pyx_t_4); PyTuple_SET_ITEM(__pyx_t_3, 0, __pyx_t_4); __pyx_t_4 = NULL;
+    }
+    __Pyx_INCREF(__pyx_v_xxxT);
+    __Pyx_GIVEREF(__pyx_v_xxxT);
+    PyTuple_SET_ITEM(__pyx_t_3, 0+__pyx_t_5, __pyx_v_xxxT);
+    __Pyx_INCREF(__pyx_v_xxx);
+    __Pyx_GIVEREF(__pyx_v_xxx);
+    PyTuple_SET_ITEM(__pyx_t_3, 1+__pyx_t_5, __pyx_v_xxx);
+    __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_t_3, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 26, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_1);
+    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+  }
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+  __pyx_v_compilation_engine = __pyx_t_1;
   __pyx_t_1 = 0;
 
   /* "jackAnalyzer.pyx":14
  * 
  *     # get the base name of the file and the directory it is in and create new file for output in the same directory
- *     cpdef compile(self, input_file, directory, output_file_name):             # <<<<<<<<<<<<<<
+ *     cpdef compile(self, xxxT, directory, output_file_name):             # <<<<<<<<<<<<<<
  * 
  *         # Extract the name of the file in the path without the 'T' extension
  */
@@ -1730,7 +1786,8 @@ static PyObject *__pyx_f_12jackAnalyzer_12JackAnalyzer_compile(CYTHON_UNUSED str
   __pyx_L0:;
   __Pyx_XDECREF(__pyx_v_file_name);
   __Pyx_XDECREF(__pyx_v_output_file);
-  __Pyx_XDECREF(__pyx_v_output_file_name);
+  __Pyx_XDECREF(__pyx_v_xxx);
+  __Pyx_XDECREF(__pyx_v_compilation_engine);
   __Pyx_XGIVEREF(__pyx_r);
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
@@ -1739,7 +1796,7 @@ static PyObject *__pyx_f_12jackAnalyzer_12JackAnalyzer_compile(CYTHON_UNUSED str
 /* Python wrapper */
 static PyObject *__pyx_pw_12jackAnalyzer_12JackAnalyzer_1compile(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
 static PyObject *__pyx_pw_12jackAnalyzer_12JackAnalyzer_1compile(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
-  PyObject *__pyx_v_input_file = 0;
+  PyObject *__pyx_v_xxxT = 0;
   PyObject *__pyx_v_directory = 0;
   PyObject *__pyx_v_output_file_name = 0;
   int __pyx_lineno = 0;
@@ -1749,7 +1806,7 @@ static PyObject *__pyx_pw_12jackAnalyzer_12JackAnalyzer_1compile(PyObject *__pyx
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("compile (wrapper)", 0);
   {
-    static PyObject **__pyx_pyargnames[] = {&__pyx_n_s_input_file,&__pyx_n_s_directory,&__pyx_n_s_output_file_name,0};
+    static PyObject **__pyx_pyargnames[] = {&__pyx_n_s_xxxT,&__pyx_n_s_directory,&__pyx_n_s_output_file_name,0};
     PyObject* values[3] = {0,0,0};
     if (unlikely(__pyx_kwds)) {
       Py_ssize_t kw_args;
@@ -1767,7 +1824,7 @@ static PyObject *__pyx_pw_12jackAnalyzer_12JackAnalyzer_1compile(PyObject *__pyx
       kw_args = PyDict_Size(__pyx_kwds);
       switch (pos_args) {
         case  0:
-        if (likely((values[0] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_input_file)) != 0)) kw_args--;
+        if (likely((values[0] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_xxxT)) != 0)) kw_args--;
         else goto __pyx_L5_argtuple_error;
         CYTHON_FALLTHROUGH;
         case  1:
@@ -1792,7 +1849,7 @@ static PyObject *__pyx_pw_12jackAnalyzer_12JackAnalyzer_1compile(PyObject *__pyx
       values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
       values[2] = PyTuple_GET_ITEM(__pyx_args, 2);
     }
-    __pyx_v_input_file = values[0];
+    __pyx_v_xxxT = values[0];
     __pyx_v_directory = values[1];
     __pyx_v_output_file_name = values[2];
   }
@@ -1804,14 +1861,14 @@ static PyObject *__pyx_pw_12jackAnalyzer_12JackAnalyzer_1compile(PyObject *__pyx
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
-  __pyx_r = __pyx_pf_12jackAnalyzer_12JackAnalyzer_compile(((struct __pyx_obj_12jackAnalyzer_JackAnalyzer *)__pyx_v_self), __pyx_v_input_file, __pyx_v_directory, __pyx_v_output_file_name);
+  __pyx_r = __pyx_pf_12jackAnalyzer_12JackAnalyzer_compile(((struct __pyx_obj_12jackAnalyzer_JackAnalyzer *)__pyx_v_self), __pyx_v_xxxT, __pyx_v_directory, __pyx_v_output_file_name);
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_12jackAnalyzer_12JackAnalyzer_compile(struct __pyx_obj_12jackAnalyzer_JackAnalyzer *__pyx_v_self, PyObject *__pyx_v_input_file, PyObject *__pyx_v_directory, PyObject *__pyx_v_output_file_name) {
+static PyObject *__pyx_pf_12jackAnalyzer_12JackAnalyzer_compile(struct __pyx_obj_12jackAnalyzer_JackAnalyzer *__pyx_v_self, PyObject *__pyx_v_xxxT, PyObject *__pyx_v_directory, PyObject *__pyx_v_output_file_name) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
@@ -1820,7 +1877,7 @@ static PyObject *__pyx_pf_12jackAnalyzer_12JackAnalyzer_compile(struct __pyx_obj
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("compile", 0);
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __pyx_f_12jackAnalyzer_12JackAnalyzer_compile(__pyx_v_self, __pyx_v_input_file, __pyx_v_directory, __pyx_v_output_file_name, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 14, __pyx_L1_error)
+  __pyx_t_1 = __pyx_f_12jackAnalyzer_12JackAnalyzer_compile(__pyx_v_self, __pyx_v_xxxT, __pyx_v_directory, __pyx_v_output_file_name, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 14, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
@@ -2667,7 +2724,6 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_directory, __pyx_k_directory, sizeof(__pyx_k_directory), 0, 0, 1, 1},
   {&__pyx_n_s_getstate, __pyx_k_getstate, sizeof(__pyx_k_getstate), 0, 0, 1, 1},
   {&__pyx_n_s_import, __pyx_k_import, sizeof(__pyx_k_import), 0, 0, 1, 1},
-  {&__pyx_n_s_input_file, __pyx_k_input_file, sizeof(__pyx_k_input_file), 0, 0, 1, 1},
   {&__pyx_n_s_jackAnalyzer, __pyx_k_jackAnalyzer, sizeof(__pyx_k_jackAnalyzer), 0, 0, 1, 1},
   {&__pyx_n_s_join, __pyx_k_join, sizeof(__pyx_k_join), 0, 0, 1, 1},
   {&__pyx_n_s_main, __pyx_k_main, sizeof(__pyx_k_main), 0, 0, 1, 1},
@@ -2696,6 +2752,7 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_update, __pyx_k_update, sizeof(__pyx_k_update), 0, 0, 1, 1},
   {&__pyx_n_s_w, __pyx_k_w, sizeof(__pyx_k_w), 0, 0, 1, 1},
   {&__pyx_kp_s_xml, __pyx_k_xml, sizeof(__pyx_k_xml), 0, 0, 1, 0},
+  {&__pyx_n_s_xxxT, __pyx_k_xxxT, sizeof(__pyx_k_xxxT), 0, 0, 1, 1},
   {0, 0, 0, 0, 0, 0, 0}
 };
 static CYTHON_SMALL_CODE int __Pyx_InitCachedBuiltins(void) {
