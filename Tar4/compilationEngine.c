@@ -969,8 +969,8 @@ static const char *__pyx_f[] = {
 /*--- Type declarations ---*/
 struct __pyx_obj_17compilationEngine_CompilationEngine;
 
-/* "compilationEngine.pyx":11
- * # Thus, compilexxx may only be called if indeed xxx is the next thing in the input.
+/* "compilationEngine.pyx":12
+ * 
  * 
  * cdef class CompilationEngine:             # <<<<<<<<<<<<<<
  *     cdef input_file
@@ -983,26 +983,31 @@ struct __pyx_obj_17compilationEngine_CompilationEngine {
   PyObject *output_file;
   int indent;
   PyObject *next_token;
+  PyObject *temp;
+  int pointer;
 };
 
 
 
 struct __pyx_vtabstruct_17compilationEngine_CompilationEngine {
+  PyObject *(*advance)(struct __pyx_obj_17compilationEngine_CompilationEngine *);
+  PyObject *(*reverse)(struct __pyx_obj_17compilationEngine_CompilationEngine *);
   PyObject *(*compileClass)(struct __pyx_obj_17compilationEngine_CompilationEngine *);
   PyObject *(*compileClassVarDec)(struct __pyx_obj_17compilationEngine_CompilationEngine *);
-  PyObject *(*compileSubroutine)(struct __pyx_obj_17compilationEngine_CompilationEngine *);
+  PyObject *(*compileSubroutineDec)(struct __pyx_obj_17compilationEngine_CompilationEngine *);
   PyObject *(*compileParameterList)(struct __pyx_obj_17compilationEngine_CompilationEngine *);
   PyObject *(*compileSubroutineBody)(struct __pyx_obj_17compilationEngine_CompilationEngine *);
   PyObject *(*compileVarDec)(struct __pyx_obj_17compilationEngine_CompilationEngine *);
   PyObject *(*compileStatements)(struct __pyx_obj_17compilationEngine_CompilationEngine *);
-  PyObject *(*compileDo)(struct __pyx_obj_17compilationEngine_CompilationEngine *);
   PyObject *(*compileLet)(struct __pyx_obj_17compilationEngine_CompilationEngine *);
-  PyObject *(*compileWhile)(struct __pyx_obj_17compilationEngine_CompilationEngine *);
-  PyObject *(*compileReturn)(struct __pyx_obj_17compilationEngine_CompilationEngine *);
   PyObject *(*compileIf)(struct __pyx_obj_17compilationEngine_CompilationEngine *);
+  PyObject *(*compileWhile)(struct __pyx_obj_17compilationEngine_CompilationEngine *);
+  PyObject *(*compileDo)(struct __pyx_obj_17compilationEngine_CompilationEngine *);
+  PyObject *(*compileReturn)(struct __pyx_obj_17compilationEngine_CompilationEngine *);
   PyObject *(*compileExpression)(struct __pyx_obj_17compilationEngine_CompilationEngine *);
   PyObject *(*compileTerm)(struct __pyx_obj_17compilationEngine_CompilationEngine *);
   PyObject *(*compileExpressionList)(struct __pyx_obj_17compilationEngine_CompilationEngine *);
+  PyObject *(*compileSubroutineCall)(struct __pyx_obj_17compilationEngine_CompilationEngine *);
 };
 static struct __pyx_vtabstruct_17compilationEngine_CompilationEngine *__pyx_vtabptr_17compilationEngine_CompilationEngine;
 
@@ -1152,6 +1157,28 @@ static CYTHON_INLINE PyObject *__Pyx_PyCFunction_FastCall(PyObject *func, PyObje
 /* PyObjectCallOneArg.proto */
 static CYTHON_INLINE PyObject* __Pyx_PyObject_CallOneArg(PyObject *func, PyObject *arg);
 
+/* GetItemInt.proto */
+#define __Pyx_GetItemInt(o, i, type, is_signed, to_py_func, is_list, wraparound, boundscheck)\
+    (__Pyx_fits_Py_ssize_t(i, type, is_signed) ?\
+    __Pyx_GetItemInt_Fast(o, (Py_ssize_t)i, is_list, wraparound, boundscheck) :\
+    (is_list ? (PyErr_SetString(PyExc_IndexError, "list index out of range"), (PyObject*)NULL) :\
+               __Pyx_GetItemInt_Generic(o, to_py_func(i))))
+#define __Pyx_GetItemInt_List(o, i, type, is_signed, to_py_func, is_list, wraparound, boundscheck)\
+    (__Pyx_fits_Py_ssize_t(i, type, is_signed) ?\
+    __Pyx_GetItemInt_List_Fast(o, (Py_ssize_t)i, wraparound, boundscheck) :\
+    (PyErr_SetString(PyExc_IndexError, "list index out of range"), (PyObject*)NULL))
+static CYTHON_INLINE PyObject *__Pyx_GetItemInt_List_Fast(PyObject *o, Py_ssize_t i,
+                                                              int wraparound, int boundscheck);
+#define __Pyx_GetItemInt_Tuple(o, i, type, is_signed, to_py_func, is_list, wraparound, boundscheck)\
+    (__Pyx_fits_Py_ssize_t(i, type, is_signed) ?\
+    __Pyx_GetItemInt_Tuple_Fast(o, (Py_ssize_t)i, wraparound, boundscheck) :\
+    (PyErr_SetString(PyExc_IndexError, "tuple index out of range"), (PyObject*)NULL))
+static CYTHON_INLINE PyObject *__Pyx_GetItemInt_Tuple_Fast(PyObject *o, Py_ssize_t i,
+                                                              int wraparound, int boundscheck);
+static PyObject *__Pyx_GetItemInt_Generic(PyObject *o, PyObject* j);
+static CYTHON_INLINE PyObject *__Pyx_GetItemInt_Fast(PyObject *o, Py_ssize_t i,
+                                                     int is_list, int wraparound, int boundscheck);
+
 /* PyObjectCall2Args.proto */
 static CYTHON_UNUSED PyObject* __Pyx_PyObject_Call2Args(PyObject* function, PyObject* arg1, PyObject* arg2);
 
@@ -1170,6 +1197,20 @@ static CYTHON_INLINE int __Pyx_PyUnicode_Equals(PyObject* s1, PyObject* s2, int 
 #else
 #define __Pyx_PyString_Equals __Pyx_PyBytes_Equals
 #endif
+
+/* bytes_tailmatch.proto */
+static int __Pyx_PyBytes_SingleTailmatch(PyObject* self, PyObject* arg,
+                                         Py_ssize_t start, Py_ssize_t end, int direction);
+static int __Pyx_PyBytes_Tailmatch(PyObject* self, PyObject* substr,
+                                   Py_ssize_t start, Py_ssize_t end, int direction);
+
+/* unicode_tailmatch.proto */
+static int __Pyx_PyUnicode_Tailmatch(
+    PyObject* s, PyObject* substr, Py_ssize_t start, Py_ssize_t end, int direction);
+
+/* str_tailmatch.proto */
+static CYTHON_INLINE int __Pyx_PyStr_Tailmatch(PyObject* self, PyObject* arg, Py_ssize_t start,
+                                               Py_ssize_t end, int direction);
 
 /* PyThreadStateGet.proto */
 #if CYTHON_FAST_THREAD_STATE
@@ -1329,21 +1370,24 @@ static int __Pyx_check_binary_version(void);
 /* InitStrings.proto */
 static int __Pyx_InitStrings(__Pyx_StringTabEntry *t);
 
+static PyObject *__pyx_f_17compilationEngine_17CompilationEngine_advance(struct __pyx_obj_17compilationEngine_CompilationEngine *__pyx_v_self); /* proto*/
+static PyObject *__pyx_f_17compilationEngine_17CompilationEngine_reverse(struct __pyx_obj_17compilationEngine_CompilationEngine *__pyx_v_self); /* proto*/
 static PyObject *__pyx_f_17compilationEngine_17CompilationEngine_compileClass(struct __pyx_obj_17compilationEngine_CompilationEngine *__pyx_v_self); /* proto*/
 static PyObject *__pyx_f_17compilationEngine_17CompilationEngine_compileClassVarDec(struct __pyx_obj_17compilationEngine_CompilationEngine *__pyx_v_self); /* proto*/
-static PyObject *__pyx_f_17compilationEngine_17CompilationEngine_compileSubroutine(struct __pyx_obj_17compilationEngine_CompilationEngine *__pyx_v_self); /* proto*/
+static PyObject *__pyx_f_17compilationEngine_17CompilationEngine_compileSubroutineDec(struct __pyx_obj_17compilationEngine_CompilationEngine *__pyx_v_self); /* proto*/
 static PyObject *__pyx_f_17compilationEngine_17CompilationEngine_compileParameterList(struct __pyx_obj_17compilationEngine_CompilationEngine *__pyx_v_self); /* proto*/
 static PyObject *__pyx_f_17compilationEngine_17CompilationEngine_compileSubroutineBody(struct __pyx_obj_17compilationEngine_CompilationEngine *__pyx_v_self); /* proto*/
 static PyObject *__pyx_f_17compilationEngine_17CompilationEngine_compileVarDec(struct __pyx_obj_17compilationEngine_CompilationEngine *__pyx_v_self); /* proto*/
 static PyObject *__pyx_f_17compilationEngine_17CompilationEngine_compileStatements(struct __pyx_obj_17compilationEngine_CompilationEngine *__pyx_v_self); /* proto*/
-static PyObject *__pyx_f_17compilationEngine_17CompilationEngine_compileDo(struct __pyx_obj_17compilationEngine_CompilationEngine *__pyx_v_self); /* proto*/
 static PyObject *__pyx_f_17compilationEngine_17CompilationEngine_compileLet(struct __pyx_obj_17compilationEngine_CompilationEngine *__pyx_v_self); /* proto*/
-static PyObject *__pyx_f_17compilationEngine_17CompilationEngine_compileWhile(struct __pyx_obj_17compilationEngine_CompilationEngine *__pyx_v_self); /* proto*/
-static PyObject *__pyx_f_17compilationEngine_17CompilationEngine_compileReturn(struct __pyx_obj_17compilationEngine_CompilationEngine *__pyx_v_self); /* proto*/
 static PyObject *__pyx_f_17compilationEngine_17CompilationEngine_compileIf(struct __pyx_obj_17compilationEngine_CompilationEngine *__pyx_v_self); /* proto*/
+static PyObject *__pyx_f_17compilationEngine_17CompilationEngine_compileWhile(struct __pyx_obj_17compilationEngine_CompilationEngine *__pyx_v_self); /* proto*/
+static PyObject *__pyx_f_17compilationEngine_17CompilationEngine_compileDo(struct __pyx_obj_17compilationEngine_CompilationEngine *__pyx_v_self); /* proto*/
+static PyObject *__pyx_f_17compilationEngine_17CompilationEngine_compileReturn(struct __pyx_obj_17compilationEngine_CompilationEngine *__pyx_v_self); /* proto*/
 static PyObject *__pyx_f_17compilationEngine_17CompilationEngine_compileExpression(struct __pyx_obj_17compilationEngine_CompilationEngine *__pyx_v_self); /* proto*/
 static PyObject *__pyx_f_17compilationEngine_17CompilationEngine_compileTerm(struct __pyx_obj_17compilationEngine_CompilationEngine *__pyx_v_self); /* proto*/
 static PyObject *__pyx_f_17compilationEngine_17CompilationEngine_compileExpressionList(struct __pyx_obj_17compilationEngine_CompilationEngine *__pyx_v_self); /* proto*/
+static PyObject *__pyx_f_17compilationEngine_17CompilationEngine_compileSubroutineCall(struct __pyx_obj_17compilationEngine_CompilationEngine *__pyx_v_self); /* proto*/
 
 /* Module declarations from 'compilationEngine' */
 static PyTypeObject *__pyx_ptype_17compilationEngine_CompilationEngine = 0;
@@ -1357,17 +1401,6 @@ static PyObject *__pyx_builtin_TypeError;
 static const char __pyx_k_[] = "  ";
 static const char __pyx_k_r[] = "r";
 static const char __pyx_k__2[] = "\n";
-static const char __pyx_k__3[] = ",";
-static const char __pyx_k__4[] = "+";
-static const char __pyx_k__5[] = "-";
-static const char __pyx_k__6[] = "*";
-static const char __pyx_k__7[] = "/";
-static const char __pyx_k__8[] = "&";
-static const char __pyx_k__9[] = "|";
-static const char __pyx_k__10[] = "<";
-static const char __pyx_k__11[] = ">";
-static const char __pyx_k__12[] = "=";
-static const char __pyx_k__13[] = "~";
 static const char __pyx_k_main[] = "__main__";
 static const char __pyx_k_name[] = "__name__";
 static const char __pyx_k_open[] = "open";
@@ -1378,16 +1411,14 @@ static const char __pyx_k_close[] = "close";
 static const char __pyx_k_strip[] = "strip";
 static const char __pyx_k_write[] = "write";
 static const char __pyx_k_reduce[] = "__reduce__";
-static const char __pyx_k_string[] = "<string";
 static const char __pyx_k_term_2[] = "</term>\n";
 static const char __pyx_k_varDec[] = "<varDec>\n";
 static const char __pyx_k_class_2[] = "</class>\n";
-static const char __pyx_k_integer[] = "<integer";
 static const char __pyx_k_getstate[] = "__getstate__";
-static const char __pyx_k_readline[] = "readline";
 static const char __pyx_k_setstate[] = "__setstate__";
 static const char __pyx_k_varDec_2[] = "</varDec>\n";
 static const char __pyx_k_TypeError[] = "TypeError";
+static const char __pyx_k_readlines[] = "readlines";
 static const char __pyx_k_reduce_ex[] = "__reduce_ex__";
 static const char __pyx_k_expression[] = "<expression>\n";
 static const char __pyx_k_identifier[] = "<identifier>";
@@ -1399,7 +1430,6 @@ static const char __pyx_k_doStatement[] = "<doStatement>\n";
 static const char __pyx_k_ifStatement[] = "<ifStatement>\n";
 static const char __pyx_k_output_file[] = "output_file";
 static const char __pyx_k_expression_2[] = "</expression>\n";
-static const char __pyx_k_getNextToken[] = "getNextToken";
 static const char __pyx_k_letStatement[] = "<letStatement>\n";
 static const char __pyx_k_statements_2[] = "</statements>\n";
 static const char __pyx_k_classVarDec_2[] = "</classVarDec>\n";
@@ -1408,27 +1438,38 @@ static const char __pyx_k_ifStatement_2[] = "</ifStatement>\n";
 static const char __pyx_k_parameterList[] = "<parameterList>\n";
 static const char __pyx_k_reduce_cython[] = "__reduce_cython__";
 static const char __pyx_k_subroutineDec[] = "<subroutineDec>\n";
-static const char __pyx_k_symbol_symbol[] = "<symbol> ) </symbol>";
+static const char __pyx_k_symbol_symbol[] = "<symbol> } </symbol>";
 static const char __pyx_k_expressionList[] = "<expressionList>\n";
 static const char __pyx_k_letStatement_2[] = "</letStatement>\n";
+static const char __pyx_k_stringConstant[] = "<stringConstant>";
 static const char __pyx_k_subroutineBody[] = "<subroutineBody>\n";
 static const char __pyx_k_whileStatement[] = "<whileStatement>\n";
+static const char __pyx_k_integerConstant[] = "<integerConstant>";
 static const char __pyx_k_parameterList_2[] = "</parameterList>\n";
 static const char __pyx_k_returnStatement[] = "<returnStatement>\n";
 static const char __pyx_k_setstate_cython[] = "__setstate_cython__";
 static const char __pyx_k_subroutineDec_2[] = "</subroutineDec>\n";
-static const char __pyx_k_symbol_symbol_2[] = "<symbol> , </symbol>\n";
-static const char __pyx_k_symbol_symbol_3[] = "<symbol> , </symbol>";
-static const char __pyx_k_symbol_symbol_4[] = "<symbol> ; </symbol>\n";
+static const char __pyx_k_symbol_symbol_2[] = "<symbol> , </symbol>";
+static const char __pyx_k_symbol_symbol_3[] = "<symbol> ; </symbol>";
+static const char __pyx_k_symbol_symbol_4[] = "<symbol> ) </symbol>";
 static const char __pyx_k_symbol_symbol_5[] = "<symbol> [ </symbol>";
-static const char __pyx_k_symbol_symbol_6[] = "<symbol> ; </symbol>";
-static const char __pyx_k_symbol_symbol_7[] = "<symbol> . </symbol>";
-static const char __pyx_k_symbol_symbol_8[] = "<symbol> ( </symbol>";
+static const char __pyx_k_symbol_symbol_6[] = "<symbol> + </symbol>";
+static const char __pyx_k_symbol_symbol_7[] = "<symbol> - </symbol>";
+static const char __pyx_k_symbol_symbol_8[] = "<symbol> * </symbol>";
+static const char __pyx_k_symbol_symbol_9[] = "<symbol> / </symbol>";
 static const char __pyx_k_expressionList_2[] = "</expressionList>\n";
 static const char __pyx_k_subroutineBody_2[] = "</subroutineBody>\n";
+static const char __pyx_k_symbol_gt_symbol[] = "<symbol> &gt; </symbol>";
+static const char __pyx_k_symbol_lt_symbol[] = "<symbol> &lt; </symbol>";
+static const char __pyx_k_symbol_symbol_10[] = "<symbol> = </symbol>";
+static const char __pyx_k_symbol_symbol_11[] = "<symbol> | </symbol>";
+static const char __pyx_k_symbol_symbol_12[] = "<symbol> ( </symbol>";
+static const char __pyx_k_symbol_symbol_13[] = "<symbol> . </symbol>";
+static const char __pyx_k_symbol_symbol_14[] = "<symbol> ~ </symbol>";
 static const char __pyx_k_whileStatement_2[] = "</whileStatement>\n";
 static const char __pyx_k_CompilationEngine[] = "CompilationEngine";
 static const char __pyx_k_returnStatement_2[] = "</returnStatement>\n";
+static const char __pyx_k_symbol_amp_symbol[] = "<symbol> &amp; </symbol>";
 static const char __pyx_k_cline_in_traceback[] = "cline_in_traceback";
 static const char __pyx_k_keyword_do_keyword[] = "<keyword> do </keyword>";
 static const char __pyx_k_keyword_if_keyword[] = "<keyword> if </keyword>";
@@ -1438,63 +1479,45 @@ static const char __pyx_k_keyword_else_keyword[] = "<keyword> else </keyword>";
 static const char __pyx_k_keyword_null_keyword[] = "<keyword> null </keyword>";
 static const char __pyx_k_keyword_this_keyword[] = "<keyword> this </keyword>";
 static const char __pyx_k_keyword_true_keyword[] = "<keyword> true </keyword>";
-static const char __pyx_k_compileSubroutineCall[] = "compileSubroutineCall";
 static const char __pyx_k_keyword_false_keyword[] = "<keyword> false </keyword>";
-static const char __pyx_k_keyword_field_keyword[] = "<keyword> field </keyword>";
 static const char __pyx_k_keyword_while_keyword[] = "<keyword> while </keyword>";
 static const char __pyx_k_keyword_method_keyword[] = "<keyword> method </keyword>";
 static const char __pyx_k_keyword_return_keyword[] = "<keyword> return </keyword>";
-static const char __pyx_k_keyword_static_keyword[] = "<keyword> static </keyword>";
 static const char __pyx_k_keyword_function_keyword[] = "<keyword> function </keyword>";
 static const char __pyx_k_keyword_constructor_keyword[] = "<keyword> constructor </keyword>";
 static const char __pyx_k_no_default___reduce___due_to_non[] = "no default __reduce__ due to non-trivial __cinit__";
 static PyObject *__pyx_kp_s_;
 static PyObject *__pyx_n_s_CompilationEngine;
 static PyObject *__pyx_n_s_TypeError;
-static PyObject *__pyx_kp_s__10;
-static PyObject *__pyx_kp_s__11;
-static PyObject *__pyx_kp_s__12;
-static PyObject *__pyx_kp_s__13;
 static PyObject *__pyx_kp_s__2;
-static PyObject *__pyx_kp_s__3;
-static PyObject *__pyx_kp_s__4;
-static PyObject *__pyx_kp_s__5;
-static PyObject *__pyx_kp_s__6;
-static PyObject *__pyx_kp_s__7;
-static PyObject *__pyx_kp_s__8;
-static PyObject *__pyx_kp_s__9;
 static PyObject *__pyx_kp_s_class;
 static PyObject *__pyx_kp_s_classVarDec;
 static PyObject *__pyx_kp_s_classVarDec_2;
 static PyObject *__pyx_kp_s_class_2;
 static PyObject *__pyx_n_s_cline_in_traceback;
 static PyObject *__pyx_n_s_close;
-static PyObject *__pyx_n_s_compileSubroutineCall;
 static PyObject *__pyx_kp_s_doStatement;
 static PyObject *__pyx_kp_s_doStatement_2;
 static PyObject *__pyx_kp_s_expression;
 static PyObject *__pyx_kp_s_expressionList;
 static PyObject *__pyx_kp_s_expressionList_2;
 static PyObject *__pyx_kp_s_expression_2;
-static PyObject *__pyx_n_s_getNextToken;
 static PyObject *__pyx_n_s_getstate;
 static PyObject *__pyx_kp_s_identifier;
 static PyObject *__pyx_kp_s_ifStatement;
 static PyObject *__pyx_kp_s_ifStatement_2;
 static PyObject *__pyx_n_s_input_file;
-static PyObject *__pyx_kp_s_integer;
+static PyObject *__pyx_kp_s_integerConstant;
 static PyObject *__pyx_kp_s_keyword_constructor_keyword;
 static PyObject *__pyx_kp_s_keyword_do_keyword;
 static PyObject *__pyx_kp_s_keyword_else_keyword;
 static PyObject *__pyx_kp_s_keyword_false_keyword;
-static PyObject *__pyx_kp_s_keyword_field_keyword;
 static PyObject *__pyx_kp_s_keyword_function_keyword;
 static PyObject *__pyx_kp_s_keyword_if_keyword;
 static PyObject *__pyx_kp_s_keyword_let_keyword;
 static PyObject *__pyx_kp_s_keyword_method_keyword;
 static PyObject *__pyx_kp_s_keyword_null_keyword;
 static PyObject *__pyx_kp_s_keyword_return_keyword;
-static PyObject *__pyx_kp_s_keyword_static_keyword;
 static PyObject *__pyx_kp_s_keyword_this_keyword;
 static PyObject *__pyx_kp_s_keyword_true_keyword;
 static PyObject *__pyx_kp_s_keyword_var_keyword;
@@ -1510,7 +1533,7 @@ static PyObject *__pyx_kp_s_parameterList;
 static PyObject *__pyx_kp_s_parameterList_2;
 static PyObject *__pyx_n_s_pyx_vtable;
 static PyObject *__pyx_n_s_r;
-static PyObject *__pyx_n_s_readline;
+static PyObject *__pyx_n_s_readlines;
 static PyObject *__pyx_n_s_reduce;
 static PyObject *__pyx_n_s_reduce_cython;
 static PyObject *__pyx_n_s_reduce_ex;
@@ -1520,13 +1543,21 @@ static PyObject *__pyx_n_s_setstate;
 static PyObject *__pyx_n_s_setstate_cython;
 static PyObject *__pyx_kp_s_statements;
 static PyObject *__pyx_kp_s_statements_2;
-static PyObject *__pyx_kp_s_string;
+static PyObject *__pyx_kp_s_stringConstant;
 static PyObject *__pyx_n_s_strip;
 static PyObject *__pyx_kp_s_subroutineBody;
 static PyObject *__pyx_kp_s_subroutineBody_2;
 static PyObject *__pyx_kp_s_subroutineDec;
 static PyObject *__pyx_kp_s_subroutineDec_2;
+static PyObject *__pyx_kp_s_symbol_amp_symbol;
+static PyObject *__pyx_kp_s_symbol_gt_symbol;
+static PyObject *__pyx_kp_s_symbol_lt_symbol;
 static PyObject *__pyx_kp_s_symbol_symbol;
+static PyObject *__pyx_kp_s_symbol_symbol_10;
+static PyObject *__pyx_kp_s_symbol_symbol_11;
+static PyObject *__pyx_kp_s_symbol_symbol_12;
+static PyObject *__pyx_kp_s_symbol_symbol_13;
+static PyObject *__pyx_kp_s_symbol_symbol_14;
 static PyObject *__pyx_kp_s_symbol_symbol_2;
 static PyObject *__pyx_kp_s_symbol_symbol_3;
 static PyObject *__pyx_kp_s_symbol_symbol_4;
@@ -1534,6 +1565,7 @@ static PyObject *__pyx_kp_s_symbol_symbol_5;
 static PyObject *__pyx_kp_s_symbol_symbol_6;
 static PyObject *__pyx_kp_s_symbol_symbol_7;
 static PyObject *__pyx_kp_s_symbol_symbol_8;
+static PyObject *__pyx_kp_s_symbol_symbol_9;
 static PyObject *__pyx_kp_s_term;
 static PyObject *__pyx_kp_s_term_2;
 static PyObject *__pyx_n_s_test;
@@ -1543,20 +1575,19 @@ static PyObject *__pyx_kp_s_whileStatement;
 static PyObject *__pyx_kp_s_whileStatement_2;
 static PyObject *__pyx_n_s_write;
 static int __pyx_pf_17compilationEngine_17CompilationEngine___cinit__(struct __pyx_obj_17compilationEngine_CompilationEngine *__pyx_v_self, PyObject *__pyx_v_input_file, PyObject *__pyx_v_output_file); /* proto */
-static PyObject *__pyx_pf_17compilationEngine_17CompilationEngine_2getNextToken(struct __pyx_obj_17compilationEngine_CompilationEngine *__pyx_v_self); /* proto */
-static PyObject *__pyx_pf_17compilationEngine_17CompilationEngine_4__reduce_cython__(CYTHON_UNUSED struct __pyx_obj_17compilationEngine_CompilationEngine *__pyx_v_self); /* proto */
-static PyObject *__pyx_pf_17compilationEngine_17CompilationEngine_6__setstate_cython__(CYTHON_UNUSED struct __pyx_obj_17compilationEngine_CompilationEngine *__pyx_v_self, CYTHON_UNUSED PyObject *__pyx_v___pyx_state); /* proto */
+static PyObject *__pyx_pf_17compilationEngine_17CompilationEngine_2__reduce_cython__(CYTHON_UNUSED struct __pyx_obj_17compilationEngine_CompilationEngine *__pyx_v_self); /* proto */
+static PyObject *__pyx_pf_17compilationEngine_17CompilationEngine_4__setstate_cython__(CYTHON_UNUSED struct __pyx_obj_17compilationEngine_CompilationEngine *__pyx_v_self, CYTHON_UNUSED PyObject *__pyx_v___pyx_state); /* proto */
 static PyObject *__pyx_tp_new_17compilationEngine_CompilationEngine(PyTypeObject *t, PyObject *a, PyObject *k); /*proto*/
-static PyObject *__pyx_tuple__14;
-static PyObject *__pyx_tuple__15;
+static PyObject *__pyx_tuple__3;
+static PyObject *__pyx_tuple__4;
 /* Late includes */
 
-/* "compilationEngine.pyx":18
+/* "compilationEngine.pyx":21
  * 
  *     # Constructor
  *     def __cinit__(self, input_file, output_file):             # <<<<<<<<<<<<<<
+ *         self.pointer = 0
  *         self.output_file = output_file
- *         self.indent = 0
  */
 
 /* Python wrapper */
@@ -1593,11 +1624,11 @@ static int __pyx_pw_17compilationEngine_17CompilationEngine_1__cinit__(PyObject 
         case  1:
         if (likely((values[1] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_output_file)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("__cinit__", 1, 2, 2, 1); __PYX_ERR(0, 18, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("__cinit__", 1, 2, 2, 1); __PYX_ERR(0, 21, __pyx_L3_error)
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "__cinit__") < 0)) __PYX_ERR(0, 18, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "__cinit__") < 0)) __PYX_ERR(0, 21, __pyx_L3_error)
       }
     } else if (PyTuple_GET_SIZE(__pyx_args) != 2) {
       goto __pyx_L5_argtuple_error;
@@ -1610,7 +1641,7 @@ static int __pyx_pw_17compilationEngine_17CompilationEngine_1__cinit__(PyObject 
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("__cinit__", 1, 2, 2, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 18, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("__cinit__", 1, 2, 2, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 21, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("compilationEngine.CompilationEngine.__cinit__", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
@@ -1634,12 +1665,21 @@ static int __pyx_pf_17compilationEngine_17CompilationEngine___cinit__(struct __p
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("__cinit__", 0);
 
-  /* "compilationEngine.pyx":19
+  /* "compilationEngine.pyx":22
  *     # Constructor
  *     def __cinit__(self, input_file, output_file):
+ *         self.pointer = 0             # <<<<<<<<<<<<<<
+ *         self.output_file = output_file
+ *         self.indent = 0
+ */
+  __pyx_v_self->pointer = 0;
+
+  /* "compilationEngine.pyx":23
+ *     def __cinit__(self, input_file, output_file):
+ *         self.pointer = 0
  *         self.output_file = output_file             # <<<<<<<<<<<<<<
  *         self.indent = 0
- *         self.input_file = open(input_file, 'r')
+ *         self.input_file = open(input_file, 'r').readlines()
  */
   __Pyx_INCREF(__pyx_v_output_file);
   __Pyx_GIVEREF(__pyx_v_output_file);
@@ -1647,82 +1687,111 @@ static int __pyx_pf_17compilationEngine_17CompilationEngine___cinit__(struct __p
   __Pyx_DECREF(__pyx_v_self->output_file);
   __pyx_v_self->output_file = __pyx_v_output_file;
 
-  /* "compilationEngine.pyx":20
- *     def __cinit__(self, input_file, output_file):
+  /* "compilationEngine.pyx":24
+ *         self.pointer = 0
  *         self.output_file = output_file
  *         self.indent = 0             # <<<<<<<<<<<<<<
- *         self.input_file = open(input_file, 'r')
- *         self.getNextToken() # read  <tokens>
+ *         self.input_file = open(input_file, 'r').readlines()
+ *         self.advance() # get the first token <tokens>
  */
   __pyx_v_self->indent = 0;
 
-  /* "compilationEngine.pyx":21
+  /* "compilationEngine.pyx":25
  *         self.output_file = output_file
  *         self.indent = 0
- *         self.input_file = open(input_file, 'r')             # <<<<<<<<<<<<<<
- *         self.getNextToken() # read  <tokens>
+ *         self.input_file = open(input_file, 'r').readlines()             # <<<<<<<<<<<<<<
+ *         self.advance() # get the first token <tokens>
  * 
  */
-  __pyx_t_1 = PyTuple_New(2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 21, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
+  __pyx_t_2 = PyTuple_New(2); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 25, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
   __Pyx_INCREF(__pyx_v_input_file);
   __Pyx_GIVEREF(__pyx_v_input_file);
-  PyTuple_SET_ITEM(__pyx_t_1, 0, __pyx_v_input_file);
+  PyTuple_SET_ITEM(__pyx_t_2, 0, __pyx_v_input_file);
   __Pyx_INCREF(__pyx_n_s_r);
   __Pyx_GIVEREF(__pyx_n_s_r);
-  PyTuple_SET_ITEM(__pyx_t_1, 1, __pyx_n_s_r);
-  __pyx_t_2 = __Pyx_PyObject_Call(__pyx_builtin_open, __pyx_t_1, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 21, __pyx_L1_error)
+  PyTuple_SET_ITEM(__pyx_t_2, 1, __pyx_n_s_r);
+  __pyx_t_3 = __Pyx_PyObject_Call(__pyx_builtin_open, __pyx_t_2, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 25, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_3);
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_readlines); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 25, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __Pyx_GIVEREF(__pyx_t_2);
+  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+  __pyx_t_3 = NULL;
+  if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
+    __pyx_t_3 = PyMethod_GET_SELF(__pyx_t_2);
+    if (likely(__pyx_t_3)) {
+      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
+      __Pyx_INCREF(__pyx_t_3);
+      __Pyx_INCREF(function);
+      __Pyx_DECREF_SET(__pyx_t_2, function);
+    }
+  }
+  __pyx_t_1 = (__pyx_t_3) ? __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_3) : __Pyx_PyObject_CallNoArg(__pyx_t_2);
+  __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
+  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 25, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+  __Pyx_GIVEREF(__pyx_t_1);
   __Pyx_GOTREF(__pyx_v_self->input_file);
   __Pyx_DECREF(__pyx_v_self->input_file);
-  __pyx_v_self->input_file = __pyx_t_2;
-  __pyx_t_2 = 0;
+  __pyx_v_self->input_file = __pyx_t_1;
+  __pyx_t_1 = 0;
 
-  /* "compilationEngine.pyx":22
+  /* "compilationEngine.pyx":26
  *         self.indent = 0
- *         self.input_file = open(input_file, 'r')
- *         self.getNextToken() # read  <tokens>             # <<<<<<<<<<<<<<
+ *         self.input_file = open(input_file, 'r').readlines()
+ *         self.advance() # get the first token <tokens>             # <<<<<<<<<<<<<<
  * 
  *         self.compileClass()
  */
-  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_getNextToken); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 22, __pyx_L1_error)
+  __pyx_t_1 = ((struct __pyx_vtabstruct_17compilationEngine_CompilationEngine *)__pyx_v_self->__pyx_vtab)->advance(__pyx_v_self); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 26, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_3 = NULL;
-  if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_1))) {
-    __pyx_t_3 = PyMethod_GET_SELF(__pyx_t_1);
-    if (likely(__pyx_t_3)) {
-      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_1);
-      __Pyx_INCREF(__pyx_t_3);
-      __Pyx_INCREF(function);
-      __Pyx_DECREF_SET(__pyx_t_1, function);
-    }
-  }
-  __pyx_t_2 = (__pyx_t_3) ? __Pyx_PyObject_CallOneArg(__pyx_t_1, __pyx_t_3) : __Pyx_PyObject_CallNoArg(__pyx_t_1);
-  __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
-  if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 22, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_2);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-  /* "compilationEngine.pyx":24
- *         self.getNextToken() # read  <tokens>
+  /* "compilationEngine.pyx":28
+ *         self.advance() # get the first token <tokens>
  * 
  *         self.compileClass()             # <<<<<<<<<<<<<<
  * 
- *     #Get the next token from the input
+ *         self.output_file.close()
  */
-  __pyx_t_2 = ((struct __pyx_vtabstruct_17compilationEngine_CompilationEngine *)__pyx_v_self->__pyx_vtab)->compileClass(__pyx_v_self); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 24, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_2);
-  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+  __pyx_t_1 = ((struct __pyx_vtabstruct_17compilationEngine_CompilationEngine *)__pyx_v_self->__pyx_vtab)->compileClass(__pyx_v_self); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 28, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "compilationEngine.pyx":18
+  /* "compilationEngine.pyx":30
+ *         self.compileClass()
+ * 
+ *         self.output_file.close()             # <<<<<<<<<<<<<<
+ * 
+ *     # Get the next token from the input
+ */
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_close); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 30, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
+  __pyx_t_3 = NULL;
+  if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
+    __pyx_t_3 = PyMethod_GET_SELF(__pyx_t_2);
+    if (likely(__pyx_t_3)) {
+      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
+      __Pyx_INCREF(__pyx_t_3);
+      __Pyx_INCREF(function);
+      __Pyx_DECREF_SET(__pyx_t_2, function);
+    }
+  }
+  __pyx_t_1 = (__pyx_t_3) ? __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_3) : __Pyx_PyObject_CallNoArg(__pyx_t_2);
+  __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
+  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 30, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+  /* "compilationEngine.pyx":21
  * 
  *     # Constructor
  *     def __cinit__(self, input_file, output_file):             # <<<<<<<<<<<<<<
+ *         self.pointer = 0
  *         self.output_file = output_file
- *         self.indent = 0
  */
 
   /* function exit code */
@@ -1739,65 +1808,35 @@ static int __pyx_pf_17compilationEngine_17CompilationEngine___cinit__(struct __p
   return __pyx_r;
 }
 
-/* "compilationEngine.pyx":27
+/* "compilationEngine.pyx":33
  * 
- *     #Get the next token from the input
- *     def getNextToken(self):             # <<<<<<<<<<<<<<
- *         return self.input_file.readline().strip()
- * 
+ *     # Get the next token from the input
+ *     cdef advance(self):             # <<<<<<<<<<<<<<
+ *         self.next_token = self.input_file[self.pointer].strip()
+ *         self.pointer += 1
  */
 
-/* Python wrapper */
-static PyObject *__pyx_pw_17compilationEngine_17CompilationEngine_3getNextToken(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
-static PyObject *__pyx_pw_17compilationEngine_17CompilationEngine_3getNextToken(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
-  PyObject *__pyx_r = 0;
-  __Pyx_RefNannyDeclarations
-  __Pyx_RefNannySetupContext("getNextToken (wrapper)", 0);
-  __pyx_r = __pyx_pf_17compilationEngine_17CompilationEngine_2getNextToken(((struct __pyx_obj_17compilationEngine_CompilationEngine *)__pyx_v_self));
-
-  /* function exit code */
-  __Pyx_RefNannyFinishContext();
-  return __pyx_r;
-}
-
-static PyObject *__pyx_pf_17compilationEngine_17CompilationEngine_2getNextToken(struct __pyx_obj_17compilationEngine_CompilationEngine *__pyx_v_self) {
+static PyObject *__pyx_f_17compilationEngine_17CompilationEngine_advance(struct __pyx_obj_17compilationEngine_CompilationEngine *__pyx_v_self) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
   PyObject *__pyx_t_2 = NULL;
   PyObject *__pyx_t_3 = NULL;
-  PyObject *__pyx_t_4 = NULL;
   int __pyx_lineno = 0;
   const char *__pyx_filename = NULL;
   int __pyx_clineno = 0;
-  __Pyx_RefNannySetupContext("getNextToken", 0);
+  __Pyx_RefNannySetupContext("advance", 0);
 
-  /* "compilationEngine.pyx":28
- *     #Get the next token from the input
- *     def getNextToken(self):
- *         return self.input_file.readline().strip()             # <<<<<<<<<<<<<<
+  /* "compilationEngine.pyx":34
+ *     # Get the next token from the input
+ *     cdef advance(self):
+ *         self.next_token = self.input_file[self.pointer].strip()             # <<<<<<<<<<<<<<
+ *         self.pointer += 1
  * 
- *     # Compiles a complete class
  */
-  __Pyx_XDECREF(__pyx_r);
-  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->input_file, __pyx_n_s_readline); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 28, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_3);
-  __pyx_t_4 = NULL;
-  if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_3))) {
-    __pyx_t_4 = PyMethod_GET_SELF(__pyx_t_3);
-    if (likely(__pyx_t_4)) {
-      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_3);
-      __Pyx_INCREF(__pyx_t_4);
-      __Pyx_INCREF(function);
-      __Pyx_DECREF_SET(__pyx_t_3, function);
-    }
-  }
-  __pyx_t_2 = (__pyx_t_4) ? __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_t_4) : __Pyx_PyObject_CallNoArg(__pyx_t_3);
-  __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
-  if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 28, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_GetItemInt(__pyx_v_self->input_file, __pyx_v_self->pointer, int, 1, __Pyx_PyInt_From_int, 0, 1, 1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 34, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_strip); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 28, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_strip); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 34, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __pyx_t_2 = NULL;
@@ -1812,38 +1851,88 @@ static PyObject *__pyx_pf_17compilationEngine_17CompilationEngine_2getNextToken(
   }
   __pyx_t_1 = (__pyx_t_2) ? __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_t_2) : __Pyx_PyObject_CallNoArg(__pyx_t_3);
   __Pyx_XDECREF(__pyx_t_2); __pyx_t_2 = 0;
-  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 28, __pyx_L1_error)
+  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 34, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  __pyx_r = __pyx_t_1;
+  if (!(likely(PyString_CheckExact(__pyx_t_1))||((__pyx_t_1) == Py_None)||((void)PyErr_Format(PyExc_TypeError, "Expected %.16s, got %.200s", "str", Py_TYPE(__pyx_t_1)->tp_name), 0))) __PYX_ERR(0, 34, __pyx_L1_error)
+  __Pyx_GIVEREF(__pyx_t_1);
+  __Pyx_GOTREF(__pyx_v_self->next_token);
+  __Pyx_DECREF(__pyx_v_self->next_token);
+  __pyx_v_self->next_token = ((PyObject*)__pyx_t_1);
   __pyx_t_1 = 0;
-  goto __pyx_L0;
 
-  /* "compilationEngine.pyx":27
+  /* "compilationEngine.pyx":35
+ *     cdef advance(self):
+ *         self.next_token = self.input_file[self.pointer].strip()
+ *         self.pointer += 1             # <<<<<<<<<<<<<<
  * 
- *     #Get the next token from the input
- *     def getNextToken(self):             # <<<<<<<<<<<<<<
- *         return self.input_file.readline().strip()
+ *     # reverse the last advance
+ */
+  __pyx_v_self->pointer = (__pyx_v_self->pointer + 1);
+
+  /* "compilationEngine.pyx":33
  * 
+ *     # Get the next token from the input
+ *     cdef advance(self):             # <<<<<<<<<<<<<<
+ *         self.next_token = self.input_file[self.pointer].strip()
+ *         self.pointer += 1
  */
 
   /* function exit code */
+  __pyx_r = Py_None; __Pyx_INCREF(Py_None);
+  goto __pyx_L0;
   __pyx_L1_error:;
   __Pyx_XDECREF(__pyx_t_1);
   __Pyx_XDECREF(__pyx_t_2);
   __Pyx_XDECREF(__pyx_t_3);
-  __Pyx_XDECREF(__pyx_t_4);
-  __Pyx_AddTraceback("compilationEngine.CompilationEngine.getNextToken", __pyx_clineno, __pyx_lineno, __pyx_filename);
-  __pyx_r = NULL;
+  __Pyx_AddTraceback("compilationEngine.CompilationEngine.advance", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __pyx_r = 0;
   __pyx_L0:;
   __Pyx_XGIVEREF(__pyx_r);
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-/* "compilationEngine.pyx":31
+/* "compilationEngine.pyx":38
  * 
- *     # Compiles a complete class
+ *     # reverse the last advance
+ *     cdef reverse(self):             # <<<<<<<<<<<<<<
+ *         self.pointer -= 1
+ * 
+ */
+
+static PyObject *__pyx_f_17compilationEngine_17CompilationEngine_reverse(struct __pyx_obj_17compilationEngine_CompilationEngine *__pyx_v_self) {
+  PyObject *__pyx_r = NULL;
+  __Pyx_RefNannyDeclarations
+  __Pyx_RefNannySetupContext("reverse", 0);
+
+  /* "compilationEngine.pyx":39
+ *     # reverse the last advance
+ *     cdef reverse(self):
+ *         self.pointer -= 1             # <<<<<<<<<<<<<<
+ * 
+ *     # compile a complete class
+ */
+  __pyx_v_self->pointer = (__pyx_v_self->pointer - 1);
+
+  /* "compilationEngine.pyx":38
+ * 
+ *     # reverse the last advance
+ *     cdef reverse(self):             # <<<<<<<<<<<<<<
+ *         self.pointer -= 1
+ * 
+ */
+
+  /* function exit code */
+  __pyx_r = Py_None; __Pyx_INCREF(Py_None);
+  __Pyx_XGIVEREF(__pyx_r);
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+/* "compilationEngine.pyx":42
+ * 
+ *     # compile a complete class
  *     cdef compileClass(self):             # <<<<<<<<<<<<<<
  *         self.output_file.write('<class>\n')
  *         self.indent += 1
@@ -1856,21 +1945,19 @@ static PyObject *__pyx_f_17compilationEngine_17CompilationEngine_compileClass(st
   PyObject *__pyx_t_2 = NULL;
   PyObject *__pyx_t_3 = NULL;
   PyObject *__pyx_t_4 = NULL;
-  PyObject *__pyx_t_5 = NULL;
-  PyObject *__pyx_t_6 = NULL;
   int __pyx_lineno = 0;
   const char *__pyx_filename = NULL;
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("compileClass", 0);
 
-  /* "compilationEngine.pyx":32
- *     # Compiles a complete class
+  /* "compilationEngine.pyx":43
+ *     # compile a complete class
  *     cdef compileClass(self):
  *         self.output_file.write('<class>\n')             # <<<<<<<<<<<<<<
  *         self.indent += 1
- *         self.output_file.write(self.indent * '  ' + self.getNextToken() + '\n') # read class
+ * 
  */
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 32, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 43, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __pyx_t_3 = NULL;
   if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
@@ -1884,112 +1971,98 @@ static PyObject *__pyx_f_17compilationEngine_17CompilationEngine_compileClass(st
   }
   __pyx_t_1 = (__pyx_t_3) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_3, __pyx_kp_s_class) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_kp_s_class);
   __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
-  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 32, __pyx_L1_error)
+  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 43, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "compilationEngine.pyx":33
+  /* "compilationEngine.pyx":44
  *     cdef compileClass(self):
  *         self.output_file.write('<class>\n')
  *         self.indent += 1             # <<<<<<<<<<<<<<
- *         self.output_file.write(self.indent * '  ' + self.getNextToken() + '\n') # read class
- *         self.output_file.write(self.indent * '  ' + self.getNextToken() + '\n') # read class name
+ * 
+ *         self.advance() # get the next token <class>
  */
   __pyx_v_self->indent = (__pyx_v_self->indent + 1);
 
-  /* "compilationEngine.pyx":34
- *         self.output_file.write('<class>\n')
+  /* "compilationEngine.pyx":46
  *         self.indent += 1
- *         self.output_file.write(self.indent * '  ' + self.getNextToken() + '\n') # read class             # <<<<<<<<<<<<<<
- *         self.output_file.write(self.indent * '  ' + self.getNextToken() + '\n') # read class name
- *         self.output_file.write(self.indent * '  ' + self.getNextToken() + '\n') # read {
+ * 
+ *         self.advance() # get the next token <class>             # <<<<<<<<<<<<<<
+ *         self.output_file.write(self.indent * "  " + self.next_token + '\n')
+ * 
  */
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 34, __pyx_L1_error)
+  __pyx_t_1 = ((struct __pyx_vtabstruct_17compilationEngine_CompilationEngine *)__pyx_v_self->__pyx_vtab)->advance(__pyx_v_self); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 46, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+  /* "compilationEngine.pyx":47
+ * 
+ *         self.advance() # get the next token <class>
+ *         self.output_file.write(self.indent * "  " + self.next_token + '\n')             # <<<<<<<<<<<<<<
+ * 
+ *         self.advance() # get the next token <class_name>
+ */
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 47, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_3 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 34, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 47, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
-  __pyx_t_4 = PyNumber_Multiply(__pyx_t_3, __pyx_kp_s_); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 34, __pyx_L1_error)
+  __pyx_t_4 = PyNumber_Multiply(__pyx_t_3, __pyx_kp_s_); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 47, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  __pyx_t_5 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_getNextToken); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 34, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_5);
-  __pyx_t_6 = NULL;
-  if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_5))) {
-    __pyx_t_6 = PyMethod_GET_SELF(__pyx_t_5);
-    if (likely(__pyx_t_6)) {
-      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_5);
-      __Pyx_INCREF(__pyx_t_6);
-      __Pyx_INCREF(function);
-      __Pyx_DECREF_SET(__pyx_t_5, function);
-    }
-  }
-  __pyx_t_3 = (__pyx_t_6) ? __Pyx_PyObject_CallOneArg(__pyx_t_5, __pyx_t_6) : __Pyx_PyObject_CallNoArg(__pyx_t_5);
-  __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
-  if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 34, __pyx_L1_error)
+  __pyx_t_3 = PyNumber_Add(__pyx_t_4, __pyx_v_self->next_token); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 47, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
-  __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-  __pyx_t_5 = PyNumber_Add(__pyx_t_4, __pyx_t_3); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 34, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_5);
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+  __pyx_t_4 = PyNumber_Add(__pyx_t_3, __pyx_kp_s__2); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 47, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_4);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  __pyx_t_3 = PyNumber_Add(__pyx_t_5, __pyx_kp_s__2); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 34, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_3);
-  __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-  __pyx_t_5 = NULL;
+  __pyx_t_3 = NULL;
   if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
-    __pyx_t_5 = PyMethod_GET_SELF(__pyx_t_2);
-    if (likely(__pyx_t_5)) {
+    __pyx_t_3 = PyMethod_GET_SELF(__pyx_t_2);
+    if (likely(__pyx_t_3)) {
       PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
-      __Pyx_INCREF(__pyx_t_5);
+      __Pyx_INCREF(__pyx_t_3);
       __Pyx_INCREF(function);
       __Pyx_DECREF_SET(__pyx_t_2, function);
     }
   }
-  __pyx_t_1 = (__pyx_t_5) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_5, __pyx_t_3) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_3);
-  __Pyx_XDECREF(__pyx_t_5); __pyx_t_5 = 0;
-  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 34, __pyx_L1_error)
+  __pyx_t_1 = (__pyx_t_3) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_3, __pyx_t_4) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_4);
+  __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
+  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 47, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "compilationEngine.pyx":35
- *         self.indent += 1
- *         self.output_file.write(self.indent * '  ' + self.getNextToken() + '\n') # read class
- *         self.output_file.write(self.indent * '  ' + self.getNextToken() + '\n') # read class name             # <<<<<<<<<<<<<<
- *         self.output_file.write(self.indent * '  ' + self.getNextToken() + '\n') # read {
- *         self.compileClassVarDec()
+  /* "compilationEngine.pyx":49
+ *         self.output_file.write(self.indent * "  " + self.next_token + '\n')
+ * 
+ *         self.advance() # get the next token <class_name>             # <<<<<<<<<<<<<<
+ *         self.output_file.write(self.indent * "  " + self.next_token + '\n')
+ * 
  */
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 35, __pyx_L1_error)
+  __pyx_t_1 = ((struct __pyx_vtabstruct_17compilationEngine_CompilationEngine *)__pyx_v_self->__pyx_vtab)->advance(__pyx_v_self); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 49, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+  /* "compilationEngine.pyx":50
+ * 
+ *         self.advance() # get the next token <class_name>
+ *         self.output_file.write(self.indent * "  " + self.next_token + '\n')             # <<<<<<<<<<<<<<
+ * 
+ *         self.advance() # get the next token {
+ */
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 50, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_3 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 35, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_3);
-  __pyx_t_5 = PyNumber_Multiply(__pyx_t_3, __pyx_kp_s_); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 35, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_5);
-  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  __pyx_t_4 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_getNextToken); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 35, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 50, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
-  __pyx_t_6 = NULL;
-  if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_4))) {
-    __pyx_t_6 = PyMethod_GET_SELF(__pyx_t_4);
-    if (likely(__pyx_t_6)) {
-      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_4);
-      __Pyx_INCREF(__pyx_t_6);
-      __Pyx_INCREF(function);
-      __Pyx_DECREF_SET(__pyx_t_4, function);
-    }
-  }
-  __pyx_t_3 = (__pyx_t_6) ? __Pyx_PyObject_CallOneArg(__pyx_t_4, __pyx_t_6) : __Pyx_PyObject_CallNoArg(__pyx_t_4);
-  __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
-  if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 35, __pyx_L1_error)
+  __pyx_t_3 = PyNumber_Multiply(__pyx_t_4, __pyx_kp_s_); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 50, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  __pyx_t_4 = PyNumber_Add(__pyx_t_5, __pyx_t_3); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 35, __pyx_L1_error)
+  __pyx_t_4 = PyNumber_Add(__pyx_t_3, __pyx_v_self->next_token); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 50, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
-  __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  __pyx_t_3 = PyNumber_Add(__pyx_t_4, __pyx_kp_s__2); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 35, __pyx_L1_error)
+  __pyx_t_3 = PyNumber_Add(__pyx_t_4, __pyx_kp_s__2); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 50, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
   __pyx_t_4 = NULL;
@@ -2005,125 +2078,111 @@ static PyObject *__pyx_f_17compilationEngine_17CompilationEngine_compileClass(st
   __pyx_t_1 = (__pyx_t_4) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_4, __pyx_t_3) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_3);
   __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 35, __pyx_L1_error)
+  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 50, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "compilationEngine.pyx":36
- *         self.output_file.write(self.indent * '  ' + self.getNextToken() + '\n') # read class
- *         self.output_file.write(self.indent * '  ' + self.getNextToken() + '\n') # read class name
- *         self.output_file.write(self.indent * '  ' + self.getNextToken() + '\n') # read {             # <<<<<<<<<<<<<<
- *         self.compileClassVarDec()
- *         self.compileSubroutine()
+  /* "compilationEngine.pyx":52
+ *         self.output_file.write(self.indent * "  " + self.next_token + '\n')
+ * 
+ *         self.advance() # get the next token {             # <<<<<<<<<<<<<<
+ *         self.output_file.write(self.indent * "  " + self.next_token + '\n')
+ * 
  */
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 36, __pyx_L1_error)
+  __pyx_t_1 = ((struct __pyx_vtabstruct_17compilationEngine_CompilationEngine *)__pyx_v_self->__pyx_vtab)->advance(__pyx_v_self); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 52, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+  /* "compilationEngine.pyx":53
+ * 
+ *         self.advance() # get the next token {
+ *         self.output_file.write(self.indent * "  " + self.next_token + '\n')             # <<<<<<<<<<<<<<
+ * 
+ *         # compile classVarDec*
+ */
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 53, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_3 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 36, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 53, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
-  __pyx_t_4 = PyNumber_Multiply(__pyx_t_3, __pyx_kp_s_); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 36, __pyx_L1_error)
+  __pyx_t_4 = PyNumber_Multiply(__pyx_t_3, __pyx_kp_s_); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 53, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  __pyx_t_5 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_getNextToken); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 36, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_5);
-  __pyx_t_6 = NULL;
-  if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_5))) {
-    __pyx_t_6 = PyMethod_GET_SELF(__pyx_t_5);
-    if (likely(__pyx_t_6)) {
-      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_5);
-      __Pyx_INCREF(__pyx_t_6);
-      __Pyx_INCREF(function);
-      __Pyx_DECREF_SET(__pyx_t_5, function);
-    }
-  }
-  __pyx_t_3 = (__pyx_t_6) ? __Pyx_PyObject_CallOneArg(__pyx_t_5, __pyx_t_6) : __Pyx_PyObject_CallNoArg(__pyx_t_5);
-  __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
-  if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 36, __pyx_L1_error)
+  __pyx_t_3 = PyNumber_Add(__pyx_t_4, __pyx_v_self->next_token); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 53, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
-  __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-  __pyx_t_5 = PyNumber_Add(__pyx_t_4, __pyx_t_3); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 36, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_5);
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+  __pyx_t_4 = PyNumber_Add(__pyx_t_3, __pyx_kp_s__2); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 53, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_4);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  __pyx_t_3 = PyNumber_Add(__pyx_t_5, __pyx_kp_s__2); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 36, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_3);
-  __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-  __pyx_t_5 = NULL;
+  __pyx_t_3 = NULL;
   if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
-    __pyx_t_5 = PyMethod_GET_SELF(__pyx_t_2);
-    if (likely(__pyx_t_5)) {
+    __pyx_t_3 = PyMethod_GET_SELF(__pyx_t_2);
+    if (likely(__pyx_t_3)) {
       PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
-      __Pyx_INCREF(__pyx_t_5);
+      __Pyx_INCREF(__pyx_t_3);
       __Pyx_INCREF(function);
       __Pyx_DECREF_SET(__pyx_t_2, function);
     }
   }
-  __pyx_t_1 = (__pyx_t_5) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_5, __pyx_t_3) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_3);
-  __Pyx_XDECREF(__pyx_t_5); __pyx_t_5 = 0;
-  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 36, __pyx_L1_error)
+  __pyx_t_1 = (__pyx_t_3) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_3, __pyx_t_4) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_4);
+  __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
+  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 53, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "compilationEngine.pyx":37
- *         self.output_file.write(self.indent * '  ' + self.getNextToken() + '\n') # read class name
- *         self.output_file.write(self.indent * '  ' + self.getNextToken() + '\n') # read {
+  /* "compilationEngine.pyx":56
+ * 
+ *         # compile classVarDec*
  *         self.compileClassVarDec()             # <<<<<<<<<<<<<<
- *         self.compileSubroutine()
- *         self.output_file.write(self.indent * '  ' + self.getNextToken() + '\n') # read }
+ * 
+ *         # compile subroutineDec*
  */
-  __pyx_t_1 = ((struct __pyx_vtabstruct_17compilationEngine_CompilationEngine *)__pyx_v_self->__pyx_vtab)->compileClassVarDec(__pyx_v_self); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 37, __pyx_L1_error)
+  __pyx_t_1 = ((struct __pyx_vtabstruct_17compilationEngine_CompilationEngine *)__pyx_v_self->__pyx_vtab)->compileClassVarDec(__pyx_v_self); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 56, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "compilationEngine.pyx":38
- *         self.output_file.write(self.indent * '  ' + self.getNextToken() + '\n') # read {
- *         self.compileClassVarDec()
- *         self.compileSubroutine()             # <<<<<<<<<<<<<<
- *         self.output_file.write(self.indent * '  ' + self.getNextToken() + '\n') # read }
- *         self.indent -= 1
+  /* "compilationEngine.pyx":59
+ * 
+ *         # compile subroutineDec*
+ *         self.compileSubroutineDec()             # <<<<<<<<<<<<<<
+ * 
+ *         self.advance() # get the next token }
  */
-  __pyx_t_1 = ((struct __pyx_vtabstruct_17compilationEngine_CompilationEngine *)__pyx_v_self->__pyx_vtab)->compileSubroutine(__pyx_v_self); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 38, __pyx_L1_error)
+  __pyx_t_1 = ((struct __pyx_vtabstruct_17compilationEngine_CompilationEngine *)__pyx_v_self->__pyx_vtab)->compileSubroutineDec(__pyx_v_self); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 59, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "compilationEngine.pyx":39
- *         self.compileClassVarDec()
- *         self.compileSubroutine()
- *         self.output_file.write(self.indent * '  ' + self.getNextToken() + '\n') # read }             # <<<<<<<<<<<<<<
- *         self.indent -= 1
- *         self.output_file.write('</class>\n')
+  /* "compilationEngine.pyx":61
+ *         self.compileSubroutineDec()
+ * 
+ *         self.advance() # get the next token }             # <<<<<<<<<<<<<<
+ *         self.output_file.write(self.indent * "  " + self.next_token + '\n')
+ * 
  */
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 39, __pyx_L1_error)
+  __pyx_t_1 = ((struct __pyx_vtabstruct_17compilationEngine_CompilationEngine *)__pyx_v_self->__pyx_vtab)->advance(__pyx_v_self); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 61, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+  /* "compilationEngine.pyx":62
+ * 
+ *         self.advance() # get the next token }
+ *         self.output_file.write(self.indent * "  " + self.next_token + '\n')             # <<<<<<<<<<<<<<
+ * 
+ *         self.indent -= 1
+ */
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 62, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_3 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 39, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_3);
-  __pyx_t_5 = PyNumber_Multiply(__pyx_t_3, __pyx_kp_s_); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 39, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_5);
-  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  __pyx_t_4 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_getNextToken); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 39, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 62, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
-  __pyx_t_6 = NULL;
-  if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_4))) {
-    __pyx_t_6 = PyMethod_GET_SELF(__pyx_t_4);
-    if (likely(__pyx_t_6)) {
-      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_4);
-      __Pyx_INCREF(__pyx_t_6);
-      __Pyx_INCREF(function);
-      __Pyx_DECREF_SET(__pyx_t_4, function);
-    }
-  }
-  __pyx_t_3 = (__pyx_t_6) ? __Pyx_PyObject_CallOneArg(__pyx_t_4, __pyx_t_6) : __Pyx_PyObject_CallNoArg(__pyx_t_4);
-  __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
-  if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 39, __pyx_L1_error)
+  __pyx_t_3 = PyNumber_Multiply(__pyx_t_4, __pyx_kp_s_); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 62, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  __pyx_t_4 = PyNumber_Add(__pyx_t_5, __pyx_t_3); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 39, __pyx_L1_error)
+  __pyx_t_4 = PyNumber_Add(__pyx_t_3, __pyx_v_self->next_token); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 62, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
-  __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  __pyx_t_3 = PyNumber_Add(__pyx_t_4, __pyx_kp_s__2); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 39, __pyx_L1_error)
+  __pyx_t_3 = PyNumber_Add(__pyx_t_4, __pyx_kp_s__2); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 62, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
   __pyx_t_4 = NULL;
@@ -2139,28 +2198,28 @@ static PyObject *__pyx_f_17compilationEngine_17CompilationEngine_compileClass(st
   __pyx_t_1 = (__pyx_t_4) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_4, __pyx_t_3) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_3);
   __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 39, __pyx_L1_error)
+  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 62, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "compilationEngine.pyx":40
- *         self.compileSubroutine()
- *         self.output_file.write(self.indent * '  ' + self.getNextToken() + '\n') # read }
+  /* "compilationEngine.pyx":64
+ *         self.output_file.write(self.indent * "  " + self.next_token + '\n')
+ * 
  *         self.indent -= 1             # <<<<<<<<<<<<<<
  *         self.output_file.write('</class>\n')
- *         self.output_file.close()
+ * 
  */
   __pyx_v_self->indent = (__pyx_v_self->indent - 1);
 
-  /* "compilationEngine.pyx":41
- *         self.output_file.write(self.indent * '  ' + self.getNextToken() + '\n') # read }
+  /* "compilationEngine.pyx":65
+ * 
  *         self.indent -= 1
  *         self.output_file.write('</class>\n')             # <<<<<<<<<<<<<<
- *         self.output_file.close()
  * 
+ *         self.output_file.close()
  */
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 41, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 65, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __pyx_t_3 = NULL;
   if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
@@ -2174,19 +2233,19 @@ static PyObject *__pyx_f_17compilationEngine_17CompilationEngine_compileClass(st
   }
   __pyx_t_1 = (__pyx_t_3) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_3, __pyx_kp_s_class_2) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_kp_s_class_2);
   __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
-  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 41, __pyx_L1_error)
+  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 65, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "compilationEngine.pyx":42
- *         self.indent -= 1
+  /* "compilationEngine.pyx":67
  *         self.output_file.write('</class>\n')
+ * 
  *         self.output_file.close()             # <<<<<<<<<<<<<<
  * 
- *     # Compiles a static declaration or a field declaration
+ *     # compile a static declaration or a field declaration
  */
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_close); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 42, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_close); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 67, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __pyx_t_3 = NULL;
   if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
@@ -2200,14 +2259,14 @@ static PyObject *__pyx_f_17compilationEngine_17CompilationEngine_compileClass(st
   }
   __pyx_t_1 = (__pyx_t_3) ? __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_3) : __Pyx_PyObject_CallNoArg(__pyx_t_2);
   __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
-  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 42, __pyx_L1_error)
+  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 67, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "compilationEngine.pyx":31
+  /* "compilationEngine.pyx":42
  * 
- *     # Compiles a complete class
+ *     # compile a complete class
  *     cdef compileClass(self):             # <<<<<<<<<<<<<<
  *         self.output_file.write('<class>\n')
  *         self.indent += 1
@@ -2221,8 +2280,6 @@ static PyObject *__pyx_f_17compilationEngine_17CompilationEngine_compileClass(st
   __Pyx_XDECREF(__pyx_t_2);
   __Pyx_XDECREF(__pyx_t_3);
   __Pyx_XDECREF(__pyx_t_4);
-  __Pyx_XDECREF(__pyx_t_5);
-  __Pyx_XDECREF(__pyx_t_6);
   __Pyx_AddTraceback("compilationEngine.CompilationEngine.compileClass", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = 0;
   __pyx_L0:;
@@ -2231,690 +2288,155 @@ static PyObject *__pyx_f_17compilationEngine_17CompilationEngine_compileClass(st
   return __pyx_r;
 }
 
-/* "compilationEngine.pyx":45
+/* "compilationEngine.pyx":70
  * 
- *     # Compiles a static declaration or a field declaration
+ *     # compile a static declaration or a field declaration
  *     cdef compileClassVarDec(self):             # <<<<<<<<<<<<<<
- *         # if the next token is not static or field then return
- *         self.next_token = self.getNextToken()
+ *         # first determine whether there is a classVarDec, nextToken is } or start subroutineDec
+ *         self.advance()
  */
 
 static PyObject *__pyx_f_17compilationEngine_17CompilationEngine_compileClassVarDec(struct __pyx_obj_17compilationEngine_CompilationEngine *__pyx_v_self) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
-  PyObject *__pyx_t_2 = NULL;
-  PyObject *__pyx_t_3 = NULL;
+  int __pyx_t_2;
+  int __pyx_t_3;
   int __pyx_t_4;
-  int __pyx_t_5;
-  int __pyx_t_6;
+  PyObject *__pyx_t_5 = NULL;
+  PyObject *__pyx_t_6 = NULL;
   PyObject *__pyx_t_7 = NULL;
-  PyObject *__pyx_t_8 = NULL;
-  PyObject *__pyx_t_9 = NULL;
   int __pyx_lineno = 0;
   const char *__pyx_filename = NULL;
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("compileClassVarDec", 0);
 
-  /* "compilationEngine.pyx":47
+  /* "compilationEngine.pyx":72
  *     cdef compileClassVarDec(self):
- *         # if the next token is not static or field then return
- *         self.next_token = self.getNextToken()             # <<<<<<<<<<<<<<
- *         if self.next_token != "<keyword> static </keyword>" and self.next_token != "<keyword> field </keyword>":
- *             return
+ *         # first determine whether there is a classVarDec, nextToken is } or start subroutineDec
+ *         self.advance()             # <<<<<<<<<<<<<<
+ *         if self.next_token == "<symbol> } </symbol>":
+ *             self.reverse()
  */
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_getNextToken); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 47, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_3 = NULL;
-  if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
-    __pyx_t_3 = PyMethod_GET_SELF(__pyx_t_2);
-    if (likely(__pyx_t_3)) {
-      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
-      __Pyx_INCREF(__pyx_t_3);
-      __Pyx_INCREF(function);
-      __Pyx_DECREF_SET(__pyx_t_2, function);
-    }
-  }
-  __pyx_t_1 = (__pyx_t_3) ? __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_3) : __Pyx_PyObject_CallNoArg(__pyx_t_2);
-  __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
-  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 47, __pyx_L1_error)
+  __pyx_t_1 = ((struct __pyx_vtabstruct_17compilationEngine_CompilationEngine *)__pyx_v_self->__pyx_vtab)->advance(__pyx_v_self); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 72, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  if (!(likely(PyString_CheckExact(__pyx_t_1))||((__pyx_t_1) == Py_None)||((void)PyErr_Format(PyExc_TypeError, "Expected %.16s, got %.200s", "str", Py_TYPE(__pyx_t_1)->tp_name), 0))) __PYX_ERR(0, 47, __pyx_L1_error)
-  __Pyx_GIVEREF(__pyx_t_1);
-  __Pyx_GOTREF(__pyx_v_self->next_token);
-  __Pyx_DECREF(__pyx_v_self->next_token);
-  __pyx_v_self->next_token = ((PyObject*)__pyx_t_1);
-  __pyx_t_1 = 0;
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "compilationEngine.pyx":48
- *         # if the next token is not static or field then return
- *         self.next_token = self.getNextToken()
- *         if self.next_token != "<keyword> static </keyword>" and self.next_token != "<keyword> field </keyword>":             # <<<<<<<<<<<<<<
+  /* "compilationEngine.pyx":73
+ *         # first determine whether there is a classVarDec, nextToken is } or start subroutineDec
+ *         self.advance()
+ *         if self.next_token == "<symbol> } </symbol>":             # <<<<<<<<<<<<<<
+ *             self.reverse()
  *             return
- *         self.output_file.write(self.indent * '  ' + '<classVarDec>\n')
  */
-  __pyx_t_5 = (__Pyx_PyString_Equals(__pyx_v_self->next_token, __pyx_kp_s_keyword_static_keyword, Py_NE)); if (unlikely(__pyx_t_5 < 0)) __PYX_ERR(0, 48, __pyx_L1_error)
-  __pyx_t_6 = (__pyx_t_5 != 0);
-  if (__pyx_t_6) {
-  } else {
-    __pyx_t_4 = __pyx_t_6;
-    goto __pyx_L4_bool_binop_done;
-  }
-  __pyx_t_6 = (__Pyx_PyString_Equals(__pyx_v_self->next_token, __pyx_kp_s_keyword_field_keyword, Py_NE)); if (unlikely(__pyx_t_6 < 0)) __PYX_ERR(0, 48, __pyx_L1_error)
-  __pyx_t_5 = (__pyx_t_6 != 0);
-  __pyx_t_4 = __pyx_t_5;
-  __pyx_L4_bool_binop_done:;
-  if (__pyx_t_4) {
+  __pyx_t_2 = (__Pyx_PyString_Equals(__pyx_v_self->next_token, __pyx_kp_s_symbol_symbol, Py_EQ)); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 73, __pyx_L1_error)
+  __pyx_t_3 = (__pyx_t_2 != 0);
+  if (__pyx_t_3) {
 
-    /* "compilationEngine.pyx":49
- *         self.next_token = self.getNextToken()
- *         if self.next_token != "<keyword> static </keyword>" and self.next_token != "<keyword> field </keyword>":
+    /* "compilationEngine.pyx":74
+ *         self.advance()
+ *         if self.next_token == "<symbol> } </symbol>":
+ *             self.reverse()             # <<<<<<<<<<<<<<
+ *             return
+ * 
+ */
+    __pyx_t_1 = ((struct __pyx_vtabstruct_17compilationEngine_CompilationEngine *)__pyx_v_self->__pyx_vtab)->reverse(__pyx_v_self); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 74, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_1);
+    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+    /* "compilationEngine.pyx":75
+ *         if self.next_token == "<symbol> } </symbol>":
+ *             self.reverse()
  *             return             # <<<<<<<<<<<<<<
- *         self.output_file.write(self.indent * '  ' + '<classVarDec>\n')
- *         self.indent += 1
+ * 
+ *         # next is subroutineDec
  */
     __Pyx_XDECREF(__pyx_r);
     __pyx_r = Py_None; __Pyx_INCREF(Py_None);
     goto __pyx_L0;
 
-    /* "compilationEngine.pyx":48
- *         # if the next token is not static or field then return
- *         self.next_token = self.getNextToken()
- *         if self.next_token != "<keyword> static </keyword>" and self.next_token != "<keyword> field </keyword>":             # <<<<<<<<<<<<<<
+    /* "compilationEngine.pyx":73
+ *         # first determine whether there is a classVarDec, nextToken is } or start subroutineDec
+ *         self.advance()
+ *         if self.next_token == "<symbol> } </symbol>":             # <<<<<<<<<<<<<<
+ *             self.reverse()
  *             return
- *         self.output_file.write(self.indent * '  ' + '<classVarDec>\n')
  */
   }
 
-  /* "compilationEngine.pyx":50
- *         if self.next_token != "<keyword> static </keyword>" and self.next_token != "<keyword> field </keyword>":
- *             return
- *         self.output_file.write(self.indent * '  ' + '<classVarDec>\n')             # <<<<<<<<<<<<<<
- *         self.indent += 1
- *         # if the next token is static or field
- */
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 50, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_3 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 50, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_3);
-  __pyx_t_7 = PyNumber_Multiply(__pyx_t_3, __pyx_kp_s_); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 50, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_7);
-  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  __pyx_t_3 = PyNumber_Add(__pyx_t_7, __pyx_kp_s_classVarDec); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 50, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_3);
-  __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-  __pyx_t_7 = NULL;
-  if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
-    __pyx_t_7 = PyMethod_GET_SELF(__pyx_t_2);
-    if (likely(__pyx_t_7)) {
-      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
-      __Pyx_INCREF(__pyx_t_7);
-      __Pyx_INCREF(function);
-      __Pyx_DECREF_SET(__pyx_t_2, function);
-    }
-  }
-  __pyx_t_1 = (__pyx_t_7) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_7, __pyx_t_3) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_3);
-  __Pyx_XDECREF(__pyx_t_7); __pyx_t_7 = 0;
-  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 50, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-
-  /* "compilationEngine.pyx":51
- *             return
- *         self.output_file.write(self.indent * '  ' + '<classVarDec>\n')
- *         self.indent += 1             # <<<<<<<<<<<<<<
- *         # if the next token is static or field
- *         self.output_file.write(self.indent * '  ' +  self.next_token + '\n') # read static or field
- */
-  __pyx_v_self->indent = (__pyx_v_self->indent + 1);
-
-  /* "compilationEngine.pyx":53
- *         self.indent += 1
- *         # if the next token is static or field
- *         self.output_file.write(self.indent * '  ' +  self.next_token + '\n') # read static or field             # <<<<<<<<<<<<<<
- *         self.output_file.write(self.indent * '  ' +  self.getNextToken() + '\n') # read type
- *         self.output_file.write(self.indent * '  ' +  self.getNextToken() + '\n') # read varName
- */
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 53, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_3 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 53, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_3);
-  __pyx_t_7 = PyNumber_Multiply(__pyx_t_3, __pyx_kp_s_); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 53, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_7);
-  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  __pyx_t_3 = PyNumber_Add(__pyx_t_7, __pyx_v_self->next_token); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 53, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_3);
-  __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-  __pyx_t_7 = PyNumber_Add(__pyx_t_3, __pyx_kp_s__2); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 53, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_7);
-  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  __pyx_t_3 = NULL;
-  if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
-    __pyx_t_3 = PyMethod_GET_SELF(__pyx_t_2);
-    if (likely(__pyx_t_3)) {
-      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
-      __Pyx_INCREF(__pyx_t_3);
-      __Pyx_INCREF(function);
-      __Pyx_DECREF_SET(__pyx_t_2, function);
-    }
-  }
-  __pyx_t_1 = (__pyx_t_3) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_3, __pyx_t_7) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_7);
-  __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
-  __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 53, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-
-  /* "compilationEngine.pyx":54
- *         # if the next token is static or field
- *         self.output_file.write(self.indent * '  ' +  self.next_token + '\n') # read static or field
- *         self.output_file.write(self.indent * '  ' +  self.getNextToken() + '\n') # read type             # <<<<<<<<<<<<<<
- *         self.output_file.write(self.indent * '  ' +  self.getNextToken() + '\n') # read varName
- *         # while the next token is a comma
- */
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 54, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_7 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 54, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_7);
-  __pyx_t_3 = PyNumber_Multiply(__pyx_t_7, __pyx_kp_s_); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 54, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_3);
-  __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-  __pyx_t_8 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_getNextToken); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 54, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_8);
-  __pyx_t_9 = NULL;
-  if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_8))) {
-    __pyx_t_9 = PyMethod_GET_SELF(__pyx_t_8);
-    if (likely(__pyx_t_9)) {
-      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_8);
-      __Pyx_INCREF(__pyx_t_9);
-      __Pyx_INCREF(function);
-      __Pyx_DECREF_SET(__pyx_t_8, function);
-    }
-  }
-  __pyx_t_7 = (__pyx_t_9) ? __Pyx_PyObject_CallOneArg(__pyx_t_8, __pyx_t_9) : __Pyx_PyObject_CallNoArg(__pyx_t_8);
-  __Pyx_XDECREF(__pyx_t_9); __pyx_t_9 = 0;
-  if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 54, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_7);
-  __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
-  __pyx_t_8 = PyNumber_Add(__pyx_t_3, __pyx_t_7); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 54, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_8);
-  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-  __pyx_t_7 = PyNumber_Add(__pyx_t_8, __pyx_kp_s__2); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 54, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_7);
-  __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
-  __pyx_t_8 = NULL;
-  if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
-    __pyx_t_8 = PyMethod_GET_SELF(__pyx_t_2);
-    if (likely(__pyx_t_8)) {
-      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
-      __Pyx_INCREF(__pyx_t_8);
-      __Pyx_INCREF(function);
-      __Pyx_DECREF_SET(__pyx_t_2, function);
-    }
-  }
-  __pyx_t_1 = (__pyx_t_8) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_8, __pyx_t_7) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_7);
-  __Pyx_XDECREF(__pyx_t_8); __pyx_t_8 = 0;
-  __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 54, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-
-  /* "compilationEngine.pyx":55
- *         self.output_file.write(self.indent * '  ' +  self.next_token + '\n') # read static or field
- *         self.output_file.write(self.indent * '  ' +  self.getNextToken() + '\n') # read type
- *         self.output_file.write(self.indent * '  ' +  self.getNextToken() + '\n') # read varName             # <<<<<<<<<<<<<<
- *         # while the next token is a comma
- *         self.next_token = self.getNextToken() # read ',' or ';'
- */
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 55, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_7 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 55, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_7);
-  __pyx_t_8 = PyNumber_Multiply(__pyx_t_7, __pyx_kp_s_); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 55, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_8);
-  __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_getNextToken); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 55, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_3);
-  __pyx_t_9 = NULL;
-  if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_3))) {
-    __pyx_t_9 = PyMethod_GET_SELF(__pyx_t_3);
-    if (likely(__pyx_t_9)) {
-      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_3);
-      __Pyx_INCREF(__pyx_t_9);
-      __Pyx_INCREF(function);
-      __Pyx_DECREF_SET(__pyx_t_3, function);
-    }
-  }
-  __pyx_t_7 = (__pyx_t_9) ? __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_t_9) : __Pyx_PyObject_CallNoArg(__pyx_t_3);
-  __Pyx_XDECREF(__pyx_t_9); __pyx_t_9 = 0;
-  if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 55, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_7);
-  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  __pyx_t_3 = PyNumber_Add(__pyx_t_8, __pyx_t_7); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 55, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_3);
-  __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
-  __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-  __pyx_t_7 = PyNumber_Add(__pyx_t_3, __pyx_kp_s__2); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 55, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_7);
-  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  __pyx_t_3 = NULL;
-  if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
-    __pyx_t_3 = PyMethod_GET_SELF(__pyx_t_2);
-    if (likely(__pyx_t_3)) {
-      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
-      __Pyx_INCREF(__pyx_t_3);
-      __Pyx_INCREF(function);
-      __Pyx_DECREF_SET(__pyx_t_2, function);
-    }
-  }
-  __pyx_t_1 = (__pyx_t_3) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_3, __pyx_t_7) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_7);
-  __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
-  __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 55, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-
-  /* "compilationEngine.pyx":57
- *         self.output_file.write(self.indent * '  ' +  self.getNextToken() + '\n') # read varName
- *         # while the next token is a comma
- *         self.next_token = self.getNextToken() # read ',' or ';'             # <<<<<<<<<<<<<<
- *         while self.next_token == ',':  # read ,
- *             self.output_file.write(self.indent * '  ' + self.next_token + '\n')
- */
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_getNextToken); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 57, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_7 = NULL;
-  if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
-    __pyx_t_7 = PyMethod_GET_SELF(__pyx_t_2);
-    if (likely(__pyx_t_7)) {
-      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
-      __Pyx_INCREF(__pyx_t_7);
-      __Pyx_INCREF(function);
-      __Pyx_DECREF_SET(__pyx_t_2, function);
-    }
-  }
-  __pyx_t_1 = (__pyx_t_7) ? __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_7) : __Pyx_PyObject_CallNoArg(__pyx_t_2);
-  __Pyx_XDECREF(__pyx_t_7); __pyx_t_7 = 0;
-  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 57, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  if (!(likely(PyString_CheckExact(__pyx_t_1))||((__pyx_t_1) == Py_None)||((void)PyErr_Format(PyExc_TypeError, "Expected %.16s, got %.200s", "str", Py_TYPE(__pyx_t_1)->tp_name), 0))) __PYX_ERR(0, 57, __pyx_L1_error)
-  __Pyx_GIVEREF(__pyx_t_1);
-  __Pyx_GOTREF(__pyx_v_self->next_token);
-  __Pyx_DECREF(__pyx_v_self->next_token);
-  __pyx_v_self->next_token = ((PyObject*)__pyx_t_1);
-  __pyx_t_1 = 0;
-
-  /* "compilationEngine.pyx":58
- *         # while the next token is a comma
- *         self.next_token = self.getNextToken() # read ',' or ';'
- *         while self.next_token == ',':  # read ,             # <<<<<<<<<<<<<<
- *             self.output_file.write(self.indent * '  ' + self.next_token + '\n')
- *             self.output_file.write(self.indent * '  ' + self.getNextToken() + '\n') # read varName
- */
-  while (1) {
-    __pyx_t_4 = (__Pyx_PyString_Equals(__pyx_v_self->next_token, __pyx_kp_s__3, Py_EQ)); if (unlikely(__pyx_t_4 < 0)) __PYX_ERR(0, 58, __pyx_L1_error)
-    __pyx_t_5 = (__pyx_t_4 != 0);
-    if (!__pyx_t_5) break;
-
-    /* "compilationEngine.pyx":59
- *         self.next_token = self.getNextToken() # read ',' or ';'
- *         while self.next_token == ',':  # read ,
- *             self.output_file.write(self.indent * '  ' + self.next_token + '\n')             # <<<<<<<<<<<<<<
- *             self.output_file.write(self.indent * '  ' + self.getNextToken() + '\n') # read varName
- *             self.next_token = self.getNextToken() # read ',' or ';'
- */
-    __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 59, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_2);
-    __pyx_t_7 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 59, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_7);
-    __pyx_t_3 = PyNumber_Multiply(__pyx_t_7, __pyx_kp_s_); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 59, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_3);
-    __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-    __pyx_t_7 = PyNumber_Add(__pyx_t_3, __pyx_v_self->next_token); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 59, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_7);
-    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-    __pyx_t_3 = PyNumber_Add(__pyx_t_7, __pyx_kp_s__2); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 59, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_3);
-    __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-    __pyx_t_7 = NULL;
-    if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
-      __pyx_t_7 = PyMethod_GET_SELF(__pyx_t_2);
-      if (likely(__pyx_t_7)) {
-        PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
-        __Pyx_INCREF(__pyx_t_7);
-        __Pyx_INCREF(function);
-        __Pyx_DECREF_SET(__pyx_t_2, function);
-      }
-    }
-    __pyx_t_1 = (__pyx_t_7) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_7, __pyx_t_3) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_3);
-    __Pyx_XDECREF(__pyx_t_7); __pyx_t_7 = 0;
-    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-    if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 59, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_1);
-    __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-
-    /* "compilationEngine.pyx":60
- *         while self.next_token == ',':  # read ,
- *             self.output_file.write(self.indent * '  ' + self.next_token + '\n')
- *             self.output_file.write(self.indent * '  ' + self.getNextToken() + '\n') # read varName             # <<<<<<<<<<<<<<
- *             self.next_token = self.getNextToken() # read ',' or ';'
- *         self.output_file.write(self.indent * '  ' + self.next_token) # read ;
- */
-    __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 60, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_2);
-    __pyx_t_3 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 60, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_3);
-    __pyx_t_7 = PyNumber_Multiply(__pyx_t_3, __pyx_kp_s_); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 60, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_7);
-    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-    __pyx_t_8 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_getNextToken); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 60, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_8);
-    __pyx_t_9 = NULL;
-    if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_8))) {
-      __pyx_t_9 = PyMethod_GET_SELF(__pyx_t_8);
-      if (likely(__pyx_t_9)) {
-        PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_8);
-        __Pyx_INCREF(__pyx_t_9);
-        __Pyx_INCREF(function);
-        __Pyx_DECREF_SET(__pyx_t_8, function);
-      }
-    }
-    __pyx_t_3 = (__pyx_t_9) ? __Pyx_PyObject_CallOneArg(__pyx_t_8, __pyx_t_9) : __Pyx_PyObject_CallNoArg(__pyx_t_8);
-    __Pyx_XDECREF(__pyx_t_9); __pyx_t_9 = 0;
-    if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 60, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_3);
-    __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
-    __pyx_t_8 = PyNumber_Add(__pyx_t_7, __pyx_t_3); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 60, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_8);
-    __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-    __pyx_t_3 = PyNumber_Add(__pyx_t_8, __pyx_kp_s__2); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 60, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_3);
-    __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
-    __pyx_t_8 = NULL;
-    if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
-      __pyx_t_8 = PyMethod_GET_SELF(__pyx_t_2);
-      if (likely(__pyx_t_8)) {
-        PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
-        __Pyx_INCREF(__pyx_t_8);
-        __Pyx_INCREF(function);
-        __Pyx_DECREF_SET(__pyx_t_2, function);
-      }
-    }
-    __pyx_t_1 = (__pyx_t_8) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_8, __pyx_t_3) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_3);
-    __Pyx_XDECREF(__pyx_t_8); __pyx_t_8 = 0;
-    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-    if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 60, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_1);
-    __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-
-    /* "compilationEngine.pyx":61
- *             self.output_file.write(self.indent * '  ' + self.next_token + '\n')
- *             self.output_file.write(self.indent * '  ' + self.getNextToken() + '\n') # read varName
- *             self.next_token = self.getNextToken() # read ',' or ';'             # <<<<<<<<<<<<<<
- *         self.output_file.write(self.indent * '  ' + self.next_token) # read ;
- *         self.indent -= 1
- */
-    __pyx_t_2 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_getNextToken); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 61, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_2);
-    __pyx_t_3 = NULL;
-    if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
-      __pyx_t_3 = PyMethod_GET_SELF(__pyx_t_2);
-      if (likely(__pyx_t_3)) {
-        PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
-        __Pyx_INCREF(__pyx_t_3);
-        __Pyx_INCREF(function);
-        __Pyx_DECREF_SET(__pyx_t_2, function);
-      }
-    }
-    __pyx_t_1 = (__pyx_t_3) ? __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_3) : __Pyx_PyObject_CallNoArg(__pyx_t_2);
-    __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
-    if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 61, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_1);
-    __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-    if (!(likely(PyString_CheckExact(__pyx_t_1))||((__pyx_t_1) == Py_None)||((void)PyErr_Format(PyExc_TypeError, "Expected %.16s, got %.200s", "str", Py_TYPE(__pyx_t_1)->tp_name), 0))) __PYX_ERR(0, 61, __pyx_L1_error)
-    __Pyx_GIVEREF(__pyx_t_1);
-    __Pyx_GOTREF(__pyx_v_self->next_token);
-    __Pyx_DECREF(__pyx_v_self->next_token);
-    __pyx_v_self->next_token = ((PyObject*)__pyx_t_1);
-    __pyx_t_1 = 0;
-  }
-
-  /* "compilationEngine.pyx":62
- *             self.output_file.write(self.indent * '  ' + self.getNextToken() + '\n') # read varName
- *             self.next_token = self.getNextToken() # read ',' or ';'
- *         self.output_file.write(self.indent * '  ' + self.next_token) # read ;             # <<<<<<<<<<<<<<
- *         self.indent -= 1
- *         self.output_file.write(self.indent * '  ' + '</classVarDec>\n')
- */
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 62, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_3 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 62, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_3);
-  __pyx_t_8 = PyNumber_Multiply(__pyx_t_3, __pyx_kp_s_); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 62, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_8);
-  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  __pyx_t_3 = PyNumber_Add(__pyx_t_8, __pyx_v_self->next_token); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 62, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_3);
-  __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
-  __pyx_t_8 = NULL;
-  if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
-    __pyx_t_8 = PyMethod_GET_SELF(__pyx_t_2);
-    if (likely(__pyx_t_8)) {
-      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
-      __Pyx_INCREF(__pyx_t_8);
-      __Pyx_INCREF(function);
-      __Pyx_DECREF_SET(__pyx_t_2, function);
-    }
-  }
-  __pyx_t_1 = (__pyx_t_8) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_8, __pyx_t_3) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_3);
-  __Pyx_XDECREF(__pyx_t_8); __pyx_t_8 = 0;
-  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 62, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-
-  /* "compilationEngine.pyx":63
- *             self.next_token = self.getNextToken() # read ',' or ';'
- *         self.output_file.write(self.indent * '  ' + self.next_token) # read ;
- *         self.indent -= 1             # <<<<<<<<<<<<<<
- *         self.output_file.write(self.indent * '  ' + '</classVarDec>\n')
+  /* "compilationEngine.pyx":78
  * 
- */
-  __pyx_v_self->indent = (__pyx_v_self->indent - 1);
-
-  /* "compilationEngine.pyx":64
- *         self.output_file.write(self.indent * '  ' + self.next_token) # read ;
- *         self.indent -= 1
- *         self.output_file.write(self.indent * '  ' + '</classVarDec>\n')             # <<<<<<<<<<<<<<
- * 
- *     # Compiles a complete method, function, or constructor
- */
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 64, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_3 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 64, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_3);
-  __pyx_t_8 = PyNumber_Multiply(__pyx_t_3, __pyx_kp_s_); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 64, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_8);
-  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  __pyx_t_3 = PyNumber_Add(__pyx_t_8, __pyx_kp_s_classVarDec_2); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 64, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_3);
-  __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
-  __pyx_t_8 = NULL;
-  if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
-    __pyx_t_8 = PyMethod_GET_SELF(__pyx_t_2);
-    if (likely(__pyx_t_8)) {
-      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
-      __Pyx_INCREF(__pyx_t_8);
-      __Pyx_INCREF(function);
-      __Pyx_DECREF_SET(__pyx_t_2, function);
-    }
-  }
-  __pyx_t_1 = (__pyx_t_8) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_8, __pyx_t_3) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_3);
-  __Pyx_XDECREF(__pyx_t_8); __pyx_t_8 = 0;
-  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 64, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-
-  /* "compilationEngine.pyx":45
- * 
- *     # Compiles a static declaration or a field declaration
- *     cdef compileClassVarDec(self):             # <<<<<<<<<<<<<<
- *         # if the next token is not static or field then return
- *         self.next_token = self.getNextToken()
- */
-
-  /* function exit code */
-  __pyx_r = Py_None; __Pyx_INCREF(Py_None);
-  goto __pyx_L0;
-  __pyx_L1_error:;
-  __Pyx_XDECREF(__pyx_t_1);
-  __Pyx_XDECREF(__pyx_t_2);
-  __Pyx_XDECREF(__pyx_t_3);
-  __Pyx_XDECREF(__pyx_t_7);
-  __Pyx_XDECREF(__pyx_t_8);
-  __Pyx_XDECREF(__pyx_t_9);
-  __Pyx_AddTraceback("compilationEngine.CompilationEngine.compileClassVarDec", __pyx_clineno, __pyx_lineno, __pyx_filename);
-  __pyx_r = 0;
-  __pyx_L0:;
-  __Pyx_XGIVEREF(__pyx_r);
-  __Pyx_RefNannyFinishContext();
-  return __pyx_r;
-}
-
-/* "compilationEngine.pyx":67
- * 
- *     # Compiles a complete method, function, or constructor
- *     cdef compileSubroutine(self):             # <<<<<<<<<<<<<<
- *         cdef temp
- *         # if the next token is not a constructor, function, or method then return
- */
-
-static PyObject *__pyx_f_17compilationEngine_17CompilationEngine_compileSubroutine(struct __pyx_obj_17compilationEngine_CompilationEngine *__pyx_v_self) {
-  PyObject *__pyx_v_temp = 0;
-  PyObject *__pyx_r = NULL;
-  __Pyx_RefNannyDeclarations
-  int __pyx_t_1;
-  int __pyx_t_2;
-  int __pyx_t_3;
-  PyObject *__pyx_t_4 = NULL;
-  PyObject *__pyx_t_5 = NULL;
-  PyObject *__pyx_t_6 = NULL;
-  PyObject *__pyx_t_7 = NULL;
-  PyObject *__pyx_t_8 = NULL;
-  PyObject *__pyx_t_9 = NULL;
-  int __pyx_lineno = 0;
-  const char *__pyx_filename = NULL;
-  int __pyx_clineno = 0;
-  __Pyx_RefNannySetupContext("compileSubroutine", 0);
-
-  /* "compilationEngine.pyx":70
- *         cdef temp
- *         # if the next token is not a constructor, function, or method then return
+ *         # next is subroutineDec
  *         if self.next_token == "<keyword> constructor </keyword>" or self.next_token == "<keyword> function </keyword>" or self.next_token == "<keyword> method </keyword>":             # <<<<<<<<<<<<<<
- *             temp = self.next_token
- *         else:
+ *             self.reverse()
+ *             return
  */
-  __pyx_t_2 = (__Pyx_PyString_Equals(__pyx_v_self->next_token, __pyx_kp_s_keyword_constructor_keyword, Py_EQ)); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 70, __pyx_L1_error)
-  __pyx_t_3 = (__pyx_t_2 != 0);
-  if (!__pyx_t_3) {
+  __pyx_t_2 = (__Pyx_PyString_Equals(__pyx_v_self->next_token, __pyx_kp_s_keyword_constructor_keyword, Py_EQ)); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 78, __pyx_L1_error)
+  __pyx_t_4 = (__pyx_t_2 != 0);
+  if (!__pyx_t_4) {
   } else {
-    __pyx_t_1 = __pyx_t_3;
-    goto __pyx_L4_bool_binop_done;
+    __pyx_t_3 = __pyx_t_4;
+    goto __pyx_L5_bool_binop_done;
   }
-  __pyx_t_3 = (__Pyx_PyString_Equals(__pyx_v_self->next_token, __pyx_kp_s_keyword_function_keyword, Py_EQ)); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(0, 70, __pyx_L1_error)
-  __pyx_t_2 = (__pyx_t_3 != 0);
+  __pyx_t_4 = (__Pyx_PyString_Equals(__pyx_v_self->next_token, __pyx_kp_s_keyword_function_keyword, Py_EQ)); if (unlikely(__pyx_t_4 < 0)) __PYX_ERR(0, 78, __pyx_L1_error)
+  __pyx_t_2 = (__pyx_t_4 != 0);
   if (!__pyx_t_2) {
   } else {
-    __pyx_t_1 = __pyx_t_2;
-    goto __pyx_L4_bool_binop_done;
+    __pyx_t_3 = __pyx_t_2;
+    goto __pyx_L5_bool_binop_done;
   }
-  __pyx_t_2 = (__Pyx_PyString_Equals(__pyx_v_self->next_token, __pyx_kp_s_keyword_method_keyword, Py_EQ)); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 70, __pyx_L1_error)
-  __pyx_t_3 = (__pyx_t_2 != 0);
-  __pyx_t_1 = __pyx_t_3;
-  __pyx_L4_bool_binop_done:;
-  if (__pyx_t_1) {
+  __pyx_t_2 = (__Pyx_PyString_Equals(__pyx_v_self->next_token, __pyx_kp_s_keyword_method_keyword, Py_EQ)); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 78, __pyx_L1_error)
+  __pyx_t_4 = (__pyx_t_2 != 0);
+  __pyx_t_3 = __pyx_t_4;
+  __pyx_L5_bool_binop_done:;
+  if (__pyx_t_3) {
 
-    /* "compilationEngine.pyx":71
- *         # if the next token is not a constructor, function, or method then return
+    /* "compilationEngine.pyx":79
+ *         # next is subroutineDec
  *         if self.next_token == "<keyword> constructor </keyword>" or self.next_token == "<keyword> function </keyword>" or self.next_token == "<keyword> method </keyword>":
- *             temp = self.next_token             # <<<<<<<<<<<<<<
- *         else:
- *             temp = self.getNextToken() # read constructor, function, or method
+ *             self.reverse()             # <<<<<<<<<<<<<<
+ *             return
+ * 
  */
-    __pyx_t_4 = __pyx_v_self->next_token;
-    __Pyx_INCREF(__pyx_t_4);
-    __pyx_v_temp = __pyx_t_4;
-    __pyx_t_4 = 0;
+    __pyx_t_1 = ((struct __pyx_vtabstruct_17compilationEngine_CompilationEngine *)__pyx_v_self->__pyx_vtab)->reverse(__pyx_v_self); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 79, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_1);
+    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-    /* "compilationEngine.pyx":70
- *         cdef temp
- *         # if the next token is not a constructor, function, or method then return
+    /* "compilationEngine.pyx":80
+ *         if self.next_token == "<keyword> constructor </keyword>" or self.next_token == "<keyword> function </keyword>" or self.next_token == "<keyword> method </keyword>":
+ *             self.reverse()
+ *             return             # <<<<<<<<<<<<<<
+ * 
+ *         # next is classVarDec
+ */
+    __Pyx_XDECREF(__pyx_r);
+    __pyx_r = Py_None; __Pyx_INCREF(Py_None);
+    goto __pyx_L0;
+
+    /* "compilationEngine.pyx":78
+ * 
+ *         # next is subroutineDec
  *         if self.next_token == "<keyword> constructor </keyword>" or self.next_token == "<keyword> function </keyword>" or self.next_token == "<keyword> method </keyword>":             # <<<<<<<<<<<<<<
- *             temp = self.next_token
- *         else:
+ *             self.reverse()
+ *             return
  */
-    goto __pyx_L3;
   }
 
-  /* "compilationEngine.pyx":73
- *             temp = self.next_token
- *         else:
- *             temp = self.getNextToken() # read constructor, function, or method             # <<<<<<<<<<<<<<
- *         self.output_file.write(self.indent * '  ' + '<subroutineDec>\n')
+  /* "compilationEngine.pyx":83
+ * 
+ *         # next is classVarDec
+ *         self.output_file.write(self.indent * "  " + '<classVarDec>\n')             # <<<<<<<<<<<<<<
  *         self.indent += 1
+ * 
  */
-  /*else*/ {
-    __pyx_t_5 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_getNextToken); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 73, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_5);
-    __pyx_t_6 = NULL;
-    if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_5))) {
-      __pyx_t_6 = PyMethod_GET_SELF(__pyx_t_5);
-      if (likely(__pyx_t_6)) {
-        PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_5);
-        __Pyx_INCREF(__pyx_t_6);
-        __Pyx_INCREF(function);
-        __Pyx_DECREF_SET(__pyx_t_5, function);
-      }
-    }
-    __pyx_t_4 = (__pyx_t_6) ? __Pyx_PyObject_CallOneArg(__pyx_t_5, __pyx_t_6) : __Pyx_PyObject_CallNoArg(__pyx_t_5);
-    __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
-    if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 73, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_4);
-    __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-    __pyx_v_temp = __pyx_t_4;
-    __pyx_t_4 = 0;
-  }
-  __pyx_L3:;
-
-  /* "compilationEngine.pyx":74
- *         else:
- *             temp = self.getNextToken() # read constructor, function, or method
- *         self.output_file.write(self.indent * '  ' + '<subroutineDec>\n')             # <<<<<<<<<<<<<<
- *         self.indent += 1
- *         # if the next token is a constructor, function, or method
- */
-  __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 74, __pyx_L1_error)
+  __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 83, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
-  __pyx_t_6 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 74, __pyx_L1_error)
+  __pyx_t_6 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 83, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_6);
-  __pyx_t_7 = PyNumber_Multiply(__pyx_t_6, __pyx_kp_s_); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 74, __pyx_L1_error)
+  __pyx_t_7 = PyNumber_Multiply(__pyx_t_6, __pyx_kp_s_); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 83, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_7);
   __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
-  __pyx_t_6 = PyNumber_Add(__pyx_t_7, __pyx_kp_s_subroutineDec); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 74, __pyx_L1_error)
+  __pyx_t_6 = PyNumber_Add(__pyx_t_7, __pyx_kp_s_classVarDec); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 83, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_6);
   __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
   __pyx_t_7 = NULL;
@@ -2927,283 +2449,202 @@ static PyObject *__pyx_f_17compilationEngine_17CompilationEngine_compileSubrouti
       __Pyx_DECREF_SET(__pyx_t_5, function);
     }
   }
-  __pyx_t_4 = (__pyx_t_7) ? __Pyx_PyObject_Call2Args(__pyx_t_5, __pyx_t_7, __pyx_t_6) : __Pyx_PyObject_CallOneArg(__pyx_t_5, __pyx_t_6);
+  __pyx_t_1 = (__pyx_t_7) ? __Pyx_PyObject_Call2Args(__pyx_t_5, __pyx_t_7, __pyx_t_6) : __Pyx_PyObject_CallOneArg(__pyx_t_5, __pyx_t_6);
   __Pyx_XDECREF(__pyx_t_7); __pyx_t_7 = 0;
   __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
-  if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 74, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_4);
+  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 83, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "compilationEngine.pyx":75
- *             temp = self.getNextToken() # read constructor, function, or method
- *         self.output_file.write(self.indent * '  ' + '<subroutineDec>\n')
+  /* "compilationEngine.pyx":84
+ *         # next is classVarDec
+ *         self.output_file.write(self.indent * "  " + '<classVarDec>\n')
  *         self.indent += 1             # <<<<<<<<<<<<<<
- *         # if the next token is a constructor, function, or method
- *         self.output_file.write(self.indent * '  ' + temp + '\n')
+ * 
+ *         self.output_file.write(self.indent * "  " + self.next_token + '\n')
  */
   __pyx_v_self->indent = (__pyx_v_self->indent + 1);
 
-  /* "compilationEngine.pyx":77
- *         self.indent += 1
- *         # if the next token is a constructor, function, or method
- *         self.output_file.write(self.indent * '  ' + temp + '\n')             # <<<<<<<<<<<<<<
- *         # if the next token is void or a type
- *         self.output_file.write(self.indent * '  ' + self.getNextToken() + '\n') # read void or type
- */
-  __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 77, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_5);
-  __pyx_t_6 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 77, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_6);
-  __pyx_t_7 = PyNumber_Multiply(__pyx_t_6, __pyx_kp_s_); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 77, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_7);
-  __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
-  __pyx_t_6 = PyNumber_Add(__pyx_t_7, __pyx_v_temp); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 77, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_6);
-  __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-  __pyx_t_7 = PyNumber_Add(__pyx_t_6, __pyx_kp_s__2); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 77, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_7);
-  __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
-  __pyx_t_6 = NULL;
-  if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_5))) {
-    __pyx_t_6 = PyMethod_GET_SELF(__pyx_t_5);
-    if (likely(__pyx_t_6)) {
-      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_5);
-      __Pyx_INCREF(__pyx_t_6);
-      __Pyx_INCREF(function);
-      __Pyx_DECREF_SET(__pyx_t_5, function);
-    }
-  }
-  __pyx_t_4 = (__pyx_t_6) ? __Pyx_PyObject_Call2Args(__pyx_t_5, __pyx_t_6, __pyx_t_7) : __Pyx_PyObject_CallOneArg(__pyx_t_5, __pyx_t_7);
-  __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
-  __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-  if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 77, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_4);
-  __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-
-  /* "compilationEngine.pyx":79
- *         self.output_file.write(self.indent * '  ' + temp + '\n')
- *         # if the next token is void or a type
- *         self.output_file.write(self.indent * '  ' + self.getNextToken() + '\n') # read void or type             # <<<<<<<<<<<<<<
- *         self.output_file.write(self.indent * '  ' + self.getNextToken() + '\n') # read subroutineName
- *         self.output_file.write(self.indent * '  ' + self.getNextToken() + '\n') # read (
- */
-  __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 79, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_5);
-  __pyx_t_7 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 79, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_7);
-  __pyx_t_6 = PyNumber_Multiply(__pyx_t_7, __pyx_kp_s_); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 79, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_6);
-  __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-  __pyx_t_8 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_getNextToken); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 79, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_8);
-  __pyx_t_9 = NULL;
-  if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_8))) {
-    __pyx_t_9 = PyMethod_GET_SELF(__pyx_t_8);
-    if (likely(__pyx_t_9)) {
-      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_8);
-      __Pyx_INCREF(__pyx_t_9);
-      __Pyx_INCREF(function);
-      __Pyx_DECREF_SET(__pyx_t_8, function);
-    }
-  }
-  __pyx_t_7 = (__pyx_t_9) ? __Pyx_PyObject_CallOneArg(__pyx_t_8, __pyx_t_9) : __Pyx_PyObject_CallNoArg(__pyx_t_8);
-  __Pyx_XDECREF(__pyx_t_9); __pyx_t_9 = 0;
-  if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 79, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_7);
-  __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
-  __pyx_t_8 = PyNumber_Add(__pyx_t_6, __pyx_t_7); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 79, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_8);
-  __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
-  __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-  __pyx_t_7 = PyNumber_Add(__pyx_t_8, __pyx_kp_s__2); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 79, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_7);
-  __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
-  __pyx_t_8 = NULL;
-  if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_5))) {
-    __pyx_t_8 = PyMethod_GET_SELF(__pyx_t_5);
-    if (likely(__pyx_t_8)) {
-      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_5);
-      __Pyx_INCREF(__pyx_t_8);
-      __Pyx_INCREF(function);
-      __Pyx_DECREF_SET(__pyx_t_5, function);
-    }
-  }
-  __pyx_t_4 = (__pyx_t_8) ? __Pyx_PyObject_Call2Args(__pyx_t_5, __pyx_t_8, __pyx_t_7) : __Pyx_PyObject_CallOneArg(__pyx_t_5, __pyx_t_7);
-  __Pyx_XDECREF(__pyx_t_8); __pyx_t_8 = 0;
-  __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-  if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 79, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_4);
-  __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-
-  /* "compilationEngine.pyx":80
- *         # if the next token is void or a type
- *         self.output_file.write(self.indent * '  ' + self.getNextToken() + '\n') # read void or type
- *         self.output_file.write(self.indent * '  ' + self.getNextToken() + '\n') # read subroutineName             # <<<<<<<<<<<<<<
- *         self.output_file.write(self.indent * '  ' + self.getNextToken() + '\n') # read (
- *         self.compileParameterList()
- */
-  __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 80, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_5);
-  __pyx_t_7 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 80, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_7);
-  __pyx_t_8 = PyNumber_Multiply(__pyx_t_7, __pyx_kp_s_); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 80, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_8);
-  __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-  __pyx_t_6 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_getNextToken); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 80, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_6);
-  __pyx_t_9 = NULL;
-  if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_6))) {
-    __pyx_t_9 = PyMethod_GET_SELF(__pyx_t_6);
-    if (likely(__pyx_t_9)) {
-      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_6);
-      __Pyx_INCREF(__pyx_t_9);
-      __Pyx_INCREF(function);
-      __Pyx_DECREF_SET(__pyx_t_6, function);
-    }
-  }
-  __pyx_t_7 = (__pyx_t_9) ? __Pyx_PyObject_CallOneArg(__pyx_t_6, __pyx_t_9) : __Pyx_PyObject_CallNoArg(__pyx_t_6);
-  __Pyx_XDECREF(__pyx_t_9); __pyx_t_9 = 0;
-  if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 80, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_7);
-  __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
-  __pyx_t_6 = PyNumber_Add(__pyx_t_8, __pyx_t_7); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 80, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_6);
-  __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
-  __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-  __pyx_t_7 = PyNumber_Add(__pyx_t_6, __pyx_kp_s__2); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 80, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_7);
-  __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
-  __pyx_t_6 = NULL;
-  if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_5))) {
-    __pyx_t_6 = PyMethod_GET_SELF(__pyx_t_5);
-    if (likely(__pyx_t_6)) {
-      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_5);
-      __Pyx_INCREF(__pyx_t_6);
-      __Pyx_INCREF(function);
-      __Pyx_DECREF_SET(__pyx_t_5, function);
-    }
-  }
-  __pyx_t_4 = (__pyx_t_6) ? __Pyx_PyObject_Call2Args(__pyx_t_5, __pyx_t_6, __pyx_t_7) : __Pyx_PyObject_CallOneArg(__pyx_t_5, __pyx_t_7);
-  __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
-  __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-  if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 80, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_4);
-  __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-
-  /* "compilationEngine.pyx":81
- *         self.output_file.write(self.indent * '  ' + self.getNextToken() + '\n') # read void or type
- *         self.output_file.write(self.indent * '  ' + self.getNextToken() + '\n') # read subroutineName
- *         self.output_file.write(self.indent * '  ' + self.getNextToken() + '\n') # read (             # <<<<<<<<<<<<<<
- *         self.compileParameterList()
- *         if self.next_token == "<symbol> ) </symbol>":
- */
-  __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 81, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_5);
-  __pyx_t_7 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 81, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_7);
-  __pyx_t_6 = PyNumber_Multiply(__pyx_t_7, __pyx_kp_s_); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 81, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_6);
-  __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-  __pyx_t_8 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_getNextToken); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 81, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_8);
-  __pyx_t_9 = NULL;
-  if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_8))) {
-    __pyx_t_9 = PyMethod_GET_SELF(__pyx_t_8);
-    if (likely(__pyx_t_9)) {
-      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_8);
-      __Pyx_INCREF(__pyx_t_9);
-      __Pyx_INCREF(function);
-      __Pyx_DECREF_SET(__pyx_t_8, function);
-    }
-  }
-  __pyx_t_7 = (__pyx_t_9) ? __Pyx_PyObject_CallOneArg(__pyx_t_8, __pyx_t_9) : __Pyx_PyObject_CallNoArg(__pyx_t_8);
-  __Pyx_XDECREF(__pyx_t_9); __pyx_t_9 = 0;
-  if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 81, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_7);
-  __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
-  __pyx_t_8 = PyNumber_Add(__pyx_t_6, __pyx_t_7); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 81, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_8);
-  __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
-  __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-  __pyx_t_7 = PyNumber_Add(__pyx_t_8, __pyx_kp_s__2); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 81, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_7);
-  __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
-  __pyx_t_8 = NULL;
-  if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_5))) {
-    __pyx_t_8 = PyMethod_GET_SELF(__pyx_t_5);
-    if (likely(__pyx_t_8)) {
-      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_5);
-      __Pyx_INCREF(__pyx_t_8);
-      __Pyx_INCREF(function);
-      __Pyx_DECREF_SET(__pyx_t_5, function);
-    }
-  }
-  __pyx_t_4 = (__pyx_t_8) ? __Pyx_PyObject_Call2Args(__pyx_t_5, __pyx_t_8, __pyx_t_7) : __Pyx_PyObject_CallOneArg(__pyx_t_5, __pyx_t_7);
-  __Pyx_XDECREF(__pyx_t_8); __pyx_t_8 = 0;
-  __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-  if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 81, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_4);
-  __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-
-  /* "compilationEngine.pyx":82
- *         self.output_file.write(self.indent * '  ' + self.getNextToken() + '\n') # read subroutineName
- *         self.output_file.write(self.indent * '  ' + self.getNextToken() + '\n') # read (
- *         self.compileParameterList()             # <<<<<<<<<<<<<<
- *         if self.next_token == "<symbol> ) </symbol>":
- *             temp = self.next_token
- */
-  __pyx_t_4 = ((struct __pyx_vtabstruct_17compilationEngine_CompilationEngine *)__pyx_v_self->__pyx_vtab)->compileParameterList(__pyx_v_self); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 82, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_4);
-  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-
-  /* "compilationEngine.pyx":83
- *         self.output_file.write(self.indent * '  ' + self.getNextToken() + '\n') # read (
- *         self.compileParameterList()
- *         if self.next_token == "<symbol> ) </symbol>":             # <<<<<<<<<<<<<<
- *             temp = self.next_token
- *         else:
- */
-  __pyx_t_1 = (__Pyx_PyString_Equals(__pyx_v_self->next_token, __pyx_kp_s_symbol_symbol, Py_EQ)); if (unlikely(__pyx_t_1 < 0)) __PYX_ERR(0, 83, __pyx_L1_error)
-  __pyx_t_3 = (__pyx_t_1 != 0);
-  if (__pyx_t_3) {
-
-    /* "compilationEngine.pyx":84
- *         self.compileParameterList()
- *         if self.next_token == "<symbol> ) </symbol>":
- *             temp = self.next_token             # <<<<<<<<<<<<<<
- *         else:
- *             temp = self.getNextToken() # read )
- */
-    __pyx_t_4 = __pyx_v_self->next_token;
-    __Pyx_INCREF(__pyx_t_4);
-    __Pyx_DECREF_SET(__pyx_v_temp, __pyx_t_4);
-    __pyx_t_4 = 0;
-
-    /* "compilationEngine.pyx":83
- *         self.output_file.write(self.indent * '  ' + self.getNextToken() + '\n') # read (
- *         self.compileParameterList()
- *         if self.next_token == "<symbol> ) </symbol>":             # <<<<<<<<<<<<<<
- *             temp = self.next_token
- *         else:
- */
-    goto __pyx_L7;
-  }
-
   /* "compilationEngine.pyx":86
- *             temp = self.next_token
- *         else:
- *             temp = self.getNextToken() # read )             # <<<<<<<<<<<<<<
- *         self.output_file.write(self.indent * '  ' + temp + '\n')
- *         self.compileSubroutineBody()
+ *         self.indent += 1
+ * 
+ *         self.output_file.write(self.indent * "  " + self.next_token + '\n')             # <<<<<<<<<<<<<<
+ * 
+ *         self.advance() # get the next token <type>
  */
-  /*else*/ {
-    __pyx_t_5 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_getNextToken); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 86, __pyx_L1_error)
+  __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 86, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_5);
+  __pyx_t_6 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 86, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_6);
+  __pyx_t_7 = PyNumber_Multiply(__pyx_t_6, __pyx_kp_s_); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 86, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_7);
+  __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
+  __pyx_t_6 = PyNumber_Add(__pyx_t_7, __pyx_v_self->next_token); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 86, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_6);
+  __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
+  __pyx_t_7 = PyNumber_Add(__pyx_t_6, __pyx_kp_s__2); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 86, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_7);
+  __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
+  __pyx_t_6 = NULL;
+  if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_5))) {
+    __pyx_t_6 = PyMethod_GET_SELF(__pyx_t_5);
+    if (likely(__pyx_t_6)) {
+      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_5);
+      __Pyx_INCREF(__pyx_t_6);
+      __Pyx_INCREF(function);
+      __Pyx_DECREF_SET(__pyx_t_5, function);
+    }
+  }
+  __pyx_t_1 = (__pyx_t_6) ? __Pyx_PyObject_Call2Args(__pyx_t_5, __pyx_t_6, __pyx_t_7) : __Pyx_PyObject_CallOneArg(__pyx_t_5, __pyx_t_7);
+  __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
+  __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
+  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 86, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+  /* "compilationEngine.pyx":88
+ *         self.output_file.write(self.indent * "  " + self.next_token + '\n')
+ * 
+ *         self.advance() # get the next token <type>             # <<<<<<<<<<<<<<
+ *         self.output_file.write(self.indent * "  " + self.next_token + '\n')
+ * 
+ */
+  __pyx_t_1 = ((struct __pyx_vtabstruct_17compilationEngine_CompilationEngine *)__pyx_v_self->__pyx_vtab)->advance(__pyx_v_self); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 88, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+  /* "compilationEngine.pyx":89
+ * 
+ *         self.advance() # get the next token <type>
+ *         self.output_file.write(self.indent * "  " + self.next_token + '\n')             # <<<<<<<<<<<<<<
+ * 
+ *         self.advance() # get the next token <varName>
+ */
+  __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 89, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_5);
+  __pyx_t_7 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 89, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_7);
+  __pyx_t_6 = PyNumber_Multiply(__pyx_t_7, __pyx_kp_s_); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 89, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_6);
+  __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
+  __pyx_t_7 = PyNumber_Add(__pyx_t_6, __pyx_v_self->next_token); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 89, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_7);
+  __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
+  __pyx_t_6 = PyNumber_Add(__pyx_t_7, __pyx_kp_s__2); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 89, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_6);
+  __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
+  __pyx_t_7 = NULL;
+  if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_5))) {
+    __pyx_t_7 = PyMethod_GET_SELF(__pyx_t_5);
+    if (likely(__pyx_t_7)) {
+      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_5);
+      __Pyx_INCREF(__pyx_t_7);
+      __Pyx_INCREF(function);
+      __Pyx_DECREF_SET(__pyx_t_5, function);
+    }
+  }
+  __pyx_t_1 = (__pyx_t_7) ? __Pyx_PyObject_Call2Args(__pyx_t_5, __pyx_t_7, __pyx_t_6) : __Pyx_PyObject_CallOneArg(__pyx_t_5, __pyx_t_6);
+  __Pyx_XDECREF(__pyx_t_7); __pyx_t_7 = 0;
+  __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
+  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 89, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+  /* "compilationEngine.pyx":91
+ *         self.output_file.write(self.indent * "  " + self.next_token + '\n')
+ * 
+ *         self.advance() # get the next token <varName>             # <<<<<<<<<<<<<<
+ *         self.output_file.write(self.indent * "  " + self.next_token + '\n')
+ * 
+ */
+  __pyx_t_1 = ((struct __pyx_vtabstruct_17compilationEngine_CompilationEngine *)__pyx_v_self->__pyx_vtab)->advance(__pyx_v_self); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 91, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+  /* "compilationEngine.pyx":92
+ * 
+ *         self.advance() # get the next token <varName>
+ *         self.output_file.write(self.indent * "  " + self.next_token + '\n')             # <<<<<<<<<<<<<<
+ * 
+ *         # compile (, varName)*
+ */
+  __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 92, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_5);
+  __pyx_t_6 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 92, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_6);
+  __pyx_t_7 = PyNumber_Multiply(__pyx_t_6, __pyx_kp_s_); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 92, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_7);
+  __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
+  __pyx_t_6 = PyNumber_Add(__pyx_t_7, __pyx_v_self->next_token); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 92, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_6);
+  __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
+  __pyx_t_7 = PyNumber_Add(__pyx_t_6, __pyx_kp_s__2); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 92, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_7);
+  __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
+  __pyx_t_6 = NULL;
+  if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_5))) {
+    __pyx_t_6 = PyMethod_GET_SELF(__pyx_t_5);
+    if (likely(__pyx_t_6)) {
+      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_5);
+      __Pyx_INCREF(__pyx_t_6);
+      __Pyx_INCREF(function);
+      __Pyx_DECREF_SET(__pyx_t_5, function);
+    }
+  }
+  __pyx_t_1 = (__pyx_t_6) ? __Pyx_PyObject_Call2Args(__pyx_t_5, __pyx_t_6, __pyx_t_7) : __Pyx_PyObject_CallOneArg(__pyx_t_5, __pyx_t_7);
+  __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
+  __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
+  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 92, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+  /* "compilationEngine.pyx":95
+ * 
+ *         # compile (, varName)*
+ *         self.advance() # get the next token , or ;             # <<<<<<<<<<<<<<
+ *         while self.next_token == "<symbol> , </symbol>":
+ *             self.output_file.write(self.indent * "  " + self.next_token + '\n')
+ */
+  __pyx_t_1 = ((struct __pyx_vtabstruct_17compilationEngine_CompilationEngine *)__pyx_v_self->__pyx_vtab)->advance(__pyx_v_self); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 95, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+  /* "compilationEngine.pyx":96
+ *         # compile (, varName)*
+ *         self.advance() # get the next token , or ;
+ *         while self.next_token == "<symbol> , </symbol>":             # <<<<<<<<<<<<<<
+ *             self.output_file.write(self.indent * "  " + self.next_token + '\n')
+ * 
+ */
+  while (1) {
+    __pyx_t_3 = (__Pyx_PyString_Equals(__pyx_v_self->next_token, __pyx_kp_s_symbol_symbol_2, Py_EQ)); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(0, 96, __pyx_L1_error)
+    __pyx_t_4 = (__pyx_t_3 != 0);
+    if (!__pyx_t_4) break;
+
+    /* "compilationEngine.pyx":97
+ *         self.advance() # get the next token , or ;
+ *         while self.next_token == "<symbol> , </symbol>":
+ *             self.output_file.write(self.indent * "  " + self.next_token + '\n')             # <<<<<<<<<<<<<<
+ * 
+ *             self.advance() # get the next token <varName>
+ */
+    __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 97, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_5);
+    __pyx_t_7 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 97, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_7);
+    __pyx_t_6 = PyNumber_Multiply(__pyx_t_7, __pyx_kp_s_); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 97, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_6);
+    __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
+    __pyx_t_7 = PyNumber_Add(__pyx_t_6, __pyx_v_self->next_token); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 97, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_7);
+    __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
+    __pyx_t_6 = PyNumber_Add(__pyx_t_7, __pyx_kp_s__2); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 97, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_6);
+    __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
     __pyx_t_7 = NULL;
     if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_5))) {
       __pyx_t_7 = PyMethod_GET_SELF(__pyx_t_5);
@@ -3214,90 +2655,158 @@ static PyObject *__pyx_f_17compilationEngine_17CompilationEngine_compileSubrouti
         __Pyx_DECREF_SET(__pyx_t_5, function);
       }
     }
-    __pyx_t_4 = (__pyx_t_7) ? __Pyx_PyObject_CallOneArg(__pyx_t_5, __pyx_t_7) : __Pyx_PyObject_CallNoArg(__pyx_t_5);
+    __pyx_t_1 = (__pyx_t_7) ? __Pyx_PyObject_Call2Args(__pyx_t_5, __pyx_t_7, __pyx_t_6) : __Pyx_PyObject_CallOneArg(__pyx_t_5, __pyx_t_6);
     __Pyx_XDECREF(__pyx_t_7); __pyx_t_7 = 0;
-    if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 86, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_4);
+    __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
+    if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 97, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_1);
     __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-    __Pyx_DECREF_SET(__pyx_v_temp, __pyx_t_4);
-    __pyx_t_4 = 0;
-  }
-  __pyx_L7:;
+    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "compilationEngine.pyx":87
- *         else:
- *             temp = self.getNextToken() # read )
- *         self.output_file.write(self.indent * '  ' + temp + '\n')             # <<<<<<<<<<<<<<
- *         self.compileSubroutineBody()
- *         self.indent -= 1
+    /* "compilationEngine.pyx":99
+ *             self.output_file.write(self.indent * "  " + self.next_token + '\n')
+ * 
+ *             self.advance() # get the next token <varName>             # <<<<<<<<<<<<<<
+ *             self.output_file.write(self.indent * "  " + self.next_token + '\n')
+ * 
  */
-  __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 87, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_5);
-  __pyx_t_7 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 87, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_7);
-  __pyx_t_8 = PyNumber_Multiply(__pyx_t_7, __pyx_kp_s_); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 87, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_8);
-  __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-  __pyx_t_7 = PyNumber_Add(__pyx_t_8, __pyx_v_temp); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 87, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_7);
-  __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
-  __pyx_t_8 = PyNumber_Add(__pyx_t_7, __pyx_kp_s__2); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 87, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_8);
-  __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-  __pyx_t_7 = NULL;
-  if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_5))) {
-    __pyx_t_7 = PyMethod_GET_SELF(__pyx_t_5);
-    if (likely(__pyx_t_7)) {
-      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_5);
-      __Pyx_INCREF(__pyx_t_7);
-      __Pyx_INCREF(function);
-      __Pyx_DECREF_SET(__pyx_t_5, function);
+    __pyx_t_1 = ((struct __pyx_vtabstruct_17compilationEngine_CompilationEngine *)__pyx_v_self->__pyx_vtab)->advance(__pyx_v_self); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 99, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_1);
+    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+    /* "compilationEngine.pyx":100
+ * 
+ *             self.advance() # get the next token <varName>
+ *             self.output_file.write(self.indent * "  " + self.next_token + '\n')             # <<<<<<<<<<<<<<
+ * 
+ *             self.advance() # get the next token , or ;
+ */
+    __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 100, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_5);
+    __pyx_t_6 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 100, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_6);
+    __pyx_t_7 = PyNumber_Multiply(__pyx_t_6, __pyx_kp_s_); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 100, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_7);
+    __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
+    __pyx_t_6 = PyNumber_Add(__pyx_t_7, __pyx_v_self->next_token); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 100, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_6);
+    __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
+    __pyx_t_7 = PyNumber_Add(__pyx_t_6, __pyx_kp_s__2); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 100, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_7);
+    __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
+    __pyx_t_6 = NULL;
+    if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_5))) {
+      __pyx_t_6 = PyMethod_GET_SELF(__pyx_t_5);
+      if (likely(__pyx_t_6)) {
+        PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_5);
+        __Pyx_INCREF(__pyx_t_6);
+        __Pyx_INCREF(function);
+        __Pyx_DECREF_SET(__pyx_t_5, function);
+      }
     }
-  }
-  __pyx_t_4 = (__pyx_t_7) ? __Pyx_PyObject_Call2Args(__pyx_t_5, __pyx_t_7, __pyx_t_8) : __Pyx_PyObject_CallOneArg(__pyx_t_5, __pyx_t_8);
-  __Pyx_XDECREF(__pyx_t_7); __pyx_t_7 = 0;
-  __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
-  if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 87, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_4);
-  __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+    __pyx_t_1 = (__pyx_t_6) ? __Pyx_PyObject_Call2Args(__pyx_t_5, __pyx_t_6, __pyx_t_7) : __Pyx_PyObject_CallOneArg(__pyx_t_5, __pyx_t_7);
+    __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
+    __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
+    if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 100, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_1);
+    __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
+    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "compilationEngine.pyx":88
- *             temp = self.getNextToken() # read )
- *         self.output_file.write(self.indent * '  ' + temp + '\n')
- *         self.compileSubroutineBody()             # <<<<<<<<<<<<<<
- *         self.indent -= 1
- *         self.output_file.write(self.indent * '  ' + '</subroutineDec>\n')
+    /* "compilationEngine.pyx":102
+ *             self.output_file.write(self.indent * "  " + self.next_token + '\n')
+ * 
+ *             self.advance() # get the next token , or ;             # <<<<<<<<<<<<<<
+ *         if self.next_token == "<symbol> ; </symbol>":
+ *             self.output_file.write(self.indent * "  " + self.next_token + '\n')
  */
-  __pyx_t_4 = ((struct __pyx_vtabstruct_17compilationEngine_CompilationEngine *)__pyx_v_self->__pyx_vtab)->compileSubroutineBody(__pyx_v_self); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 88, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_4);
-  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+    __pyx_t_1 = ((struct __pyx_vtabstruct_17compilationEngine_CompilationEngine *)__pyx_v_self->__pyx_vtab)->advance(__pyx_v_self); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 102, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_1);
+    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  }
 
-  /* "compilationEngine.pyx":89
- *         self.output_file.write(self.indent * '  ' + temp + '\n')
- *         self.compileSubroutineBody()
+  /* "compilationEngine.pyx":103
+ * 
+ *             self.advance() # get the next token , or ;
+ *         if self.next_token == "<symbol> ; </symbol>":             # <<<<<<<<<<<<<<
+ *             self.output_file.write(self.indent * "  " + self.next_token + '\n')
+ * 
+ */
+  __pyx_t_4 = (__Pyx_PyString_Equals(__pyx_v_self->next_token, __pyx_kp_s_symbol_symbol_3, Py_EQ)); if (unlikely(__pyx_t_4 < 0)) __PYX_ERR(0, 103, __pyx_L1_error)
+  __pyx_t_3 = (__pyx_t_4 != 0);
+  if (__pyx_t_3) {
+
+    /* "compilationEngine.pyx":104
+ *             self.advance() # get the next token , or ;
+ *         if self.next_token == "<symbol> ; </symbol>":
+ *             self.output_file.write(self.indent * "  " + self.next_token + '\n')             # <<<<<<<<<<<<<<
+ * 
+ *         self.indent -= 1
+ */
+    __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 104, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_5);
+    __pyx_t_7 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 104, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_7);
+    __pyx_t_6 = PyNumber_Multiply(__pyx_t_7, __pyx_kp_s_); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 104, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_6);
+    __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
+    __pyx_t_7 = PyNumber_Add(__pyx_t_6, __pyx_v_self->next_token); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 104, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_7);
+    __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
+    __pyx_t_6 = PyNumber_Add(__pyx_t_7, __pyx_kp_s__2); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 104, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_6);
+    __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
+    __pyx_t_7 = NULL;
+    if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_5))) {
+      __pyx_t_7 = PyMethod_GET_SELF(__pyx_t_5);
+      if (likely(__pyx_t_7)) {
+        PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_5);
+        __Pyx_INCREF(__pyx_t_7);
+        __Pyx_INCREF(function);
+        __Pyx_DECREF_SET(__pyx_t_5, function);
+      }
+    }
+    __pyx_t_1 = (__pyx_t_7) ? __Pyx_PyObject_Call2Args(__pyx_t_5, __pyx_t_7, __pyx_t_6) : __Pyx_PyObject_CallOneArg(__pyx_t_5, __pyx_t_6);
+    __Pyx_XDECREF(__pyx_t_7); __pyx_t_7 = 0;
+    __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
+    if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 104, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_1);
+    __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
+    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+    /* "compilationEngine.pyx":103
+ * 
+ *             self.advance() # get the next token , or ;
+ *         if self.next_token == "<symbol> ; </symbol>":             # <<<<<<<<<<<<<<
+ *             self.output_file.write(self.indent * "  " + self.next_token + '\n')
+ * 
+ */
+  }
+
+  /* "compilationEngine.pyx":106
+ *             self.output_file.write(self.indent * "  " + self.next_token + '\n')
+ * 
  *         self.indent -= 1             # <<<<<<<<<<<<<<
- *         self.output_file.write(self.indent * '  ' + '</subroutineDec>\n')
+ *         self.output_file.write(self.indent * "  " + '</classVarDec>\n')
  * 
  */
   __pyx_v_self->indent = (__pyx_v_self->indent - 1);
 
-  /* "compilationEngine.pyx":90
- *         self.compileSubroutineBody()
- *         self.indent -= 1
- *         self.output_file.write(self.indent * '  ' + '</subroutineDec>\n')             # <<<<<<<<<<<<<<
+  /* "compilationEngine.pyx":107
  * 
- *     # Compiles a (possibly empty) parameter list, not including the enclosing ()
+ *         self.indent -= 1
+ *         self.output_file.write(self.indent * "  " + '</classVarDec>\n')             # <<<<<<<<<<<<<<
+ * 
+ *         # compile classVarDec*
  */
-  __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 90, __pyx_L1_error)
+  __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 107, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
-  __pyx_t_8 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 90, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_8);
-  __pyx_t_7 = PyNumber_Multiply(__pyx_t_8, __pyx_kp_s_); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 90, __pyx_L1_error)
+  __pyx_t_6 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 107, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_6);
+  __pyx_t_7 = PyNumber_Multiply(__pyx_t_6, __pyx_kp_s_); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 107, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_7);
-  __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
-  __pyx_t_8 = PyNumber_Add(__pyx_t_7, __pyx_kp_s_subroutineDec_2); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 90, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_8);
+  __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
+  __pyx_t_6 = PyNumber_Add(__pyx_t_7, __pyx_kp_s_classVarDec_2); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 107, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_6);
   __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
   __pyx_t_7 = NULL;
   if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_5))) {
@@ -3309,47 +2818,509 @@ static PyObject *__pyx_f_17compilationEngine_17CompilationEngine_compileSubrouti
       __Pyx_DECREF_SET(__pyx_t_5, function);
     }
   }
-  __pyx_t_4 = (__pyx_t_7) ? __Pyx_PyObject_Call2Args(__pyx_t_5, __pyx_t_7, __pyx_t_8) : __Pyx_PyObject_CallOneArg(__pyx_t_5, __pyx_t_8);
+  __pyx_t_1 = (__pyx_t_7) ? __Pyx_PyObject_Call2Args(__pyx_t_5, __pyx_t_7, __pyx_t_6) : __Pyx_PyObject_CallOneArg(__pyx_t_5, __pyx_t_6);
   __Pyx_XDECREF(__pyx_t_7); __pyx_t_7 = 0;
-  __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
-  if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 90, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_4);
+  __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
+  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 107, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "compilationEngine.pyx":67
+  /* "compilationEngine.pyx":110
  * 
- *     # Compiles a complete method, function, or constructor
- *     cdef compileSubroutine(self):             # <<<<<<<<<<<<<<
- *         cdef temp
- *         # if the next token is not a constructor, function, or method then return
+ *         # compile classVarDec*
+ *         self.compileClassVarDec()             # <<<<<<<<<<<<<<
+ * 
+ *     # compile a complete method, function, or constructor
+ */
+  __pyx_t_1 = ((struct __pyx_vtabstruct_17compilationEngine_CompilationEngine *)__pyx_v_self->__pyx_vtab)->compileClassVarDec(__pyx_v_self); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 110, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+  /* "compilationEngine.pyx":70
+ * 
+ *     # compile a static declaration or a field declaration
+ *     cdef compileClassVarDec(self):             # <<<<<<<<<<<<<<
+ *         # first determine whether there is a classVarDec, nextToken is } or start subroutineDec
+ *         self.advance()
  */
 
   /* function exit code */
   __pyx_r = Py_None; __Pyx_INCREF(Py_None);
   goto __pyx_L0;
   __pyx_L1_error:;
-  __Pyx_XDECREF(__pyx_t_4);
+  __Pyx_XDECREF(__pyx_t_1);
   __Pyx_XDECREF(__pyx_t_5);
   __Pyx_XDECREF(__pyx_t_6);
   __Pyx_XDECREF(__pyx_t_7);
-  __Pyx_XDECREF(__pyx_t_8);
-  __Pyx_XDECREF(__pyx_t_9);
-  __Pyx_AddTraceback("compilationEngine.CompilationEngine.compileSubroutine", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("compilationEngine.CompilationEngine.compileClassVarDec", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = 0;
   __pyx_L0:;
-  __Pyx_XDECREF(__pyx_v_temp);
   __Pyx_XGIVEREF(__pyx_r);
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-/* "compilationEngine.pyx":93
+/* "compilationEngine.pyx":113
  * 
- *     # Compiles a (possibly empty) parameter list, not including the enclosing ()
+ *     # compile a complete method, function, or constructor
+ *     cdef compileSubroutineDec(self):             # <<<<<<<<<<<<<<
+ *         # first determine whether there is a subroutineDec, nextToken is }
+ *         self.advance() # get the next token <keyword> or }
+ */
+
+static PyObject *__pyx_f_17compilationEngine_17CompilationEngine_compileSubroutineDec(struct __pyx_obj_17compilationEngine_CompilationEngine *__pyx_v_self) {
+  PyObject *__pyx_r = NULL;
+  __Pyx_RefNannyDeclarations
+  PyObject *__pyx_t_1 = NULL;
+  int __pyx_t_2;
+  int __pyx_t_3;
+  PyObject *__pyx_t_4 = NULL;
+  PyObject *__pyx_t_5 = NULL;
+  PyObject *__pyx_t_6 = NULL;
+  int __pyx_lineno = 0;
+  const char *__pyx_filename = NULL;
+  int __pyx_clineno = 0;
+  __Pyx_RefNannySetupContext("compileSubroutineDec", 0);
+
+  /* "compilationEngine.pyx":115
+ *     cdef compileSubroutineDec(self):
+ *         # first determine whether there is a subroutineDec, nextToken is }
+ *         self.advance() # get the next token <keyword> or }             # <<<<<<<<<<<<<<
+ *         if self.next_token == "<symbol> } </symbol>":
+ *             self.reverse()
+ */
+  __pyx_t_1 = ((struct __pyx_vtabstruct_17compilationEngine_CompilationEngine *)__pyx_v_self->__pyx_vtab)->advance(__pyx_v_self); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 115, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+  /* "compilationEngine.pyx":116
+ *         # first determine whether there is a subroutineDec, nextToken is }
+ *         self.advance() # get the next token <keyword> or }
+ *         if self.next_token == "<symbol> } </symbol>":             # <<<<<<<<<<<<<<
+ *             self.reverse()
+ *             return
+ */
+  __pyx_t_2 = (__Pyx_PyString_Equals(__pyx_v_self->next_token, __pyx_kp_s_symbol_symbol, Py_EQ)); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 116, __pyx_L1_error)
+  __pyx_t_3 = (__pyx_t_2 != 0);
+  if (__pyx_t_3) {
+
+    /* "compilationEngine.pyx":117
+ *         self.advance() # get the next token <keyword> or }
+ *         if self.next_token == "<symbol> } </symbol>":
+ *             self.reverse()             # <<<<<<<<<<<<<<
+ *             return
+ * 
+ */
+    __pyx_t_1 = ((struct __pyx_vtabstruct_17compilationEngine_CompilationEngine *)__pyx_v_self->__pyx_vtab)->reverse(__pyx_v_self); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 117, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_1);
+    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+    /* "compilationEngine.pyx":118
+ *         if self.next_token == "<symbol> } </symbol>":
+ *             self.reverse()
+ *             return             # <<<<<<<<<<<<<<
+ * 
+ *         # next is subroutineDec
+ */
+    __Pyx_XDECREF(__pyx_r);
+    __pyx_r = Py_None; __Pyx_INCREF(Py_None);
+    goto __pyx_L0;
+
+    /* "compilationEngine.pyx":116
+ *         # first determine whether there is a subroutineDec, nextToken is }
+ *         self.advance() # get the next token <keyword> or }
+ *         if self.next_token == "<symbol> } </symbol>":             # <<<<<<<<<<<<<<
+ *             self.reverse()
+ *             return
+ */
+  }
+
+  /* "compilationEngine.pyx":121
+ * 
+ *         # next is subroutineDec
+ *         self.output_file.write(self.indent * "  " + '<subroutineDec>\n')             # <<<<<<<<<<<<<<
+ *         self.indent += 1
+ * 
+ */
+  __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 121, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_4);
+  __pyx_t_5 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 121, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_5);
+  __pyx_t_6 = PyNumber_Multiply(__pyx_t_5, __pyx_kp_s_); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 121, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_6);
+  __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
+  __pyx_t_5 = PyNumber_Add(__pyx_t_6, __pyx_kp_s_subroutineDec); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 121, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_5);
+  __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
+  __pyx_t_6 = NULL;
+  if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_4))) {
+    __pyx_t_6 = PyMethod_GET_SELF(__pyx_t_4);
+    if (likely(__pyx_t_6)) {
+      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_4);
+      __Pyx_INCREF(__pyx_t_6);
+      __Pyx_INCREF(function);
+      __Pyx_DECREF_SET(__pyx_t_4, function);
+    }
+  }
+  __pyx_t_1 = (__pyx_t_6) ? __Pyx_PyObject_Call2Args(__pyx_t_4, __pyx_t_6, __pyx_t_5) : __Pyx_PyObject_CallOneArg(__pyx_t_4, __pyx_t_5);
+  __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
+  __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
+  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 121, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+  /* "compilationEngine.pyx":122
+ *         # next is subroutineDec
+ *         self.output_file.write(self.indent * "  " + '<subroutineDec>\n')
+ *         self.indent += 1             # <<<<<<<<<<<<<<
+ * 
+ *         self.output_file.write(self.indent * "  " + self.next_token + '\n') # get the next token <keyword>
+ */
+  __pyx_v_self->indent = (__pyx_v_self->indent + 1);
+
+  /* "compilationEngine.pyx":124
+ *         self.indent += 1
+ * 
+ *         self.output_file.write(self.indent * "  " + self.next_token + '\n') # get the next token <keyword>             # <<<<<<<<<<<<<<
+ * 
+ *         self.advance() # get the next token <type> or void
+ */
+  __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 124, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_4);
+  __pyx_t_5 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 124, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_5);
+  __pyx_t_6 = PyNumber_Multiply(__pyx_t_5, __pyx_kp_s_); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 124, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_6);
+  __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
+  __pyx_t_5 = PyNumber_Add(__pyx_t_6, __pyx_v_self->next_token); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 124, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_5);
+  __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
+  __pyx_t_6 = PyNumber_Add(__pyx_t_5, __pyx_kp_s__2); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 124, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_6);
+  __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
+  __pyx_t_5 = NULL;
+  if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_4))) {
+    __pyx_t_5 = PyMethod_GET_SELF(__pyx_t_4);
+    if (likely(__pyx_t_5)) {
+      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_4);
+      __Pyx_INCREF(__pyx_t_5);
+      __Pyx_INCREF(function);
+      __Pyx_DECREF_SET(__pyx_t_4, function);
+    }
+  }
+  __pyx_t_1 = (__pyx_t_5) ? __Pyx_PyObject_Call2Args(__pyx_t_4, __pyx_t_5, __pyx_t_6) : __Pyx_PyObject_CallOneArg(__pyx_t_4, __pyx_t_6);
+  __Pyx_XDECREF(__pyx_t_5); __pyx_t_5 = 0;
+  __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
+  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 124, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+  /* "compilationEngine.pyx":126
+ *         self.output_file.write(self.indent * "  " + self.next_token + '\n') # get the next token <keyword>
+ * 
+ *         self.advance() # get the next token <type> or void             # <<<<<<<<<<<<<<
+ *         self.output_file.write(self.indent * "  " + self.next_token + '\n')
+ * 
+ */
+  __pyx_t_1 = ((struct __pyx_vtabstruct_17compilationEngine_CompilationEngine *)__pyx_v_self->__pyx_vtab)->advance(__pyx_v_self); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 126, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+  /* "compilationEngine.pyx":127
+ * 
+ *         self.advance() # get the next token <type> or void
+ *         self.output_file.write(self.indent * "  " + self.next_token + '\n')             # <<<<<<<<<<<<<<
+ * 
+ *         self.advance() # get the next token <subroutineName>
+ */
+  __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 127, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_4);
+  __pyx_t_6 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 127, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_6);
+  __pyx_t_5 = PyNumber_Multiply(__pyx_t_6, __pyx_kp_s_); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 127, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_5);
+  __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
+  __pyx_t_6 = PyNumber_Add(__pyx_t_5, __pyx_v_self->next_token); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 127, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_6);
+  __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
+  __pyx_t_5 = PyNumber_Add(__pyx_t_6, __pyx_kp_s__2); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 127, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_5);
+  __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
+  __pyx_t_6 = NULL;
+  if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_4))) {
+    __pyx_t_6 = PyMethod_GET_SELF(__pyx_t_4);
+    if (likely(__pyx_t_6)) {
+      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_4);
+      __Pyx_INCREF(__pyx_t_6);
+      __Pyx_INCREF(function);
+      __Pyx_DECREF_SET(__pyx_t_4, function);
+    }
+  }
+  __pyx_t_1 = (__pyx_t_6) ? __Pyx_PyObject_Call2Args(__pyx_t_4, __pyx_t_6, __pyx_t_5) : __Pyx_PyObject_CallOneArg(__pyx_t_4, __pyx_t_5);
+  __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
+  __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
+  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 127, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+  /* "compilationEngine.pyx":129
+ *         self.output_file.write(self.indent * "  " + self.next_token + '\n')
+ * 
+ *         self.advance() # get the next token <subroutineName>             # <<<<<<<<<<<<<<
+ *         self.output_file.write(self.indent * "  " + self.next_token + '\n')
+ * 
+ */
+  __pyx_t_1 = ((struct __pyx_vtabstruct_17compilationEngine_CompilationEngine *)__pyx_v_self->__pyx_vtab)->advance(__pyx_v_self); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 129, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+  /* "compilationEngine.pyx":130
+ * 
+ *         self.advance() # get the next token <subroutineName>
+ *         self.output_file.write(self.indent * "  " + self.next_token + '\n')             # <<<<<<<<<<<<<<
+ * 
+ *         self.advance() # get the next token (
+ */
+  __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 130, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_4);
+  __pyx_t_5 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 130, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_5);
+  __pyx_t_6 = PyNumber_Multiply(__pyx_t_5, __pyx_kp_s_); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 130, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_6);
+  __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
+  __pyx_t_5 = PyNumber_Add(__pyx_t_6, __pyx_v_self->next_token); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 130, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_5);
+  __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
+  __pyx_t_6 = PyNumber_Add(__pyx_t_5, __pyx_kp_s__2); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 130, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_6);
+  __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
+  __pyx_t_5 = NULL;
+  if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_4))) {
+    __pyx_t_5 = PyMethod_GET_SELF(__pyx_t_4);
+    if (likely(__pyx_t_5)) {
+      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_4);
+      __Pyx_INCREF(__pyx_t_5);
+      __Pyx_INCREF(function);
+      __Pyx_DECREF_SET(__pyx_t_4, function);
+    }
+  }
+  __pyx_t_1 = (__pyx_t_5) ? __Pyx_PyObject_Call2Args(__pyx_t_4, __pyx_t_5, __pyx_t_6) : __Pyx_PyObject_CallOneArg(__pyx_t_4, __pyx_t_6);
+  __Pyx_XDECREF(__pyx_t_5); __pyx_t_5 = 0;
+  __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
+  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 130, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+  /* "compilationEngine.pyx":132
+ *         self.output_file.write(self.indent * "  " + self.next_token + '\n')
+ * 
+ *         self.advance() # get the next token (             # <<<<<<<<<<<<<<
+ *         self.output_file.write(self.indent * "  " + self.next_token + '\n')
+ * 
+ */
+  __pyx_t_1 = ((struct __pyx_vtabstruct_17compilationEngine_CompilationEngine *)__pyx_v_self->__pyx_vtab)->advance(__pyx_v_self); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 132, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+  /* "compilationEngine.pyx":133
+ * 
+ *         self.advance() # get the next token (
+ *         self.output_file.write(self.indent * "  " + self.next_token + '\n')             # <<<<<<<<<<<<<<
+ * 
+ *         # compile parameterList
+ */
+  __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 133, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_4);
+  __pyx_t_6 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 133, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_6);
+  __pyx_t_5 = PyNumber_Multiply(__pyx_t_6, __pyx_kp_s_); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 133, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_5);
+  __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
+  __pyx_t_6 = PyNumber_Add(__pyx_t_5, __pyx_v_self->next_token); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 133, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_6);
+  __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
+  __pyx_t_5 = PyNumber_Add(__pyx_t_6, __pyx_kp_s__2); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 133, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_5);
+  __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
+  __pyx_t_6 = NULL;
+  if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_4))) {
+    __pyx_t_6 = PyMethod_GET_SELF(__pyx_t_4);
+    if (likely(__pyx_t_6)) {
+      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_4);
+      __Pyx_INCREF(__pyx_t_6);
+      __Pyx_INCREF(function);
+      __Pyx_DECREF_SET(__pyx_t_4, function);
+    }
+  }
+  __pyx_t_1 = (__pyx_t_6) ? __Pyx_PyObject_Call2Args(__pyx_t_4, __pyx_t_6, __pyx_t_5) : __Pyx_PyObject_CallOneArg(__pyx_t_4, __pyx_t_5);
+  __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
+  __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
+  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 133, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+  /* "compilationEngine.pyx":136
+ * 
+ *         # compile parameterList
+ *         self.compileParameterList()             # <<<<<<<<<<<<<<
+ * 
+ *         self.advance() # get the next token )
+ */
+  __pyx_t_1 = ((struct __pyx_vtabstruct_17compilationEngine_CompilationEngine *)__pyx_v_self->__pyx_vtab)->compileParameterList(__pyx_v_self); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 136, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+  /* "compilationEngine.pyx":138
+ *         self.compileParameterList()
+ * 
+ *         self.advance() # get the next token )             # <<<<<<<<<<<<<<
+ *         self.output_file.write(self.indent * "  " + self.next_token + '\n')
+ * 
+ */
+  __pyx_t_1 = ((struct __pyx_vtabstruct_17compilationEngine_CompilationEngine *)__pyx_v_self->__pyx_vtab)->advance(__pyx_v_self); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 138, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+  /* "compilationEngine.pyx":139
+ * 
+ *         self.advance() # get the next token )
+ *         self.output_file.write(self.indent * "  " + self.next_token + '\n')             # <<<<<<<<<<<<<<
+ * 
+ *         # compile subroutineBody
+ */
+  __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 139, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_4);
+  __pyx_t_5 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 139, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_5);
+  __pyx_t_6 = PyNumber_Multiply(__pyx_t_5, __pyx_kp_s_); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 139, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_6);
+  __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
+  __pyx_t_5 = PyNumber_Add(__pyx_t_6, __pyx_v_self->next_token); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 139, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_5);
+  __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
+  __pyx_t_6 = PyNumber_Add(__pyx_t_5, __pyx_kp_s__2); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 139, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_6);
+  __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
+  __pyx_t_5 = NULL;
+  if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_4))) {
+    __pyx_t_5 = PyMethod_GET_SELF(__pyx_t_4);
+    if (likely(__pyx_t_5)) {
+      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_4);
+      __Pyx_INCREF(__pyx_t_5);
+      __Pyx_INCREF(function);
+      __Pyx_DECREF_SET(__pyx_t_4, function);
+    }
+  }
+  __pyx_t_1 = (__pyx_t_5) ? __Pyx_PyObject_Call2Args(__pyx_t_4, __pyx_t_5, __pyx_t_6) : __Pyx_PyObject_CallOneArg(__pyx_t_4, __pyx_t_6);
+  __Pyx_XDECREF(__pyx_t_5); __pyx_t_5 = 0;
+  __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
+  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 139, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+  /* "compilationEngine.pyx":142
+ * 
+ *         # compile subroutineBody
+ *         self.compileSubroutineBody()             # <<<<<<<<<<<<<<
+ * 
+ *         self.indent -= 1
+ */
+  __pyx_t_1 = ((struct __pyx_vtabstruct_17compilationEngine_CompilationEngine *)__pyx_v_self->__pyx_vtab)->compileSubroutineBody(__pyx_v_self); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 142, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+  /* "compilationEngine.pyx":144
+ *         self.compileSubroutineBody()
+ * 
+ *         self.indent -= 1             # <<<<<<<<<<<<<<
+ *         self.output_file.write(self.indent * "  " + '</subroutineDec>\n')
+ * 
+ */
+  __pyx_v_self->indent = (__pyx_v_self->indent - 1);
+
+  /* "compilationEngine.pyx":145
+ * 
+ *         self.indent -= 1
+ *         self.output_file.write(self.indent * "  " + '</subroutineDec>\n')             # <<<<<<<<<<<<<<
+ * 
+ *         # compile subroutineDec*
+ */
+  __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 145, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_4);
+  __pyx_t_6 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 145, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_6);
+  __pyx_t_5 = PyNumber_Multiply(__pyx_t_6, __pyx_kp_s_); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 145, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_5);
+  __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
+  __pyx_t_6 = PyNumber_Add(__pyx_t_5, __pyx_kp_s_subroutineDec_2); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 145, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_6);
+  __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
+  __pyx_t_5 = NULL;
+  if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_4))) {
+    __pyx_t_5 = PyMethod_GET_SELF(__pyx_t_4);
+    if (likely(__pyx_t_5)) {
+      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_4);
+      __Pyx_INCREF(__pyx_t_5);
+      __Pyx_INCREF(function);
+      __Pyx_DECREF_SET(__pyx_t_4, function);
+    }
+  }
+  __pyx_t_1 = (__pyx_t_5) ? __Pyx_PyObject_Call2Args(__pyx_t_4, __pyx_t_5, __pyx_t_6) : __Pyx_PyObject_CallOneArg(__pyx_t_4, __pyx_t_6);
+  __Pyx_XDECREF(__pyx_t_5); __pyx_t_5 = 0;
+  __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
+  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 145, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+  /* "compilationEngine.pyx":148
+ * 
+ *         # compile subroutineDec*
+ *         self.compileSubroutineDec()             # <<<<<<<<<<<<<<
+ * 
+ *     # compile a (possibly empty) parameter list, not including the enclosing ()
+ */
+  __pyx_t_1 = ((struct __pyx_vtabstruct_17compilationEngine_CompilationEngine *)__pyx_v_self->__pyx_vtab)->compileSubroutineDec(__pyx_v_self); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 148, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+  /* "compilationEngine.pyx":113
+ * 
+ *     # compile a complete method, function, or constructor
+ *     cdef compileSubroutineDec(self):             # <<<<<<<<<<<<<<
+ *         # first determine whether there is a subroutineDec, nextToken is }
+ *         self.advance() # get the next token <keyword> or }
+ */
+
+  /* function exit code */
+  __pyx_r = Py_None; __Pyx_INCREF(Py_None);
+  goto __pyx_L0;
+  __pyx_L1_error:;
+  __Pyx_XDECREF(__pyx_t_1);
+  __Pyx_XDECREF(__pyx_t_4);
+  __Pyx_XDECREF(__pyx_t_5);
+  __Pyx_XDECREF(__pyx_t_6);
+  __Pyx_AddTraceback("compilationEngine.CompilationEngine.compileSubroutineDec", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __pyx_r = 0;
+  __pyx_L0:;
+  __Pyx_XGIVEREF(__pyx_r);
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+/* "compilationEngine.pyx":151
+ * 
+ *     # compile a (possibly empty) parameter list, not including the enclosing ()
  *     cdef compileParameterList(self):             # <<<<<<<<<<<<<<
- *         self.output_file.write(self.indent * '  ' + '<parameterList>\n')
- *         self.next_token = self.getNextToken()
+ * 
+ *         self.output_file.write(self.indent * "  " + '<parameterList>\n')
  */
 
 static PyObject *__pyx_f_17compilationEngine_17CompilationEngine_compileParameterList(struct __pyx_obj_17compilationEngine_CompilationEngine *__pyx_v_self) {
@@ -3361,28 +3332,26 @@ static PyObject *__pyx_f_17compilationEngine_17CompilationEngine_compileParamete
   PyObject *__pyx_t_4 = NULL;
   int __pyx_t_5;
   int __pyx_t_6;
-  PyObject *__pyx_t_7 = NULL;
-  PyObject *__pyx_t_8 = NULL;
   int __pyx_lineno = 0;
   const char *__pyx_filename = NULL;
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("compileParameterList", 0);
 
-  /* "compilationEngine.pyx":94
- *     # Compiles a (possibly empty) parameter list, not including the enclosing ()
+  /* "compilationEngine.pyx":153
  *     cdef compileParameterList(self):
- *         self.output_file.write(self.indent * '  ' + '<parameterList>\n')             # <<<<<<<<<<<<<<
- *         self.next_token = self.getNextToken()
- *         # if the next token is a type
+ * 
+ *         self.output_file.write(self.indent * "  " + '<parameterList>\n')             # <<<<<<<<<<<<<<
+ *         self.indent += 1
+ * 
  */
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 94, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 153, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_3 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 94, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 153, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
-  __pyx_t_4 = PyNumber_Multiply(__pyx_t_3, __pyx_kp_s_); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 94, __pyx_L1_error)
+  __pyx_t_4 = PyNumber_Multiply(__pyx_t_3, __pyx_kp_s_); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 153, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  __pyx_t_3 = PyNumber_Add(__pyx_t_4, __pyx_kp_s_parameterList); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 94, __pyx_L1_error)
+  __pyx_t_3 = PyNumber_Add(__pyx_t_4, __pyx_kp_s_parameterList); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 153, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
   __pyx_t_4 = NULL;
@@ -3398,165 +3367,79 @@ static PyObject *__pyx_f_17compilationEngine_17CompilationEngine_compileParamete
   __pyx_t_1 = (__pyx_t_4) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_4, __pyx_t_3) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_3);
   __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 94, __pyx_L1_error)
+  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 153, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "compilationEngine.pyx":95
- *     cdef compileParameterList(self):
- *         self.output_file.write(self.indent * '  ' + '<parameterList>\n')
- *         self.next_token = self.getNextToken()             # <<<<<<<<<<<<<<
- *         # if the next token is a type
- *         if self.next_token != "<symbol> ) </symbol>":
+  /* "compilationEngine.pyx":154
+ * 
+ *         self.output_file.write(self.indent * "  " + '<parameterList>\n')
+ *         self.indent += 1             # <<<<<<<<<<<<<<
+ * 
+ *         # first determine whether there is a parameterList, nextToken is )
  */
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_getNextToken); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 95, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_3 = NULL;
-  if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
-    __pyx_t_3 = PyMethod_GET_SELF(__pyx_t_2);
-    if (likely(__pyx_t_3)) {
-      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
-      __Pyx_INCREF(__pyx_t_3);
-      __Pyx_INCREF(function);
-      __Pyx_DECREF_SET(__pyx_t_2, function);
-    }
-  }
-  __pyx_t_1 = (__pyx_t_3) ? __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_3) : __Pyx_PyObject_CallNoArg(__pyx_t_2);
-  __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
-  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 95, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  if (!(likely(PyString_CheckExact(__pyx_t_1))||((__pyx_t_1) == Py_None)||((void)PyErr_Format(PyExc_TypeError, "Expected %.16s, got %.200s", "str", Py_TYPE(__pyx_t_1)->tp_name), 0))) __PYX_ERR(0, 95, __pyx_L1_error)
-  __Pyx_GIVEREF(__pyx_t_1);
-  __Pyx_GOTREF(__pyx_v_self->next_token);
-  __Pyx_DECREF(__pyx_v_self->next_token);
-  __pyx_v_self->next_token = ((PyObject*)__pyx_t_1);
-  __pyx_t_1 = 0;
+  __pyx_v_self->indent = (__pyx_v_self->indent + 1);
 
-  /* "compilationEngine.pyx":97
- *         self.next_token = self.getNextToken()
- *         # if the next token is a type
- *         if self.next_token != "<symbol> ) </symbol>":             # <<<<<<<<<<<<<<
- *             self.indent += 1
- *             self.output_file.write(self.indent * '  ' +  self.next_token + '\n') # read type
+  /* "compilationEngine.pyx":157
+ * 
+ *         # first determine whether there is a parameterList, nextToken is )
+ *         self.advance() # get the next token ) or <type>             # <<<<<<<<<<<<<<
+ *         if self.next_token == "<symbol> ) </symbol>":
+ *             self.reverse()
  */
-  __pyx_t_5 = (__Pyx_PyString_Equals(__pyx_v_self->next_token, __pyx_kp_s_symbol_symbol, Py_NE)); if (unlikely(__pyx_t_5 < 0)) __PYX_ERR(0, 97, __pyx_L1_error)
+  __pyx_t_1 = ((struct __pyx_vtabstruct_17compilationEngine_CompilationEngine *)__pyx_v_self->__pyx_vtab)->advance(__pyx_v_self); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 157, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+  /* "compilationEngine.pyx":158
+ *         # first determine whether there is a parameterList, nextToken is )
+ *         self.advance() # get the next token ) or <type>
+ *         if self.next_token == "<symbol> ) </symbol>":             # <<<<<<<<<<<<<<
+ *             self.reverse()
+ *             self.indent -= 1
+ */
+  __pyx_t_5 = (__Pyx_PyString_Equals(__pyx_v_self->next_token, __pyx_kp_s_symbol_symbol_4, Py_EQ)); if (unlikely(__pyx_t_5 < 0)) __PYX_ERR(0, 158, __pyx_L1_error)
   __pyx_t_6 = (__pyx_t_5 != 0);
   if (__pyx_t_6) {
 
-    /* "compilationEngine.pyx":98
- *         # if the next token is a type
- *         if self.next_token != "<symbol> ) </symbol>":
- *             self.indent += 1             # <<<<<<<<<<<<<<
- *             self.output_file.write(self.indent * '  ' +  self.next_token + '\n') # read type
- *             self.output_file.write(self.indent * '  ' +  self.getNextToken() + '\n') # read varName
+    /* "compilationEngine.pyx":159
+ *         self.advance() # get the next token ) or <type>
+ *         if self.next_token == "<symbol> ) </symbol>":
+ *             self.reverse()             # <<<<<<<<<<<<<<
+ *             self.indent -= 1
+ *             self.output_file.write(self.indent * "  " + '</parameterList>\n')
  */
-    __pyx_v_self->indent = (__pyx_v_self->indent + 1);
-
-    /* "compilationEngine.pyx":99
- *         if self.next_token != "<symbol> ) </symbol>":
- *             self.indent += 1
- *             self.output_file.write(self.indent * '  ' +  self.next_token + '\n') # read type             # <<<<<<<<<<<<<<
- *             self.output_file.write(self.indent * '  ' +  self.getNextToken() + '\n') # read varName
- *             # while the next token is a comma
- */
-    __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 99, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_2);
-    __pyx_t_3 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 99, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_3);
-    __pyx_t_4 = PyNumber_Multiply(__pyx_t_3, __pyx_kp_s_); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 99, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_4);
-    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-    __pyx_t_3 = PyNumber_Add(__pyx_t_4, __pyx_v_self->next_token); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 99, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_3);
-    __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-    __pyx_t_4 = PyNumber_Add(__pyx_t_3, __pyx_kp_s__2); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 99, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_4);
-    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-    __pyx_t_3 = NULL;
-    if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
-      __pyx_t_3 = PyMethod_GET_SELF(__pyx_t_2);
-      if (likely(__pyx_t_3)) {
-        PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
-        __Pyx_INCREF(__pyx_t_3);
-        __Pyx_INCREF(function);
-        __Pyx_DECREF_SET(__pyx_t_2, function);
-      }
-    }
-    __pyx_t_1 = (__pyx_t_3) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_3, __pyx_t_4) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_4);
-    __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
-    __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-    if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 99, __pyx_L1_error)
+    __pyx_t_1 = ((struct __pyx_vtabstruct_17compilationEngine_CompilationEngine *)__pyx_v_self->__pyx_vtab)->reverse(__pyx_v_self); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 159, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
-    __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-    /* "compilationEngine.pyx":100
- *             self.indent += 1
- *             self.output_file.write(self.indent * '  ' +  self.next_token + '\n') # read type
- *             self.output_file.write(self.indent * '  ' +  self.getNextToken() + '\n') # read varName             # <<<<<<<<<<<<<<
- *             # while the next token is a comma
- *             self.next_token = self.getNextToken()
+    /* "compilationEngine.pyx":160
+ *         if self.next_token == "<symbol> ) </symbol>":
+ *             self.reverse()
+ *             self.indent -= 1             # <<<<<<<<<<<<<<
+ *             self.output_file.write(self.indent * "  " + '</parameterList>\n')
+ *             return
  */
-    __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 100, __pyx_L1_error)
+    __pyx_v_self->indent = (__pyx_v_self->indent - 1);
+
+    /* "compilationEngine.pyx":161
+ *             self.reverse()
+ *             self.indent -= 1
+ *             self.output_file.write(self.indent * "  " + '</parameterList>\n')             # <<<<<<<<<<<<<<
+ *             return
+ * 
+ */
+    __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 161, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
-    __pyx_t_4 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 100, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 161, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_3);
+    __pyx_t_4 = PyNumber_Multiply(__pyx_t_3, __pyx_kp_s_); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 161, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
-    __pyx_t_3 = PyNumber_Multiply(__pyx_t_4, __pyx_kp_s_); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 100, __pyx_L1_error)
+    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+    __pyx_t_3 = PyNumber_Add(__pyx_t_4, __pyx_kp_s_parameterList_2); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 161, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-    __pyx_t_7 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_getNextToken); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 100, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_7);
-    __pyx_t_8 = NULL;
-    if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_7))) {
-      __pyx_t_8 = PyMethod_GET_SELF(__pyx_t_7);
-      if (likely(__pyx_t_8)) {
-        PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_7);
-        __Pyx_INCREF(__pyx_t_8);
-        __Pyx_INCREF(function);
-        __Pyx_DECREF_SET(__pyx_t_7, function);
-      }
-    }
-    __pyx_t_4 = (__pyx_t_8) ? __Pyx_PyObject_CallOneArg(__pyx_t_7, __pyx_t_8) : __Pyx_PyObject_CallNoArg(__pyx_t_7);
-    __Pyx_XDECREF(__pyx_t_8); __pyx_t_8 = 0;
-    if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 100, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_4);
-    __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-    __pyx_t_7 = PyNumber_Add(__pyx_t_3, __pyx_t_4); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 100, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_7);
-    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-    __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-    __pyx_t_4 = PyNumber_Add(__pyx_t_7, __pyx_kp_s__2); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 100, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_4);
-    __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-    __pyx_t_7 = NULL;
-    if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
-      __pyx_t_7 = PyMethod_GET_SELF(__pyx_t_2);
-      if (likely(__pyx_t_7)) {
-        PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
-        __Pyx_INCREF(__pyx_t_7);
-        __Pyx_INCREF(function);
-        __Pyx_DECREF_SET(__pyx_t_2, function);
-      }
-    }
-    __pyx_t_1 = (__pyx_t_7) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_7, __pyx_t_4) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_4);
-    __Pyx_XDECREF(__pyx_t_7); __pyx_t_7 = 0;
-    __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-    if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 100, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_1);
-    __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-
-    /* "compilationEngine.pyx":102
- *             self.output_file.write(self.indent * '  ' +  self.getNextToken() + '\n') # read varName
- *             # while the next token is a comma
- *             self.next_token = self.getNextToken()             # <<<<<<<<<<<<<<
- *             while self.next_token == ',':  # read ,
- *                 self.output_file.write(self.indent * '  ' + '<symbol> , </symbol>\n')
- */
-    __pyx_t_2 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_getNextToken); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 102, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_2);
     __pyx_t_4 = NULL;
     if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
       __pyx_t_4 = PyMethod_GET_SELF(__pyx_t_2);
@@ -3567,1530 +3450,101 @@ static PyObject *__pyx_f_17compilationEngine_17CompilationEngine_compileParamete
         __Pyx_DECREF_SET(__pyx_t_2, function);
       }
     }
-    __pyx_t_1 = (__pyx_t_4) ? __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_4) : __Pyx_PyObject_CallNoArg(__pyx_t_2);
+    __pyx_t_1 = (__pyx_t_4) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_4, __pyx_t_3) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_3);
     __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
-    if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 102, __pyx_L1_error)
+    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+    if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 161, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-    if (!(likely(PyString_CheckExact(__pyx_t_1))||((__pyx_t_1) == Py_None)||((void)PyErr_Format(PyExc_TypeError, "Expected %.16s, got %.200s", "str", Py_TYPE(__pyx_t_1)->tp_name), 0))) __PYX_ERR(0, 102, __pyx_L1_error)
-    __Pyx_GIVEREF(__pyx_t_1);
-    __Pyx_GOTREF(__pyx_v_self->next_token);
-    __Pyx_DECREF(__pyx_v_self->next_token);
-    __pyx_v_self->next_token = ((PyObject*)__pyx_t_1);
-    __pyx_t_1 = 0;
+    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-    /* "compilationEngine.pyx":103
- *             # while the next token is a comma
- *             self.next_token = self.getNextToken()
- *             while self.next_token == ',':  # read ,             # <<<<<<<<<<<<<<
- *                 self.output_file.write(self.indent * '  ' + '<symbol> , </symbol>\n')
- *                 self.output_file.write(self.indent * '  ' +  self.getNextToken() + '\n') # read type
- */
-    while (1) {
-      __pyx_t_6 = (__Pyx_PyString_Equals(__pyx_v_self->next_token, __pyx_kp_s__3, Py_EQ)); if (unlikely(__pyx_t_6 < 0)) __PYX_ERR(0, 103, __pyx_L1_error)
-      __pyx_t_5 = (__pyx_t_6 != 0);
-      if (!__pyx_t_5) break;
-
-      /* "compilationEngine.pyx":104
- *             self.next_token = self.getNextToken()
- *             while self.next_token == ',':  # read ,
- *                 self.output_file.write(self.indent * '  ' + '<symbol> , </symbol>\n')             # <<<<<<<<<<<<<<
- *                 self.output_file.write(self.indent * '  ' +  self.getNextToken() + '\n') # read type
- *                 self.output_file.write(self.indent * '  ' +  self.getNextToken() + '\n') # read varName
- */
-      __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 104, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_2);
-      __pyx_t_4 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 104, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_4);
-      __pyx_t_7 = PyNumber_Multiply(__pyx_t_4, __pyx_kp_s_); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 104, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_7);
-      __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-      __pyx_t_4 = PyNumber_Add(__pyx_t_7, __pyx_kp_s_symbol_symbol_2); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 104, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_4);
-      __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-      __pyx_t_7 = NULL;
-      if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
-        __pyx_t_7 = PyMethod_GET_SELF(__pyx_t_2);
-        if (likely(__pyx_t_7)) {
-          PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
-          __Pyx_INCREF(__pyx_t_7);
-          __Pyx_INCREF(function);
-          __Pyx_DECREF_SET(__pyx_t_2, function);
-        }
-      }
-      __pyx_t_1 = (__pyx_t_7) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_7, __pyx_t_4) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_4);
-      __Pyx_XDECREF(__pyx_t_7); __pyx_t_7 = 0;
-      __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-      if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 104, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_1);
-      __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-      __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-
-      /* "compilationEngine.pyx":105
- *             while self.next_token == ',':  # read ,
- *                 self.output_file.write(self.indent * '  ' + '<symbol> , </symbol>\n')
- *                 self.output_file.write(self.indent * '  ' +  self.getNextToken() + '\n') # read type             # <<<<<<<<<<<<<<
- *                 self.output_file.write(self.indent * '  ' +  self.getNextToken() + '\n') # read varName
- *                 self.next_token = self.getNextToken() # read ',' or ')'
- */
-      __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 105, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_2);
-      __pyx_t_4 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 105, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_4);
-      __pyx_t_7 = PyNumber_Multiply(__pyx_t_4, __pyx_kp_s_); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 105, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_7);
-      __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-      __pyx_t_3 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_getNextToken); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 105, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_3);
-      __pyx_t_8 = NULL;
-      if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_3))) {
-        __pyx_t_8 = PyMethod_GET_SELF(__pyx_t_3);
-        if (likely(__pyx_t_8)) {
-          PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_3);
-          __Pyx_INCREF(__pyx_t_8);
-          __Pyx_INCREF(function);
-          __Pyx_DECREF_SET(__pyx_t_3, function);
-        }
-      }
-      __pyx_t_4 = (__pyx_t_8) ? __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_t_8) : __Pyx_PyObject_CallNoArg(__pyx_t_3);
-      __Pyx_XDECREF(__pyx_t_8); __pyx_t_8 = 0;
-      if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 105, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_4);
-      __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-      __pyx_t_3 = PyNumber_Add(__pyx_t_7, __pyx_t_4); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 105, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_3);
-      __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-      __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-      __pyx_t_4 = PyNumber_Add(__pyx_t_3, __pyx_kp_s__2); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 105, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_4);
-      __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-      __pyx_t_3 = NULL;
-      if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
-        __pyx_t_3 = PyMethod_GET_SELF(__pyx_t_2);
-        if (likely(__pyx_t_3)) {
-          PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
-          __Pyx_INCREF(__pyx_t_3);
-          __Pyx_INCREF(function);
-          __Pyx_DECREF_SET(__pyx_t_2, function);
-        }
-      }
-      __pyx_t_1 = (__pyx_t_3) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_3, __pyx_t_4) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_4);
-      __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
-      __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-      if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 105, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_1);
-      __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-      __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-
-      /* "compilationEngine.pyx":106
- *                 self.output_file.write(self.indent * '  ' + '<symbol> , </symbol>\n')
- *                 self.output_file.write(self.indent * '  ' +  self.getNextToken() + '\n') # read type
- *                 self.output_file.write(self.indent * '  ' +  self.getNextToken() + '\n') # read varName             # <<<<<<<<<<<<<<
- *                 self.next_token = self.getNextToken() # read ',' or ')'
+    /* "compilationEngine.pyx":162
  *             self.indent -= 1
- */
-      __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 106, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_2);
-      __pyx_t_4 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 106, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_4);
-      __pyx_t_3 = PyNumber_Multiply(__pyx_t_4, __pyx_kp_s_); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 106, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_3);
-      __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-      __pyx_t_7 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_getNextToken); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 106, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_7);
-      __pyx_t_8 = NULL;
-      if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_7))) {
-        __pyx_t_8 = PyMethod_GET_SELF(__pyx_t_7);
-        if (likely(__pyx_t_8)) {
-          PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_7);
-          __Pyx_INCREF(__pyx_t_8);
-          __Pyx_INCREF(function);
-          __Pyx_DECREF_SET(__pyx_t_7, function);
-        }
-      }
-      __pyx_t_4 = (__pyx_t_8) ? __Pyx_PyObject_CallOneArg(__pyx_t_7, __pyx_t_8) : __Pyx_PyObject_CallNoArg(__pyx_t_7);
-      __Pyx_XDECREF(__pyx_t_8); __pyx_t_8 = 0;
-      if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 106, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_4);
-      __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-      __pyx_t_7 = PyNumber_Add(__pyx_t_3, __pyx_t_4); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 106, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_7);
-      __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-      __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-      __pyx_t_4 = PyNumber_Add(__pyx_t_7, __pyx_kp_s__2); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 106, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_4);
-      __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-      __pyx_t_7 = NULL;
-      if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
-        __pyx_t_7 = PyMethod_GET_SELF(__pyx_t_2);
-        if (likely(__pyx_t_7)) {
-          PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
-          __Pyx_INCREF(__pyx_t_7);
-          __Pyx_INCREF(function);
-          __Pyx_DECREF_SET(__pyx_t_2, function);
-        }
-      }
-      __pyx_t_1 = (__pyx_t_7) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_7, __pyx_t_4) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_4);
-      __Pyx_XDECREF(__pyx_t_7); __pyx_t_7 = 0;
-      __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-      if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 106, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_1);
-      __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-      __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-
-      /* "compilationEngine.pyx":107
- *                 self.output_file.write(self.indent * '  ' +  self.getNextToken() + '\n') # read type
- *                 self.output_file.write(self.indent * '  ' +  self.getNextToken() + '\n') # read varName
- *                 self.next_token = self.getNextToken() # read ',' or ')'             # <<<<<<<<<<<<<<
- *             self.indent -= 1
- *         self.output_file.write(self.indent * '  ' + '</parameterList>\n')
- */
-      __pyx_t_2 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_getNextToken); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 107, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_2);
-      __pyx_t_4 = NULL;
-      if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
-        __pyx_t_4 = PyMethod_GET_SELF(__pyx_t_2);
-        if (likely(__pyx_t_4)) {
-          PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
-          __Pyx_INCREF(__pyx_t_4);
-          __Pyx_INCREF(function);
-          __Pyx_DECREF_SET(__pyx_t_2, function);
-        }
-      }
-      __pyx_t_1 = (__pyx_t_4) ? __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_4) : __Pyx_PyObject_CallNoArg(__pyx_t_2);
-      __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
-      if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 107, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_1);
-      __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-      if (!(likely(PyString_CheckExact(__pyx_t_1))||((__pyx_t_1) == Py_None)||((void)PyErr_Format(PyExc_TypeError, "Expected %.16s, got %.200s", "str", Py_TYPE(__pyx_t_1)->tp_name), 0))) __PYX_ERR(0, 107, __pyx_L1_error)
-      __Pyx_GIVEREF(__pyx_t_1);
-      __Pyx_GOTREF(__pyx_v_self->next_token);
-      __Pyx_DECREF(__pyx_v_self->next_token);
-      __pyx_v_self->next_token = ((PyObject*)__pyx_t_1);
-      __pyx_t_1 = 0;
-    }
-
-    /* "compilationEngine.pyx":108
- *                 self.output_file.write(self.indent * '  ' +  self.getNextToken() + '\n') # read varName
- *                 self.next_token = self.getNextToken() # read ',' or ')'
- *             self.indent -= 1             # <<<<<<<<<<<<<<
- *         self.output_file.write(self.indent * '  ' + '</parameterList>\n')
- * 
- */
-    __pyx_v_self->indent = (__pyx_v_self->indent - 1);
-
-    /* "compilationEngine.pyx":97
- *         self.next_token = self.getNextToken()
- *         # if the next token is a type
- *         if self.next_token != "<symbol> ) </symbol>":             # <<<<<<<<<<<<<<
- *             self.indent += 1
- *             self.output_file.write(self.indent * '  ' +  self.next_token + '\n') # read type
- */
-  }
-
-  /* "compilationEngine.pyx":109
- *                 self.next_token = self.getNextToken() # read ',' or ')'
- *             self.indent -= 1
- *         self.output_file.write(self.indent * '  ' + '</parameterList>\n')             # <<<<<<<<<<<<<<
- * 
- *     # Compiles a subroutine's body
- */
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 109, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_4 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 109, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_4);
-  __pyx_t_7 = PyNumber_Multiply(__pyx_t_4, __pyx_kp_s_); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 109, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_7);
-  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  __pyx_t_4 = PyNumber_Add(__pyx_t_7, __pyx_kp_s_parameterList_2); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 109, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_4);
-  __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-  __pyx_t_7 = NULL;
-  if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
-    __pyx_t_7 = PyMethod_GET_SELF(__pyx_t_2);
-    if (likely(__pyx_t_7)) {
-      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
-      __Pyx_INCREF(__pyx_t_7);
-      __Pyx_INCREF(function);
-      __Pyx_DECREF_SET(__pyx_t_2, function);
-    }
-  }
-  __pyx_t_1 = (__pyx_t_7) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_7, __pyx_t_4) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_4);
-  __Pyx_XDECREF(__pyx_t_7); __pyx_t_7 = 0;
-  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 109, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-
-  /* "compilationEngine.pyx":93
- * 
- *     # Compiles a (possibly empty) parameter list, not including the enclosing ()
- *     cdef compileParameterList(self):             # <<<<<<<<<<<<<<
- *         self.output_file.write(self.indent * '  ' + '<parameterList>\n')
- *         self.next_token = self.getNextToken()
- */
-
-  /* function exit code */
-  __pyx_r = Py_None; __Pyx_INCREF(Py_None);
-  goto __pyx_L0;
-  __pyx_L1_error:;
-  __Pyx_XDECREF(__pyx_t_1);
-  __Pyx_XDECREF(__pyx_t_2);
-  __Pyx_XDECREF(__pyx_t_3);
-  __Pyx_XDECREF(__pyx_t_4);
-  __Pyx_XDECREF(__pyx_t_7);
-  __Pyx_XDECREF(__pyx_t_8);
-  __Pyx_AddTraceback("compilationEngine.CompilationEngine.compileParameterList", __pyx_clineno, __pyx_lineno, __pyx_filename);
-  __pyx_r = 0;
-  __pyx_L0:;
-  __Pyx_XGIVEREF(__pyx_r);
-  __Pyx_RefNannyFinishContext();
-  return __pyx_r;
-}
-
-/* "compilationEngine.pyx":112
- * 
- *     # Compiles a subroutine's body
- *     cdef compileSubroutineBody(self):             # <<<<<<<<<<<<<<
- *         self.output_file.write(self.indent * '  ' + '<subroutineBody>\n')
- *         self.indent += 1
- */
-
-static PyObject *__pyx_f_17compilationEngine_17CompilationEngine_compileSubroutineBody(struct __pyx_obj_17compilationEngine_CompilationEngine *__pyx_v_self) {
-  PyObject *__pyx_r = NULL;
-  __Pyx_RefNannyDeclarations
-  PyObject *__pyx_t_1 = NULL;
-  PyObject *__pyx_t_2 = NULL;
-  PyObject *__pyx_t_3 = NULL;
-  PyObject *__pyx_t_4 = NULL;
-  PyObject *__pyx_t_5 = NULL;
-  PyObject *__pyx_t_6 = NULL;
-  int __pyx_lineno = 0;
-  const char *__pyx_filename = NULL;
-  int __pyx_clineno = 0;
-  __Pyx_RefNannySetupContext("compileSubroutineBody", 0);
-
-  /* "compilationEngine.pyx":113
- *     # Compiles a subroutine's body
- *     cdef compileSubroutineBody(self):
- *         self.output_file.write(self.indent * '  ' + '<subroutineBody>\n')             # <<<<<<<<<<<<<<
- *         self.indent += 1
- *         self.output_file.write(self.indent * '  ' + self.getNextToken() + '\n') # read {
- */
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 113, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_3 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 113, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_3);
-  __pyx_t_4 = PyNumber_Multiply(__pyx_t_3, __pyx_kp_s_); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 113, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_4);
-  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  __pyx_t_3 = PyNumber_Add(__pyx_t_4, __pyx_kp_s_subroutineBody); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 113, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_3);
-  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  __pyx_t_4 = NULL;
-  if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
-    __pyx_t_4 = PyMethod_GET_SELF(__pyx_t_2);
-    if (likely(__pyx_t_4)) {
-      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
-      __Pyx_INCREF(__pyx_t_4);
-      __Pyx_INCREF(function);
-      __Pyx_DECREF_SET(__pyx_t_2, function);
-    }
-  }
-  __pyx_t_1 = (__pyx_t_4) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_4, __pyx_t_3) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_3);
-  __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
-  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 113, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-
-  /* "compilationEngine.pyx":114
- *     cdef compileSubroutineBody(self):
- *         self.output_file.write(self.indent * '  ' + '<subroutineBody>\n')
- *         self.indent += 1             # <<<<<<<<<<<<<<
- *         self.output_file.write(self.indent * '  ' + self.getNextToken() + '\n') # read {
- *         self.compileVarDec()
- */
-  __pyx_v_self->indent = (__pyx_v_self->indent + 1);
-
-  /* "compilationEngine.pyx":115
- *         self.output_file.write(self.indent * '  ' + '<subroutineBody>\n')
- *         self.indent += 1
- *         self.output_file.write(self.indent * '  ' + self.getNextToken() + '\n') # read {             # <<<<<<<<<<<<<<
- *         self.compileVarDec()
- *         self.compileStatements()
- */
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 115, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_3 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 115, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_3);
-  __pyx_t_4 = PyNumber_Multiply(__pyx_t_3, __pyx_kp_s_); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 115, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_4);
-  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  __pyx_t_5 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_getNextToken); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 115, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_5);
-  __pyx_t_6 = NULL;
-  if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_5))) {
-    __pyx_t_6 = PyMethod_GET_SELF(__pyx_t_5);
-    if (likely(__pyx_t_6)) {
-      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_5);
-      __Pyx_INCREF(__pyx_t_6);
-      __Pyx_INCREF(function);
-      __Pyx_DECREF_SET(__pyx_t_5, function);
-    }
-  }
-  __pyx_t_3 = (__pyx_t_6) ? __Pyx_PyObject_CallOneArg(__pyx_t_5, __pyx_t_6) : __Pyx_PyObject_CallNoArg(__pyx_t_5);
-  __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
-  if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 115, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_3);
-  __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-  __pyx_t_5 = PyNumber_Add(__pyx_t_4, __pyx_t_3); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 115, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_5);
-  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  __pyx_t_3 = PyNumber_Add(__pyx_t_5, __pyx_kp_s__2); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 115, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_3);
-  __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-  __pyx_t_5 = NULL;
-  if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
-    __pyx_t_5 = PyMethod_GET_SELF(__pyx_t_2);
-    if (likely(__pyx_t_5)) {
-      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
-      __Pyx_INCREF(__pyx_t_5);
-      __Pyx_INCREF(function);
-      __Pyx_DECREF_SET(__pyx_t_2, function);
-    }
-  }
-  __pyx_t_1 = (__pyx_t_5) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_5, __pyx_t_3) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_3);
-  __Pyx_XDECREF(__pyx_t_5); __pyx_t_5 = 0;
-  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 115, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-
-  /* "compilationEngine.pyx":116
- *         self.indent += 1
- *         self.output_file.write(self.indent * '  ' + self.getNextToken() + '\n') # read {
- *         self.compileVarDec()             # <<<<<<<<<<<<<<
- *         self.compileStatements()
- *         self.output_file.write(self.indent * '  ' + self.getNextToken() + '\n') # read }
- */
-  __pyx_t_1 = ((struct __pyx_vtabstruct_17compilationEngine_CompilationEngine *)__pyx_v_self->__pyx_vtab)->compileVarDec(__pyx_v_self); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 116, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-
-  /* "compilationEngine.pyx":117
- *         self.output_file.write(self.indent * '  ' + self.getNextToken() + '\n') # read {
- *         self.compileVarDec()
- *         self.compileStatements()             # <<<<<<<<<<<<<<
- *         self.output_file.write(self.indent * '  ' + self.getNextToken() + '\n') # read }
- *         self.indent -= 1
- */
-  __pyx_t_1 = ((struct __pyx_vtabstruct_17compilationEngine_CompilationEngine *)__pyx_v_self->__pyx_vtab)->compileStatements(__pyx_v_self); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 117, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-
-  /* "compilationEngine.pyx":118
- *         self.compileVarDec()
- *         self.compileStatements()
- *         self.output_file.write(self.indent * '  ' + self.getNextToken() + '\n') # read }             # <<<<<<<<<<<<<<
- *         self.indent -= 1
- *         self.output_file.write(self.indent * '  ' + '</subroutineBody>\n')
- */
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 118, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_3 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 118, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_3);
-  __pyx_t_5 = PyNumber_Multiply(__pyx_t_3, __pyx_kp_s_); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 118, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_5);
-  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  __pyx_t_4 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_getNextToken); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 118, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_4);
-  __pyx_t_6 = NULL;
-  if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_4))) {
-    __pyx_t_6 = PyMethod_GET_SELF(__pyx_t_4);
-    if (likely(__pyx_t_6)) {
-      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_4);
-      __Pyx_INCREF(__pyx_t_6);
-      __Pyx_INCREF(function);
-      __Pyx_DECREF_SET(__pyx_t_4, function);
-    }
-  }
-  __pyx_t_3 = (__pyx_t_6) ? __Pyx_PyObject_CallOneArg(__pyx_t_4, __pyx_t_6) : __Pyx_PyObject_CallNoArg(__pyx_t_4);
-  __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
-  if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 118, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_3);
-  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  __pyx_t_4 = PyNumber_Add(__pyx_t_5, __pyx_t_3); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 118, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_4);
-  __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  __pyx_t_3 = PyNumber_Add(__pyx_t_4, __pyx_kp_s__2); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 118, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_3);
-  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  __pyx_t_4 = NULL;
-  if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
-    __pyx_t_4 = PyMethod_GET_SELF(__pyx_t_2);
-    if (likely(__pyx_t_4)) {
-      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
-      __Pyx_INCREF(__pyx_t_4);
-      __Pyx_INCREF(function);
-      __Pyx_DECREF_SET(__pyx_t_2, function);
-    }
-  }
-  __pyx_t_1 = (__pyx_t_4) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_4, __pyx_t_3) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_3);
-  __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
-  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 118, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-
-  /* "compilationEngine.pyx":119
- *         self.compileStatements()
- *         self.output_file.write(self.indent * '  ' + self.getNextToken() + '\n') # read }
- *         self.indent -= 1             # <<<<<<<<<<<<<<
- *         self.output_file.write(self.indent * '  ' + '</subroutineBody>\n')
- * 
- */
-  __pyx_v_self->indent = (__pyx_v_self->indent - 1);
-
-  /* "compilationEngine.pyx":120
- *         self.output_file.write(self.indent * '  ' + self.getNextToken() + '\n') # read }
- *         self.indent -= 1
- *         self.output_file.write(self.indent * '  ' + '</subroutineBody>\n')             # <<<<<<<<<<<<<<
- * 
- *     # Compiles a var declaration
- */
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 120, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_3 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 120, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_3);
-  __pyx_t_4 = PyNumber_Multiply(__pyx_t_3, __pyx_kp_s_); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 120, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_4);
-  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  __pyx_t_3 = PyNumber_Add(__pyx_t_4, __pyx_kp_s_subroutineBody_2); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 120, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_3);
-  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  __pyx_t_4 = NULL;
-  if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
-    __pyx_t_4 = PyMethod_GET_SELF(__pyx_t_2);
-    if (likely(__pyx_t_4)) {
-      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
-      __Pyx_INCREF(__pyx_t_4);
-      __Pyx_INCREF(function);
-      __Pyx_DECREF_SET(__pyx_t_2, function);
-    }
-  }
-  __pyx_t_1 = (__pyx_t_4) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_4, __pyx_t_3) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_3);
-  __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
-  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 120, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-
-  /* "compilationEngine.pyx":112
- * 
- *     # Compiles a subroutine's body
- *     cdef compileSubroutineBody(self):             # <<<<<<<<<<<<<<
- *         self.output_file.write(self.indent * '  ' + '<subroutineBody>\n')
- *         self.indent += 1
- */
-
-  /* function exit code */
-  __pyx_r = Py_None; __Pyx_INCREF(Py_None);
-  goto __pyx_L0;
-  __pyx_L1_error:;
-  __Pyx_XDECREF(__pyx_t_1);
-  __Pyx_XDECREF(__pyx_t_2);
-  __Pyx_XDECREF(__pyx_t_3);
-  __Pyx_XDECREF(__pyx_t_4);
-  __Pyx_XDECREF(__pyx_t_5);
-  __Pyx_XDECREF(__pyx_t_6);
-  __Pyx_AddTraceback("compilationEngine.CompilationEngine.compileSubroutineBody", __pyx_clineno, __pyx_lineno, __pyx_filename);
-  __pyx_r = 0;
-  __pyx_L0:;
-  __Pyx_XGIVEREF(__pyx_r);
-  __Pyx_RefNannyFinishContext();
-  return __pyx_r;
-}
-
-/* "compilationEngine.pyx":123
- * 
- *     # Compiles a var declaration
- *     cdef compileVarDec(self):             # <<<<<<<<<<<<<<
- *         # if the next token is not var then return
- *         self.next_token = self.getNextToken()
- */
-
-static PyObject *__pyx_f_17compilationEngine_17CompilationEngine_compileVarDec(struct __pyx_obj_17compilationEngine_CompilationEngine *__pyx_v_self) {
-  PyObject *__pyx_r = NULL;
-  __Pyx_RefNannyDeclarations
-  PyObject *__pyx_t_1 = NULL;
-  PyObject *__pyx_t_2 = NULL;
-  PyObject *__pyx_t_3 = NULL;
-  int __pyx_t_4;
-  int __pyx_t_5;
-  PyObject *__pyx_t_6 = NULL;
-  PyObject *__pyx_t_7 = NULL;
-  PyObject *__pyx_t_8 = NULL;
-  int __pyx_lineno = 0;
-  const char *__pyx_filename = NULL;
-  int __pyx_clineno = 0;
-  __Pyx_RefNannySetupContext("compileVarDec", 0);
-
-  /* "compilationEngine.pyx":125
- *     cdef compileVarDec(self):
- *         # if the next token is not var then return
- *         self.next_token = self.getNextToken()             # <<<<<<<<<<<<<<
- *         if self.next_token != "<keyword> var </keyword>":
- *             return
- */
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_getNextToken); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 125, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_3 = NULL;
-  if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
-    __pyx_t_3 = PyMethod_GET_SELF(__pyx_t_2);
-    if (likely(__pyx_t_3)) {
-      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
-      __Pyx_INCREF(__pyx_t_3);
-      __Pyx_INCREF(function);
-      __Pyx_DECREF_SET(__pyx_t_2, function);
-    }
-  }
-  __pyx_t_1 = (__pyx_t_3) ? __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_3) : __Pyx_PyObject_CallNoArg(__pyx_t_2);
-  __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
-  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 125, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  if (!(likely(PyString_CheckExact(__pyx_t_1))||((__pyx_t_1) == Py_None)||((void)PyErr_Format(PyExc_TypeError, "Expected %.16s, got %.200s", "str", Py_TYPE(__pyx_t_1)->tp_name), 0))) __PYX_ERR(0, 125, __pyx_L1_error)
-  __Pyx_GIVEREF(__pyx_t_1);
-  __Pyx_GOTREF(__pyx_v_self->next_token);
-  __Pyx_DECREF(__pyx_v_self->next_token);
-  __pyx_v_self->next_token = ((PyObject*)__pyx_t_1);
-  __pyx_t_1 = 0;
-
-  /* "compilationEngine.pyx":126
- *         # if the next token is not var then return
- *         self.next_token = self.getNextToken()
- *         if self.next_token != "<keyword> var </keyword>":             # <<<<<<<<<<<<<<
- *             return
- *         self.output_file.write(self.indent * '  ' + '<varDec>\n')
- */
-  __pyx_t_4 = (__Pyx_PyString_Equals(__pyx_v_self->next_token, __pyx_kp_s_keyword_var_keyword, Py_NE)); if (unlikely(__pyx_t_4 < 0)) __PYX_ERR(0, 126, __pyx_L1_error)
-  __pyx_t_5 = (__pyx_t_4 != 0);
-  if (__pyx_t_5) {
-
-    /* "compilationEngine.pyx":127
- *         self.next_token = self.getNextToken()
- *         if self.next_token != "<keyword> var </keyword>":
+ *             self.output_file.write(self.indent * "  " + '</parameterList>\n')
  *             return             # <<<<<<<<<<<<<<
- *         self.output_file.write(self.indent * '  ' + '<varDec>\n')
- *         self.indent += 1
+ * 
+ *         # next is parameterList
  */
     __Pyx_XDECREF(__pyx_r);
     __pyx_r = Py_None; __Pyx_INCREF(Py_None);
     goto __pyx_L0;
 
-    /* "compilationEngine.pyx":126
- *         # if the next token is not var then return
- *         self.next_token = self.getNextToken()
- *         if self.next_token != "<keyword> var </keyword>":             # <<<<<<<<<<<<<<
- *             return
- *         self.output_file.write(self.indent * '  ' + '<varDec>\n')
+    /* "compilationEngine.pyx":158
+ *         # first determine whether there is a parameterList, nextToken is )
+ *         self.advance() # get the next token ) or <type>
+ *         if self.next_token == "<symbol> ) </symbol>":             # <<<<<<<<<<<<<<
+ *             self.reverse()
+ *             self.indent -= 1
  */
   }
 
-  /* "compilationEngine.pyx":128
- *         if self.next_token != "<keyword> var </keyword>":
- *             return
- *         self.output_file.write(self.indent * '  ' + '<varDec>\n')             # <<<<<<<<<<<<<<
- *         self.indent += 1
- *         # if the next token is var
- */
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 128, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_3 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 128, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_3);
-  __pyx_t_6 = PyNumber_Multiply(__pyx_t_3, __pyx_kp_s_); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 128, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_6);
-  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  __pyx_t_3 = PyNumber_Add(__pyx_t_6, __pyx_kp_s_varDec); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 128, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_3);
-  __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
-  __pyx_t_6 = NULL;
-  if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
-    __pyx_t_6 = PyMethod_GET_SELF(__pyx_t_2);
-    if (likely(__pyx_t_6)) {
-      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
-      __Pyx_INCREF(__pyx_t_6);
-      __Pyx_INCREF(function);
-      __Pyx_DECREF_SET(__pyx_t_2, function);
-    }
-  }
-  __pyx_t_1 = (__pyx_t_6) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_6, __pyx_t_3) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_3);
-  __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
-  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 128, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-
-  /* "compilationEngine.pyx":129
- *             return
- *         self.output_file.write(self.indent * '  ' + '<varDec>\n')
- *         self.indent += 1             # <<<<<<<<<<<<<<
- *         # if the next token is var
- *         self.output_file.write(self.indent * '  ' + self.next_token + '\n') # read var
- */
-  __pyx_v_self->indent = (__pyx_v_self->indent + 1);
-
-  /* "compilationEngine.pyx":131
- *         self.indent += 1
- *         # if the next token is var
- *         self.output_file.write(self.indent * '  ' + self.next_token + '\n') # read var             # <<<<<<<<<<<<<<
- *         self.output_file.write(self.indent * '  ' + self.getNextToken() + '\n') # read type
- *         self.output_file.write(self.indent * '  ' + self.getNextToken() + '\n') # read varName
- */
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 131, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_3 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 131, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_3);
-  __pyx_t_6 = PyNumber_Multiply(__pyx_t_3, __pyx_kp_s_); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 131, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_6);
-  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  __pyx_t_3 = PyNumber_Add(__pyx_t_6, __pyx_v_self->next_token); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 131, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_3);
-  __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
-  __pyx_t_6 = PyNumber_Add(__pyx_t_3, __pyx_kp_s__2); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 131, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_6);
-  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  __pyx_t_3 = NULL;
-  if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
-    __pyx_t_3 = PyMethod_GET_SELF(__pyx_t_2);
-    if (likely(__pyx_t_3)) {
-      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
-      __Pyx_INCREF(__pyx_t_3);
-      __Pyx_INCREF(function);
-      __Pyx_DECREF_SET(__pyx_t_2, function);
-    }
-  }
-  __pyx_t_1 = (__pyx_t_3) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_3, __pyx_t_6) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_6);
-  __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
-  __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
-  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 131, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-
-  /* "compilationEngine.pyx":132
- *         # if the next token is var
- *         self.output_file.write(self.indent * '  ' + self.next_token + '\n') # read var
- *         self.output_file.write(self.indent * '  ' + self.getNextToken() + '\n') # read type             # <<<<<<<<<<<<<<
- *         self.output_file.write(self.indent * '  ' + self.getNextToken() + '\n') # read varName
- *         # while the next token is a comma
- */
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 132, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_6 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 132, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_6);
-  __pyx_t_3 = PyNumber_Multiply(__pyx_t_6, __pyx_kp_s_); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 132, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_3);
-  __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
-  __pyx_t_7 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_getNextToken); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 132, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_7);
-  __pyx_t_8 = NULL;
-  if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_7))) {
-    __pyx_t_8 = PyMethod_GET_SELF(__pyx_t_7);
-    if (likely(__pyx_t_8)) {
-      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_7);
-      __Pyx_INCREF(__pyx_t_8);
-      __Pyx_INCREF(function);
-      __Pyx_DECREF_SET(__pyx_t_7, function);
-    }
-  }
-  __pyx_t_6 = (__pyx_t_8) ? __Pyx_PyObject_CallOneArg(__pyx_t_7, __pyx_t_8) : __Pyx_PyObject_CallNoArg(__pyx_t_7);
-  __Pyx_XDECREF(__pyx_t_8); __pyx_t_8 = 0;
-  if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 132, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_6);
-  __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-  __pyx_t_7 = PyNumber_Add(__pyx_t_3, __pyx_t_6); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 132, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_7);
-  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
-  __pyx_t_6 = PyNumber_Add(__pyx_t_7, __pyx_kp_s__2); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 132, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_6);
-  __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-  __pyx_t_7 = NULL;
-  if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
-    __pyx_t_7 = PyMethod_GET_SELF(__pyx_t_2);
-    if (likely(__pyx_t_7)) {
-      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
-      __Pyx_INCREF(__pyx_t_7);
-      __Pyx_INCREF(function);
-      __Pyx_DECREF_SET(__pyx_t_2, function);
-    }
-  }
-  __pyx_t_1 = (__pyx_t_7) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_7, __pyx_t_6) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_6);
-  __Pyx_XDECREF(__pyx_t_7); __pyx_t_7 = 0;
-  __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
-  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 132, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-
-  /* "compilationEngine.pyx":133
- *         self.output_file.write(self.indent * '  ' + self.next_token + '\n') # read var
- *         self.output_file.write(self.indent * '  ' + self.getNextToken() + '\n') # read type
- *         self.output_file.write(self.indent * '  ' + self.getNextToken() + '\n') # read varName             # <<<<<<<<<<<<<<
- *         # while the next token is a comma
- *         self.next_token = self.getNextToken() # read ',' or ';'
- */
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 133, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_6 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 133, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_6);
-  __pyx_t_7 = PyNumber_Multiply(__pyx_t_6, __pyx_kp_s_); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 133, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_7);
-  __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
-  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_getNextToken); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 133, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_3);
-  __pyx_t_8 = NULL;
-  if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_3))) {
-    __pyx_t_8 = PyMethod_GET_SELF(__pyx_t_3);
-    if (likely(__pyx_t_8)) {
-      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_3);
-      __Pyx_INCREF(__pyx_t_8);
-      __Pyx_INCREF(function);
-      __Pyx_DECREF_SET(__pyx_t_3, function);
-    }
-  }
-  __pyx_t_6 = (__pyx_t_8) ? __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_t_8) : __Pyx_PyObject_CallNoArg(__pyx_t_3);
-  __Pyx_XDECREF(__pyx_t_8); __pyx_t_8 = 0;
-  if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 133, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_6);
-  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  __pyx_t_3 = PyNumber_Add(__pyx_t_7, __pyx_t_6); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 133, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_3);
-  __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-  __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
-  __pyx_t_6 = PyNumber_Add(__pyx_t_3, __pyx_kp_s__2); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 133, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_6);
-  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  __pyx_t_3 = NULL;
-  if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
-    __pyx_t_3 = PyMethod_GET_SELF(__pyx_t_2);
-    if (likely(__pyx_t_3)) {
-      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
-      __Pyx_INCREF(__pyx_t_3);
-      __Pyx_INCREF(function);
-      __Pyx_DECREF_SET(__pyx_t_2, function);
-    }
-  }
-  __pyx_t_1 = (__pyx_t_3) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_3, __pyx_t_6) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_6);
-  __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
-  __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
-  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 133, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-
-  /* "compilationEngine.pyx":135
- *         self.output_file.write(self.indent * '  ' + self.getNextToken() + '\n') # read varName
- *         # while the next token is a comma
- *         self.next_token = self.getNextToken() # read ',' or ';'             # <<<<<<<<<<<<<<
- *         while self.next_token == "<symbol> , </symbol>": # read ,
- *             self.output_file.write(self.indent * '  ' + self.next_token + '\n')
- */
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_getNextToken); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 135, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_6 = NULL;
-  if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
-    __pyx_t_6 = PyMethod_GET_SELF(__pyx_t_2);
-    if (likely(__pyx_t_6)) {
-      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
-      __Pyx_INCREF(__pyx_t_6);
-      __Pyx_INCREF(function);
-      __Pyx_DECREF_SET(__pyx_t_2, function);
-    }
-  }
-  __pyx_t_1 = (__pyx_t_6) ? __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_6) : __Pyx_PyObject_CallNoArg(__pyx_t_2);
-  __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
-  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 135, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  if (!(likely(PyString_CheckExact(__pyx_t_1))||((__pyx_t_1) == Py_None)||((void)PyErr_Format(PyExc_TypeError, "Expected %.16s, got %.200s", "str", Py_TYPE(__pyx_t_1)->tp_name), 0))) __PYX_ERR(0, 135, __pyx_L1_error)
-  __Pyx_GIVEREF(__pyx_t_1);
-  __Pyx_GOTREF(__pyx_v_self->next_token);
-  __Pyx_DECREF(__pyx_v_self->next_token);
-  __pyx_v_self->next_token = ((PyObject*)__pyx_t_1);
-  __pyx_t_1 = 0;
-
-  /* "compilationEngine.pyx":136
- *         # while the next token is a comma
- *         self.next_token = self.getNextToken() # read ',' or ';'
- *         while self.next_token == "<symbol> , </symbol>": # read ,             # <<<<<<<<<<<<<<
- *             self.output_file.write(self.indent * '  ' + self.next_token + '\n')
- *             self.output_file.write(self.indent * '  ' + self.getNextToken() + '\n') # read varName
- */
-  while (1) {
-    __pyx_t_5 = (__Pyx_PyString_Equals(__pyx_v_self->next_token, __pyx_kp_s_symbol_symbol_3, Py_EQ)); if (unlikely(__pyx_t_5 < 0)) __PYX_ERR(0, 136, __pyx_L1_error)
-    __pyx_t_4 = (__pyx_t_5 != 0);
-    if (!__pyx_t_4) break;
-
-    /* "compilationEngine.pyx":137
- *         self.next_token = self.getNextToken() # read ',' or ';'
- *         while self.next_token == "<symbol> , </symbol>": # read ,
- *             self.output_file.write(self.indent * '  ' + self.next_token + '\n')             # <<<<<<<<<<<<<<
- *             self.output_file.write(self.indent * '  ' + self.getNextToken() + '\n') # read varName
- *             self.next_token = self.getNextToken() # read ',' or ';'
- */
-    __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 137, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_2);
-    __pyx_t_6 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 137, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_6);
-    __pyx_t_3 = PyNumber_Multiply(__pyx_t_6, __pyx_kp_s_); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 137, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_3);
-    __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
-    __pyx_t_6 = PyNumber_Add(__pyx_t_3, __pyx_v_self->next_token); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 137, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_6);
-    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-    __pyx_t_3 = PyNumber_Add(__pyx_t_6, __pyx_kp_s__2); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 137, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_3);
-    __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
-    __pyx_t_6 = NULL;
-    if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
-      __pyx_t_6 = PyMethod_GET_SELF(__pyx_t_2);
-      if (likely(__pyx_t_6)) {
-        PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
-        __Pyx_INCREF(__pyx_t_6);
-        __Pyx_INCREF(function);
-        __Pyx_DECREF_SET(__pyx_t_2, function);
-      }
-    }
-    __pyx_t_1 = (__pyx_t_6) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_6, __pyx_t_3) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_3);
-    __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
-    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-    if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 137, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_1);
-    __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-
-    /* "compilationEngine.pyx":138
- *         while self.next_token == "<symbol> , </symbol>": # read ,
- *             self.output_file.write(self.indent * '  ' + self.next_token + '\n')
- *             self.output_file.write(self.indent * '  ' + self.getNextToken() + '\n') # read varName             # <<<<<<<<<<<<<<
- *             self.next_token = self.getNextToken() # read ',' or ';'
- *         self.output_file.write(self.indent * '  ' + self.next_token + '\n') # read ;
- */
-    __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 138, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_2);
-    __pyx_t_3 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 138, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_3);
-    __pyx_t_6 = PyNumber_Multiply(__pyx_t_3, __pyx_kp_s_); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 138, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_6);
-    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-    __pyx_t_7 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_getNextToken); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 138, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_7);
-    __pyx_t_8 = NULL;
-    if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_7))) {
-      __pyx_t_8 = PyMethod_GET_SELF(__pyx_t_7);
-      if (likely(__pyx_t_8)) {
-        PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_7);
-        __Pyx_INCREF(__pyx_t_8);
-        __Pyx_INCREF(function);
-        __Pyx_DECREF_SET(__pyx_t_7, function);
-      }
-    }
-    __pyx_t_3 = (__pyx_t_8) ? __Pyx_PyObject_CallOneArg(__pyx_t_7, __pyx_t_8) : __Pyx_PyObject_CallNoArg(__pyx_t_7);
-    __Pyx_XDECREF(__pyx_t_8); __pyx_t_8 = 0;
-    if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 138, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_3);
-    __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-    __pyx_t_7 = PyNumber_Add(__pyx_t_6, __pyx_t_3); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 138, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_7);
-    __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
-    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-    __pyx_t_3 = PyNumber_Add(__pyx_t_7, __pyx_kp_s__2); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 138, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_3);
-    __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-    __pyx_t_7 = NULL;
-    if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
-      __pyx_t_7 = PyMethod_GET_SELF(__pyx_t_2);
-      if (likely(__pyx_t_7)) {
-        PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
-        __Pyx_INCREF(__pyx_t_7);
-        __Pyx_INCREF(function);
-        __Pyx_DECREF_SET(__pyx_t_2, function);
-      }
-    }
-    __pyx_t_1 = (__pyx_t_7) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_7, __pyx_t_3) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_3);
-    __Pyx_XDECREF(__pyx_t_7); __pyx_t_7 = 0;
-    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-    if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 138, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_1);
-    __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-
-    /* "compilationEngine.pyx":139
- *             self.output_file.write(self.indent * '  ' + self.next_token + '\n')
- *             self.output_file.write(self.indent * '  ' + self.getNextToken() + '\n') # read varName
- *             self.next_token = self.getNextToken() # read ',' or ';'             # <<<<<<<<<<<<<<
- *         self.output_file.write(self.indent * '  ' + self.next_token + '\n') # read ;
- *         self.indent -= 1
- */
-    __pyx_t_2 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_getNextToken); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 139, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_2);
-    __pyx_t_3 = NULL;
-    if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
-      __pyx_t_3 = PyMethod_GET_SELF(__pyx_t_2);
-      if (likely(__pyx_t_3)) {
-        PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
-        __Pyx_INCREF(__pyx_t_3);
-        __Pyx_INCREF(function);
-        __Pyx_DECREF_SET(__pyx_t_2, function);
-      }
-    }
-    __pyx_t_1 = (__pyx_t_3) ? __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_3) : __Pyx_PyObject_CallNoArg(__pyx_t_2);
-    __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
-    if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 139, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_1);
-    __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-    if (!(likely(PyString_CheckExact(__pyx_t_1))||((__pyx_t_1) == Py_None)||((void)PyErr_Format(PyExc_TypeError, "Expected %.16s, got %.200s", "str", Py_TYPE(__pyx_t_1)->tp_name), 0))) __PYX_ERR(0, 139, __pyx_L1_error)
-    __Pyx_GIVEREF(__pyx_t_1);
-    __Pyx_GOTREF(__pyx_v_self->next_token);
-    __Pyx_DECREF(__pyx_v_self->next_token);
-    __pyx_v_self->next_token = ((PyObject*)__pyx_t_1);
-    __pyx_t_1 = 0;
-  }
-
-  /* "compilationEngine.pyx":140
- *             self.output_file.write(self.indent * '  ' + self.getNextToken() + '\n') # read varName
- *             self.next_token = self.getNextToken() # read ',' or ';'
- *         self.output_file.write(self.indent * '  ' + self.next_token + '\n') # read ;             # <<<<<<<<<<<<<<
- *         self.indent -= 1
- *         self.output_file.write(self.indent * '  ' + '</varDec>\n')
- */
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 140, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_3 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 140, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_3);
-  __pyx_t_7 = PyNumber_Multiply(__pyx_t_3, __pyx_kp_s_); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 140, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_7);
-  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  __pyx_t_3 = PyNumber_Add(__pyx_t_7, __pyx_v_self->next_token); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 140, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_3);
-  __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-  __pyx_t_7 = PyNumber_Add(__pyx_t_3, __pyx_kp_s__2); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 140, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_7);
-  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  __pyx_t_3 = NULL;
-  if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
-    __pyx_t_3 = PyMethod_GET_SELF(__pyx_t_2);
-    if (likely(__pyx_t_3)) {
-      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
-      __Pyx_INCREF(__pyx_t_3);
-      __Pyx_INCREF(function);
-      __Pyx_DECREF_SET(__pyx_t_2, function);
-    }
-  }
-  __pyx_t_1 = (__pyx_t_3) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_3, __pyx_t_7) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_7);
-  __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
-  __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 140, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-
-  /* "compilationEngine.pyx":141
- *             self.next_token = self.getNextToken() # read ',' or ';'
- *         self.output_file.write(self.indent * '  ' + self.next_token + '\n') # read ;
- *         self.indent -= 1             # <<<<<<<<<<<<<<
- *         self.output_file.write(self.indent * '  ' + '</varDec>\n')
- *         self.compileVarDec()
- */
-  __pyx_v_self->indent = (__pyx_v_self->indent - 1);
-
-  /* "compilationEngine.pyx":142
- *         self.output_file.write(self.indent * '  ' + self.next_token + '\n') # read ;
- *         self.indent -= 1
- *         self.output_file.write(self.indent * '  ' + '</varDec>\n')             # <<<<<<<<<<<<<<
- *         self.compileVarDec()
+  /* "compilationEngine.pyx":165
  * 
+ *         # next is parameterList
+ *         self.output_file.write(self.indent * "  " + self.next_token + '\n') # get the next token <type>             # <<<<<<<<<<<<<<
+ *         self.advance() # get the next token <varName>
+ *         self.output_file.write(self.indent * "  " + self.next_token + '\n')
  */
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 142, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 165, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_7 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 142, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_7);
-  __pyx_t_3 = PyNumber_Multiply(__pyx_t_7, __pyx_kp_s_); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 142, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 165, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
-  __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-  __pyx_t_7 = PyNumber_Add(__pyx_t_3, __pyx_kp_s_varDec_2); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 142, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_7);
-  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  __pyx_t_3 = NULL;
-  if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
-    __pyx_t_3 = PyMethod_GET_SELF(__pyx_t_2);
-    if (likely(__pyx_t_3)) {
-      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
-      __Pyx_INCREF(__pyx_t_3);
-      __Pyx_INCREF(function);
-      __Pyx_DECREF_SET(__pyx_t_2, function);
-    }
-  }
-  __pyx_t_1 = (__pyx_t_3) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_3, __pyx_t_7) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_7);
-  __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
-  __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 142, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-
-  /* "compilationEngine.pyx":143
- *         self.indent -= 1
- *         self.output_file.write(self.indent * '  ' + '</varDec>\n')
- *         self.compileVarDec()             # <<<<<<<<<<<<<<
- * 
- *     # Compiles a sequence of statements, not including the enclosing {}
- */
-  __pyx_t_1 = ((struct __pyx_vtabstruct_17compilationEngine_CompilationEngine *)__pyx_v_self->__pyx_vtab)->compileVarDec(__pyx_v_self); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 143, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-
-  /* "compilationEngine.pyx":123
- * 
- *     # Compiles a var declaration
- *     cdef compileVarDec(self):             # <<<<<<<<<<<<<<
- *         # if the next token is not var then return
- *         self.next_token = self.getNextToken()
- */
-
-  /* function exit code */
-  __pyx_r = Py_None; __Pyx_INCREF(Py_None);
-  goto __pyx_L0;
-  __pyx_L1_error:;
-  __Pyx_XDECREF(__pyx_t_1);
-  __Pyx_XDECREF(__pyx_t_2);
-  __Pyx_XDECREF(__pyx_t_3);
-  __Pyx_XDECREF(__pyx_t_6);
-  __Pyx_XDECREF(__pyx_t_7);
-  __Pyx_XDECREF(__pyx_t_8);
-  __Pyx_AddTraceback("compilationEngine.CompilationEngine.compileVarDec", __pyx_clineno, __pyx_lineno, __pyx_filename);
-  __pyx_r = 0;
-  __pyx_L0:;
-  __Pyx_XGIVEREF(__pyx_r);
-  __Pyx_RefNannyFinishContext();
-  return __pyx_r;
-}
-
-/* "compilationEngine.pyx":146
- * 
- *     # Compiles a sequence of statements, not including the enclosing {}
- *     cdef compileStatements(self):             # <<<<<<<<<<<<<<
- *         self.output_file.write(self.indent * '  ' + '<statements>\n')
- *         self.indent += 1
- */
-
-static PyObject *__pyx_f_17compilationEngine_17CompilationEngine_compileStatements(struct __pyx_obj_17compilationEngine_CompilationEngine *__pyx_v_self) {
-  PyObject *__pyx_r = NULL;
-  __Pyx_RefNannyDeclarations
-  PyObject *__pyx_t_1 = NULL;
-  PyObject *__pyx_t_2 = NULL;
-  PyObject *__pyx_t_3 = NULL;
-  PyObject *__pyx_t_4 = NULL;
-  int __pyx_t_5;
-  int __pyx_t_6;
-  int __pyx_t_7;
-  int __pyx_lineno = 0;
-  const char *__pyx_filename = NULL;
-  int __pyx_clineno = 0;
-  __Pyx_RefNannySetupContext("compileStatements", 0);
-
-  /* "compilationEngine.pyx":147
- *     # Compiles a sequence of statements, not including the enclosing {}
- *     cdef compileStatements(self):
- *         self.output_file.write(self.indent * '  ' + '<statements>\n')             # <<<<<<<<<<<<<<
- *         self.indent += 1
- *         # while the next token is a statement
- */
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 147, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_3 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 147, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_3);
-  __pyx_t_4 = PyNumber_Multiply(__pyx_t_3, __pyx_kp_s_); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 147, __pyx_L1_error)
+  __pyx_t_4 = PyNumber_Multiply(__pyx_t_3, __pyx_kp_s_); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 165, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  __pyx_t_3 = PyNumber_Add(__pyx_t_4, __pyx_kp_s_statements); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 147, __pyx_L1_error)
+  __pyx_t_3 = PyNumber_Add(__pyx_t_4, __pyx_v_self->next_token); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 165, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  __pyx_t_4 = NULL;
-  if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
-    __pyx_t_4 = PyMethod_GET_SELF(__pyx_t_2);
-    if (likely(__pyx_t_4)) {
-      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
-      __Pyx_INCREF(__pyx_t_4);
-      __Pyx_INCREF(function);
-      __Pyx_DECREF_SET(__pyx_t_2, function);
-    }
-  }
-  __pyx_t_1 = (__pyx_t_4) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_4, __pyx_t_3) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_3);
-  __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
-  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 147, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-
-  /* "compilationEngine.pyx":148
- *     cdef compileStatements(self):
- *         self.output_file.write(self.indent * '  ' + '<statements>\n')
- *         self.indent += 1             # <<<<<<<<<<<<<<
- *         # while the next token is a statement
- *         while self.next_token == "<keyword> let </keyword>" or self.next_token == "<keyword> if </keyword>" or self.next_token == "<keyword> while </keyword>" or self.next_token == "<keyword> do </keyword>" or self.next_token == "<keyword> return </keyword>":
- */
-  __pyx_v_self->indent = (__pyx_v_self->indent + 1);
-
-  /* "compilationEngine.pyx":150
- *         self.indent += 1
- *         # while the next token is a statement
- *         while self.next_token == "<keyword> let </keyword>" or self.next_token == "<keyword> if </keyword>" or self.next_token == "<keyword> while </keyword>" or self.next_token == "<keyword> do </keyword>" or self.next_token == "<keyword> return </keyword>":             # <<<<<<<<<<<<<<
- *             if self.next_token == "<keyword> let </keyword>":
- *                 self.compileLet()
- */
-  while (1) {
-    __pyx_t_6 = (__Pyx_PyString_Equals(__pyx_v_self->next_token, __pyx_kp_s_keyword_let_keyword, Py_EQ)); if (unlikely(__pyx_t_6 < 0)) __PYX_ERR(0, 150, __pyx_L1_error)
-    __pyx_t_7 = (__pyx_t_6 != 0);
-    if (!__pyx_t_7) {
-    } else {
-      __pyx_t_5 = __pyx_t_7;
-      goto __pyx_L5_bool_binop_done;
-    }
-    __pyx_t_7 = (__Pyx_PyString_Equals(__pyx_v_self->next_token, __pyx_kp_s_keyword_if_keyword, Py_EQ)); if (unlikely(__pyx_t_7 < 0)) __PYX_ERR(0, 150, __pyx_L1_error)
-    __pyx_t_6 = (__pyx_t_7 != 0);
-    if (!__pyx_t_6) {
-    } else {
-      __pyx_t_5 = __pyx_t_6;
-      goto __pyx_L5_bool_binop_done;
-    }
-    __pyx_t_6 = (__Pyx_PyString_Equals(__pyx_v_self->next_token, __pyx_kp_s_keyword_while_keyword, Py_EQ)); if (unlikely(__pyx_t_6 < 0)) __PYX_ERR(0, 150, __pyx_L1_error)
-    __pyx_t_7 = (__pyx_t_6 != 0);
-    if (!__pyx_t_7) {
-    } else {
-      __pyx_t_5 = __pyx_t_7;
-      goto __pyx_L5_bool_binop_done;
-    }
-    __pyx_t_7 = (__Pyx_PyString_Equals(__pyx_v_self->next_token, __pyx_kp_s_keyword_do_keyword, Py_EQ)); if (unlikely(__pyx_t_7 < 0)) __PYX_ERR(0, 150, __pyx_L1_error)
-    __pyx_t_6 = (__pyx_t_7 != 0);
-    if (!__pyx_t_6) {
-    } else {
-      __pyx_t_5 = __pyx_t_6;
-      goto __pyx_L5_bool_binop_done;
-    }
-    __pyx_t_6 = (__Pyx_PyString_Equals(__pyx_v_self->next_token, __pyx_kp_s_keyword_return_keyword, Py_EQ)); if (unlikely(__pyx_t_6 < 0)) __PYX_ERR(0, 150, __pyx_L1_error)
-    __pyx_t_7 = (__pyx_t_6 != 0);
-    __pyx_t_5 = __pyx_t_7;
-    __pyx_L5_bool_binop_done:;
-    if (!__pyx_t_5) break;
-
-    /* "compilationEngine.pyx":151
- *         # while the next token is a statement
- *         while self.next_token == "<keyword> let </keyword>" or self.next_token == "<keyword> if </keyword>" or self.next_token == "<keyword> while </keyword>" or self.next_token == "<keyword> do </keyword>" or self.next_token == "<keyword> return </keyword>":
- *             if self.next_token == "<keyword> let </keyword>":             # <<<<<<<<<<<<<<
- *                 self.compileLet()
- *             elif self.next_token == "<keyword> if </keyword>":
- */
-    __pyx_t_5 = (__Pyx_PyString_Equals(__pyx_v_self->next_token, __pyx_kp_s_keyword_let_keyword, Py_EQ)); if (unlikely(__pyx_t_5 < 0)) __PYX_ERR(0, 151, __pyx_L1_error)
-    __pyx_t_7 = (__pyx_t_5 != 0);
-    if (__pyx_t_7) {
-
-      /* "compilationEngine.pyx":152
- *         while self.next_token == "<keyword> let </keyword>" or self.next_token == "<keyword> if </keyword>" or self.next_token == "<keyword> while </keyword>" or self.next_token == "<keyword> do </keyword>" or self.next_token == "<keyword> return </keyword>":
- *             if self.next_token == "<keyword> let </keyword>":
- *                 self.compileLet()             # <<<<<<<<<<<<<<
- *             elif self.next_token == "<keyword> if </keyword>":
- *                 self.compileIf()
- */
-      __pyx_t_1 = ((struct __pyx_vtabstruct_17compilationEngine_CompilationEngine *)__pyx_v_self->__pyx_vtab)->compileLet(__pyx_v_self); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 152, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_1);
-      __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-
-      /* "compilationEngine.pyx":151
- *         # while the next token is a statement
- *         while self.next_token == "<keyword> let </keyword>" or self.next_token == "<keyword> if </keyword>" or self.next_token == "<keyword> while </keyword>" or self.next_token == "<keyword> do </keyword>" or self.next_token == "<keyword> return </keyword>":
- *             if self.next_token == "<keyword> let </keyword>":             # <<<<<<<<<<<<<<
- *                 self.compileLet()
- *             elif self.next_token == "<keyword> if </keyword>":
- */
-      goto __pyx_L10;
-    }
-
-    /* "compilationEngine.pyx":153
- *             if self.next_token == "<keyword> let </keyword>":
- *                 self.compileLet()
- *             elif self.next_token == "<keyword> if </keyword>":             # <<<<<<<<<<<<<<
- *                 self.compileIf()
- *             elif self.next_token == "<keyword> while </keyword>":
- */
-    __pyx_t_7 = (__Pyx_PyString_Equals(__pyx_v_self->next_token, __pyx_kp_s_keyword_if_keyword, Py_EQ)); if (unlikely(__pyx_t_7 < 0)) __PYX_ERR(0, 153, __pyx_L1_error)
-    __pyx_t_5 = (__pyx_t_7 != 0);
-    if (__pyx_t_5) {
-
-      /* "compilationEngine.pyx":154
- *                 self.compileLet()
- *             elif self.next_token == "<keyword> if </keyword>":
- *                 self.compileIf()             # <<<<<<<<<<<<<<
- *             elif self.next_token == "<keyword> while </keyword>":
- *                 self.compileWhile()
- */
-      __pyx_t_1 = ((struct __pyx_vtabstruct_17compilationEngine_CompilationEngine *)__pyx_v_self->__pyx_vtab)->compileIf(__pyx_v_self); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 154, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_1);
-      __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-
-      /* "compilationEngine.pyx":153
- *             if self.next_token == "<keyword> let </keyword>":
- *                 self.compileLet()
- *             elif self.next_token == "<keyword> if </keyword>":             # <<<<<<<<<<<<<<
- *                 self.compileIf()
- *             elif self.next_token == "<keyword> while </keyword>":
- */
-      goto __pyx_L10;
-    }
-
-    /* "compilationEngine.pyx":155
- *             elif self.next_token == "<keyword> if </keyword>":
- *                 self.compileIf()
- *             elif self.next_token == "<keyword> while </keyword>":             # <<<<<<<<<<<<<<
- *                 self.compileWhile()
- *             elif self.next_token == "<keyword> do </keyword>":
- */
-    __pyx_t_5 = (__Pyx_PyString_Equals(__pyx_v_self->next_token, __pyx_kp_s_keyword_while_keyword, Py_EQ)); if (unlikely(__pyx_t_5 < 0)) __PYX_ERR(0, 155, __pyx_L1_error)
-    __pyx_t_7 = (__pyx_t_5 != 0);
-    if (__pyx_t_7) {
-
-      /* "compilationEngine.pyx":156
- *                 self.compileIf()
- *             elif self.next_token == "<keyword> while </keyword>":
- *                 self.compileWhile()             # <<<<<<<<<<<<<<
- *             elif self.next_token == "<keyword> do </keyword>":
- *                 self.compileDo()
- */
-      __pyx_t_1 = ((struct __pyx_vtabstruct_17compilationEngine_CompilationEngine *)__pyx_v_self->__pyx_vtab)->compileWhile(__pyx_v_self); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 156, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_1);
-      __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-
-      /* "compilationEngine.pyx":155
- *             elif self.next_token == "<keyword> if </keyword>":
- *                 self.compileIf()
- *             elif self.next_token == "<keyword> while </keyword>":             # <<<<<<<<<<<<<<
- *                 self.compileWhile()
- *             elif self.next_token == "<keyword> do </keyword>":
- */
-      goto __pyx_L10;
-    }
-
-    /* "compilationEngine.pyx":157
- *             elif self.next_token == "<keyword> while </keyword>":
- *                 self.compileWhile()
- *             elif self.next_token == "<keyword> do </keyword>":             # <<<<<<<<<<<<<<
- *                 self.compileDo()
- *             elif self.next_token == "<keyword> return </keyword>":
- */
-    __pyx_t_7 = (__Pyx_PyString_Equals(__pyx_v_self->next_token, __pyx_kp_s_keyword_do_keyword, Py_EQ)); if (unlikely(__pyx_t_7 < 0)) __PYX_ERR(0, 157, __pyx_L1_error)
-    __pyx_t_5 = (__pyx_t_7 != 0);
-    if (__pyx_t_5) {
-
-      /* "compilationEngine.pyx":158
- *                 self.compileWhile()
- *             elif self.next_token == "<keyword> do </keyword>":
- *                 self.compileDo()             # <<<<<<<<<<<<<<
- *             elif self.next_token == "<keyword> return </keyword>":
- *                 self.compileReturn()
- */
-      __pyx_t_1 = ((struct __pyx_vtabstruct_17compilationEngine_CompilationEngine *)__pyx_v_self->__pyx_vtab)->compileDo(__pyx_v_self); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 158, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_1);
-      __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-
-      /* "compilationEngine.pyx":157
- *             elif self.next_token == "<keyword> while </keyword>":
- *                 self.compileWhile()
- *             elif self.next_token == "<keyword> do </keyword>":             # <<<<<<<<<<<<<<
- *                 self.compileDo()
- *             elif self.next_token == "<keyword> return </keyword>":
- */
-      goto __pyx_L10;
-    }
-
-    /* "compilationEngine.pyx":159
- *             elif self.next_token == "<keyword> do </keyword>":
- *                 self.compileDo()
- *             elif self.next_token == "<keyword> return </keyword>":             # <<<<<<<<<<<<<<
- *                 self.compileReturn()
- *             self.next_token = self.getNextToken()
- */
-    __pyx_t_5 = (__Pyx_PyString_Equals(__pyx_v_self->next_token, __pyx_kp_s_keyword_return_keyword, Py_EQ)); if (unlikely(__pyx_t_5 < 0)) __PYX_ERR(0, 159, __pyx_L1_error)
-    __pyx_t_7 = (__pyx_t_5 != 0);
-    if (__pyx_t_7) {
-
-      /* "compilationEngine.pyx":160
- *                 self.compileDo()
- *             elif self.next_token == "<keyword> return </keyword>":
- *                 self.compileReturn()             # <<<<<<<<<<<<<<
- *             self.next_token = self.getNextToken()
- *         self.indent -= 1
- */
-      __pyx_t_1 = ((struct __pyx_vtabstruct_17compilationEngine_CompilationEngine *)__pyx_v_self->__pyx_vtab)->compileReturn(__pyx_v_self); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 160, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_1);
-      __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-
-      /* "compilationEngine.pyx":159
- *             elif self.next_token == "<keyword> do </keyword>":
- *                 self.compileDo()
- *             elif self.next_token == "<keyword> return </keyword>":             # <<<<<<<<<<<<<<
- *                 self.compileReturn()
- *             self.next_token = self.getNextToken()
- */
-    }
-    __pyx_L10:;
-
-    /* "compilationEngine.pyx":161
- *             elif self.next_token == "<keyword> return </keyword>":
- *                 self.compileReturn()
- *             self.next_token = self.getNextToken()             # <<<<<<<<<<<<<<
- *         self.indent -= 1
- *         self.output_file.write(self.indent * '  ' + '</statements>\n')
- */
-    __pyx_t_2 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_getNextToken); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 161, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_2);
-    __pyx_t_3 = NULL;
-    if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
-      __pyx_t_3 = PyMethod_GET_SELF(__pyx_t_2);
-      if (likely(__pyx_t_3)) {
-        PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
-        __Pyx_INCREF(__pyx_t_3);
-        __Pyx_INCREF(function);
-        __Pyx_DECREF_SET(__pyx_t_2, function);
-      }
-    }
-    __pyx_t_1 = (__pyx_t_3) ? __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_3) : __Pyx_PyObject_CallNoArg(__pyx_t_2);
-    __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
-    if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 161, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_1);
-    __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-    if (!(likely(PyString_CheckExact(__pyx_t_1))||((__pyx_t_1) == Py_None)||((void)PyErr_Format(PyExc_TypeError, "Expected %.16s, got %.200s", "str", Py_TYPE(__pyx_t_1)->tp_name), 0))) __PYX_ERR(0, 161, __pyx_L1_error)
-    __Pyx_GIVEREF(__pyx_t_1);
-    __Pyx_GOTREF(__pyx_v_self->next_token);
-    __Pyx_DECREF(__pyx_v_self->next_token);
-    __pyx_v_self->next_token = ((PyObject*)__pyx_t_1);
-    __pyx_t_1 = 0;
-  }
-
-  /* "compilationEngine.pyx":162
- *                 self.compileReturn()
- *             self.next_token = self.getNextToken()
- *         self.indent -= 1             # <<<<<<<<<<<<<<
- *         self.output_file.write(self.indent * '  ' + '</statements>\n')
- * 
- */
-  __pyx_v_self->indent = (__pyx_v_self->indent - 1);
-
-  /* "compilationEngine.pyx":163
- *             self.next_token = self.getNextToken()
- *         self.indent -= 1
- *         self.output_file.write(self.indent * '  ' + '</statements>\n')             # <<<<<<<<<<<<<<
- * 
- *     # Compiles a do statement
- */
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 163, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_3 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 163, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_3);
-  __pyx_t_4 = PyNumber_Multiply(__pyx_t_3, __pyx_kp_s_); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 163, __pyx_L1_error)
+  __pyx_t_4 = PyNumber_Add(__pyx_t_3, __pyx_kp_s__2); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 165, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  __pyx_t_3 = PyNumber_Add(__pyx_t_4, __pyx_kp_s_statements_2); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 163, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_3);
-  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  __pyx_t_4 = NULL;
+  __pyx_t_3 = NULL;
   if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
-    __pyx_t_4 = PyMethod_GET_SELF(__pyx_t_2);
-    if (likely(__pyx_t_4)) {
+    __pyx_t_3 = PyMethod_GET_SELF(__pyx_t_2);
+    if (likely(__pyx_t_3)) {
       PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
-      __Pyx_INCREF(__pyx_t_4);
+      __Pyx_INCREF(__pyx_t_3);
       __Pyx_INCREF(function);
       __Pyx_DECREF_SET(__pyx_t_2, function);
     }
   }
-  __pyx_t_1 = (__pyx_t_4) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_4, __pyx_t_3) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_3);
-  __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
-  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 163, __pyx_L1_error)
+  __pyx_t_1 = (__pyx_t_3) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_3, __pyx_t_4) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_4);
+  __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
+  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 165, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "compilationEngine.pyx":146
+  /* "compilationEngine.pyx":166
+ *         # next is parameterList
+ *         self.output_file.write(self.indent * "  " + self.next_token + '\n') # get the next token <type>
+ *         self.advance() # get the next token <varName>             # <<<<<<<<<<<<<<
+ *         self.output_file.write(self.indent * "  " + self.next_token + '\n')
  * 
- *     # Compiles a sequence of statements, not including the enclosing {}
- *     cdef compileStatements(self):             # <<<<<<<<<<<<<<
- *         self.output_file.write(self.indent * '  ' + '<statements>\n')
- *         self.indent += 1
  */
-
-  /* function exit code */
-  __pyx_r = Py_None; __Pyx_INCREF(Py_None);
-  goto __pyx_L0;
-  __pyx_L1_error:;
-  __Pyx_XDECREF(__pyx_t_1);
-  __Pyx_XDECREF(__pyx_t_2);
-  __Pyx_XDECREF(__pyx_t_3);
-  __Pyx_XDECREF(__pyx_t_4);
-  __Pyx_AddTraceback("compilationEngine.CompilationEngine.compileStatements", __pyx_clineno, __pyx_lineno, __pyx_filename);
-  __pyx_r = 0;
-  __pyx_L0:;
-  __Pyx_XGIVEREF(__pyx_r);
-  __Pyx_RefNannyFinishContext();
-  return __pyx_r;
-}
-
-/* "compilationEngine.pyx":166
- * 
- *     # Compiles a do statement
- *     cdef compileDo(self):             # <<<<<<<<<<<<<<
- *         self.output_file.write(self.indent * '  ' + '<doStatement>\n')
- *         self.indent += 1
- */
-
-static PyObject *__pyx_f_17compilationEngine_17CompilationEngine_compileDo(struct __pyx_obj_17compilationEngine_CompilationEngine *__pyx_v_self) {
-  PyObject *__pyx_r = NULL;
-  __Pyx_RefNannyDeclarations
-  PyObject *__pyx_t_1 = NULL;
-  PyObject *__pyx_t_2 = NULL;
-  PyObject *__pyx_t_3 = NULL;
-  PyObject *__pyx_t_4 = NULL;
-  int __pyx_lineno = 0;
-  const char *__pyx_filename = NULL;
-  int __pyx_clineno = 0;
-  __Pyx_RefNannySetupContext("compileDo", 0);
+  __pyx_t_1 = ((struct __pyx_vtabstruct_17compilationEngine_CompilationEngine *)__pyx_v_self->__pyx_vtab)->advance(__pyx_v_self); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 166, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
   /* "compilationEngine.pyx":167
- *     # Compiles a do statement
- *     cdef compileDo(self):
- *         self.output_file.write(self.indent * '  ' + '<doStatement>\n')             # <<<<<<<<<<<<<<
- *         self.indent += 1
- *         self.output_file.write(self.indent * '  ' + self.next_token + '\n') # read do
+ *         self.output_file.write(self.indent * "  " + self.next_token + '\n') # get the next token <type>
+ *         self.advance() # get the next token <varName>
+ *         self.output_file.write(self.indent * "  " + self.next_token + '\n')             # <<<<<<<<<<<<<<
+ * 
+ *         # compile (, type varName)*
  */
   __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 167, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_3 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 167, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 167, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_4);
+  __pyx_t_3 = PyNumber_Multiply(__pyx_t_4, __pyx_kp_s_); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 167, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
-  __pyx_t_4 = PyNumber_Multiply(__pyx_t_3, __pyx_kp_s_); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 167, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+  __pyx_t_4 = PyNumber_Add(__pyx_t_3, __pyx_v_self->next_token); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 167, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  __pyx_t_3 = PyNumber_Add(__pyx_t_4, __pyx_kp_s_doStatement); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 167, __pyx_L1_error)
+  __pyx_t_3 = PyNumber_Add(__pyx_t_4, __pyx_kp_s__2); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 167, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
   __pyx_t_4 = NULL;
@@ -5111,405 +3565,97 @@ static PyObject *__pyx_f_17compilationEngine_17CompilationEngine_compileDo(struc
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "compilationEngine.pyx":168
- *     cdef compileDo(self):
- *         self.output_file.write(self.indent * '  ' + '<doStatement>\n')
- *         self.indent += 1             # <<<<<<<<<<<<<<
- *         self.output_file.write(self.indent * '  ' + self.next_token + '\n') # read do
- *         self.compileSubroutineCall()
- */
-  __pyx_v_self->indent = (__pyx_v_self->indent + 1);
-
-  /* "compilationEngine.pyx":169
- *         self.output_file.write(self.indent * '  ' + '<doStatement>\n')
- *         self.indent += 1
- *         self.output_file.write(self.indent * '  ' + self.next_token + '\n') # read do             # <<<<<<<<<<<<<<
- *         self.compileSubroutineCall()
- *         self.output_file.write(self.indent * '  ' + '<symbol> ; </symbol>\n') # read ;
- */
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 169, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_3 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 169, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_3);
-  __pyx_t_4 = PyNumber_Multiply(__pyx_t_3, __pyx_kp_s_); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 169, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_4);
-  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  __pyx_t_3 = PyNumber_Add(__pyx_t_4, __pyx_v_self->next_token); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 169, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_3);
-  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  __pyx_t_4 = PyNumber_Add(__pyx_t_3, __pyx_kp_s__2); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 169, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_4);
-  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  __pyx_t_3 = NULL;
-  if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
-    __pyx_t_3 = PyMethod_GET_SELF(__pyx_t_2);
-    if (likely(__pyx_t_3)) {
-      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
-      __Pyx_INCREF(__pyx_t_3);
-      __Pyx_INCREF(function);
-      __Pyx_DECREF_SET(__pyx_t_2, function);
-    }
-  }
-  __pyx_t_1 = (__pyx_t_3) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_3, __pyx_t_4) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_4);
-  __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
-  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 169, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-
   /* "compilationEngine.pyx":170
- *         self.indent += 1
- *         self.output_file.write(self.indent * '  ' + self.next_token + '\n') # read do
- *         self.compileSubroutineCall()             # <<<<<<<<<<<<<<
- *         self.output_file.write(self.indent * '  ' + '<symbol> ; </symbol>\n') # read ;
- *         self.indent -= 1
+ * 
+ *         # compile (, type varName)*
+ *         self.advance() # get the next token , or )             # <<<<<<<<<<<<<<
+ *         while self.next_token == "<symbol> , </symbol>":
+ *             self.output_file.write(self.indent * "  " + self.next_token + '\n')
  */
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_compileSubroutineCall); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 170, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_4 = NULL;
-  if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
-    __pyx_t_4 = PyMethod_GET_SELF(__pyx_t_2);
-    if (likely(__pyx_t_4)) {
-      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
-      __Pyx_INCREF(__pyx_t_4);
-      __Pyx_INCREF(function);
-      __Pyx_DECREF_SET(__pyx_t_2, function);
-    }
-  }
-  __pyx_t_1 = (__pyx_t_4) ? __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_4) : __Pyx_PyObject_CallNoArg(__pyx_t_2);
-  __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
-  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 170, __pyx_L1_error)
+  __pyx_t_1 = ((struct __pyx_vtabstruct_17compilationEngine_CompilationEngine *)__pyx_v_self->__pyx_vtab)->advance(__pyx_v_self); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 170, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
   /* "compilationEngine.pyx":171
- *         self.output_file.write(self.indent * '  ' + self.next_token + '\n') # read do
- *         self.compileSubroutineCall()
- *         self.output_file.write(self.indent * '  ' + '<symbol> ; </symbol>\n') # read ;             # <<<<<<<<<<<<<<
- *         self.indent -= 1
- *         self.output_file.write(self.indent * '  ' + '</doStatement>\n')
- */
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 171, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_4 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 171, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_4);
-  __pyx_t_3 = PyNumber_Multiply(__pyx_t_4, __pyx_kp_s_); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 171, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_3);
-  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  __pyx_t_4 = PyNumber_Add(__pyx_t_3, __pyx_kp_s_symbol_symbol_4); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 171, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_4);
-  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  __pyx_t_3 = NULL;
-  if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
-    __pyx_t_3 = PyMethod_GET_SELF(__pyx_t_2);
-    if (likely(__pyx_t_3)) {
-      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
-      __Pyx_INCREF(__pyx_t_3);
-      __Pyx_INCREF(function);
-      __Pyx_DECREF_SET(__pyx_t_2, function);
-    }
-  }
-  __pyx_t_1 = (__pyx_t_3) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_3, __pyx_t_4) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_4);
-  __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
-  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 171, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-
-  /* "compilationEngine.pyx":172
- *         self.compileSubroutineCall()
- *         self.output_file.write(self.indent * '  ' + '<symbol> ; </symbol>\n') # read ;
- *         self.indent -= 1             # <<<<<<<<<<<<<<
- *         self.output_file.write(self.indent * '  ' + '</doStatement>\n')
+ *         # compile (, type varName)*
+ *         self.advance() # get the next token , or )
+ *         while self.next_token == "<symbol> , </symbol>":             # <<<<<<<<<<<<<<
+ *             self.output_file.write(self.indent * "  " + self.next_token + '\n')
  * 
  */
-  __pyx_v_self->indent = (__pyx_v_self->indent - 1);
+  while (1) {
+    __pyx_t_6 = (__Pyx_PyString_Equals(__pyx_v_self->next_token, __pyx_kp_s_symbol_symbol_2, Py_EQ)); if (unlikely(__pyx_t_6 < 0)) __PYX_ERR(0, 171, __pyx_L1_error)
+    __pyx_t_5 = (__pyx_t_6 != 0);
+    if (!__pyx_t_5) break;
 
-  /* "compilationEngine.pyx":173
- *         self.output_file.write(self.indent * '  ' + '<symbol> ; </symbol>\n') # read ;
- *         self.indent -= 1
- *         self.output_file.write(self.indent * '  ' + '</doStatement>\n')             # <<<<<<<<<<<<<<
+    /* "compilationEngine.pyx":172
+ *         self.advance() # get the next token , or )
+ *         while self.next_token == "<symbol> , </symbol>":
+ *             self.output_file.write(self.indent * "  " + self.next_token + '\n')             # <<<<<<<<<<<<<<
  * 
- *     # Compiles a let statement
+ *             self.advance() # get the next token <type>
  */
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 173, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_4 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 173, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_4);
-  __pyx_t_3 = PyNumber_Multiply(__pyx_t_4, __pyx_kp_s_); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 173, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_3);
-  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  __pyx_t_4 = PyNumber_Add(__pyx_t_3, __pyx_kp_s_doStatement_2); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 173, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_4);
-  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  __pyx_t_3 = NULL;
-  if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
-    __pyx_t_3 = PyMethod_GET_SELF(__pyx_t_2);
-    if (likely(__pyx_t_3)) {
-      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
-      __Pyx_INCREF(__pyx_t_3);
-      __Pyx_INCREF(function);
-      __Pyx_DECREF_SET(__pyx_t_2, function);
-    }
-  }
-  __pyx_t_1 = (__pyx_t_3) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_3, __pyx_t_4) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_4);
-  __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
-  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 173, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-
-  /* "compilationEngine.pyx":166
- * 
- *     # Compiles a do statement
- *     cdef compileDo(self):             # <<<<<<<<<<<<<<
- *         self.output_file.write(self.indent * '  ' + '<doStatement>\n')
- *         self.indent += 1
- */
-
-  /* function exit code */
-  __pyx_r = Py_None; __Pyx_INCREF(Py_None);
-  goto __pyx_L0;
-  __pyx_L1_error:;
-  __Pyx_XDECREF(__pyx_t_1);
-  __Pyx_XDECREF(__pyx_t_2);
-  __Pyx_XDECREF(__pyx_t_3);
-  __Pyx_XDECREF(__pyx_t_4);
-  __Pyx_AddTraceback("compilationEngine.CompilationEngine.compileDo", __pyx_clineno, __pyx_lineno, __pyx_filename);
-  __pyx_r = 0;
-  __pyx_L0:;
-  __Pyx_XGIVEREF(__pyx_r);
-  __Pyx_RefNannyFinishContext();
-  return __pyx_r;
-}
-
-/* "compilationEngine.pyx":176
- * 
- *     # Compiles a let statement
- *     cdef compileLet(self):             # <<<<<<<<<<<<<<
- *         self.output_file.write(self.indent * '  ' + '<letStatement>\n')
- *         self.indent += 1
- */
-
-static PyObject *__pyx_f_17compilationEngine_17CompilationEngine_compileLet(struct __pyx_obj_17compilationEngine_CompilationEngine *__pyx_v_self) {
-  PyObject *__pyx_r = NULL;
-  __Pyx_RefNannyDeclarations
-  PyObject *__pyx_t_1 = NULL;
-  PyObject *__pyx_t_2 = NULL;
-  PyObject *__pyx_t_3 = NULL;
-  PyObject *__pyx_t_4 = NULL;
-  PyObject *__pyx_t_5 = NULL;
-  PyObject *__pyx_t_6 = NULL;
-  int __pyx_t_7;
-  int __pyx_t_8;
-  int __pyx_lineno = 0;
-  const char *__pyx_filename = NULL;
-  int __pyx_clineno = 0;
-  __Pyx_RefNannySetupContext("compileLet", 0);
-
-  /* "compilationEngine.pyx":177
- *     # Compiles a let statement
- *     cdef compileLet(self):
- *         self.output_file.write(self.indent * '  ' + '<letStatement>\n')             # <<<<<<<<<<<<<<
- *         self.indent += 1
- *         self.output_file.write(self.indent * '  ' + self.next_token + '\n') # read let
- */
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 177, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_3 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 177, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_3);
-  __pyx_t_4 = PyNumber_Multiply(__pyx_t_3, __pyx_kp_s_); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 177, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_4);
-  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  __pyx_t_3 = PyNumber_Add(__pyx_t_4, __pyx_kp_s_letStatement); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 177, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_3);
-  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  __pyx_t_4 = NULL;
-  if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
-    __pyx_t_4 = PyMethod_GET_SELF(__pyx_t_2);
-    if (likely(__pyx_t_4)) {
-      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
-      __Pyx_INCREF(__pyx_t_4);
-      __Pyx_INCREF(function);
-      __Pyx_DECREF_SET(__pyx_t_2, function);
-    }
-  }
-  __pyx_t_1 = (__pyx_t_4) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_4, __pyx_t_3) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_3);
-  __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
-  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 177, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-
-  /* "compilationEngine.pyx":178
- *     cdef compileLet(self):
- *         self.output_file.write(self.indent * '  ' + '<letStatement>\n')
- *         self.indent += 1             # <<<<<<<<<<<<<<
- *         self.output_file.write(self.indent * '  ' + self.next_token + '\n') # read let
- *         self.output_file.write(self.indent * '  ' + self.getNextToken() + '\n') # read varName
- */
-  __pyx_v_self->indent = (__pyx_v_self->indent + 1);
-
-  /* "compilationEngine.pyx":179
- *         self.output_file.write(self.indent * '  ' + '<letStatement>\n')
- *         self.indent += 1
- *         self.output_file.write(self.indent * '  ' + self.next_token + '\n') # read let             # <<<<<<<<<<<<<<
- *         self.output_file.write(self.indent * '  ' + self.getNextToken() + '\n') # read varName
- *         # if the next token is [
- */
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 179, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_3 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 179, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_3);
-  __pyx_t_4 = PyNumber_Multiply(__pyx_t_3, __pyx_kp_s_); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 179, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_4);
-  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  __pyx_t_3 = PyNumber_Add(__pyx_t_4, __pyx_v_self->next_token); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 179, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_3);
-  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  __pyx_t_4 = PyNumber_Add(__pyx_t_3, __pyx_kp_s__2); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 179, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_4);
-  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  __pyx_t_3 = NULL;
-  if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
-    __pyx_t_3 = PyMethod_GET_SELF(__pyx_t_2);
-    if (likely(__pyx_t_3)) {
-      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
-      __Pyx_INCREF(__pyx_t_3);
-      __Pyx_INCREF(function);
-      __Pyx_DECREF_SET(__pyx_t_2, function);
-    }
-  }
-  __pyx_t_1 = (__pyx_t_3) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_3, __pyx_t_4) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_4);
-  __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
-  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 179, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-
-  /* "compilationEngine.pyx":180
- *         self.indent += 1
- *         self.output_file.write(self.indent * '  ' + self.next_token + '\n') # read let
- *         self.output_file.write(self.indent * '  ' + self.getNextToken() + '\n') # read varName             # <<<<<<<<<<<<<<
- *         # if the next token is [
- *         self.next_token = self.getNextToken()
- */
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 180, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_4 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 180, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_4);
-  __pyx_t_3 = PyNumber_Multiply(__pyx_t_4, __pyx_kp_s_); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 180, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_3);
-  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  __pyx_t_5 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_getNextToken); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 180, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_5);
-  __pyx_t_6 = NULL;
-  if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_5))) {
-    __pyx_t_6 = PyMethod_GET_SELF(__pyx_t_5);
-    if (likely(__pyx_t_6)) {
-      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_5);
-      __Pyx_INCREF(__pyx_t_6);
-      __Pyx_INCREF(function);
-      __Pyx_DECREF_SET(__pyx_t_5, function);
-    }
-  }
-  __pyx_t_4 = (__pyx_t_6) ? __Pyx_PyObject_CallOneArg(__pyx_t_5, __pyx_t_6) : __Pyx_PyObject_CallNoArg(__pyx_t_5);
-  __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
-  if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 180, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_4);
-  __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-  __pyx_t_5 = PyNumber_Add(__pyx_t_3, __pyx_t_4); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 180, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_5);
-  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  __pyx_t_4 = PyNumber_Add(__pyx_t_5, __pyx_kp_s__2); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 180, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_4);
-  __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-  __pyx_t_5 = NULL;
-  if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
-    __pyx_t_5 = PyMethod_GET_SELF(__pyx_t_2);
-    if (likely(__pyx_t_5)) {
-      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
-      __Pyx_INCREF(__pyx_t_5);
-      __Pyx_INCREF(function);
-      __Pyx_DECREF_SET(__pyx_t_2, function);
-    }
-  }
-  __pyx_t_1 = (__pyx_t_5) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_5, __pyx_t_4) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_4);
-  __Pyx_XDECREF(__pyx_t_5); __pyx_t_5 = 0;
-  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 180, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-
-  /* "compilationEngine.pyx":182
- *         self.output_file.write(self.indent * '  ' + self.getNextToken() + '\n') # read varName
- *         # if the next token is [
- *         self.next_token = self.getNextToken()             # <<<<<<<<<<<<<<
- *         if self.next_token == "<symbol> [ </symbol>":
- *             self.output_file.write(self.indent * '  ' + self.next_token + '\n')
- */
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_getNextToken); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 182, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_4 = NULL;
-  if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
-    __pyx_t_4 = PyMethod_GET_SELF(__pyx_t_2);
-    if (likely(__pyx_t_4)) {
-      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
-      __Pyx_INCREF(__pyx_t_4);
-      __Pyx_INCREF(function);
-      __Pyx_DECREF_SET(__pyx_t_2, function);
-    }
-  }
-  __pyx_t_1 = (__pyx_t_4) ? __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_4) : __Pyx_PyObject_CallNoArg(__pyx_t_2);
-  __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
-  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 182, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  if (!(likely(PyString_CheckExact(__pyx_t_1))||((__pyx_t_1) == Py_None)||((void)PyErr_Format(PyExc_TypeError, "Expected %.16s, got %.200s", "str", Py_TYPE(__pyx_t_1)->tp_name), 0))) __PYX_ERR(0, 182, __pyx_L1_error)
-  __Pyx_GIVEREF(__pyx_t_1);
-  __Pyx_GOTREF(__pyx_v_self->next_token);
-  __Pyx_DECREF(__pyx_v_self->next_token);
-  __pyx_v_self->next_token = ((PyObject*)__pyx_t_1);
-  __pyx_t_1 = 0;
-
-  /* "compilationEngine.pyx":183
- *         # if the next token is [
- *         self.next_token = self.getNextToken()
- *         if self.next_token == "<symbol> [ </symbol>":             # <<<<<<<<<<<<<<
- *             self.output_file.write(self.indent * '  ' + self.next_token + '\n')
- *             self.compileExpression()
- */
-  __pyx_t_7 = (__Pyx_PyString_Equals(__pyx_v_self->next_token, __pyx_kp_s_symbol_symbol_5, Py_EQ)); if (unlikely(__pyx_t_7 < 0)) __PYX_ERR(0, 183, __pyx_L1_error)
-  __pyx_t_8 = (__pyx_t_7 != 0);
-  if (__pyx_t_8) {
-
-    /* "compilationEngine.pyx":184
- *         self.next_token = self.getNextToken()
- *         if self.next_token == "<symbol> [ </symbol>":
- *             self.output_file.write(self.indent * '  ' + self.next_token + '\n')             # <<<<<<<<<<<<<<
- *             self.compileExpression()
- *             self.output_file.write(self.indent * '  ' + self.next_token + '\n') # read ]
- */
-    __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 184, __pyx_L1_error)
+    __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 172, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
-    __pyx_t_4 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 184, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 172, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_3);
+    __pyx_t_4 = PyNumber_Multiply(__pyx_t_3, __pyx_kp_s_); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 172, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
-    __pyx_t_5 = PyNumber_Multiply(__pyx_t_4, __pyx_kp_s_); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 184, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_5);
+    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+    __pyx_t_3 = PyNumber_Add(__pyx_t_4, __pyx_v_self->next_token); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 172, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_3);
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-    __pyx_t_4 = PyNumber_Add(__pyx_t_5, __pyx_v_self->next_token); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 184, __pyx_L1_error)
+    __pyx_t_4 = PyNumber_Add(__pyx_t_3, __pyx_kp_s__2); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 172, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
-    __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-    __pyx_t_5 = PyNumber_Add(__pyx_t_4, __pyx_kp_s__2); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 184, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_5);
+    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+    __pyx_t_3 = NULL;
+    if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
+      __pyx_t_3 = PyMethod_GET_SELF(__pyx_t_2);
+      if (likely(__pyx_t_3)) {
+        PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
+        __Pyx_INCREF(__pyx_t_3);
+        __Pyx_INCREF(function);
+        __Pyx_DECREF_SET(__pyx_t_2, function);
+      }
+    }
+    __pyx_t_1 = (__pyx_t_3) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_3, __pyx_t_4) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_4);
+    __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
+    __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+    if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 172, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_1);
+    __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+    /* "compilationEngine.pyx":174
+ *             self.output_file.write(self.indent * "  " + self.next_token + '\n')
+ * 
+ *             self.advance() # get the next token <type>             # <<<<<<<<<<<<<<
+ *             self.output_file.write(self.indent * "  " + self.next_token + '\n')
+ * 
+ */
+    __pyx_t_1 = ((struct __pyx_vtabstruct_17compilationEngine_CompilationEngine *)__pyx_v_self->__pyx_vtab)->advance(__pyx_v_self); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 174, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_1);
+    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+    /* "compilationEngine.pyx":175
+ * 
+ *             self.advance() # get the next token <type>
+ *             self.output_file.write(self.indent * "  " + self.next_token + '\n')             # <<<<<<<<<<<<<<
+ * 
+ *             self.advance() # get the next token <varName>
+ */
+    __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 175, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_2);
+    __pyx_t_4 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 175, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_4);
+    __pyx_t_3 = PyNumber_Multiply(__pyx_t_4, __pyx_kp_s_); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 175, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_3);
+    __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+    __pyx_t_4 = PyNumber_Add(__pyx_t_3, __pyx_v_self->next_token); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 175, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_4);
+    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+    __pyx_t_3 = PyNumber_Add(__pyx_t_4, __pyx_kp_s__2); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 175, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_3);
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
     __pyx_t_4 = NULL;
     if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
@@ -5521,310 +3667,130 @@ static PyObject *__pyx_f_17compilationEngine_17CompilationEngine_compileLet(stru
         __Pyx_DECREF_SET(__pyx_t_2, function);
       }
     }
-    __pyx_t_1 = (__pyx_t_4) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_4, __pyx_t_5) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_5);
+    __pyx_t_1 = (__pyx_t_4) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_4, __pyx_t_3) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_3);
     __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
-    __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-    if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 184, __pyx_L1_error)
+    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+    if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 175, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-    /* "compilationEngine.pyx":185
- *         if self.next_token == "<symbol> [ </symbol>":
- *             self.output_file.write(self.indent * '  ' + self.next_token + '\n')
- *             self.compileExpression()             # <<<<<<<<<<<<<<
- *             self.output_file.write(self.indent * '  ' + self.next_token + '\n') # read ]
- *         self.output_file.write(self.indent * '  ' + self.next_token + '\n') # read =
+    /* "compilationEngine.pyx":177
+ *             self.output_file.write(self.indent * "  " + self.next_token + '\n')
+ * 
+ *             self.advance() # get the next token <varName>             # <<<<<<<<<<<<<<
+ *             self.output_file.write(self.indent * "  " + self.next_token + '\n')
+ * 
  */
-    __pyx_t_1 = ((struct __pyx_vtabstruct_17compilationEngine_CompilationEngine *)__pyx_v_self->__pyx_vtab)->compileExpression(__pyx_v_self); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 185, __pyx_L1_error)
+    __pyx_t_1 = ((struct __pyx_vtabstruct_17compilationEngine_CompilationEngine *)__pyx_v_self->__pyx_vtab)->advance(__pyx_v_self); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 177, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-    /* "compilationEngine.pyx":186
- *             self.output_file.write(self.indent * '  ' + self.next_token + '\n')
- *             self.compileExpression()
- *             self.output_file.write(self.indent * '  ' + self.next_token + '\n') # read ]             # <<<<<<<<<<<<<<
- *         self.output_file.write(self.indent * '  ' + self.next_token + '\n') # read =
- *         self.compileExpression()
+    /* "compilationEngine.pyx":178
+ * 
+ *             self.advance() # get the next token <varName>
+ *             self.output_file.write(self.indent * "  " + self.next_token + '\n')             # <<<<<<<<<<<<<<
+ * 
+ *             self.advance() # get the next token , or )
  */
-    __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 186, __pyx_L1_error)
+    __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 178, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
-    __pyx_t_5 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 186, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_5);
-    __pyx_t_4 = PyNumber_Multiply(__pyx_t_5, __pyx_kp_s_); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 186, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 178, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_3);
+    __pyx_t_4 = PyNumber_Multiply(__pyx_t_3, __pyx_kp_s_); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 178, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
-    __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-    __pyx_t_5 = PyNumber_Add(__pyx_t_4, __pyx_v_self->next_token); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 186, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_5);
+    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+    __pyx_t_3 = PyNumber_Add(__pyx_t_4, __pyx_v_self->next_token); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 178, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_3);
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-    __pyx_t_4 = PyNumber_Add(__pyx_t_5, __pyx_kp_s__2); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 186, __pyx_L1_error)
+    __pyx_t_4 = PyNumber_Add(__pyx_t_3, __pyx_kp_s__2); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 178, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
-    __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-    __pyx_t_5 = NULL;
+    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+    __pyx_t_3 = NULL;
     if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
-      __pyx_t_5 = PyMethod_GET_SELF(__pyx_t_2);
-      if (likely(__pyx_t_5)) {
+      __pyx_t_3 = PyMethod_GET_SELF(__pyx_t_2);
+      if (likely(__pyx_t_3)) {
         PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
-        __Pyx_INCREF(__pyx_t_5);
+        __Pyx_INCREF(__pyx_t_3);
         __Pyx_INCREF(function);
         __Pyx_DECREF_SET(__pyx_t_2, function);
       }
     }
-    __pyx_t_1 = (__pyx_t_5) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_5, __pyx_t_4) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_4);
-    __Pyx_XDECREF(__pyx_t_5); __pyx_t_5 = 0;
+    __pyx_t_1 = (__pyx_t_3) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_3, __pyx_t_4) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_4);
+    __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-    if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 186, __pyx_L1_error)
+    if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 178, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
+    /* "compilationEngine.pyx":180
+ *             self.output_file.write(self.indent * "  " + self.next_token + '\n')
+ * 
+ *             self.advance() # get the next token , or )             # <<<<<<<<<<<<<<
+ * 
+ *         if self.next_token == "<symbol> ) </symbol>":
+ */
+    __pyx_t_1 = ((struct __pyx_vtabstruct_17compilationEngine_CompilationEngine *)__pyx_v_self->__pyx_vtab)->advance(__pyx_v_self); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 180, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_1);
+    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  }
+
+  /* "compilationEngine.pyx":182
+ *             self.advance() # get the next token , or )
+ * 
+ *         if self.next_token == "<symbol> ) </symbol>":             # <<<<<<<<<<<<<<
+ *             self.reverse()
+ * 
+ */
+  __pyx_t_5 = (__Pyx_PyString_Equals(__pyx_v_self->next_token, __pyx_kp_s_symbol_symbol_4, Py_EQ)); if (unlikely(__pyx_t_5 < 0)) __PYX_ERR(0, 182, __pyx_L1_error)
+  __pyx_t_6 = (__pyx_t_5 != 0);
+  if (__pyx_t_6) {
+
     /* "compilationEngine.pyx":183
- *         # if the next token is [
- *         self.next_token = self.getNextToken()
- *         if self.next_token == "<symbol> [ </symbol>":             # <<<<<<<<<<<<<<
- *             self.output_file.write(self.indent * '  ' + self.next_token + '\n')
- *             self.compileExpression()
- */
-  }
-
-  /* "compilationEngine.pyx":187
- *             self.compileExpression()
- *             self.output_file.write(self.indent * '  ' + self.next_token + '\n') # read ]
- *         self.output_file.write(self.indent * '  ' + self.next_token + '\n') # read =             # <<<<<<<<<<<<<<
- *         self.compileExpression()
- *         self.output_file.write(self.indent * '  ' + '<symbol> ; </symbol>\n')
- */
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 187, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_4 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 187, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_4);
-  __pyx_t_5 = PyNumber_Multiply(__pyx_t_4, __pyx_kp_s_); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 187, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_5);
-  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  __pyx_t_4 = PyNumber_Add(__pyx_t_5, __pyx_v_self->next_token); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 187, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_4);
-  __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-  __pyx_t_5 = PyNumber_Add(__pyx_t_4, __pyx_kp_s__2); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 187, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_5);
-  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  __pyx_t_4 = NULL;
-  if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
-    __pyx_t_4 = PyMethod_GET_SELF(__pyx_t_2);
-    if (likely(__pyx_t_4)) {
-      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
-      __Pyx_INCREF(__pyx_t_4);
-      __Pyx_INCREF(function);
-      __Pyx_DECREF_SET(__pyx_t_2, function);
-    }
-  }
-  __pyx_t_1 = (__pyx_t_4) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_4, __pyx_t_5) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_5);
-  __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
-  __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 187, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-
-  /* "compilationEngine.pyx":188
- *             self.output_file.write(self.indent * '  ' + self.next_token + '\n') # read ]
- *         self.output_file.write(self.indent * '  ' + self.next_token + '\n') # read =
- *         self.compileExpression()             # <<<<<<<<<<<<<<
- *         self.output_file.write(self.indent * '  ' + '<symbol> ; </symbol>\n')
+ * 
+ *         if self.next_token == "<symbol> ) </symbol>":
+ *             self.reverse()             # <<<<<<<<<<<<<<
+ * 
  *         self.indent -= 1
  */
-  __pyx_t_1 = ((struct __pyx_vtabstruct_17compilationEngine_CompilationEngine *)__pyx_v_self->__pyx_vtab)->compileExpression(__pyx_v_self); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 188, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+    __pyx_t_1 = ((struct __pyx_vtabstruct_17compilationEngine_CompilationEngine *)__pyx_v_self->__pyx_vtab)->reverse(__pyx_v_self); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 183, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_1);
+    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "compilationEngine.pyx":189
- *         self.output_file.write(self.indent * '  ' + self.next_token + '\n') # read =
- *         self.compileExpression()
- *         self.output_file.write(self.indent * '  ' + '<symbol> ; </symbol>\n')             # <<<<<<<<<<<<<<
- *         self.indent -= 1
- *         self.output_file.write(self.indent * '  ' + '</letStatement>\n')
+    /* "compilationEngine.pyx":182
+ *             self.advance() # get the next token , or )
+ * 
+ *         if self.next_token == "<symbol> ) </symbol>":             # <<<<<<<<<<<<<<
+ *             self.reverse()
+ * 
  */
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 189, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_5 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 189, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_5);
-  __pyx_t_4 = PyNumber_Multiply(__pyx_t_5, __pyx_kp_s_); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 189, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_4);
-  __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-  __pyx_t_5 = PyNumber_Add(__pyx_t_4, __pyx_kp_s_symbol_symbol_4); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 189, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_5);
-  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  __pyx_t_4 = NULL;
-  if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
-    __pyx_t_4 = PyMethod_GET_SELF(__pyx_t_2);
-    if (likely(__pyx_t_4)) {
-      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
-      __Pyx_INCREF(__pyx_t_4);
-      __Pyx_INCREF(function);
-      __Pyx_DECREF_SET(__pyx_t_2, function);
-    }
   }
-  __pyx_t_1 = (__pyx_t_4) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_4, __pyx_t_5) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_5);
-  __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
-  __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 189, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "compilationEngine.pyx":190
- *         self.compileExpression()
- *         self.output_file.write(self.indent * '  ' + '<symbol> ; </symbol>\n')
+  /* "compilationEngine.pyx":185
+ *             self.reverse()
+ * 
  *         self.indent -= 1             # <<<<<<<<<<<<<<
- *         self.output_file.write(self.indent * '  ' + '</letStatement>\n')
+ *         self.output_file.write(self.indent * "  " + '</parameterList>\n')
  * 
  */
   __pyx_v_self->indent = (__pyx_v_self->indent - 1);
 
-  /* "compilationEngine.pyx":191
- *         self.output_file.write(self.indent * '  ' + '<symbol> ; </symbol>\n')
+  /* "compilationEngine.pyx":186
+ * 
  *         self.indent -= 1
- *         self.output_file.write(self.indent * '  ' + '</letStatement>\n')             # <<<<<<<<<<<<<<
+ *         self.output_file.write(self.indent * "  " + '</parameterList>\n')             # <<<<<<<<<<<<<<
  * 
- *     # Compiles a while statement
+ *     # compile a subroutine's body
  */
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 191, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 186, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_5 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 191, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_5);
-  __pyx_t_4 = PyNumber_Multiply(__pyx_t_5, __pyx_kp_s_); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 191, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 186, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
-  __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-  __pyx_t_5 = PyNumber_Add(__pyx_t_4, __pyx_kp_s_letStatement_2); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 191, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_5);
-  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  __pyx_t_4 = NULL;
-  if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
-    __pyx_t_4 = PyMethod_GET_SELF(__pyx_t_2);
-    if (likely(__pyx_t_4)) {
-      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
-      __Pyx_INCREF(__pyx_t_4);
-      __Pyx_INCREF(function);
-      __Pyx_DECREF_SET(__pyx_t_2, function);
-    }
-  }
-  __pyx_t_1 = (__pyx_t_4) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_4, __pyx_t_5) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_5);
-  __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
-  __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 191, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-
-  /* "compilationEngine.pyx":176
- * 
- *     # Compiles a let statement
- *     cdef compileLet(self):             # <<<<<<<<<<<<<<
- *         self.output_file.write(self.indent * '  ' + '<letStatement>\n')
- *         self.indent += 1
- */
-
-  /* function exit code */
-  __pyx_r = Py_None; __Pyx_INCREF(Py_None);
-  goto __pyx_L0;
-  __pyx_L1_error:;
-  __Pyx_XDECREF(__pyx_t_1);
-  __Pyx_XDECREF(__pyx_t_2);
-  __Pyx_XDECREF(__pyx_t_3);
-  __Pyx_XDECREF(__pyx_t_4);
-  __Pyx_XDECREF(__pyx_t_5);
-  __Pyx_XDECREF(__pyx_t_6);
-  __Pyx_AddTraceback("compilationEngine.CompilationEngine.compileLet", __pyx_clineno, __pyx_lineno, __pyx_filename);
-  __pyx_r = 0;
-  __pyx_L0:;
-  __Pyx_XGIVEREF(__pyx_r);
-  __Pyx_RefNannyFinishContext();
-  return __pyx_r;
-}
-
-/* "compilationEngine.pyx":194
- * 
- *     # Compiles a while statement
- *     cdef compileWhile(self):             # <<<<<<<<<<<<<<
- *         self.output_file.write(self.indent * '  ' + '<whileStatement>\n')
- *         self.indent += 1
- */
-
-static PyObject *__pyx_f_17compilationEngine_17CompilationEngine_compileWhile(struct __pyx_obj_17compilationEngine_CompilationEngine *__pyx_v_self) {
-  PyObject *__pyx_r = NULL;
-  __Pyx_RefNannyDeclarations
-  PyObject *__pyx_t_1 = NULL;
-  PyObject *__pyx_t_2 = NULL;
-  PyObject *__pyx_t_3 = NULL;
-  PyObject *__pyx_t_4 = NULL;
-  PyObject *__pyx_t_5 = NULL;
-  PyObject *__pyx_t_6 = NULL;
-  int __pyx_lineno = 0;
-  const char *__pyx_filename = NULL;
-  int __pyx_clineno = 0;
-  __Pyx_RefNannySetupContext("compileWhile", 0);
-
-  /* "compilationEngine.pyx":195
- *     # Compiles a while statement
- *     cdef compileWhile(self):
- *         self.output_file.write(self.indent * '  ' + '<whileStatement>\n')             # <<<<<<<<<<<<<<
- *         self.indent += 1
- *         self.output_file.write(self.indent * '  ' + self.next_token + '\n') # read while
- */
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 195, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_3 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 195, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_3);
-  __pyx_t_4 = PyNumber_Multiply(__pyx_t_3, __pyx_kp_s_); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 195, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_4);
-  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  __pyx_t_3 = PyNumber_Add(__pyx_t_4, __pyx_kp_s_whileStatement); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 195, __pyx_L1_error)
+  __pyx_t_3 = PyNumber_Multiply(__pyx_t_4, __pyx_kp_s_); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 186, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  __pyx_t_4 = NULL;
-  if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
-    __pyx_t_4 = PyMethod_GET_SELF(__pyx_t_2);
-    if (likely(__pyx_t_4)) {
-      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
-      __Pyx_INCREF(__pyx_t_4);
-      __Pyx_INCREF(function);
-      __Pyx_DECREF_SET(__pyx_t_2, function);
-    }
-  }
-  __pyx_t_1 = (__pyx_t_4) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_4, __pyx_t_3) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_3);
-  __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
-  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 195, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-
-  /* "compilationEngine.pyx":196
- *     cdef compileWhile(self):
- *         self.output_file.write(self.indent * '  ' + '<whileStatement>\n')
- *         self.indent += 1             # <<<<<<<<<<<<<<
- *         self.output_file.write(self.indent * '  ' + self.next_token + '\n') # read while
- *         self.output_file.write(self.indent * '  ' + self.getNextToken() + '\n') # read (
- */
-  __pyx_v_self->indent = (__pyx_v_self->indent + 1);
-
-  /* "compilationEngine.pyx":197
- *         self.output_file.write(self.indent * '  ' + '<whileStatement>\n')
- *         self.indent += 1
- *         self.output_file.write(self.indent * '  ' + self.next_token + '\n') # read while             # <<<<<<<<<<<<<<
- *         self.output_file.write(self.indent * '  ' + self.getNextToken() + '\n') # read (
- *         self.compileExpression()
- */
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 197, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_3 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 197, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_3);
-  __pyx_t_4 = PyNumber_Multiply(__pyx_t_3, __pyx_kp_s_); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 197, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_4);
-  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  __pyx_t_3 = PyNumber_Add(__pyx_t_4, __pyx_v_self->next_token); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 197, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_3);
-  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  __pyx_t_4 = PyNumber_Add(__pyx_t_3, __pyx_kp_s__2); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 197, __pyx_L1_error)
+  __pyx_t_4 = PyNumber_Add(__pyx_t_3, __pyx_kp_s_parameterList_2); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 186, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   __pyx_t_3 = NULL;
@@ -5840,114 +3806,174 @@ static PyObject *__pyx_f_17compilationEngine_17CompilationEngine_compileWhile(st
   __pyx_t_1 = (__pyx_t_3) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_3, __pyx_t_4) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_4);
   __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 197, __pyx_L1_error)
+  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 186, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "compilationEngine.pyx":198
- *         self.indent += 1
- *         self.output_file.write(self.indent * '  ' + self.next_token + '\n') # read while
- *         self.output_file.write(self.indent * '  ' + self.getNextToken() + '\n') # read (             # <<<<<<<<<<<<<<
- *         self.compileExpression()
- *         self.output_file.write(self.indent * '  ' + self.getNextToken() + '\n') # read )
+  /* "compilationEngine.pyx":151
+ * 
+ *     # compile a (possibly empty) parameter list, not including the enclosing ()
+ *     cdef compileParameterList(self):             # <<<<<<<<<<<<<<
+ * 
+ *         self.output_file.write(self.indent * "  " + '<parameterList>\n')
  */
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 198, __pyx_L1_error)
+
+  /* function exit code */
+  __pyx_r = Py_None; __Pyx_INCREF(Py_None);
+  goto __pyx_L0;
+  __pyx_L1_error:;
+  __Pyx_XDECREF(__pyx_t_1);
+  __Pyx_XDECREF(__pyx_t_2);
+  __Pyx_XDECREF(__pyx_t_3);
+  __Pyx_XDECREF(__pyx_t_4);
+  __Pyx_AddTraceback("compilationEngine.CompilationEngine.compileParameterList", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __pyx_r = 0;
+  __pyx_L0:;
+  __Pyx_XGIVEREF(__pyx_r);
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+/* "compilationEngine.pyx":189
+ * 
+ *     # compile a subroutine's body
+ *     cdef compileSubroutineBody(self):             # <<<<<<<<<<<<<<
+ *         self.output_file.write(self.indent * "  " + '<subroutineBody>\n')
+ *         self.indent += 1
+ */
+
+static PyObject *__pyx_f_17compilationEngine_17CompilationEngine_compileSubroutineBody(struct __pyx_obj_17compilationEngine_CompilationEngine *__pyx_v_self) {
+  PyObject *__pyx_r = NULL;
+  __Pyx_RefNannyDeclarations
+  PyObject *__pyx_t_1 = NULL;
+  PyObject *__pyx_t_2 = NULL;
+  PyObject *__pyx_t_3 = NULL;
+  PyObject *__pyx_t_4 = NULL;
+  int __pyx_lineno = 0;
+  const char *__pyx_filename = NULL;
+  int __pyx_clineno = 0;
+  __Pyx_RefNannySetupContext("compileSubroutineBody", 0);
+
+  /* "compilationEngine.pyx":190
+ *     # compile a subroutine's body
+ *     cdef compileSubroutineBody(self):
+ *         self.output_file.write(self.indent * "  " + '<subroutineBody>\n')             # <<<<<<<<<<<<<<
+ *         self.indent += 1
+ * 
+ */
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 190, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_4 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 198, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 190, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_3);
+  __pyx_t_4 = PyNumber_Multiply(__pyx_t_3, __pyx_kp_s_); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 190, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
-  __pyx_t_3 = PyNumber_Multiply(__pyx_t_4, __pyx_kp_s_); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 198, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+  __pyx_t_3 = PyNumber_Add(__pyx_t_4, __pyx_kp_s_subroutineBody); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 190, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  __pyx_t_5 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_getNextToken); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 198, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_5);
-  __pyx_t_6 = NULL;
-  if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_5))) {
-    __pyx_t_6 = PyMethod_GET_SELF(__pyx_t_5);
-    if (likely(__pyx_t_6)) {
-      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_5);
-      __Pyx_INCREF(__pyx_t_6);
-      __Pyx_INCREF(function);
-      __Pyx_DECREF_SET(__pyx_t_5, function);
-    }
-  }
-  __pyx_t_4 = (__pyx_t_6) ? __Pyx_PyObject_CallOneArg(__pyx_t_5, __pyx_t_6) : __Pyx_PyObject_CallNoArg(__pyx_t_5);
-  __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
-  if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 198, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_4);
-  __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-  __pyx_t_5 = PyNumber_Add(__pyx_t_3, __pyx_t_4); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 198, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_5);
-  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  __pyx_t_4 = PyNumber_Add(__pyx_t_5, __pyx_kp_s__2); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 198, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_4);
-  __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-  __pyx_t_5 = NULL;
+  __pyx_t_4 = NULL;
   if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
-    __pyx_t_5 = PyMethod_GET_SELF(__pyx_t_2);
-    if (likely(__pyx_t_5)) {
+    __pyx_t_4 = PyMethod_GET_SELF(__pyx_t_2);
+    if (likely(__pyx_t_4)) {
       PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
-      __Pyx_INCREF(__pyx_t_5);
+      __Pyx_INCREF(__pyx_t_4);
       __Pyx_INCREF(function);
       __Pyx_DECREF_SET(__pyx_t_2, function);
     }
   }
-  __pyx_t_1 = (__pyx_t_5) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_5, __pyx_t_4) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_4);
-  __Pyx_XDECREF(__pyx_t_5); __pyx_t_5 = 0;
-  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 198, __pyx_L1_error)
+  __pyx_t_1 = (__pyx_t_4) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_4, __pyx_t_3) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_3);
+  __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
+  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 190, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "compilationEngine.pyx":199
- *         self.output_file.write(self.indent * '  ' + self.next_token + '\n') # read while
- *         self.output_file.write(self.indent * '  ' + self.getNextToken() + '\n') # read (
- *         self.compileExpression()             # <<<<<<<<<<<<<<
- *         self.output_file.write(self.indent * '  ' + self.getNextToken() + '\n') # read )
- *         self.output_file.write(self.indent * '  ' + self.getNextToken() + '\n') # read {
+  /* "compilationEngine.pyx":191
+ *     cdef compileSubroutineBody(self):
+ *         self.output_file.write(self.indent * "  " + '<subroutineBody>\n')
+ *         self.indent += 1             # <<<<<<<<<<<<<<
+ * 
+ *         self.advance() # get the next token {
  */
-  __pyx_t_1 = ((struct __pyx_vtabstruct_17compilationEngine_CompilationEngine *)__pyx_v_self->__pyx_vtab)->compileExpression(__pyx_v_self); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 199, __pyx_L1_error)
+  __pyx_v_self->indent = (__pyx_v_self->indent + 1);
+
+  /* "compilationEngine.pyx":193
+ *         self.indent += 1
+ * 
+ *         self.advance() # get the next token {             # <<<<<<<<<<<<<<
+ *         self.output_file.write(self.indent * "  " + self.next_token + '\n')
+ * 
+ */
+  __pyx_t_1 = ((struct __pyx_vtabstruct_17compilationEngine_CompilationEngine *)__pyx_v_self->__pyx_vtab)->advance(__pyx_v_self); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 193, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+  /* "compilationEngine.pyx":194
+ * 
+ *         self.advance() # get the next token {
+ *         self.output_file.write(self.indent * "  " + self.next_token + '\n')             # <<<<<<<<<<<<<<
+ * 
+ *         # compile varDec*
+ */
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 194, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
+  __pyx_t_3 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 194, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_3);
+  __pyx_t_4 = PyNumber_Multiply(__pyx_t_3, __pyx_kp_s_); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 194, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_4);
+  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+  __pyx_t_3 = PyNumber_Add(__pyx_t_4, __pyx_v_self->next_token); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 194, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_3);
+  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+  __pyx_t_4 = PyNumber_Add(__pyx_t_3, __pyx_kp_s__2); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 194, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_4);
+  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+  __pyx_t_3 = NULL;
+  if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
+    __pyx_t_3 = PyMethod_GET_SELF(__pyx_t_2);
+    if (likely(__pyx_t_3)) {
+      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
+      __Pyx_INCREF(__pyx_t_3);
+      __Pyx_INCREF(function);
+      __Pyx_DECREF_SET(__pyx_t_2, function);
+    }
+  }
+  __pyx_t_1 = (__pyx_t_3) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_3, __pyx_t_4) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_4);
+  __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
+  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 194, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+  /* "compilationEngine.pyx":197
+ * 
+ *         # compile varDec*
+ *         self.compileVarDec()             # <<<<<<<<<<<<<<
+ * 
+ *         # compile statements
+ */
+  __pyx_t_1 = ((struct __pyx_vtabstruct_17compilationEngine_CompilationEngine *)__pyx_v_self->__pyx_vtab)->compileVarDec(__pyx_v_self); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 197, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
   /* "compilationEngine.pyx":200
- *         self.output_file.write(self.indent * '  ' + self.getNextToken() + '\n') # read (
- *         self.compileExpression()
- *         self.output_file.write(self.indent * '  ' + self.getNextToken() + '\n') # read )             # <<<<<<<<<<<<<<
- *         self.output_file.write(self.indent * '  ' + self.getNextToken() + '\n') # read {
+ * 
+ *         # compile statements
+ *         self.output_file.write(self.indent * "  " + '<statements>\n')             # <<<<<<<<<<<<<<
+ *         self.indent += 1
  *         self.compileStatements()
  */
   __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 200, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __pyx_t_4 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 200, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
-  __pyx_t_5 = PyNumber_Multiply(__pyx_t_4, __pyx_kp_s_); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 200, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_5);
-  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_getNextToken); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 200, __pyx_L1_error)
+  __pyx_t_3 = PyNumber_Multiply(__pyx_t_4, __pyx_kp_s_); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 200, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
-  __pyx_t_6 = NULL;
-  if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_3))) {
-    __pyx_t_6 = PyMethod_GET_SELF(__pyx_t_3);
-    if (likely(__pyx_t_6)) {
-      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_3);
-      __Pyx_INCREF(__pyx_t_6);
-      __Pyx_INCREF(function);
-      __Pyx_DECREF_SET(__pyx_t_3, function);
-    }
-  }
-  __pyx_t_4 = (__pyx_t_6) ? __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_t_6) : __Pyx_PyObject_CallNoArg(__pyx_t_3);
-  __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
-  if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 200, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_4);
-  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  __pyx_t_3 = PyNumber_Add(__pyx_t_5, __pyx_t_4); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 200, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_3);
-  __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  __pyx_t_4 = PyNumber_Add(__pyx_t_3, __pyx_kp_s__2); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 200, __pyx_L1_error)
+  __pyx_t_4 = PyNumber_Add(__pyx_t_3, __pyx_kp_s_statements); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 200, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   __pyx_t_3 = NULL;
@@ -5969,152 +3995,49 @@ static PyObject *__pyx_f_17compilationEngine_17CompilationEngine_compileWhile(st
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
   /* "compilationEngine.pyx":201
- *         self.compileExpression()
- *         self.output_file.write(self.indent * '  ' + self.getNextToken() + '\n') # read )
- *         self.output_file.write(self.indent * '  ' + self.getNextToken() + '\n') # read {             # <<<<<<<<<<<<<<
+ *         # compile statements
+ *         self.output_file.write(self.indent * "  " + '<statements>\n')
+ *         self.indent += 1             # <<<<<<<<<<<<<<
  *         self.compileStatements()
- *         self.output_file.write(self.indent * '  ' + self.getNextToken() + '\n') # read }
+ *         self.indent -= 1
  */
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 201, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_4 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 201, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_4);
-  __pyx_t_3 = PyNumber_Multiply(__pyx_t_4, __pyx_kp_s_); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 201, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_3);
-  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  __pyx_t_5 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_getNextToken); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 201, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_5);
-  __pyx_t_6 = NULL;
-  if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_5))) {
-    __pyx_t_6 = PyMethod_GET_SELF(__pyx_t_5);
-    if (likely(__pyx_t_6)) {
-      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_5);
-      __Pyx_INCREF(__pyx_t_6);
-      __Pyx_INCREF(function);
-      __Pyx_DECREF_SET(__pyx_t_5, function);
-    }
-  }
-  __pyx_t_4 = (__pyx_t_6) ? __Pyx_PyObject_CallOneArg(__pyx_t_5, __pyx_t_6) : __Pyx_PyObject_CallNoArg(__pyx_t_5);
-  __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
-  if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 201, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_4);
-  __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-  __pyx_t_5 = PyNumber_Add(__pyx_t_3, __pyx_t_4); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 201, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_5);
-  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  __pyx_t_4 = PyNumber_Add(__pyx_t_5, __pyx_kp_s__2); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 201, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_4);
-  __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-  __pyx_t_5 = NULL;
-  if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
-    __pyx_t_5 = PyMethod_GET_SELF(__pyx_t_2);
-    if (likely(__pyx_t_5)) {
-      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
-      __Pyx_INCREF(__pyx_t_5);
-      __Pyx_INCREF(function);
-      __Pyx_DECREF_SET(__pyx_t_2, function);
-    }
-  }
-  __pyx_t_1 = (__pyx_t_5) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_5, __pyx_t_4) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_4);
-  __Pyx_XDECREF(__pyx_t_5); __pyx_t_5 = 0;
-  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 201, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  __pyx_v_self->indent = (__pyx_v_self->indent + 1);
 
   /* "compilationEngine.pyx":202
- *         self.output_file.write(self.indent * '  ' + self.getNextToken() + '\n') # read )
- *         self.output_file.write(self.indent * '  ' + self.getNextToken() + '\n') # read {
+ *         self.output_file.write(self.indent * "  " + '<statements>\n')
+ *         self.indent += 1
  *         self.compileStatements()             # <<<<<<<<<<<<<<
- *         self.output_file.write(self.indent * '  ' + self.getNextToken() + '\n') # read }
  *         self.indent -= 1
+ *         self.output_file.write(self.indent * "  " + '</statements>\n')
  */
   __pyx_t_1 = ((struct __pyx_vtabstruct_17compilationEngine_CompilationEngine *)__pyx_v_self->__pyx_vtab)->compileStatements(__pyx_v_self); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 202, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
   /* "compilationEngine.pyx":203
- *         self.output_file.write(self.indent * '  ' + self.getNextToken() + '\n') # read {
+ *         self.indent += 1
  *         self.compileStatements()
- *         self.output_file.write(self.indent * '  ' + self.getNextToken() + '\n') # read }             # <<<<<<<<<<<<<<
- *         self.indent -= 1
- *         self.output_file.write(self.indent * '  ' + '</whileStatement>\n')
- */
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 203, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_4 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 203, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_4);
-  __pyx_t_5 = PyNumber_Multiply(__pyx_t_4, __pyx_kp_s_); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 203, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_5);
-  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_getNextToken); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 203, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_3);
-  __pyx_t_6 = NULL;
-  if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_3))) {
-    __pyx_t_6 = PyMethod_GET_SELF(__pyx_t_3);
-    if (likely(__pyx_t_6)) {
-      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_3);
-      __Pyx_INCREF(__pyx_t_6);
-      __Pyx_INCREF(function);
-      __Pyx_DECREF_SET(__pyx_t_3, function);
-    }
-  }
-  __pyx_t_4 = (__pyx_t_6) ? __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_t_6) : __Pyx_PyObject_CallNoArg(__pyx_t_3);
-  __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
-  if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 203, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_4);
-  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  __pyx_t_3 = PyNumber_Add(__pyx_t_5, __pyx_t_4); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 203, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_3);
-  __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  __pyx_t_4 = PyNumber_Add(__pyx_t_3, __pyx_kp_s__2); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 203, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_4);
-  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  __pyx_t_3 = NULL;
-  if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
-    __pyx_t_3 = PyMethod_GET_SELF(__pyx_t_2);
-    if (likely(__pyx_t_3)) {
-      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
-      __Pyx_INCREF(__pyx_t_3);
-      __Pyx_INCREF(function);
-      __Pyx_DECREF_SET(__pyx_t_2, function);
-    }
-  }
-  __pyx_t_1 = (__pyx_t_3) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_3, __pyx_t_4) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_4);
-  __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
-  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 203, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-
-  /* "compilationEngine.pyx":204
- *         self.compileStatements()
- *         self.output_file.write(self.indent * '  ' + self.getNextToken() + '\n') # read }
  *         self.indent -= 1             # <<<<<<<<<<<<<<
- *         self.output_file.write(self.indent * '  ' + '</whileStatement>\n')
+ *         self.output_file.write(self.indent * "  " + '</statements>\n')
  * 
  */
   __pyx_v_self->indent = (__pyx_v_self->indent - 1);
 
-  /* "compilationEngine.pyx":205
- *         self.output_file.write(self.indent * '  ' + self.getNextToken() + '\n') # read }
+  /* "compilationEngine.pyx":204
+ *         self.compileStatements()
  *         self.indent -= 1
- *         self.output_file.write(self.indent * '  ' + '</whileStatement>\n')             # <<<<<<<<<<<<<<
+ *         self.output_file.write(self.indent * "  " + '</statements>\n')             # <<<<<<<<<<<<<<
  * 
- *     # Compiles a return statement
+ *         self.advance() # get the next token }
  */
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 205, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 204, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_4 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 205, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 204, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
-  __pyx_t_3 = PyNumber_Multiply(__pyx_t_4, __pyx_kp_s_); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 205, __pyx_L1_error)
+  __pyx_t_3 = PyNumber_Multiply(__pyx_t_4, __pyx_kp_s_); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 204, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  __pyx_t_4 = PyNumber_Add(__pyx_t_3, __pyx_kp_s_whileStatement_2); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 205, __pyx_L1_error)
+  __pyx_t_4 = PyNumber_Add(__pyx_t_3, __pyx_kp_s_statements_2); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 204, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   __pyx_t_3 = NULL;
@@ -6130,16 +4053,109 @@ static PyObject *__pyx_f_17compilationEngine_17CompilationEngine_compileWhile(st
   __pyx_t_1 = (__pyx_t_3) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_3, __pyx_t_4) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_4);
   __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 205, __pyx_L1_error)
+  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 204, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "compilationEngine.pyx":194
+  /* "compilationEngine.pyx":206
+ *         self.output_file.write(self.indent * "  " + '</statements>\n')
  * 
- *     # Compiles a while statement
- *     cdef compileWhile(self):             # <<<<<<<<<<<<<<
- *         self.output_file.write(self.indent * '  ' + '<whileStatement>\n')
+ *         self.advance() # get the next token }             # <<<<<<<<<<<<<<
+ *         self.output_file.write(self.indent * "  " + self.next_token + '\n')
+ * 
+ */
+  __pyx_t_1 = ((struct __pyx_vtabstruct_17compilationEngine_CompilationEngine *)__pyx_v_self->__pyx_vtab)->advance(__pyx_v_self); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 206, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+  /* "compilationEngine.pyx":207
+ * 
+ *         self.advance() # get the next token }
+ *         self.output_file.write(self.indent * "  " + self.next_token + '\n')             # <<<<<<<<<<<<<<
+ * 
+ *         self.indent -= 1
+ */
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 207, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
+  __pyx_t_4 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 207, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_4);
+  __pyx_t_3 = PyNumber_Multiply(__pyx_t_4, __pyx_kp_s_); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 207, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_3);
+  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+  __pyx_t_4 = PyNumber_Add(__pyx_t_3, __pyx_v_self->next_token); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 207, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_4);
+  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+  __pyx_t_3 = PyNumber_Add(__pyx_t_4, __pyx_kp_s__2); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 207, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_3);
+  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+  __pyx_t_4 = NULL;
+  if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
+    __pyx_t_4 = PyMethod_GET_SELF(__pyx_t_2);
+    if (likely(__pyx_t_4)) {
+      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
+      __Pyx_INCREF(__pyx_t_4);
+      __Pyx_INCREF(function);
+      __Pyx_DECREF_SET(__pyx_t_2, function);
+    }
+  }
+  __pyx_t_1 = (__pyx_t_4) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_4, __pyx_t_3) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_3);
+  __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
+  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 207, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+  /* "compilationEngine.pyx":209
+ *         self.output_file.write(self.indent * "  " + self.next_token + '\n')
+ * 
+ *         self.indent -= 1             # <<<<<<<<<<<<<<
+ *         self.output_file.write(self.indent * "  " + '</subroutineBody>\n')
+ * 
+ */
+  __pyx_v_self->indent = (__pyx_v_self->indent - 1);
+
+  /* "compilationEngine.pyx":210
+ * 
+ *         self.indent -= 1
+ *         self.output_file.write(self.indent * "  " + '</subroutineBody>\n')             # <<<<<<<<<<<<<<
+ * 
+ *     # compile a var declaration
+ */
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 210, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
+  __pyx_t_3 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 210, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_3);
+  __pyx_t_4 = PyNumber_Multiply(__pyx_t_3, __pyx_kp_s_); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 210, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_4);
+  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+  __pyx_t_3 = PyNumber_Add(__pyx_t_4, __pyx_kp_s_subroutineBody_2); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 210, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_3);
+  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+  __pyx_t_4 = NULL;
+  if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
+    __pyx_t_4 = PyMethod_GET_SELF(__pyx_t_2);
+    if (likely(__pyx_t_4)) {
+      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
+      __Pyx_INCREF(__pyx_t_4);
+      __Pyx_INCREF(function);
+      __Pyx_DECREF_SET(__pyx_t_2, function);
+    }
+  }
+  __pyx_t_1 = (__pyx_t_4) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_4, __pyx_t_3) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_3);
+  __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
+  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 210, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+  /* "compilationEngine.pyx":189
+ * 
+ *     # compile a subroutine's body
+ *     cdef compileSubroutineBody(self):             # <<<<<<<<<<<<<<
+ *         self.output_file.write(self.indent * "  " + '<subroutineBody>\n')
  *         self.indent += 1
  */
 
@@ -6151,8 +4167,2496 @@ static PyObject *__pyx_f_17compilationEngine_17CompilationEngine_compileWhile(st
   __Pyx_XDECREF(__pyx_t_2);
   __Pyx_XDECREF(__pyx_t_3);
   __Pyx_XDECREF(__pyx_t_4);
+  __Pyx_AddTraceback("compilationEngine.CompilationEngine.compileSubroutineBody", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __pyx_r = 0;
+  __pyx_L0:;
+  __Pyx_XGIVEREF(__pyx_r);
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+/* "compilationEngine.pyx":213
+ * 
+ *     # compile a var declaration
+ *     cdef compileVarDec(self):             # <<<<<<<<<<<<<<
+ *         # determine if there is a varDec
+ *         self.advance() # get the next token } or <keyword> var </keyword>
+ */
+
+static PyObject *__pyx_f_17compilationEngine_17CompilationEngine_compileVarDec(struct __pyx_obj_17compilationEngine_CompilationEngine *__pyx_v_self) {
+  PyObject *__pyx_r = NULL;
+  __Pyx_RefNannyDeclarations
+  PyObject *__pyx_t_1 = NULL;
+  int __pyx_t_2;
+  int __pyx_t_3;
+  PyObject *__pyx_t_4 = NULL;
+  PyObject *__pyx_t_5 = NULL;
+  PyObject *__pyx_t_6 = NULL;
+  int __pyx_lineno = 0;
+  const char *__pyx_filename = NULL;
+  int __pyx_clineno = 0;
+  __Pyx_RefNannySetupContext("compileVarDec", 0);
+
+  /* "compilationEngine.pyx":215
+ *     cdef compileVarDec(self):
+ *         # determine if there is a varDec
+ *         self.advance() # get the next token } or <keyword> var </keyword>             # <<<<<<<<<<<<<<
+ * 
+ *         # no 'var' go back
+ */
+  __pyx_t_1 = ((struct __pyx_vtabstruct_17compilationEngine_CompilationEngine *)__pyx_v_self->__pyx_vtab)->advance(__pyx_v_self); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 215, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+  /* "compilationEngine.pyx":218
+ * 
+ *         # no 'var' go back
+ *         if self.next_token != "<keyword> var </keyword>":             # <<<<<<<<<<<<<<
+ *             self.reverse()
+ *             return
+ */
+  __pyx_t_2 = (__Pyx_PyString_Equals(__pyx_v_self->next_token, __pyx_kp_s_keyword_var_keyword, Py_NE)); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 218, __pyx_L1_error)
+  __pyx_t_3 = (__pyx_t_2 != 0);
+  if (__pyx_t_3) {
+
+    /* "compilationEngine.pyx":219
+ *         # no 'var' go back
+ *         if self.next_token != "<keyword> var </keyword>":
+ *             self.reverse()             # <<<<<<<<<<<<<<
+ *             return
+ * 
+ */
+    __pyx_t_1 = ((struct __pyx_vtabstruct_17compilationEngine_CompilationEngine *)__pyx_v_self->__pyx_vtab)->reverse(__pyx_v_self); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 219, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_1);
+    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+    /* "compilationEngine.pyx":220
+ *         if self.next_token != "<keyword> var </keyword>":
+ *             self.reverse()
+ *             return             # <<<<<<<<<<<<<<
+ * 
+ *         # next is varDec
+ */
+    __Pyx_XDECREF(__pyx_r);
+    __pyx_r = Py_None; __Pyx_INCREF(Py_None);
+    goto __pyx_L0;
+
+    /* "compilationEngine.pyx":218
+ * 
+ *         # no 'var' go back
+ *         if self.next_token != "<keyword> var </keyword>":             # <<<<<<<<<<<<<<
+ *             self.reverse()
+ *             return
+ */
+  }
+
+  /* "compilationEngine.pyx":223
+ * 
+ *         # next is varDec
+ *         self.output_file.write(self.indent * "  " + '<varDec>\n')             # <<<<<<<<<<<<<<
+ *         self.indent += 1
+ * 
+ */
+  __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 223, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_4);
+  __pyx_t_5 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 223, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_5);
+  __pyx_t_6 = PyNumber_Multiply(__pyx_t_5, __pyx_kp_s_); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 223, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_6);
+  __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
+  __pyx_t_5 = PyNumber_Add(__pyx_t_6, __pyx_kp_s_varDec); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 223, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_5);
+  __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
+  __pyx_t_6 = NULL;
+  if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_4))) {
+    __pyx_t_6 = PyMethod_GET_SELF(__pyx_t_4);
+    if (likely(__pyx_t_6)) {
+      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_4);
+      __Pyx_INCREF(__pyx_t_6);
+      __Pyx_INCREF(function);
+      __Pyx_DECREF_SET(__pyx_t_4, function);
+    }
+  }
+  __pyx_t_1 = (__pyx_t_6) ? __Pyx_PyObject_Call2Args(__pyx_t_4, __pyx_t_6, __pyx_t_5) : __Pyx_PyObject_CallOneArg(__pyx_t_4, __pyx_t_5);
+  __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
+  __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
+  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 223, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+  /* "compilationEngine.pyx":224
+ *         # next is varDec
+ *         self.output_file.write(self.indent * "  " + '<varDec>\n')
+ *         self.indent += 1             # <<<<<<<<<<<<<<
+ * 
+ *         self.output_file.write(self.indent * "  " + self.next_token + '\n') # get the next token <keyword> var </keyword>
+ */
+  __pyx_v_self->indent = (__pyx_v_self->indent + 1);
+
+  /* "compilationEngine.pyx":226
+ *         self.indent += 1
+ * 
+ *         self.output_file.write(self.indent * "  " + self.next_token + '\n') # get the next token <keyword> var </keyword>             # <<<<<<<<<<<<<<
+ * 
+ *         self.advance() # get the next token <type>
+ */
+  __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 226, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_4);
+  __pyx_t_5 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 226, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_5);
+  __pyx_t_6 = PyNumber_Multiply(__pyx_t_5, __pyx_kp_s_); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 226, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_6);
+  __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
+  __pyx_t_5 = PyNumber_Add(__pyx_t_6, __pyx_v_self->next_token); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 226, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_5);
+  __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
+  __pyx_t_6 = PyNumber_Add(__pyx_t_5, __pyx_kp_s__2); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 226, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_6);
+  __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
+  __pyx_t_5 = NULL;
+  if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_4))) {
+    __pyx_t_5 = PyMethod_GET_SELF(__pyx_t_4);
+    if (likely(__pyx_t_5)) {
+      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_4);
+      __Pyx_INCREF(__pyx_t_5);
+      __Pyx_INCREF(function);
+      __Pyx_DECREF_SET(__pyx_t_4, function);
+    }
+  }
+  __pyx_t_1 = (__pyx_t_5) ? __Pyx_PyObject_Call2Args(__pyx_t_4, __pyx_t_5, __pyx_t_6) : __Pyx_PyObject_CallOneArg(__pyx_t_4, __pyx_t_6);
+  __Pyx_XDECREF(__pyx_t_5); __pyx_t_5 = 0;
+  __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
+  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 226, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+  /* "compilationEngine.pyx":228
+ *         self.output_file.write(self.indent * "  " + self.next_token + '\n') # get the next token <keyword> var </keyword>
+ * 
+ *         self.advance() # get the next token <type>             # <<<<<<<<<<<<<<
+ *         self.output_file.write(self.indent * "  " + self.next_token + '\n')
+ * 
+ */
+  __pyx_t_1 = ((struct __pyx_vtabstruct_17compilationEngine_CompilationEngine *)__pyx_v_self->__pyx_vtab)->advance(__pyx_v_self); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 228, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+  /* "compilationEngine.pyx":229
+ * 
+ *         self.advance() # get the next token <type>
+ *         self.output_file.write(self.indent * "  " + self.next_token + '\n')             # <<<<<<<<<<<<<<
+ * 
+ *         self.advance() # get the next token <varName>
+ */
+  __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 229, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_4);
+  __pyx_t_6 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 229, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_6);
+  __pyx_t_5 = PyNumber_Multiply(__pyx_t_6, __pyx_kp_s_); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 229, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_5);
+  __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
+  __pyx_t_6 = PyNumber_Add(__pyx_t_5, __pyx_v_self->next_token); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 229, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_6);
+  __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
+  __pyx_t_5 = PyNumber_Add(__pyx_t_6, __pyx_kp_s__2); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 229, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_5);
+  __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
+  __pyx_t_6 = NULL;
+  if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_4))) {
+    __pyx_t_6 = PyMethod_GET_SELF(__pyx_t_4);
+    if (likely(__pyx_t_6)) {
+      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_4);
+      __Pyx_INCREF(__pyx_t_6);
+      __Pyx_INCREF(function);
+      __Pyx_DECREF_SET(__pyx_t_4, function);
+    }
+  }
+  __pyx_t_1 = (__pyx_t_6) ? __Pyx_PyObject_Call2Args(__pyx_t_4, __pyx_t_6, __pyx_t_5) : __Pyx_PyObject_CallOneArg(__pyx_t_4, __pyx_t_5);
+  __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
+  __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
+  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 229, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+  /* "compilationEngine.pyx":231
+ *         self.output_file.write(self.indent * "  " + self.next_token + '\n')
+ * 
+ *         self.advance() # get the next token <varName>             # <<<<<<<<<<<<<<
+ *         self.output_file.write(self.indent * "  " + self.next_token + '\n') # get the next token <varName>
+ * 
+ */
+  __pyx_t_1 = ((struct __pyx_vtabstruct_17compilationEngine_CompilationEngine *)__pyx_v_self->__pyx_vtab)->advance(__pyx_v_self); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 231, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+  /* "compilationEngine.pyx":232
+ * 
+ *         self.advance() # get the next token <varName>
+ *         self.output_file.write(self.indent * "  " + self.next_token + '\n') # get the next token <varName>             # <<<<<<<<<<<<<<
+ * 
+ *         self.advance() # get the next token , or ;
+ */
+  __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 232, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_4);
+  __pyx_t_5 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 232, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_5);
+  __pyx_t_6 = PyNumber_Multiply(__pyx_t_5, __pyx_kp_s_); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 232, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_6);
+  __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
+  __pyx_t_5 = PyNumber_Add(__pyx_t_6, __pyx_v_self->next_token); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 232, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_5);
+  __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
+  __pyx_t_6 = PyNumber_Add(__pyx_t_5, __pyx_kp_s__2); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 232, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_6);
+  __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
+  __pyx_t_5 = NULL;
+  if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_4))) {
+    __pyx_t_5 = PyMethod_GET_SELF(__pyx_t_4);
+    if (likely(__pyx_t_5)) {
+      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_4);
+      __Pyx_INCREF(__pyx_t_5);
+      __Pyx_INCREF(function);
+      __Pyx_DECREF_SET(__pyx_t_4, function);
+    }
+  }
+  __pyx_t_1 = (__pyx_t_5) ? __Pyx_PyObject_Call2Args(__pyx_t_4, __pyx_t_5, __pyx_t_6) : __Pyx_PyObject_CallOneArg(__pyx_t_4, __pyx_t_6);
+  __Pyx_XDECREF(__pyx_t_5); __pyx_t_5 = 0;
+  __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
+  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 232, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+  /* "compilationEngine.pyx":234
+ *         self.output_file.write(self.indent * "  " + self.next_token + '\n') # get the next token <varName>
+ * 
+ *         self.advance() # get the next token , or ;             # <<<<<<<<<<<<<<
+ * 
+ *         # compile (, varName)*
+ */
+  __pyx_t_1 = ((struct __pyx_vtabstruct_17compilationEngine_CompilationEngine *)__pyx_v_self->__pyx_vtab)->advance(__pyx_v_self); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 234, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+  /* "compilationEngine.pyx":237
+ * 
+ *         # compile (, varName)*
+ *         while self.next_token == "<symbol> , </symbol>":             # <<<<<<<<<<<<<<
+ *             self.output_file.write(self.indent * "  " + self.next_token + '\n') # get the next token ,
+ *             self.advance() # get the next token <varName>
+ */
+  while (1) {
+    __pyx_t_3 = (__Pyx_PyString_Equals(__pyx_v_self->next_token, __pyx_kp_s_symbol_symbol_2, Py_EQ)); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(0, 237, __pyx_L1_error)
+    __pyx_t_2 = (__pyx_t_3 != 0);
+    if (!__pyx_t_2) break;
+
+    /* "compilationEngine.pyx":238
+ *         # compile (, varName)*
+ *         while self.next_token == "<symbol> , </symbol>":
+ *             self.output_file.write(self.indent * "  " + self.next_token + '\n') # get the next token ,             # <<<<<<<<<<<<<<
+ *             self.advance() # get the next token <varName>
+ *             self.output_file.write(self.indent * "  " + self.next_token + '\n') # get the next token <varName>
+ */
+    __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 238, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_4);
+    __pyx_t_6 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 238, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_6);
+    __pyx_t_5 = PyNumber_Multiply(__pyx_t_6, __pyx_kp_s_); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 238, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_5);
+    __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
+    __pyx_t_6 = PyNumber_Add(__pyx_t_5, __pyx_v_self->next_token); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 238, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_6);
+    __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
+    __pyx_t_5 = PyNumber_Add(__pyx_t_6, __pyx_kp_s__2); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 238, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_5);
+    __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
+    __pyx_t_6 = NULL;
+    if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_4))) {
+      __pyx_t_6 = PyMethod_GET_SELF(__pyx_t_4);
+      if (likely(__pyx_t_6)) {
+        PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_4);
+        __Pyx_INCREF(__pyx_t_6);
+        __Pyx_INCREF(function);
+        __Pyx_DECREF_SET(__pyx_t_4, function);
+      }
+    }
+    __pyx_t_1 = (__pyx_t_6) ? __Pyx_PyObject_Call2Args(__pyx_t_4, __pyx_t_6, __pyx_t_5) : __Pyx_PyObject_CallOneArg(__pyx_t_4, __pyx_t_5);
+    __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
+    __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
+    if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 238, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_1);
+    __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+    /* "compilationEngine.pyx":239
+ *         while self.next_token == "<symbol> , </symbol>":
+ *             self.output_file.write(self.indent * "  " + self.next_token + '\n') # get the next token ,
+ *             self.advance() # get the next token <varName>             # <<<<<<<<<<<<<<
+ *             self.output_file.write(self.indent * "  " + self.next_token + '\n') # get the next token <varName>
+ *             self.advance() # get the next token , or ;
+ */
+    __pyx_t_1 = ((struct __pyx_vtabstruct_17compilationEngine_CompilationEngine *)__pyx_v_self->__pyx_vtab)->advance(__pyx_v_self); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 239, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_1);
+    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+    /* "compilationEngine.pyx":240
+ *             self.output_file.write(self.indent * "  " + self.next_token + '\n') # get the next token ,
+ *             self.advance() # get the next token <varName>
+ *             self.output_file.write(self.indent * "  " + self.next_token + '\n') # get the next token <varName>             # <<<<<<<<<<<<<<
+ *             self.advance() # get the next token , or ;
+ * 
+ */
+    __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 240, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_4);
+    __pyx_t_5 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 240, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_5);
+    __pyx_t_6 = PyNumber_Multiply(__pyx_t_5, __pyx_kp_s_); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 240, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_6);
+    __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
+    __pyx_t_5 = PyNumber_Add(__pyx_t_6, __pyx_v_self->next_token); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 240, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_5);
+    __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
+    __pyx_t_6 = PyNumber_Add(__pyx_t_5, __pyx_kp_s__2); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 240, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_6);
+    __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
+    __pyx_t_5 = NULL;
+    if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_4))) {
+      __pyx_t_5 = PyMethod_GET_SELF(__pyx_t_4);
+      if (likely(__pyx_t_5)) {
+        PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_4);
+        __Pyx_INCREF(__pyx_t_5);
+        __Pyx_INCREF(function);
+        __Pyx_DECREF_SET(__pyx_t_4, function);
+      }
+    }
+    __pyx_t_1 = (__pyx_t_5) ? __Pyx_PyObject_Call2Args(__pyx_t_4, __pyx_t_5, __pyx_t_6) : __Pyx_PyObject_CallOneArg(__pyx_t_4, __pyx_t_6);
+    __Pyx_XDECREF(__pyx_t_5); __pyx_t_5 = 0;
+    __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
+    if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 240, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_1);
+    __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+    /* "compilationEngine.pyx":241
+ *             self.advance() # get the next token <varName>
+ *             self.output_file.write(self.indent * "  " + self.next_token + '\n') # get the next token <varName>
+ *             self.advance() # get the next token , or ;             # <<<<<<<<<<<<<<
+ * 
+ *         self.output_file.write(self.indent * "  " + self.next_token + '\n') # get the next token ;
+ */
+    __pyx_t_1 = ((struct __pyx_vtabstruct_17compilationEngine_CompilationEngine *)__pyx_v_self->__pyx_vtab)->advance(__pyx_v_self); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 241, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_1);
+    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  }
+
+  /* "compilationEngine.pyx":243
+ *             self.advance() # get the next token , or ;
+ * 
+ *         self.output_file.write(self.indent * "  " + self.next_token + '\n') # get the next token ;             # <<<<<<<<<<<<<<
+ * 
+ *         self.indent -= 1
+ */
+  __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 243, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_4);
+  __pyx_t_6 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 243, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_6);
+  __pyx_t_5 = PyNumber_Multiply(__pyx_t_6, __pyx_kp_s_); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 243, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_5);
+  __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
+  __pyx_t_6 = PyNumber_Add(__pyx_t_5, __pyx_v_self->next_token); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 243, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_6);
+  __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
+  __pyx_t_5 = PyNumber_Add(__pyx_t_6, __pyx_kp_s__2); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 243, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_5);
+  __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
+  __pyx_t_6 = NULL;
+  if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_4))) {
+    __pyx_t_6 = PyMethod_GET_SELF(__pyx_t_4);
+    if (likely(__pyx_t_6)) {
+      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_4);
+      __Pyx_INCREF(__pyx_t_6);
+      __Pyx_INCREF(function);
+      __Pyx_DECREF_SET(__pyx_t_4, function);
+    }
+  }
+  __pyx_t_1 = (__pyx_t_6) ? __Pyx_PyObject_Call2Args(__pyx_t_4, __pyx_t_6, __pyx_t_5) : __Pyx_PyObject_CallOneArg(__pyx_t_4, __pyx_t_5);
+  __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
+  __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
+  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 243, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+  /* "compilationEngine.pyx":245
+ *         self.output_file.write(self.indent * "  " + self.next_token + '\n') # get the next token ;
+ * 
+ *         self.indent -= 1             # <<<<<<<<<<<<<<
+ *         self.output_file.write(self.indent * "  " + '</varDec>\n')
+ * 
+ */
+  __pyx_v_self->indent = (__pyx_v_self->indent - 1);
+
+  /* "compilationEngine.pyx":246
+ * 
+ *         self.indent -= 1
+ *         self.output_file.write(self.indent * "  " + '</varDec>\n')             # <<<<<<<<<<<<<<
+ * 
+ *         # compile varDec*
+ */
+  __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 246, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_4);
+  __pyx_t_5 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 246, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_5);
+  __pyx_t_6 = PyNumber_Multiply(__pyx_t_5, __pyx_kp_s_); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 246, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_6);
+  __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
+  __pyx_t_5 = PyNumber_Add(__pyx_t_6, __pyx_kp_s_varDec_2); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 246, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_5);
+  __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
+  __pyx_t_6 = NULL;
+  if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_4))) {
+    __pyx_t_6 = PyMethod_GET_SELF(__pyx_t_4);
+    if (likely(__pyx_t_6)) {
+      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_4);
+      __Pyx_INCREF(__pyx_t_6);
+      __Pyx_INCREF(function);
+      __Pyx_DECREF_SET(__pyx_t_4, function);
+    }
+  }
+  __pyx_t_1 = (__pyx_t_6) ? __Pyx_PyObject_Call2Args(__pyx_t_4, __pyx_t_6, __pyx_t_5) : __Pyx_PyObject_CallOneArg(__pyx_t_4, __pyx_t_5);
+  __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
+  __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
+  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 246, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+  /* "compilationEngine.pyx":249
+ * 
+ *         # compile varDec*
+ *         self.compileVarDec()             # <<<<<<<<<<<<<<
+ * 
+ *     # compile a sequence of statements, not including the enclosing {}
+ */
+  __pyx_t_1 = ((struct __pyx_vtabstruct_17compilationEngine_CompilationEngine *)__pyx_v_self->__pyx_vtab)->compileVarDec(__pyx_v_self); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 249, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+  /* "compilationEngine.pyx":213
+ * 
+ *     # compile a var declaration
+ *     cdef compileVarDec(self):             # <<<<<<<<<<<<<<
+ *         # determine if there is a varDec
+ *         self.advance() # get the next token } or <keyword> var </keyword>
+ */
+
+  /* function exit code */
+  __pyx_r = Py_None; __Pyx_INCREF(Py_None);
+  goto __pyx_L0;
+  __pyx_L1_error:;
+  __Pyx_XDECREF(__pyx_t_1);
+  __Pyx_XDECREF(__pyx_t_4);
   __Pyx_XDECREF(__pyx_t_5);
   __Pyx_XDECREF(__pyx_t_6);
+  __Pyx_AddTraceback("compilationEngine.CompilationEngine.compileVarDec", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __pyx_r = 0;
+  __pyx_L0:;
+  __Pyx_XGIVEREF(__pyx_r);
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+/* "compilationEngine.pyx":252
+ * 
+ *     # compile a sequence of statements, not including the enclosing {}
+ *     cdef compileStatements(self):             # <<<<<<<<<<<<<<
+ * 
+ *         # first determine whether there is a statement, nextToken is }
+ */
+
+static PyObject *__pyx_f_17compilationEngine_17CompilationEngine_compileStatements(struct __pyx_obj_17compilationEngine_CompilationEngine *__pyx_v_self) {
+  PyObject *__pyx_r = NULL;
+  __Pyx_RefNannyDeclarations
+  PyObject *__pyx_t_1 = NULL;
+  int __pyx_t_2;
+  int __pyx_t_3;
+  int __pyx_lineno = 0;
+  const char *__pyx_filename = NULL;
+  int __pyx_clineno = 0;
+  __Pyx_RefNannySetupContext("compileStatements", 0);
+
+  /* "compilationEngine.pyx":255
+ * 
+ *         # first determine whether there is a statement, nextToken is }
+ *         self.advance() # get the next token } or <keyword>             # <<<<<<<<<<<<<<
+ *         if self.next_token == "<symbol> } </symbol>":
+ *             self.reverse()
+ */
+  __pyx_t_1 = ((struct __pyx_vtabstruct_17compilationEngine_CompilationEngine *)__pyx_v_self->__pyx_vtab)->advance(__pyx_v_self); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 255, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+  /* "compilationEngine.pyx":256
+ *         # first determine whether there is a statement, nextToken is }
+ *         self.advance() # get the next token } or <keyword>
+ *         if self.next_token == "<symbol> } </symbol>":             # <<<<<<<<<<<<<<
+ *             self.reverse()
+ *             return
+ */
+  __pyx_t_2 = (__Pyx_PyString_Equals(__pyx_v_self->next_token, __pyx_kp_s_symbol_symbol, Py_EQ)); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 256, __pyx_L1_error)
+  __pyx_t_3 = (__pyx_t_2 != 0);
+  if (__pyx_t_3) {
+
+    /* "compilationEngine.pyx":257
+ *         self.advance() # get the next token } or <keyword>
+ *         if self.next_token == "<symbol> } </symbol>":
+ *             self.reverse()             # <<<<<<<<<<<<<<
+ *             return
+ * 
+ */
+    __pyx_t_1 = ((struct __pyx_vtabstruct_17compilationEngine_CompilationEngine *)__pyx_v_self->__pyx_vtab)->reverse(__pyx_v_self); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 257, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_1);
+    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+    /* "compilationEngine.pyx":258
+ *         if self.next_token == "<symbol> } </symbol>":
+ *             self.reverse()
+ *             return             # <<<<<<<<<<<<<<
+ * 
+ *         # next is statement
+ */
+    __Pyx_XDECREF(__pyx_r);
+    __pyx_r = Py_None; __Pyx_INCREF(Py_None);
+    goto __pyx_L0;
+
+    /* "compilationEngine.pyx":256
+ *         # first determine whether there is a statement, nextToken is }
+ *         self.advance() # get the next token } or <keyword>
+ *         if self.next_token == "<symbol> } </symbol>":             # <<<<<<<<<<<<<<
+ *             self.reverse()
+ *             return
+ */
+  }
+
+  /* "compilationEngine.pyx":261
+ * 
+ *         # next is statement
+ *         if self.next_token == "<keyword> let </keyword>":             # <<<<<<<<<<<<<<
+ *             self.compileLet()
+ *         elif self.next_token == "<keyword> if </keyword>":
+ */
+  __pyx_t_3 = (__Pyx_PyString_Equals(__pyx_v_self->next_token, __pyx_kp_s_keyword_let_keyword, Py_EQ)); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(0, 261, __pyx_L1_error)
+  __pyx_t_2 = (__pyx_t_3 != 0);
+  if (__pyx_t_2) {
+
+    /* "compilationEngine.pyx":262
+ *         # next is statement
+ *         if self.next_token == "<keyword> let </keyword>":
+ *             self.compileLet()             # <<<<<<<<<<<<<<
+ *         elif self.next_token == "<keyword> if </keyword>":
+ *             self.compileIf()
+ */
+    __pyx_t_1 = ((struct __pyx_vtabstruct_17compilationEngine_CompilationEngine *)__pyx_v_self->__pyx_vtab)->compileLet(__pyx_v_self); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 262, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_1);
+    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+    /* "compilationEngine.pyx":261
+ * 
+ *         # next is statement
+ *         if self.next_token == "<keyword> let </keyword>":             # <<<<<<<<<<<<<<
+ *             self.compileLet()
+ *         elif self.next_token == "<keyword> if </keyword>":
+ */
+    goto __pyx_L4;
+  }
+
+  /* "compilationEngine.pyx":263
+ *         if self.next_token == "<keyword> let </keyword>":
+ *             self.compileLet()
+ *         elif self.next_token == "<keyword> if </keyword>":             # <<<<<<<<<<<<<<
+ *             self.compileIf()
+ *         elif self.next_token == "<keyword> while </keyword>":
+ */
+  __pyx_t_2 = (__Pyx_PyString_Equals(__pyx_v_self->next_token, __pyx_kp_s_keyword_if_keyword, Py_EQ)); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 263, __pyx_L1_error)
+  __pyx_t_3 = (__pyx_t_2 != 0);
+  if (__pyx_t_3) {
+
+    /* "compilationEngine.pyx":264
+ *             self.compileLet()
+ *         elif self.next_token == "<keyword> if </keyword>":
+ *             self.compileIf()             # <<<<<<<<<<<<<<
+ *         elif self.next_token == "<keyword> while </keyword>":
+ *             self.compileWhile()
+ */
+    __pyx_t_1 = ((struct __pyx_vtabstruct_17compilationEngine_CompilationEngine *)__pyx_v_self->__pyx_vtab)->compileIf(__pyx_v_self); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 264, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_1);
+    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+    /* "compilationEngine.pyx":263
+ *         if self.next_token == "<keyword> let </keyword>":
+ *             self.compileLet()
+ *         elif self.next_token == "<keyword> if </keyword>":             # <<<<<<<<<<<<<<
+ *             self.compileIf()
+ *         elif self.next_token == "<keyword> while </keyword>":
+ */
+    goto __pyx_L4;
+  }
+
+  /* "compilationEngine.pyx":265
+ *         elif self.next_token == "<keyword> if </keyword>":
+ *             self.compileIf()
+ *         elif self.next_token == "<keyword> while </keyword>":             # <<<<<<<<<<<<<<
+ *             self.compileWhile()
+ *         elif self.next_token == "<keyword> do </keyword>":
+ */
+  __pyx_t_3 = (__Pyx_PyString_Equals(__pyx_v_self->next_token, __pyx_kp_s_keyword_while_keyword, Py_EQ)); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(0, 265, __pyx_L1_error)
+  __pyx_t_2 = (__pyx_t_3 != 0);
+  if (__pyx_t_2) {
+
+    /* "compilationEngine.pyx":266
+ *             self.compileIf()
+ *         elif self.next_token == "<keyword> while </keyword>":
+ *             self.compileWhile()             # <<<<<<<<<<<<<<
+ *         elif self.next_token == "<keyword> do </keyword>":
+ *             self.compileDo()
+ */
+    __pyx_t_1 = ((struct __pyx_vtabstruct_17compilationEngine_CompilationEngine *)__pyx_v_self->__pyx_vtab)->compileWhile(__pyx_v_self); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 266, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_1);
+    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+    /* "compilationEngine.pyx":265
+ *         elif self.next_token == "<keyword> if </keyword>":
+ *             self.compileIf()
+ *         elif self.next_token == "<keyword> while </keyword>":             # <<<<<<<<<<<<<<
+ *             self.compileWhile()
+ *         elif self.next_token == "<keyword> do </keyword>":
+ */
+    goto __pyx_L4;
+  }
+
+  /* "compilationEngine.pyx":267
+ *         elif self.next_token == "<keyword> while </keyword>":
+ *             self.compileWhile()
+ *         elif self.next_token == "<keyword> do </keyword>":             # <<<<<<<<<<<<<<
+ *             self.compileDo()
+ *         elif self.next_token == "<keyword> return </keyword>":
+ */
+  __pyx_t_2 = (__Pyx_PyString_Equals(__pyx_v_self->next_token, __pyx_kp_s_keyword_do_keyword, Py_EQ)); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 267, __pyx_L1_error)
+  __pyx_t_3 = (__pyx_t_2 != 0);
+  if (__pyx_t_3) {
+
+    /* "compilationEngine.pyx":268
+ *             self.compileWhile()
+ *         elif self.next_token == "<keyword> do </keyword>":
+ *             self.compileDo()             # <<<<<<<<<<<<<<
+ *         elif self.next_token == "<keyword> return </keyword>":
+ *             self.compileReturn()
+ */
+    __pyx_t_1 = ((struct __pyx_vtabstruct_17compilationEngine_CompilationEngine *)__pyx_v_self->__pyx_vtab)->compileDo(__pyx_v_self); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 268, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_1);
+    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+    /* "compilationEngine.pyx":267
+ *         elif self.next_token == "<keyword> while </keyword>":
+ *             self.compileWhile()
+ *         elif self.next_token == "<keyword> do </keyword>":             # <<<<<<<<<<<<<<
+ *             self.compileDo()
+ *         elif self.next_token == "<keyword> return </keyword>":
+ */
+    goto __pyx_L4;
+  }
+
+  /* "compilationEngine.pyx":269
+ *         elif self.next_token == "<keyword> do </keyword>":
+ *             self.compileDo()
+ *         elif self.next_token == "<keyword> return </keyword>":             # <<<<<<<<<<<<<<
+ *             self.compileReturn()
+ * 
+ */
+  __pyx_t_3 = (__Pyx_PyString_Equals(__pyx_v_self->next_token, __pyx_kp_s_keyword_return_keyword, Py_EQ)); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(0, 269, __pyx_L1_error)
+  __pyx_t_2 = (__pyx_t_3 != 0);
+  if (__pyx_t_2) {
+
+    /* "compilationEngine.pyx":270
+ *             self.compileDo()
+ *         elif self.next_token == "<keyword> return </keyword>":
+ *             self.compileReturn()             # <<<<<<<<<<<<<<
+ * 
+ *         # compile statement*
+ */
+    __pyx_t_1 = ((struct __pyx_vtabstruct_17compilationEngine_CompilationEngine *)__pyx_v_self->__pyx_vtab)->compileReturn(__pyx_v_self); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 270, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_1);
+    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+    /* "compilationEngine.pyx":269
+ *         elif self.next_token == "<keyword> do </keyword>":
+ *             self.compileDo()
+ *         elif self.next_token == "<keyword> return </keyword>":             # <<<<<<<<<<<<<<
+ *             self.compileReturn()
+ * 
+ */
+  }
+  __pyx_L4:;
+
+  /* "compilationEngine.pyx":273
+ * 
+ *         # compile statement*
+ *         self.compileStatements()             # <<<<<<<<<<<<<<
+ * 
+ * 
+ */
+  __pyx_t_1 = ((struct __pyx_vtabstruct_17compilationEngine_CompilationEngine *)__pyx_v_self->__pyx_vtab)->compileStatements(__pyx_v_self); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 273, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+  /* "compilationEngine.pyx":252
+ * 
+ *     # compile a sequence of statements, not including the enclosing {}
+ *     cdef compileStatements(self):             # <<<<<<<<<<<<<<
+ * 
+ *         # first determine whether there is a statement, nextToken is }
+ */
+
+  /* function exit code */
+  __pyx_r = Py_None; __Pyx_INCREF(Py_None);
+  goto __pyx_L0;
+  __pyx_L1_error:;
+  __Pyx_XDECREF(__pyx_t_1);
+  __Pyx_AddTraceback("compilationEngine.CompilationEngine.compileStatements", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __pyx_r = 0;
+  __pyx_L0:;
+  __Pyx_XGIVEREF(__pyx_r);
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+/* "compilationEngine.pyx":277
+ * 
+ *     # compile a let statement
+ *     cdef compileLet(self):             # <<<<<<<<<<<<<<
+ *         self.output_file.write(self.indent * "  " + '<letStatement>\n')
+ *         self.indent += 1
+ */
+
+static PyObject *__pyx_f_17compilationEngine_17CompilationEngine_compileLet(struct __pyx_obj_17compilationEngine_CompilationEngine *__pyx_v_self) {
+  int __pyx_v_isExpression;
+  PyObject *__pyx_r = NULL;
+  __Pyx_RefNannyDeclarations
+  PyObject *__pyx_t_1 = NULL;
+  PyObject *__pyx_t_2 = NULL;
+  PyObject *__pyx_t_3 = NULL;
+  PyObject *__pyx_t_4 = NULL;
+  int __pyx_t_5;
+  int __pyx_t_6;
+  int __pyx_lineno = 0;
+  const char *__pyx_filename = NULL;
+  int __pyx_clineno = 0;
+  __Pyx_RefNannySetupContext("compileLet", 0);
+
+  /* "compilationEngine.pyx":278
+ *     # compile a let statement
+ *     cdef compileLet(self):
+ *         self.output_file.write(self.indent * "  " + '<letStatement>\n')             # <<<<<<<<<<<<<<
+ *         self.indent += 1
+ * 
+ */
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 278, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
+  __pyx_t_3 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 278, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_3);
+  __pyx_t_4 = PyNumber_Multiply(__pyx_t_3, __pyx_kp_s_); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 278, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_4);
+  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+  __pyx_t_3 = PyNumber_Add(__pyx_t_4, __pyx_kp_s_letStatement); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 278, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_3);
+  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+  __pyx_t_4 = NULL;
+  if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
+    __pyx_t_4 = PyMethod_GET_SELF(__pyx_t_2);
+    if (likely(__pyx_t_4)) {
+      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
+      __Pyx_INCREF(__pyx_t_4);
+      __Pyx_INCREF(function);
+      __Pyx_DECREF_SET(__pyx_t_2, function);
+    }
+  }
+  __pyx_t_1 = (__pyx_t_4) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_4, __pyx_t_3) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_3);
+  __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
+  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 278, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+  /* "compilationEngine.pyx":279
+ *     cdef compileLet(self):
+ *         self.output_file.write(self.indent * "  " + '<letStatement>\n')
+ *         self.indent += 1             # <<<<<<<<<<<<<<
+ * 
+ *         self.output_file.write(self.indent * "  " + self.next_token + '\n') # get the next token <keyword> let </keyword>
+ */
+  __pyx_v_self->indent = (__pyx_v_self->indent + 1);
+
+  /* "compilationEngine.pyx":281
+ *         self.indent += 1
+ * 
+ *         self.output_file.write(self.indent * "  " + self.next_token + '\n') # get the next token <keyword> let </keyword>             # <<<<<<<<<<<<<<
+ * 
+ *         self.advance() # get the next token <varName>
+ */
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 281, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
+  __pyx_t_3 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 281, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_3);
+  __pyx_t_4 = PyNumber_Multiply(__pyx_t_3, __pyx_kp_s_); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 281, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_4);
+  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+  __pyx_t_3 = PyNumber_Add(__pyx_t_4, __pyx_v_self->next_token); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 281, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_3);
+  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+  __pyx_t_4 = PyNumber_Add(__pyx_t_3, __pyx_kp_s__2); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 281, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_4);
+  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+  __pyx_t_3 = NULL;
+  if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
+    __pyx_t_3 = PyMethod_GET_SELF(__pyx_t_2);
+    if (likely(__pyx_t_3)) {
+      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
+      __Pyx_INCREF(__pyx_t_3);
+      __Pyx_INCREF(function);
+      __Pyx_DECREF_SET(__pyx_t_2, function);
+    }
+  }
+  __pyx_t_1 = (__pyx_t_3) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_3, __pyx_t_4) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_4);
+  __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
+  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 281, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+  /* "compilationEngine.pyx":283
+ *         self.output_file.write(self.indent * "  " + self.next_token + '\n') # get the next token <keyword> let </keyword>
+ * 
+ *         self.advance() # get the next token <varName>             # <<<<<<<<<<<<<<
+ *         self.output_file.write(self.indent * "  " + self.next_token + '\n')
+ * 
+ */
+  __pyx_t_1 = ((struct __pyx_vtabstruct_17compilationEngine_CompilationEngine *)__pyx_v_self->__pyx_vtab)->advance(__pyx_v_self); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 283, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+  /* "compilationEngine.pyx":284
+ * 
+ *         self.advance() # get the next token <varName>
+ *         self.output_file.write(self.indent * "  " + self.next_token + '\n')             # <<<<<<<<<<<<<<
+ * 
+ *         # compile ([expression])?
+ */
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 284, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
+  __pyx_t_4 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 284, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_4);
+  __pyx_t_3 = PyNumber_Multiply(__pyx_t_4, __pyx_kp_s_); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 284, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_3);
+  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+  __pyx_t_4 = PyNumber_Add(__pyx_t_3, __pyx_v_self->next_token); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 284, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_4);
+  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+  __pyx_t_3 = PyNumber_Add(__pyx_t_4, __pyx_kp_s__2); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 284, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_3);
+  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+  __pyx_t_4 = NULL;
+  if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
+    __pyx_t_4 = PyMethod_GET_SELF(__pyx_t_2);
+    if (likely(__pyx_t_4)) {
+      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
+      __Pyx_INCREF(__pyx_t_4);
+      __Pyx_INCREF(function);
+      __Pyx_DECREF_SET(__pyx_t_2, function);
+    }
+  }
+  __pyx_t_1 = (__pyx_t_4) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_4, __pyx_t_3) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_3);
+  __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
+  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 284, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+  /* "compilationEngine.pyx":287
+ * 
+ *         # compile ([expression])?
+ *         self.advance() # get the next token [ or =             # <<<<<<<<<<<<<<
+ * 
+ *         isExpression = False
+ */
+  __pyx_t_1 = ((struct __pyx_vtabstruct_17compilationEngine_CompilationEngine *)__pyx_v_self->__pyx_vtab)->advance(__pyx_v_self); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 287, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+  /* "compilationEngine.pyx":289
+ *         self.advance() # get the next token [ or =
+ * 
+ *         isExpression = False             # <<<<<<<<<<<<<<
+ * 
+ *         # '[' expression ']'
+ */
+  __pyx_v_isExpression = 0;
+
+  /* "compilationEngine.pyx":292
+ * 
+ *         # '[' expression ']'
+ *         if self.next_token == "<symbol> [ </symbol>":             # <<<<<<<<<<<<<<
+ *             isExpression = True
+ *             self.output_file.write(self.indent * "  " + self.next_token + '\n') # get the next token [
+ */
+  __pyx_t_5 = (__Pyx_PyString_Equals(__pyx_v_self->next_token, __pyx_kp_s_symbol_symbol_5, Py_EQ)); if (unlikely(__pyx_t_5 < 0)) __PYX_ERR(0, 292, __pyx_L1_error)
+  __pyx_t_6 = (__pyx_t_5 != 0);
+  if (__pyx_t_6) {
+
+    /* "compilationEngine.pyx":293
+ *         # '[' expression ']'
+ *         if self.next_token == "<symbol> [ </symbol>":
+ *             isExpression = True             # <<<<<<<<<<<<<<
+ *             self.output_file.write(self.indent * "  " + self.next_token + '\n') # get the next token [
+ * 
+ */
+    __pyx_v_isExpression = 1;
+
+    /* "compilationEngine.pyx":294
+ *         if self.next_token == "<symbol> [ </symbol>":
+ *             isExpression = True
+ *             self.output_file.write(self.indent * "  " + self.next_token + '\n') # get the next token [             # <<<<<<<<<<<<<<
+ * 
+ *             # compile expression
+ */
+    __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 294, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_2);
+    __pyx_t_3 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 294, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_3);
+    __pyx_t_4 = PyNumber_Multiply(__pyx_t_3, __pyx_kp_s_); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 294, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_4);
+    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+    __pyx_t_3 = PyNumber_Add(__pyx_t_4, __pyx_v_self->next_token); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 294, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_3);
+    __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+    __pyx_t_4 = PyNumber_Add(__pyx_t_3, __pyx_kp_s__2); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 294, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_4);
+    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+    __pyx_t_3 = NULL;
+    if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
+      __pyx_t_3 = PyMethod_GET_SELF(__pyx_t_2);
+      if (likely(__pyx_t_3)) {
+        PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
+        __Pyx_INCREF(__pyx_t_3);
+        __Pyx_INCREF(function);
+        __Pyx_DECREF_SET(__pyx_t_2, function);
+      }
+    }
+    __pyx_t_1 = (__pyx_t_3) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_3, __pyx_t_4) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_4);
+    __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
+    __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+    if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 294, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_1);
+    __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+    /* "compilationEngine.pyx":297
+ * 
+ *             # compile expression
+ *             self.compileExpression()             # <<<<<<<<<<<<<<
+ * 
+ *             self.advance() # get the next token ]
+ */
+    __pyx_t_1 = ((struct __pyx_vtabstruct_17compilationEngine_CompilationEngine *)__pyx_v_self->__pyx_vtab)->compileExpression(__pyx_v_self); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 297, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_1);
+    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+    /* "compilationEngine.pyx":299
+ *             self.compileExpression()
+ * 
+ *             self.advance() # get the next token ]             # <<<<<<<<<<<<<<
+ *             self.output_file.write(self.indent * "  " + self.next_token + '\n')
+ * 
+ */
+    __pyx_t_1 = ((struct __pyx_vtabstruct_17compilationEngine_CompilationEngine *)__pyx_v_self->__pyx_vtab)->advance(__pyx_v_self); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 299, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_1);
+    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+    /* "compilationEngine.pyx":300
+ * 
+ *             self.advance() # get the next token ]
+ *             self.output_file.write(self.indent * "  " + self.next_token + '\n')             # <<<<<<<<<<<<<<
+ * 
+ *         if isExpression == True:
+ */
+    __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 300, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_2);
+    __pyx_t_4 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 300, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_4);
+    __pyx_t_3 = PyNumber_Multiply(__pyx_t_4, __pyx_kp_s_); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 300, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_3);
+    __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+    __pyx_t_4 = PyNumber_Add(__pyx_t_3, __pyx_v_self->next_token); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 300, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_4);
+    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+    __pyx_t_3 = PyNumber_Add(__pyx_t_4, __pyx_kp_s__2); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 300, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_3);
+    __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+    __pyx_t_4 = NULL;
+    if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
+      __pyx_t_4 = PyMethod_GET_SELF(__pyx_t_2);
+      if (likely(__pyx_t_4)) {
+        PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
+        __Pyx_INCREF(__pyx_t_4);
+        __Pyx_INCREF(function);
+        __Pyx_DECREF_SET(__pyx_t_2, function);
+      }
+    }
+    __pyx_t_1 = (__pyx_t_4) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_4, __pyx_t_3) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_3);
+    __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
+    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+    if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 300, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_1);
+    __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+    /* "compilationEngine.pyx":292
+ * 
+ *         # '[' expression ']'
+ *         if self.next_token == "<symbol> [ </symbol>":             # <<<<<<<<<<<<<<
+ *             isExpression = True
+ *             self.output_file.write(self.indent * "  " + self.next_token + '\n') # get the next token [
+ */
+  }
+
+  /* "compilationEngine.pyx":302
+ *             self.output_file.write(self.indent * "  " + self.next_token + '\n')
+ * 
+ *         if isExpression == True:             # <<<<<<<<<<<<<<
+ *             self.advance() # get the next token =
+ * 
+ */
+  __pyx_t_6 = ((__pyx_v_isExpression == 1) != 0);
+  if (__pyx_t_6) {
+
+    /* "compilationEngine.pyx":303
+ * 
+ *         if isExpression == True:
+ *             self.advance() # get the next token =             # <<<<<<<<<<<<<<
+ * 
+ *         # '='
+ */
+    __pyx_t_1 = ((struct __pyx_vtabstruct_17compilationEngine_CompilationEngine *)__pyx_v_self->__pyx_vtab)->advance(__pyx_v_self); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 303, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_1);
+    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+    /* "compilationEngine.pyx":302
+ *             self.output_file.write(self.indent * "  " + self.next_token + '\n')
+ * 
+ *         if isExpression == True:             # <<<<<<<<<<<<<<
+ *             self.advance() # get the next token =
+ * 
+ */
+  }
+
+  /* "compilationEngine.pyx":306
+ * 
+ *         # '='
+ *         self.output_file.write(self.indent * "  " + self.next_token + '\n')             # <<<<<<<<<<<<<<
+ * 
+ *         # compile expression
+ */
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 306, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
+  __pyx_t_3 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 306, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_3);
+  __pyx_t_4 = PyNumber_Multiply(__pyx_t_3, __pyx_kp_s_); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 306, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_4);
+  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+  __pyx_t_3 = PyNumber_Add(__pyx_t_4, __pyx_v_self->next_token); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 306, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_3);
+  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+  __pyx_t_4 = PyNumber_Add(__pyx_t_3, __pyx_kp_s__2); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 306, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_4);
+  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+  __pyx_t_3 = NULL;
+  if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
+    __pyx_t_3 = PyMethod_GET_SELF(__pyx_t_2);
+    if (likely(__pyx_t_3)) {
+      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
+      __Pyx_INCREF(__pyx_t_3);
+      __Pyx_INCREF(function);
+      __Pyx_DECREF_SET(__pyx_t_2, function);
+    }
+  }
+  __pyx_t_1 = (__pyx_t_3) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_3, __pyx_t_4) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_4);
+  __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
+  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 306, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+  /* "compilationEngine.pyx":309
+ * 
+ *         # compile expression
+ *         self.compileExpression()             # <<<<<<<<<<<<<<
+ * 
+ *         self.advance() # get the next token ;
+ */
+  __pyx_t_1 = ((struct __pyx_vtabstruct_17compilationEngine_CompilationEngine *)__pyx_v_self->__pyx_vtab)->compileExpression(__pyx_v_self); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 309, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+  /* "compilationEngine.pyx":311
+ *         self.compileExpression()
+ * 
+ *         self.advance() # get the next token ;             # <<<<<<<<<<<<<<
+ *         self.output_file.write(self.indent * "  " + self.next_token + '\n')
+ * 
+ */
+  __pyx_t_1 = ((struct __pyx_vtabstruct_17compilationEngine_CompilationEngine *)__pyx_v_self->__pyx_vtab)->advance(__pyx_v_self); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 311, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+  /* "compilationEngine.pyx":312
+ * 
+ *         self.advance() # get the next token ;
+ *         self.output_file.write(self.indent * "  " + self.next_token + '\n')             # <<<<<<<<<<<<<<
+ * 
+ *         self.indent -= 1
+ */
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 312, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
+  __pyx_t_4 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 312, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_4);
+  __pyx_t_3 = PyNumber_Multiply(__pyx_t_4, __pyx_kp_s_); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 312, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_3);
+  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+  __pyx_t_4 = PyNumber_Add(__pyx_t_3, __pyx_v_self->next_token); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 312, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_4);
+  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+  __pyx_t_3 = PyNumber_Add(__pyx_t_4, __pyx_kp_s__2); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 312, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_3);
+  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+  __pyx_t_4 = NULL;
+  if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
+    __pyx_t_4 = PyMethod_GET_SELF(__pyx_t_2);
+    if (likely(__pyx_t_4)) {
+      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
+      __Pyx_INCREF(__pyx_t_4);
+      __Pyx_INCREF(function);
+      __Pyx_DECREF_SET(__pyx_t_2, function);
+    }
+  }
+  __pyx_t_1 = (__pyx_t_4) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_4, __pyx_t_3) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_3);
+  __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
+  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 312, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+  /* "compilationEngine.pyx":314
+ *         self.output_file.write(self.indent * "  " + self.next_token + '\n')
+ * 
+ *         self.indent -= 1             # <<<<<<<<<<<<<<
+ *         self.output_file.write(self.indent * "  " + "</letStatement>\n")
+ * 
+ */
+  __pyx_v_self->indent = (__pyx_v_self->indent - 1);
+
+  /* "compilationEngine.pyx":315
+ * 
+ *         self.indent -= 1
+ *         self.output_file.write(self.indent * "  " + "</letStatement>\n")             # <<<<<<<<<<<<<<
+ * 
+ *     # compile an if statement, possibly with a trailing else clause
+ */
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 315, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
+  __pyx_t_3 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 315, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_3);
+  __pyx_t_4 = PyNumber_Multiply(__pyx_t_3, __pyx_kp_s_); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 315, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_4);
+  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+  __pyx_t_3 = PyNumber_Add(__pyx_t_4, __pyx_kp_s_letStatement_2); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 315, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_3);
+  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+  __pyx_t_4 = NULL;
+  if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
+    __pyx_t_4 = PyMethod_GET_SELF(__pyx_t_2);
+    if (likely(__pyx_t_4)) {
+      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
+      __Pyx_INCREF(__pyx_t_4);
+      __Pyx_INCREF(function);
+      __Pyx_DECREF_SET(__pyx_t_2, function);
+    }
+  }
+  __pyx_t_1 = (__pyx_t_4) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_4, __pyx_t_3) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_3);
+  __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
+  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 315, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+  /* "compilationEngine.pyx":277
+ * 
+ *     # compile a let statement
+ *     cdef compileLet(self):             # <<<<<<<<<<<<<<
+ *         self.output_file.write(self.indent * "  " + '<letStatement>\n')
+ *         self.indent += 1
+ */
+
+  /* function exit code */
+  __pyx_r = Py_None; __Pyx_INCREF(Py_None);
+  goto __pyx_L0;
+  __pyx_L1_error:;
+  __Pyx_XDECREF(__pyx_t_1);
+  __Pyx_XDECREF(__pyx_t_2);
+  __Pyx_XDECREF(__pyx_t_3);
+  __Pyx_XDECREF(__pyx_t_4);
+  __Pyx_AddTraceback("compilationEngine.CompilationEngine.compileLet", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __pyx_r = 0;
+  __pyx_L0:;
+  __Pyx_XGIVEREF(__pyx_r);
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+/* "compilationEngine.pyx":318
+ * 
+ *     # compile an if statement, possibly with a trailing else clause
+ *     cdef compileIf(self):             # <<<<<<<<<<<<<<
+ *         self.output_file.write(self.indent * "  " + '<ifStatement>\n')
+ *         self.indent += 1
+ */
+
+static PyObject *__pyx_f_17compilationEngine_17CompilationEngine_compileIf(struct __pyx_obj_17compilationEngine_CompilationEngine *__pyx_v_self) {
+  PyObject *__pyx_r = NULL;
+  __Pyx_RefNannyDeclarations
+  PyObject *__pyx_t_1 = NULL;
+  PyObject *__pyx_t_2 = NULL;
+  PyObject *__pyx_t_3 = NULL;
+  PyObject *__pyx_t_4 = NULL;
+  int __pyx_t_5;
+  int __pyx_t_6;
+  int __pyx_lineno = 0;
+  const char *__pyx_filename = NULL;
+  int __pyx_clineno = 0;
+  __Pyx_RefNannySetupContext("compileIf", 0);
+
+  /* "compilationEngine.pyx":319
+ *     # compile an if statement, possibly with a trailing else clause
+ *     cdef compileIf(self):
+ *         self.output_file.write(self.indent * "  " + '<ifStatement>\n')             # <<<<<<<<<<<<<<
+ *         self.indent += 1
+ * 
+ */
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 319, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
+  __pyx_t_3 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 319, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_3);
+  __pyx_t_4 = PyNumber_Multiply(__pyx_t_3, __pyx_kp_s_); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 319, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_4);
+  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+  __pyx_t_3 = PyNumber_Add(__pyx_t_4, __pyx_kp_s_ifStatement); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 319, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_3);
+  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+  __pyx_t_4 = NULL;
+  if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
+    __pyx_t_4 = PyMethod_GET_SELF(__pyx_t_2);
+    if (likely(__pyx_t_4)) {
+      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
+      __Pyx_INCREF(__pyx_t_4);
+      __Pyx_INCREF(function);
+      __Pyx_DECREF_SET(__pyx_t_2, function);
+    }
+  }
+  __pyx_t_1 = (__pyx_t_4) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_4, __pyx_t_3) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_3);
+  __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
+  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 319, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+  /* "compilationEngine.pyx":320
+ *     cdef compileIf(self):
+ *         self.output_file.write(self.indent * "  " + '<ifStatement>\n')
+ *         self.indent += 1             # <<<<<<<<<<<<<<
+ * 
+ *         self.output_file.write(self.indent * "  " + self.next_token + '\n') # get the next token <keyword> if </keyword>
+ */
+  __pyx_v_self->indent = (__pyx_v_self->indent + 1);
+
+  /* "compilationEngine.pyx":322
+ *         self.indent += 1
+ * 
+ *         self.output_file.write(self.indent * "  " + self.next_token + '\n') # get the next token <keyword> if </keyword>             # <<<<<<<<<<<<<<
+ * 
+ *         self.advance() # get the next token (
+ */
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 322, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
+  __pyx_t_3 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 322, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_3);
+  __pyx_t_4 = PyNumber_Multiply(__pyx_t_3, __pyx_kp_s_); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 322, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_4);
+  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+  __pyx_t_3 = PyNumber_Add(__pyx_t_4, __pyx_v_self->next_token); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 322, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_3);
+  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+  __pyx_t_4 = PyNumber_Add(__pyx_t_3, __pyx_kp_s__2); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 322, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_4);
+  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+  __pyx_t_3 = NULL;
+  if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
+    __pyx_t_3 = PyMethod_GET_SELF(__pyx_t_2);
+    if (likely(__pyx_t_3)) {
+      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
+      __Pyx_INCREF(__pyx_t_3);
+      __Pyx_INCREF(function);
+      __Pyx_DECREF_SET(__pyx_t_2, function);
+    }
+  }
+  __pyx_t_1 = (__pyx_t_3) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_3, __pyx_t_4) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_4);
+  __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
+  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 322, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+  /* "compilationEngine.pyx":324
+ *         self.output_file.write(self.indent * "  " + self.next_token + '\n') # get the next token <keyword> if </keyword>
+ * 
+ *         self.advance() # get the next token (             # <<<<<<<<<<<<<<
+ *         self.output_file.write(self.indent * "  " + self.next_token + '\n')
+ * 
+ */
+  __pyx_t_1 = ((struct __pyx_vtabstruct_17compilationEngine_CompilationEngine *)__pyx_v_self->__pyx_vtab)->advance(__pyx_v_self); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 324, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+  /* "compilationEngine.pyx":325
+ * 
+ *         self.advance() # get the next token (
+ *         self.output_file.write(self.indent * "  " + self.next_token + '\n')             # <<<<<<<<<<<<<<
+ * 
+ *         # compile expression
+ */
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 325, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
+  __pyx_t_4 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 325, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_4);
+  __pyx_t_3 = PyNumber_Multiply(__pyx_t_4, __pyx_kp_s_); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 325, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_3);
+  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+  __pyx_t_4 = PyNumber_Add(__pyx_t_3, __pyx_v_self->next_token); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 325, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_4);
+  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+  __pyx_t_3 = PyNumber_Add(__pyx_t_4, __pyx_kp_s__2); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 325, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_3);
+  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+  __pyx_t_4 = NULL;
+  if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
+    __pyx_t_4 = PyMethod_GET_SELF(__pyx_t_2);
+    if (likely(__pyx_t_4)) {
+      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
+      __Pyx_INCREF(__pyx_t_4);
+      __Pyx_INCREF(function);
+      __Pyx_DECREF_SET(__pyx_t_2, function);
+    }
+  }
+  __pyx_t_1 = (__pyx_t_4) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_4, __pyx_t_3) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_3);
+  __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
+  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 325, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+  /* "compilationEngine.pyx":328
+ * 
+ *         # compile expression
+ *         self.compileExpression()             # <<<<<<<<<<<<<<
+ * 
+ *         self.advance() # get the next token )
+ */
+  __pyx_t_1 = ((struct __pyx_vtabstruct_17compilationEngine_CompilationEngine *)__pyx_v_self->__pyx_vtab)->compileExpression(__pyx_v_self); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 328, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+  /* "compilationEngine.pyx":330
+ *         self.compileExpression()
+ * 
+ *         self.advance() # get the next token )             # <<<<<<<<<<<<<<
+ *         self.output_file.write(self.indent * "  " + self.next_token + '\n')
+ * 
+ */
+  __pyx_t_1 = ((struct __pyx_vtabstruct_17compilationEngine_CompilationEngine *)__pyx_v_self->__pyx_vtab)->advance(__pyx_v_self); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 330, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+  /* "compilationEngine.pyx":331
+ * 
+ *         self.advance() # get the next token )
+ *         self.output_file.write(self.indent * "  " + self.next_token + '\n')             # <<<<<<<<<<<<<<
+ * 
+ *         self.advance() # get the next token {
+ */
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 331, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
+  __pyx_t_3 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 331, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_3);
+  __pyx_t_4 = PyNumber_Multiply(__pyx_t_3, __pyx_kp_s_); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 331, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_4);
+  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+  __pyx_t_3 = PyNumber_Add(__pyx_t_4, __pyx_v_self->next_token); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 331, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_3);
+  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+  __pyx_t_4 = PyNumber_Add(__pyx_t_3, __pyx_kp_s__2); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 331, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_4);
+  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+  __pyx_t_3 = NULL;
+  if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
+    __pyx_t_3 = PyMethod_GET_SELF(__pyx_t_2);
+    if (likely(__pyx_t_3)) {
+      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
+      __Pyx_INCREF(__pyx_t_3);
+      __Pyx_INCREF(function);
+      __Pyx_DECREF_SET(__pyx_t_2, function);
+    }
+  }
+  __pyx_t_1 = (__pyx_t_3) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_3, __pyx_t_4) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_4);
+  __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
+  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 331, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+  /* "compilationEngine.pyx":333
+ *         self.output_file.write(self.indent * "  " + self.next_token + '\n')
+ * 
+ *         self.advance() # get the next token {             # <<<<<<<<<<<<<<
+ *         self.output_file.write(self.indent * "  " + self.next_token + '\n')
+ * 
+ */
+  __pyx_t_1 = ((struct __pyx_vtabstruct_17compilationEngine_CompilationEngine *)__pyx_v_self->__pyx_vtab)->advance(__pyx_v_self); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 333, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+  /* "compilationEngine.pyx":334
+ * 
+ *         self.advance() # get the next token {
+ *         self.output_file.write(self.indent * "  " + self.next_token + '\n')             # <<<<<<<<<<<<<<
+ * 
+ *         # compile statements
+ */
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 334, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
+  __pyx_t_4 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 334, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_4);
+  __pyx_t_3 = PyNumber_Multiply(__pyx_t_4, __pyx_kp_s_); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 334, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_3);
+  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+  __pyx_t_4 = PyNumber_Add(__pyx_t_3, __pyx_v_self->next_token); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 334, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_4);
+  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+  __pyx_t_3 = PyNumber_Add(__pyx_t_4, __pyx_kp_s__2); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 334, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_3);
+  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+  __pyx_t_4 = NULL;
+  if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
+    __pyx_t_4 = PyMethod_GET_SELF(__pyx_t_2);
+    if (likely(__pyx_t_4)) {
+      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
+      __Pyx_INCREF(__pyx_t_4);
+      __Pyx_INCREF(function);
+      __Pyx_DECREF_SET(__pyx_t_2, function);
+    }
+  }
+  __pyx_t_1 = (__pyx_t_4) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_4, __pyx_t_3) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_3);
+  __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
+  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 334, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+  /* "compilationEngine.pyx":337
+ * 
+ *         # compile statements
+ *         self.output_file.write(self.indent * "  " + '<statements>\n')             # <<<<<<<<<<<<<<
+ *         self.indent += 1
+ *         self.compileStatements()
+ */
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 337, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
+  __pyx_t_3 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 337, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_3);
+  __pyx_t_4 = PyNumber_Multiply(__pyx_t_3, __pyx_kp_s_); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 337, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_4);
+  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+  __pyx_t_3 = PyNumber_Add(__pyx_t_4, __pyx_kp_s_statements); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 337, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_3);
+  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+  __pyx_t_4 = NULL;
+  if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
+    __pyx_t_4 = PyMethod_GET_SELF(__pyx_t_2);
+    if (likely(__pyx_t_4)) {
+      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
+      __Pyx_INCREF(__pyx_t_4);
+      __Pyx_INCREF(function);
+      __Pyx_DECREF_SET(__pyx_t_2, function);
+    }
+  }
+  __pyx_t_1 = (__pyx_t_4) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_4, __pyx_t_3) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_3);
+  __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
+  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 337, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+  /* "compilationEngine.pyx":338
+ *         # compile statements
+ *         self.output_file.write(self.indent * "  " + '<statements>\n')
+ *         self.indent += 1             # <<<<<<<<<<<<<<
+ *         self.compileStatements()
+ *         self.indent -= 1
+ */
+  __pyx_v_self->indent = (__pyx_v_self->indent + 1);
+
+  /* "compilationEngine.pyx":339
+ *         self.output_file.write(self.indent * "  " + '<statements>\n')
+ *         self.indent += 1
+ *         self.compileStatements()             # <<<<<<<<<<<<<<
+ *         self.indent -= 1
+ *         self.output_file.write(self.indent * "  " + '</statements>\n')
+ */
+  __pyx_t_1 = ((struct __pyx_vtabstruct_17compilationEngine_CompilationEngine *)__pyx_v_self->__pyx_vtab)->compileStatements(__pyx_v_self); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 339, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+  /* "compilationEngine.pyx":340
+ *         self.indent += 1
+ *         self.compileStatements()
+ *         self.indent -= 1             # <<<<<<<<<<<<<<
+ *         self.output_file.write(self.indent * "  " + '</statements>\n')
+ * 
+ */
+  __pyx_v_self->indent = (__pyx_v_self->indent - 1);
+
+  /* "compilationEngine.pyx":341
+ *         self.compileStatements()
+ *         self.indent -= 1
+ *         self.output_file.write(self.indent * "  " + '</statements>\n')             # <<<<<<<<<<<<<<
+ * 
+ * 
+ */
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 341, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
+  __pyx_t_3 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 341, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_3);
+  __pyx_t_4 = PyNumber_Multiply(__pyx_t_3, __pyx_kp_s_); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 341, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_4);
+  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+  __pyx_t_3 = PyNumber_Add(__pyx_t_4, __pyx_kp_s_statements_2); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 341, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_3);
+  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+  __pyx_t_4 = NULL;
+  if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
+    __pyx_t_4 = PyMethod_GET_SELF(__pyx_t_2);
+    if (likely(__pyx_t_4)) {
+      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
+      __Pyx_INCREF(__pyx_t_4);
+      __Pyx_INCREF(function);
+      __Pyx_DECREF_SET(__pyx_t_2, function);
+    }
+  }
+  __pyx_t_1 = (__pyx_t_4) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_4, __pyx_t_3) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_3);
+  __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
+  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 341, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+  /* "compilationEngine.pyx":344
+ * 
+ * 
+ *         self.advance() # get the next token }             # <<<<<<<<<<<<<<
+ *         self.output_file.write(self.indent * "  " + self.next_token + '\n')
+ * 
+ */
+  __pyx_t_1 = ((struct __pyx_vtabstruct_17compilationEngine_CompilationEngine *)__pyx_v_self->__pyx_vtab)->advance(__pyx_v_self); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 344, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+  /* "compilationEngine.pyx":345
+ * 
+ *         self.advance() # get the next token }
+ *         self.output_file.write(self.indent * "  " + self.next_token + '\n')             # <<<<<<<<<<<<<<
+ * 
+ *         # compile (else { statements })?
+ */
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 345, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
+  __pyx_t_3 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 345, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_3);
+  __pyx_t_4 = PyNumber_Multiply(__pyx_t_3, __pyx_kp_s_); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 345, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_4);
+  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+  __pyx_t_3 = PyNumber_Add(__pyx_t_4, __pyx_v_self->next_token); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 345, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_3);
+  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+  __pyx_t_4 = PyNumber_Add(__pyx_t_3, __pyx_kp_s__2); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 345, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_4);
+  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+  __pyx_t_3 = NULL;
+  if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
+    __pyx_t_3 = PyMethod_GET_SELF(__pyx_t_2);
+    if (likely(__pyx_t_3)) {
+      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
+      __Pyx_INCREF(__pyx_t_3);
+      __Pyx_INCREF(function);
+      __Pyx_DECREF_SET(__pyx_t_2, function);
+    }
+  }
+  __pyx_t_1 = (__pyx_t_3) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_3, __pyx_t_4) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_4);
+  __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
+  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 345, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+  /* "compilationEngine.pyx":348
+ * 
+ *         # compile (else { statements })?
+ *         self.advance() # get the next token else or not else             # <<<<<<<<<<<<<<
+ *         if self.next_token == "<keyword> else </keyword>":
+ *             self.output_file.write(self.indent * "  " + self.next_token + '\n')
+ */
+  __pyx_t_1 = ((struct __pyx_vtabstruct_17compilationEngine_CompilationEngine *)__pyx_v_self->__pyx_vtab)->advance(__pyx_v_self); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 348, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+  /* "compilationEngine.pyx":349
+ *         # compile (else { statements })?
+ *         self.advance() # get the next token else or not else
+ *         if self.next_token == "<keyword> else </keyword>":             # <<<<<<<<<<<<<<
+ *             self.output_file.write(self.indent * "  " + self.next_token + '\n')
+ * 
+ */
+  __pyx_t_5 = (__Pyx_PyString_Equals(__pyx_v_self->next_token, __pyx_kp_s_keyword_else_keyword, Py_EQ)); if (unlikely(__pyx_t_5 < 0)) __PYX_ERR(0, 349, __pyx_L1_error)
+  __pyx_t_6 = (__pyx_t_5 != 0);
+  if (__pyx_t_6) {
+
+    /* "compilationEngine.pyx":350
+ *         self.advance() # get the next token else or not else
+ *         if self.next_token == "<keyword> else </keyword>":
+ *             self.output_file.write(self.indent * "  " + self.next_token + '\n')             # <<<<<<<<<<<<<<
+ * 
+ *             self.advance() # get the next token {
+ */
+    __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 350, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_2);
+    __pyx_t_4 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 350, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_4);
+    __pyx_t_3 = PyNumber_Multiply(__pyx_t_4, __pyx_kp_s_); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 350, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_3);
+    __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+    __pyx_t_4 = PyNumber_Add(__pyx_t_3, __pyx_v_self->next_token); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 350, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_4);
+    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+    __pyx_t_3 = PyNumber_Add(__pyx_t_4, __pyx_kp_s__2); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 350, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_3);
+    __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+    __pyx_t_4 = NULL;
+    if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
+      __pyx_t_4 = PyMethod_GET_SELF(__pyx_t_2);
+      if (likely(__pyx_t_4)) {
+        PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
+        __Pyx_INCREF(__pyx_t_4);
+        __Pyx_INCREF(function);
+        __Pyx_DECREF_SET(__pyx_t_2, function);
+      }
+    }
+    __pyx_t_1 = (__pyx_t_4) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_4, __pyx_t_3) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_3);
+    __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
+    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+    if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 350, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_1);
+    __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+    /* "compilationEngine.pyx":352
+ *             self.output_file.write(self.indent * "  " + self.next_token + '\n')
+ * 
+ *             self.advance() # get the next token {             # <<<<<<<<<<<<<<
+ *             self.output_file.write(self.indent * "  " + self.next_token + '\n')
+ * 
+ */
+    __pyx_t_1 = ((struct __pyx_vtabstruct_17compilationEngine_CompilationEngine *)__pyx_v_self->__pyx_vtab)->advance(__pyx_v_self); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 352, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_1);
+    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+    /* "compilationEngine.pyx":353
+ * 
+ *             self.advance() # get the next token {
+ *             self.output_file.write(self.indent * "  " + self.next_token + '\n')             # <<<<<<<<<<<<<<
+ * 
+ *             # compile statements
+ */
+    __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 353, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_2);
+    __pyx_t_3 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 353, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_3);
+    __pyx_t_4 = PyNumber_Multiply(__pyx_t_3, __pyx_kp_s_); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 353, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_4);
+    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+    __pyx_t_3 = PyNumber_Add(__pyx_t_4, __pyx_v_self->next_token); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 353, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_3);
+    __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+    __pyx_t_4 = PyNumber_Add(__pyx_t_3, __pyx_kp_s__2); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 353, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_4);
+    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+    __pyx_t_3 = NULL;
+    if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
+      __pyx_t_3 = PyMethod_GET_SELF(__pyx_t_2);
+      if (likely(__pyx_t_3)) {
+        PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
+        __Pyx_INCREF(__pyx_t_3);
+        __Pyx_INCREF(function);
+        __Pyx_DECREF_SET(__pyx_t_2, function);
+      }
+    }
+    __pyx_t_1 = (__pyx_t_3) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_3, __pyx_t_4) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_4);
+    __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
+    __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+    if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 353, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_1);
+    __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+    /* "compilationEngine.pyx":356
+ * 
+ *             # compile statements
+ *             self.output_file.write(self.indent * "  " + '<statements>\n')             # <<<<<<<<<<<<<<
+ *             self.indent += 1
+ *             self.compileStatements()
+ */
+    __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 356, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_2);
+    __pyx_t_4 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 356, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_4);
+    __pyx_t_3 = PyNumber_Multiply(__pyx_t_4, __pyx_kp_s_); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 356, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_3);
+    __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+    __pyx_t_4 = PyNumber_Add(__pyx_t_3, __pyx_kp_s_statements); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 356, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_4);
+    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+    __pyx_t_3 = NULL;
+    if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
+      __pyx_t_3 = PyMethod_GET_SELF(__pyx_t_2);
+      if (likely(__pyx_t_3)) {
+        PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
+        __Pyx_INCREF(__pyx_t_3);
+        __Pyx_INCREF(function);
+        __Pyx_DECREF_SET(__pyx_t_2, function);
+      }
+    }
+    __pyx_t_1 = (__pyx_t_3) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_3, __pyx_t_4) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_4);
+    __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
+    __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+    if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 356, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_1);
+    __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+    /* "compilationEngine.pyx":357
+ *             # compile statements
+ *             self.output_file.write(self.indent * "  " + '<statements>\n')
+ *             self.indent += 1             # <<<<<<<<<<<<<<
+ *             self.compileStatements()
+ *             self.indent -= 1
+ */
+    __pyx_v_self->indent = (__pyx_v_self->indent + 1);
+
+    /* "compilationEngine.pyx":358
+ *             self.output_file.write(self.indent * "  " + '<statements>\n')
+ *             self.indent += 1
+ *             self.compileStatements()             # <<<<<<<<<<<<<<
+ *             self.indent -= 1
+ *             self.output_file.write(self.indent * "  " + '</statements>\n')
+ */
+    __pyx_t_1 = ((struct __pyx_vtabstruct_17compilationEngine_CompilationEngine *)__pyx_v_self->__pyx_vtab)->compileStatements(__pyx_v_self); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 358, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_1);
+    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+    /* "compilationEngine.pyx":359
+ *             self.indent += 1
+ *             self.compileStatements()
+ *             self.indent -= 1             # <<<<<<<<<<<<<<
+ *             self.output_file.write(self.indent * "  " + '</statements>\n')
+ * 
+ */
+    __pyx_v_self->indent = (__pyx_v_self->indent - 1);
+
+    /* "compilationEngine.pyx":360
+ *             self.compileStatements()
+ *             self.indent -= 1
+ *             self.output_file.write(self.indent * "  " + '</statements>\n')             # <<<<<<<<<<<<<<
+ * 
+ * 
+ */
+    __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 360, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_2);
+    __pyx_t_4 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 360, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_4);
+    __pyx_t_3 = PyNumber_Multiply(__pyx_t_4, __pyx_kp_s_); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 360, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_3);
+    __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+    __pyx_t_4 = PyNumber_Add(__pyx_t_3, __pyx_kp_s_statements_2); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 360, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_4);
+    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+    __pyx_t_3 = NULL;
+    if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
+      __pyx_t_3 = PyMethod_GET_SELF(__pyx_t_2);
+      if (likely(__pyx_t_3)) {
+        PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
+        __Pyx_INCREF(__pyx_t_3);
+        __Pyx_INCREF(function);
+        __Pyx_DECREF_SET(__pyx_t_2, function);
+      }
+    }
+    __pyx_t_1 = (__pyx_t_3) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_3, __pyx_t_4) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_4);
+    __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
+    __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+    if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 360, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_1);
+    __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+    /* "compilationEngine.pyx":363
+ * 
+ * 
+ *             self.advance() # get the next token }             # <<<<<<<<<<<<<<
+ *             self.output_file.write(self.indent * "  " + self.next_token + '\n')
+ * 
+ */
+    __pyx_t_1 = ((struct __pyx_vtabstruct_17compilationEngine_CompilationEngine *)__pyx_v_self->__pyx_vtab)->advance(__pyx_v_self); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 363, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_1);
+    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+    /* "compilationEngine.pyx":364
+ * 
+ *             self.advance() # get the next token }
+ *             self.output_file.write(self.indent * "  " + self.next_token + '\n')             # <<<<<<<<<<<<<<
+ * 
+ *         else:
+ */
+    __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 364, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_2);
+    __pyx_t_4 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 364, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_4);
+    __pyx_t_3 = PyNumber_Multiply(__pyx_t_4, __pyx_kp_s_); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 364, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_3);
+    __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+    __pyx_t_4 = PyNumber_Add(__pyx_t_3, __pyx_v_self->next_token); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 364, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_4);
+    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+    __pyx_t_3 = PyNumber_Add(__pyx_t_4, __pyx_kp_s__2); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 364, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_3);
+    __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+    __pyx_t_4 = NULL;
+    if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
+      __pyx_t_4 = PyMethod_GET_SELF(__pyx_t_2);
+      if (likely(__pyx_t_4)) {
+        PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
+        __Pyx_INCREF(__pyx_t_4);
+        __Pyx_INCREF(function);
+        __Pyx_DECREF_SET(__pyx_t_2, function);
+      }
+    }
+    __pyx_t_1 = (__pyx_t_4) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_4, __pyx_t_3) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_3);
+    __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
+    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+    if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 364, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_1);
+    __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+    /* "compilationEngine.pyx":349
+ *         # compile (else { statements })?
+ *         self.advance() # get the next token else or not else
+ *         if self.next_token == "<keyword> else </keyword>":             # <<<<<<<<<<<<<<
+ *             self.output_file.write(self.indent * "  " + self.next_token + '\n')
+ * 
+ */
+    goto __pyx_L3;
+  }
+
+  /* "compilationEngine.pyx":367
+ * 
+ *         else:
+ *             self.reverse()             # <<<<<<<<<<<<<<
+ * 
+ *         self.indent -= 1
+ */
+  /*else*/ {
+    __pyx_t_1 = ((struct __pyx_vtabstruct_17compilationEngine_CompilationEngine *)__pyx_v_self->__pyx_vtab)->reverse(__pyx_v_self); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 367, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_1);
+    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  }
+  __pyx_L3:;
+
+  /* "compilationEngine.pyx":369
+ *             self.reverse()
+ * 
+ *         self.indent -= 1             # <<<<<<<<<<<<<<
+ *         self.output_file.write(self.indent * "  " + '</ifStatement>\n')
+ * 
+ */
+  __pyx_v_self->indent = (__pyx_v_self->indent - 1);
+
+  /* "compilationEngine.pyx":370
+ * 
+ *         self.indent -= 1
+ *         self.output_file.write(self.indent * "  " + '</ifStatement>\n')             # <<<<<<<<<<<<<<
+ * 
+ *     # compile a while statement
+ */
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 370, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
+  __pyx_t_3 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 370, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_3);
+  __pyx_t_4 = PyNumber_Multiply(__pyx_t_3, __pyx_kp_s_); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 370, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_4);
+  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+  __pyx_t_3 = PyNumber_Add(__pyx_t_4, __pyx_kp_s_ifStatement_2); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 370, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_3);
+  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+  __pyx_t_4 = NULL;
+  if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
+    __pyx_t_4 = PyMethod_GET_SELF(__pyx_t_2);
+    if (likely(__pyx_t_4)) {
+      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
+      __Pyx_INCREF(__pyx_t_4);
+      __Pyx_INCREF(function);
+      __Pyx_DECREF_SET(__pyx_t_2, function);
+    }
+  }
+  __pyx_t_1 = (__pyx_t_4) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_4, __pyx_t_3) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_3);
+  __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
+  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 370, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+  /* "compilationEngine.pyx":318
+ * 
+ *     # compile an if statement, possibly with a trailing else clause
+ *     cdef compileIf(self):             # <<<<<<<<<<<<<<
+ *         self.output_file.write(self.indent * "  " + '<ifStatement>\n')
+ *         self.indent += 1
+ */
+
+  /* function exit code */
+  __pyx_r = Py_None; __Pyx_INCREF(Py_None);
+  goto __pyx_L0;
+  __pyx_L1_error:;
+  __Pyx_XDECREF(__pyx_t_1);
+  __Pyx_XDECREF(__pyx_t_2);
+  __Pyx_XDECREF(__pyx_t_3);
+  __Pyx_XDECREF(__pyx_t_4);
+  __Pyx_AddTraceback("compilationEngine.CompilationEngine.compileIf", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __pyx_r = 0;
+  __pyx_L0:;
+  __Pyx_XGIVEREF(__pyx_r);
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+/* "compilationEngine.pyx":373
+ * 
+ *     # compile a while statement
+ *     cdef compileWhile(self):             # <<<<<<<<<<<<<<
+ *         self.output_file.write(self.indent * "  " + '<whileStatement>\n')
+ *         self.indent += 1
+ */
+
+static PyObject *__pyx_f_17compilationEngine_17CompilationEngine_compileWhile(struct __pyx_obj_17compilationEngine_CompilationEngine *__pyx_v_self) {
+  PyObject *__pyx_r = NULL;
+  __Pyx_RefNannyDeclarations
+  PyObject *__pyx_t_1 = NULL;
+  PyObject *__pyx_t_2 = NULL;
+  PyObject *__pyx_t_3 = NULL;
+  PyObject *__pyx_t_4 = NULL;
+  int __pyx_lineno = 0;
+  const char *__pyx_filename = NULL;
+  int __pyx_clineno = 0;
+  __Pyx_RefNannySetupContext("compileWhile", 0);
+
+  /* "compilationEngine.pyx":374
+ *     # compile a while statement
+ *     cdef compileWhile(self):
+ *         self.output_file.write(self.indent * "  " + '<whileStatement>\n')             # <<<<<<<<<<<<<<
+ *         self.indent += 1
+ * 
+ */
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 374, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
+  __pyx_t_3 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 374, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_3);
+  __pyx_t_4 = PyNumber_Multiply(__pyx_t_3, __pyx_kp_s_); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 374, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_4);
+  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+  __pyx_t_3 = PyNumber_Add(__pyx_t_4, __pyx_kp_s_whileStatement); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 374, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_3);
+  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+  __pyx_t_4 = NULL;
+  if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
+    __pyx_t_4 = PyMethod_GET_SELF(__pyx_t_2);
+    if (likely(__pyx_t_4)) {
+      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
+      __Pyx_INCREF(__pyx_t_4);
+      __Pyx_INCREF(function);
+      __Pyx_DECREF_SET(__pyx_t_2, function);
+    }
+  }
+  __pyx_t_1 = (__pyx_t_4) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_4, __pyx_t_3) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_3);
+  __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
+  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 374, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+  /* "compilationEngine.pyx":375
+ *     cdef compileWhile(self):
+ *         self.output_file.write(self.indent * "  " + '<whileStatement>\n')
+ *         self.indent += 1             # <<<<<<<<<<<<<<
+ * 
+ *         self.output_file.write(self.indent * "  " + self.next_token + '\n') # get the next token <keyword> while </keyword>
+ */
+  __pyx_v_self->indent = (__pyx_v_self->indent + 1);
+
+  /* "compilationEngine.pyx":377
+ *         self.indent += 1
+ * 
+ *         self.output_file.write(self.indent * "  " + self.next_token + '\n') # get the next token <keyword> while </keyword>             # <<<<<<<<<<<<<<
+ * 
+ *         self.advance() # get the next token (
+ */
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 377, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
+  __pyx_t_3 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 377, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_3);
+  __pyx_t_4 = PyNumber_Multiply(__pyx_t_3, __pyx_kp_s_); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 377, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_4);
+  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+  __pyx_t_3 = PyNumber_Add(__pyx_t_4, __pyx_v_self->next_token); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 377, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_3);
+  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+  __pyx_t_4 = PyNumber_Add(__pyx_t_3, __pyx_kp_s__2); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 377, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_4);
+  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+  __pyx_t_3 = NULL;
+  if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
+    __pyx_t_3 = PyMethod_GET_SELF(__pyx_t_2);
+    if (likely(__pyx_t_3)) {
+      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
+      __Pyx_INCREF(__pyx_t_3);
+      __Pyx_INCREF(function);
+      __Pyx_DECREF_SET(__pyx_t_2, function);
+    }
+  }
+  __pyx_t_1 = (__pyx_t_3) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_3, __pyx_t_4) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_4);
+  __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
+  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 377, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+  /* "compilationEngine.pyx":379
+ *         self.output_file.write(self.indent * "  " + self.next_token + '\n') # get the next token <keyword> while </keyword>
+ * 
+ *         self.advance() # get the next token (             # <<<<<<<<<<<<<<
+ *         self.output_file.write(self.indent * "  " + self.next_token + '\n')
+ * 
+ */
+  __pyx_t_1 = ((struct __pyx_vtabstruct_17compilationEngine_CompilationEngine *)__pyx_v_self->__pyx_vtab)->advance(__pyx_v_self); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 379, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+  /* "compilationEngine.pyx":380
+ * 
+ *         self.advance() # get the next token (
+ *         self.output_file.write(self.indent * "  " + self.next_token + '\n')             # <<<<<<<<<<<<<<
+ * 
+ *         # compile expression
+ */
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 380, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
+  __pyx_t_4 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 380, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_4);
+  __pyx_t_3 = PyNumber_Multiply(__pyx_t_4, __pyx_kp_s_); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 380, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_3);
+  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+  __pyx_t_4 = PyNumber_Add(__pyx_t_3, __pyx_v_self->next_token); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 380, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_4);
+  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+  __pyx_t_3 = PyNumber_Add(__pyx_t_4, __pyx_kp_s__2); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 380, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_3);
+  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+  __pyx_t_4 = NULL;
+  if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
+    __pyx_t_4 = PyMethod_GET_SELF(__pyx_t_2);
+    if (likely(__pyx_t_4)) {
+      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
+      __Pyx_INCREF(__pyx_t_4);
+      __Pyx_INCREF(function);
+      __Pyx_DECREF_SET(__pyx_t_2, function);
+    }
+  }
+  __pyx_t_1 = (__pyx_t_4) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_4, __pyx_t_3) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_3);
+  __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
+  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 380, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+  /* "compilationEngine.pyx":383
+ * 
+ *         # compile expression
+ *         self.compileExpression()             # <<<<<<<<<<<<<<
+ * 
+ *         self.advance() # get the next token )
+ */
+  __pyx_t_1 = ((struct __pyx_vtabstruct_17compilationEngine_CompilationEngine *)__pyx_v_self->__pyx_vtab)->compileExpression(__pyx_v_self); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 383, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+  /* "compilationEngine.pyx":385
+ *         self.compileExpression()
+ * 
+ *         self.advance() # get the next token )             # <<<<<<<<<<<<<<
+ *         self.output_file.write(self.indent * "  " + self.next_token + '\n')
+ * 
+ */
+  __pyx_t_1 = ((struct __pyx_vtabstruct_17compilationEngine_CompilationEngine *)__pyx_v_self->__pyx_vtab)->advance(__pyx_v_self); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 385, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+  /* "compilationEngine.pyx":386
+ * 
+ *         self.advance() # get the next token )
+ *         self.output_file.write(self.indent * "  " + self.next_token + '\n')             # <<<<<<<<<<<<<<
+ * 
+ *         self.advance() # get the next token {
+ */
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 386, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
+  __pyx_t_3 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 386, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_3);
+  __pyx_t_4 = PyNumber_Multiply(__pyx_t_3, __pyx_kp_s_); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 386, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_4);
+  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+  __pyx_t_3 = PyNumber_Add(__pyx_t_4, __pyx_v_self->next_token); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 386, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_3);
+  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+  __pyx_t_4 = PyNumber_Add(__pyx_t_3, __pyx_kp_s__2); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 386, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_4);
+  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+  __pyx_t_3 = NULL;
+  if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
+    __pyx_t_3 = PyMethod_GET_SELF(__pyx_t_2);
+    if (likely(__pyx_t_3)) {
+      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
+      __Pyx_INCREF(__pyx_t_3);
+      __Pyx_INCREF(function);
+      __Pyx_DECREF_SET(__pyx_t_2, function);
+    }
+  }
+  __pyx_t_1 = (__pyx_t_3) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_3, __pyx_t_4) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_4);
+  __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
+  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 386, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+  /* "compilationEngine.pyx":388
+ *         self.output_file.write(self.indent * "  " + self.next_token + '\n')
+ * 
+ *         self.advance() # get the next token {             # <<<<<<<<<<<<<<
+ *         self.output_file.write(self.indent * "  " + self.next_token + '\n')
+ * 
+ */
+  __pyx_t_1 = ((struct __pyx_vtabstruct_17compilationEngine_CompilationEngine *)__pyx_v_self->__pyx_vtab)->advance(__pyx_v_self); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 388, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+  /* "compilationEngine.pyx":389
+ * 
+ *         self.advance() # get the next token {
+ *         self.output_file.write(self.indent * "  " + self.next_token + '\n')             # <<<<<<<<<<<<<<
+ * 
+ *         # compile statements
+ */
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 389, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
+  __pyx_t_4 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 389, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_4);
+  __pyx_t_3 = PyNumber_Multiply(__pyx_t_4, __pyx_kp_s_); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 389, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_3);
+  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+  __pyx_t_4 = PyNumber_Add(__pyx_t_3, __pyx_v_self->next_token); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 389, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_4);
+  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+  __pyx_t_3 = PyNumber_Add(__pyx_t_4, __pyx_kp_s__2); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 389, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_3);
+  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+  __pyx_t_4 = NULL;
+  if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
+    __pyx_t_4 = PyMethod_GET_SELF(__pyx_t_2);
+    if (likely(__pyx_t_4)) {
+      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
+      __Pyx_INCREF(__pyx_t_4);
+      __Pyx_INCREF(function);
+      __Pyx_DECREF_SET(__pyx_t_2, function);
+    }
+  }
+  __pyx_t_1 = (__pyx_t_4) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_4, __pyx_t_3) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_3);
+  __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
+  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 389, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+  /* "compilationEngine.pyx":392
+ * 
+ *         # compile statements
+ *         self.output_file.write(self.indent * "  " + '<statements>\n')             # <<<<<<<<<<<<<<
+ *         self.indent += 1
+ *         self.compileStatements()
+ */
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 392, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
+  __pyx_t_3 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 392, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_3);
+  __pyx_t_4 = PyNumber_Multiply(__pyx_t_3, __pyx_kp_s_); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 392, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_4);
+  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+  __pyx_t_3 = PyNumber_Add(__pyx_t_4, __pyx_kp_s_statements); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 392, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_3);
+  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+  __pyx_t_4 = NULL;
+  if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
+    __pyx_t_4 = PyMethod_GET_SELF(__pyx_t_2);
+    if (likely(__pyx_t_4)) {
+      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
+      __Pyx_INCREF(__pyx_t_4);
+      __Pyx_INCREF(function);
+      __Pyx_DECREF_SET(__pyx_t_2, function);
+    }
+  }
+  __pyx_t_1 = (__pyx_t_4) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_4, __pyx_t_3) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_3);
+  __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
+  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 392, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+  /* "compilationEngine.pyx":393
+ *         # compile statements
+ *         self.output_file.write(self.indent * "  " + '<statements>\n')
+ *         self.indent += 1             # <<<<<<<<<<<<<<
+ *         self.compileStatements()
+ *         self.indent -= 1
+ */
+  __pyx_v_self->indent = (__pyx_v_self->indent + 1);
+
+  /* "compilationEngine.pyx":394
+ *         self.output_file.write(self.indent * "  " + '<statements>\n')
+ *         self.indent += 1
+ *         self.compileStatements()             # <<<<<<<<<<<<<<
+ *         self.indent -= 1
+ *         self.output_file.write(self.indent * "  " + '</statements>\n')
+ */
+  __pyx_t_1 = ((struct __pyx_vtabstruct_17compilationEngine_CompilationEngine *)__pyx_v_self->__pyx_vtab)->compileStatements(__pyx_v_self); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 394, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+  /* "compilationEngine.pyx":395
+ *         self.indent += 1
+ *         self.compileStatements()
+ *         self.indent -= 1             # <<<<<<<<<<<<<<
+ *         self.output_file.write(self.indent * "  " + '</statements>\n')
+ * 
+ */
+  __pyx_v_self->indent = (__pyx_v_self->indent - 1);
+
+  /* "compilationEngine.pyx":396
+ *         self.compileStatements()
+ *         self.indent -= 1
+ *         self.output_file.write(self.indent * "  " + '</statements>\n')             # <<<<<<<<<<<<<<
+ * 
+ * 
+ */
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 396, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
+  __pyx_t_3 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 396, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_3);
+  __pyx_t_4 = PyNumber_Multiply(__pyx_t_3, __pyx_kp_s_); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 396, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_4);
+  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+  __pyx_t_3 = PyNumber_Add(__pyx_t_4, __pyx_kp_s_statements_2); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 396, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_3);
+  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+  __pyx_t_4 = NULL;
+  if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
+    __pyx_t_4 = PyMethod_GET_SELF(__pyx_t_2);
+    if (likely(__pyx_t_4)) {
+      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
+      __Pyx_INCREF(__pyx_t_4);
+      __Pyx_INCREF(function);
+      __Pyx_DECREF_SET(__pyx_t_2, function);
+    }
+  }
+  __pyx_t_1 = (__pyx_t_4) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_4, __pyx_t_3) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_3);
+  __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
+  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 396, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+  /* "compilationEngine.pyx":399
+ * 
+ * 
+ *         self.advance() # get the next token }             # <<<<<<<<<<<<<<
+ *         self.output_file.write(self.indent * "  " + self.next_token + '\n')
+ * 
+ */
+  __pyx_t_1 = ((struct __pyx_vtabstruct_17compilationEngine_CompilationEngine *)__pyx_v_self->__pyx_vtab)->advance(__pyx_v_self); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 399, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+  /* "compilationEngine.pyx":400
+ * 
+ *         self.advance() # get the next token }
+ *         self.output_file.write(self.indent * "  " + self.next_token + '\n')             # <<<<<<<<<<<<<<
+ * 
+ *         self.indent -= 1
+ */
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 400, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
+  __pyx_t_3 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 400, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_3);
+  __pyx_t_4 = PyNumber_Multiply(__pyx_t_3, __pyx_kp_s_); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 400, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_4);
+  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+  __pyx_t_3 = PyNumber_Add(__pyx_t_4, __pyx_v_self->next_token); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 400, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_3);
+  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+  __pyx_t_4 = PyNumber_Add(__pyx_t_3, __pyx_kp_s__2); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 400, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_4);
+  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+  __pyx_t_3 = NULL;
+  if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
+    __pyx_t_3 = PyMethod_GET_SELF(__pyx_t_2);
+    if (likely(__pyx_t_3)) {
+      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
+      __Pyx_INCREF(__pyx_t_3);
+      __Pyx_INCREF(function);
+      __Pyx_DECREF_SET(__pyx_t_2, function);
+    }
+  }
+  __pyx_t_1 = (__pyx_t_3) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_3, __pyx_t_4) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_4);
+  __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
+  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 400, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+  /* "compilationEngine.pyx":402
+ *         self.output_file.write(self.indent * "  " + self.next_token + '\n')
+ * 
+ *         self.indent -= 1             # <<<<<<<<<<<<<<
+ *         self.output_file.write(self.indent * "  " + '</whileStatement>\n')
+ * 
+ */
+  __pyx_v_self->indent = (__pyx_v_self->indent - 1);
+
+  /* "compilationEngine.pyx":403
+ * 
+ *         self.indent -= 1
+ *         self.output_file.write(self.indent * "  " + '</whileStatement>\n')             # <<<<<<<<<<<<<<
+ * 
+ *     # compile a do statement
+ */
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 403, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
+  __pyx_t_4 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 403, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_4);
+  __pyx_t_3 = PyNumber_Multiply(__pyx_t_4, __pyx_kp_s_); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 403, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_3);
+  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+  __pyx_t_4 = PyNumber_Add(__pyx_t_3, __pyx_kp_s_whileStatement_2); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 403, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_4);
+  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+  __pyx_t_3 = NULL;
+  if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
+    __pyx_t_3 = PyMethod_GET_SELF(__pyx_t_2);
+    if (likely(__pyx_t_3)) {
+      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
+      __Pyx_INCREF(__pyx_t_3);
+      __Pyx_INCREF(function);
+      __Pyx_DECREF_SET(__pyx_t_2, function);
+    }
+  }
+  __pyx_t_1 = (__pyx_t_3) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_3, __pyx_t_4) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_4);
+  __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
+  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 403, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+  /* "compilationEngine.pyx":373
+ * 
+ *     # compile a while statement
+ *     cdef compileWhile(self):             # <<<<<<<<<<<<<<
+ *         self.output_file.write(self.indent * "  " + '<whileStatement>\n')
+ *         self.indent += 1
+ */
+
+  /* function exit code */
+  __pyx_r = Py_None; __Pyx_INCREF(Py_None);
+  goto __pyx_L0;
+  __pyx_L1_error:;
+  __Pyx_XDECREF(__pyx_t_1);
+  __Pyx_XDECREF(__pyx_t_2);
+  __Pyx_XDECREF(__pyx_t_3);
+  __Pyx_XDECREF(__pyx_t_4);
   __Pyx_AddTraceback("compilationEngine.CompilationEngine.compileWhile", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = 0;
   __pyx_L0:;
@@ -6161,11 +6665,241 @@ static PyObject *__pyx_f_17compilationEngine_17CompilationEngine_compileWhile(st
   return __pyx_r;
 }
 
-/* "compilationEngine.pyx":208
+/* "compilationEngine.pyx":406
  * 
- *     # Compiles a return statement
+ *     # compile a do statement
+ *     cdef compileDo(self):             # <<<<<<<<<<<<<<
+ *         self.output_file.write(self.indent * "  " + '<doStatement>\n')
+ *         self.indent += 1
+ */
+
+static PyObject *__pyx_f_17compilationEngine_17CompilationEngine_compileDo(struct __pyx_obj_17compilationEngine_CompilationEngine *__pyx_v_self) {
+  PyObject *__pyx_r = NULL;
+  __Pyx_RefNannyDeclarations
+  PyObject *__pyx_t_1 = NULL;
+  PyObject *__pyx_t_2 = NULL;
+  PyObject *__pyx_t_3 = NULL;
+  PyObject *__pyx_t_4 = NULL;
+  int __pyx_lineno = 0;
+  const char *__pyx_filename = NULL;
+  int __pyx_clineno = 0;
+  __Pyx_RefNannySetupContext("compileDo", 0);
+
+  /* "compilationEngine.pyx":407
+ *     # compile a do statement
+ *     cdef compileDo(self):
+ *         self.output_file.write(self.indent * "  " + '<doStatement>\n')             # <<<<<<<<<<<<<<
+ *         self.indent += 1
+ * 
+ */
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 407, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
+  __pyx_t_3 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 407, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_3);
+  __pyx_t_4 = PyNumber_Multiply(__pyx_t_3, __pyx_kp_s_); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 407, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_4);
+  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+  __pyx_t_3 = PyNumber_Add(__pyx_t_4, __pyx_kp_s_doStatement); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 407, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_3);
+  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+  __pyx_t_4 = NULL;
+  if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
+    __pyx_t_4 = PyMethod_GET_SELF(__pyx_t_2);
+    if (likely(__pyx_t_4)) {
+      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
+      __Pyx_INCREF(__pyx_t_4);
+      __Pyx_INCREF(function);
+      __Pyx_DECREF_SET(__pyx_t_2, function);
+    }
+  }
+  __pyx_t_1 = (__pyx_t_4) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_4, __pyx_t_3) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_3);
+  __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
+  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 407, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+  /* "compilationEngine.pyx":408
+ *     cdef compileDo(self):
+ *         self.output_file.write(self.indent * "  " + '<doStatement>\n')
+ *         self.indent += 1             # <<<<<<<<<<<<<<
+ * 
+ *         self.output_file.write(self.indent * "  " + self.next_token + '\n') # get the next token <keyword> do </keyword>
+ */
+  __pyx_v_self->indent = (__pyx_v_self->indent + 1);
+
+  /* "compilationEngine.pyx":410
+ *         self.indent += 1
+ * 
+ *         self.output_file.write(self.indent * "  " + self.next_token + '\n') # get the next token <keyword> do </keyword>             # <<<<<<<<<<<<<<
+ * 
+ *         # compile subroutineCall
+ */
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 410, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
+  __pyx_t_3 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 410, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_3);
+  __pyx_t_4 = PyNumber_Multiply(__pyx_t_3, __pyx_kp_s_); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 410, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_4);
+  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+  __pyx_t_3 = PyNumber_Add(__pyx_t_4, __pyx_v_self->next_token); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 410, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_3);
+  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+  __pyx_t_4 = PyNumber_Add(__pyx_t_3, __pyx_kp_s__2); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 410, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_4);
+  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+  __pyx_t_3 = NULL;
+  if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
+    __pyx_t_3 = PyMethod_GET_SELF(__pyx_t_2);
+    if (likely(__pyx_t_3)) {
+      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
+      __Pyx_INCREF(__pyx_t_3);
+      __Pyx_INCREF(function);
+      __Pyx_DECREF_SET(__pyx_t_2, function);
+    }
+  }
+  __pyx_t_1 = (__pyx_t_3) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_3, __pyx_t_4) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_4);
+  __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
+  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 410, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+  /* "compilationEngine.pyx":413
+ * 
+ *         # compile subroutineCall
+ *         self.compileSubroutineCall()             # <<<<<<<<<<<<<<
+ * 
+ *         self.advance() # get the next token ;
+ */
+  __pyx_t_1 = ((struct __pyx_vtabstruct_17compilationEngine_CompilationEngine *)__pyx_v_self->__pyx_vtab)->compileSubroutineCall(__pyx_v_self); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 413, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+  /* "compilationEngine.pyx":415
+ *         self.compileSubroutineCall()
+ * 
+ *         self.advance() # get the next token ;             # <<<<<<<<<<<<<<
+ *         self.output_file.write(self.indent * "  " + self.next_token + '\n')
+ * 
+ */
+  __pyx_t_1 = ((struct __pyx_vtabstruct_17compilationEngine_CompilationEngine *)__pyx_v_self->__pyx_vtab)->advance(__pyx_v_self); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 415, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+  /* "compilationEngine.pyx":416
+ * 
+ *         self.advance() # get the next token ;
+ *         self.output_file.write(self.indent * "  " + self.next_token + '\n')             # <<<<<<<<<<<<<<
+ * 
+ *         self.indent -= 1
+ */
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 416, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
+  __pyx_t_4 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 416, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_4);
+  __pyx_t_3 = PyNumber_Multiply(__pyx_t_4, __pyx_kp_s_); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 416, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_3);
+  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+  __pyx_t_4 = PyNumber_Add(__pyx_t_3, __pyx_v_self->next_token); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 416, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_4);
+  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+  __pyx_t_3 = PyNumber_Add(__pyx_t_4, __pyx_kp_s__2); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 416, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_3);
+  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+  __pyx_t_4 = NULL;
+  if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
+    __pyx_t_4 = PyMethod_GET_SELF(__pyx_t_2);
+    if (likely(__pyx_t_4)) {
+      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
+      __Pyx_INCREF(__pyx_t_4);
+      __Pyx_INCREF(function);
+      __Pyx_DECREF_SET(__pyx_t_2, function);
+    }
+  }
+  __pyx_t_1 = (__pyx_t_4) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_4, __pyx_t_3) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_3);
+  __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
+  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 416, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+  /* "compilationEngine.pyx":418
+ *         self.output_file.write(self.indent * "  " + self.next_token + '\n')
+ * 
+ *         self.indent -= 1             # <<<<<<<<<<<<<<
+ *         self.output_file.write(self.indent * "  " + '</doStatement>\n')
+ * 
+ */
+  __pyx_v_self->indent = (__pyx_v_self->indent - 1);
+
+  /* "compilationEngine.pyx":419
+ * 
+ *         self.indent -= 1
+ *         self.output_file.write(self.indent * "  " + '</doStatement>\n')             # <<<<<<<<<<<<<<
+ * 
+ *     # compile a return statement
+ */
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 419, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
+  __pyx_t_3 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 419, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_3);
+  __pyx_t_4 = PyNumber_Multiply(__pyx_t_3, __pyx_kp_s_); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 419, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_4);
+  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+  __pyx_t_3 = PyNumber_Add(__pyx_t_4, __pyx_kp_s_doStatement_2); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 419, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_3);
+  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+  __pyx_t_4 = NULL;
+  if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
+    __pyx_t_4 = PyMethod_GET_SELF(__pyx_t_2);
+    if (likely(__pyx_t_4)) {
+      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
+      __Pyx_INCREF(__pyx_t_4);
+      __Pyx_INCREF(function);
+      __Pyx_DECREF_SET(__pyx_t_2, function);
+    }
+  }
+  __pyx_t_1 = (__pyx_t_4) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_4, __pyx_t_3) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_3);
+  __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
+  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 419, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+  /* "compilationEngine.pyx":406
+ * 
+ *     # compile a do statement
+ *     cdef compileDo(self):             # <<<<<<<<<<<<<<
+ *         self.output_file.write(self.indent * "  " + '<doStatement>\n')
+ *         self.indent += 1
+ */
+
+  /* function exit code */
+  __pyx_r = Py_None; __Pyx_INCREF(Py_None);
+  goto __pyx_L0;
+  __pyx_L1_error:;
+  __Pyx_XDECREF(__pyx_t_1);
+  __Pyx_XDECREF(__pyx_t_2);
+  __Pyx_XDECREF(__pyx_t_3);
+  __Pyx_XDECREF(__pyx_t_4);
+  __Pyx_AddTraceback("compilationEngine.CompilationEngine.compileDo", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __pyx_r = 0;
+  __pyx_L0:;
+  __Pyx_XGIVEREF(__pyx_r);
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+/* "compilationEngine.pyx":422
+ * 
+ *     # compile a return statement
  *     cdef compileReturn(self):             # <<<<<<<<<<<<<<
- *         self.output_file.write(self.indent * '  ' + '<returnStatement>\n')
+ *         self.output_file.write(self.indent * "  " + '<returnStatement>\n')
  *         self.indent += 1
  */
 
@@ -6183,21 +6917,21 @@ static PyObject *__pyx_f_17compilationEngine_17CompilationEngine_compileReturn(s
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("compileReturn", 0);
 
-  /* "compilationEngine.pyx":209
- *     # Compiles a return statement
+  /* "compilationEngine.pyx":423
+ *     # compile a return statement
  *     cdef compileReturn(self):
- *         self.output_file.write(self.indent * '  ' + '<returnStatement>\n')             # <<<<<<<<<<<<<<
+ *         self.output_file.write(self.indent * "  " + '<returnStatement>\n')             # <<<<<<<<<<<<<<
  *         self.indent += 1
- *         self.output_file.write(self.indent * '  ' + self.next_token + '\n') # read return
+ * 
  */
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 209, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 423, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_3 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 209, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 423, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
-  __pyx_t_4 = PyNumber_Multiply(__pyx_t_3, __pyx_kp_s_); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 209, __pyx_L1_error)
+  __pyx_t_4 = PyNumber_Multiply(__pyx_t_3, __pyx_kp_s_); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 423, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  __pyx_t_3 = PyNumber_Add(__pyx_t_4, __pyx_kp_s_returnStatement); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 209, __pyx_L1_error)
+  __pyx_t_3 = PyNumber_Add(__pyx_t_4, __pyx_kp_s_returnStatement); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 423, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
   __pyx_t_4 = NULL;
@@ -6213,38 +6947,38 @@ static PyObject *__pyx_f_17compilationEngine_17CompilationEngine_compileReturn(s
   __pyx_t_1 = (__pyx_t_4) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_4, __pyx_t_3) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_3);
   __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 209, __pyx_L1_error)
+  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 423, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "compilationEngine.pyx":210
+  /* "compilationEngine.pyx":424
  *     cdef compileReturn(self):
- *         self.output_file.write(self.indent * '  ' + '<returnStatement>\n')
+ *         self.output_file.write(self.indent * "  " + '<returnStatement>\n')
  *         self.indent += 1             # <<<<<<<<<<<<<<
- *         self.output_file.write(self.indent * '  ' + self.next_token + '\n') # read return
- *         # if the next token is not ;
+ * 
+ *         self.output_file.write(self.indent * "  " + self.next_token + '\n') # get the next token <keyword> return </keyword>
  */
   __pyx_v_self->indent = (__pyx_v_self->indent + 1);
 
-  /* "compilationEngine.pyx":211
- *         self.output_file.write(self.indent * '  ' + '<returnStatement>\n')
+  /* "compilationEngine.pyx":426
  *         self.indent += 1
- *         self.output_file.write(self.indent * '  ' + self.next_token + '\n') # read return             # <<<<<<<<<<<<<<
- *         # if the next token is not ;
- *         self.next_token = self.getNextToken()
+ * 
+ *         self.output_file.write(self.indent * "  " + self.next_token + '\n') # get the next token <keyword> return </keyword>             # <<<<<<<<<<<<<<
+ * 
+ *         # compile expression?
  */
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 211, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 426, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_3 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 211, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 426, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
-  __pyx_t_4 = PyNumber_Multiply(__pyx_t_3, __pyx_kp_s_); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 211, __pyx_L1_error)
+  __pyx_t_4 = PyNumber_Multiply(__pyx_t_3, __pyx_kp_s_); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 426, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  __pyx_t_3 = PyNumber_Add(__pyx_t_4, __pyx_v_self->next_token); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 211, __pyx_L1_error)
+  __pyx_t_3 = PyNumber_Add(__pyx_t_4, __pyx_v_self->next_token); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 426, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  __pyx_t_4 = PyNumber_Add(__pyx_t_3, __pyx_kp_s__2); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 211, __pyx_L1_error)
+  __pyx_t_4 = PyNumber_Add(__pyx_t_3, __pyx_kp_s__2); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 426, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   __pyx_t_3 = NULL;
@@ -6260,88 +6994,186 @@ static PyObject *__pyx_f_17compilationEngine_17CompilationEngine_compileReturn(s
   __pyx_t_1 = (__pyx_t_3) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_3, __pyx_t_4) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_4);
   __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 211, __pyx_L1_error)
+  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 426, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "compilationEngine.pyx":213
- *         self.output_file.write(self.indent * '  ' + self.next_token + '\n') # read return
- *         # if the next token is not ;
- *         self.next_token = self.getNextToken()             # <<<<<<<<<<<<<<
- *         if self.next_token != "<symbol> ; </symbol>":
- *             self.compileExpression()
+  /* "compilationEngine.pyx":429
+ * 
+ *         # compile expression?
+ *         self.advance() # get the next token ; or not ;             # <<<<<<<<<<<<<<
+ *         if self.next_token == "<symbol> ; </symbol>":
+ *             self.output_file.write(self.indent * "  " + self.next_token + '\n')
  */
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_getNextToken); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 213, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_4 = NULL;
-  if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
-    __pyx_t_4 = PyMethod_GET_SELF(__pyx_t_2);
-    if (likely(__pyx_t_4)) {
-      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
-      __Pyx_INCREF(__pyx_t_4);
-      __Pyx_INCREF(function);
-      __Pyx_DECREF_SET(__pyx_t_2, function);
-    }
-  }
-  __pyx_t_1 = (__pyx_t_4) ? __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_4) : __Pyx_PyObject_CallNoArg(__pyx_t_2);
-  __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
-  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 213, __pyx_L1_error)
+  __pyx_t_1 = ((struct __pyx_vtabstruct_17compilationEngine_CompilationEngine *)__pyx_v_self->__pyx_vtab)->advance(__pyx_v_self); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 429, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  if (!(likely(PyString_CheckExact(__pyx_t_1))||((__pyx_t_1) == Py_None)||((void)PyErr_Format(PyExc_TypeError, "Expected %.16s, got %.200s", "str", Py_TYPE(__pyx_t_1)->tp_name), 0))) __PYX_ERR(0, 213, __pyx_L1_error)
-  __Pyx_GIVEREF(__pyx_t_1);
-  __Pyx_GOTREF(__pyx_v_self->next_token);
-  __Pyx_DECREF(__pyx_v_self->next_token);
-  __pyx_v_self->next_token = ((PyObject*)__pyx_t_1);
-  __pyx_t_1 = 0;
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "compilationEngine.pyx":214
- *         # if the next token is not ;
- *         self.next_token = self.getNextToken()
- *         if self.next_token != "<symbol> ; </symbol>":             # <<<<<<<<<<<<<<
- *             self.compileExpression()
- *         self.output_file.write(self.indent * '  ' + '<symbol> ; </symbol>\n')
+  /* "compilationEngine.pyx":430
+ *         # compile expression?
+ *         self.advance() # get the next token ; or not ;
+ *         if self.next_token == "<symbol> ; </symbol>":             # <<<<<<<<<<<<<<
+ *             self.output_file.write(self.indent * "  " + self.next_token + '\n')
+ *             self.indent -= 1
  */
-  __pyx_t_5 = (__Pyx_PyString_Equals(__pyx_v_self->next_token, __pyx_kp_s_symbol_symbol_6, Py_NE)); if (unlikely(__pyx_t_5 < 0)) __PYX_ERR(0, 214, __pyx_L1_error)
+  __pyx_t_5 = (__Pyx_PyString_Equals(__pyx_v_self->next_token, __pyx_kp_s_symbol_symbol_3, Py_EQ)); if (unlikely(__pyx_t_5 < 0)) __PYX_ERR(0, 430, __pyx_L1_error)
   __pyx_t_6 = (__pyx_t_5 != 0);
   if (__pyx_t_6) {
 
-    /* "compilationEngine.pyx":215
- *         self.next_token = self.getNextToken()
- *         if self.next_token != "<symbol> ; </symbol>":
- *             self.compileExpression()             # <<<<<<<<<<<<<<
- *         self.output_file.write(self.indent * '  ' + '<symbol> ; </symbol>\n')
- *         self.indent -= 1
+    /* "compilationEngine.pyx":431
+ *         self.advance() # get the next token ; or not ;
+ *         if self.next_token == "<symbol> ; </symbol>":
+ *             self.output_file.write(self.indent * "  " + self.next_token + '\n')             # <<<<<<<<<<<<<<
+ *             self.indent -= 1
+ *             self.output_file.write(self.indent * "  " + '</returnStatement>\n')
  */
-    __pyx_t_1 = ((struct __pyx_vtabstruct_17compilationEngine_CompilationEngine *)__pyx_v_self->__pyx_vtab)->compileExpression(__pyx_v_self); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 215, __pyx_L1_error)
+    __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 431, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_2);
+    __pyx_t_4 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 431, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_4);
+    __pyx_t_3 = PyNumber_Multiply(__pyx_t_4, __pyx_kp_s_); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 431, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_3);
+    __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+    __pyx_t_4 = PyNumber_Add(__pyx_t_3, __pyx_v_self->next_token); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 431, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_4);
+    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+    __pyx_t_3 = PyNumber_Add(__pyx_t_4, __pyx_kp_s__2); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 431, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_3);
+    __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+    __pyx_t_4 = NULL;
+    if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
+      __pyx_t_4 = PyMethod_GET_SELF(__pyx_t_2);
+      if (likely(__pyx_t_4)) {
+        PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
+        __Pyx_INCREF(__pyx_t_4);
+        __Pyx_INCREF(function);
+        __Pyx_DECREF_SET(__pyx_t_2, function);
+      }
+    }
+    __pyx_t_1 = (__pyx_t_4) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_4, __pyx_t_3) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_3);
+    __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
+    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+    if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 431, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
+    __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-    /* "compilationEngine.pyx":214
- *         # if the next token is not ;
- *         self.next_token = self.getNextToken()
- *         if self.next_token != "<symbol> ; </symbol>":             # <<<<<<<<<<<<<<
- *             self.compileExpression()
- *         self.output_file.write(self.indent * '  ' + '<symbol> ; </symbol>\n')
+    /* "compilationEngine.pyx":432
+ *         if self.next_token == "<symbol> ; </symbol>":
+ *             self.output_file.write(self.indent * "  " + self.next_token + '\n')
+ *             self.indent -= 1             # <<<<<<<<<<<<<<
+ *             self.output_file.write(self.indent * "  " + '</returnStatement>\n')
+ *             return
+ */
+    __pyx_v_self->indent = (__pyx_v_self->indent - 1);
+
+    /* "compilationEngine.pyx":433
+ *             self.output_file.write(self.indent * "  " + self.next_token + '\n')
+ *             self.indent -= 1
+ *             self.output_file.write(self.indent * "  " + '</returnStatement>\n')             # <<<<<<<<<<<<<<
+ *             return
+ *         self.reverse()
+ */
+    __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 433, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_2);
+    __pyx_t_3 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 433, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_3);
+    __pyx_t_4 = PyNumber_Multiply(__pyx_t_3, __pyx_kp_s_); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 433, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_4);
+    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+    __pyx_t_3 = PyNumber_Add(__pyx_t_4, __pyx_kp_s_returnStatement_2); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 433, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_3);
+    __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+    __pyx_t_4 = NULL;
+    if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
+      __pyx_t_4 = PyMethod_GET_SELF(__pyx_t_2);
+      if (likely(__pyx_t_4)) {
+        PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
+        __Pyx_INCREF(__pyx_t_4);
+        __Pyx_INCREF(function);
+        __Pyx_DECREF_SET(__pyx_t_2, function);
+      }
+    }
+    __pyx_t_1 = (__pyx_t_4) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_4, __pyx_t_3) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_3);
+    __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
+    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+    if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 433, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_1);
+    __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+    /* "compilationEngine.pyx":434
+ *             self.indent -= 1
+ *             self.output_file.write(self.indent * "  " + '</returnStatement>\n')
+ *             return             # <<<<<<<<<<<<<<
+ *         self.reverse()
+ *         self.compileExpression()
+ */
+    __Pyx_XDECREF(__pyx_r);
+    __pyx_r = Py_None; __Pyx_INCREF(Py_None);
+    goto __pyx_L0;
+
+    /* "compilationEngine.pyx":430
+ *         # compile expression?
+ *         self.advance() # get the next token ; or not ;
+ *         if self.next_token == "<symbol> ; </symbol>":             # <<<<<<<<<<<<<<
+ *             self.output_file.write(self.indent * "  " + self.next_token + '\n')
+ *             self.indent -= 1
  */
   }
 
-  /* "compilationEngine.pyx":216
- *         if self.next_token != "<symbol> ; </symbol>":
- *             self.compileExpression()
- *         self.output_file.write(self.indent * '  ' + '<symbol> ; </symbol>\n')             # <<<<<<<<<<<<<<
- *         self.indent -= 1
- *         self.output_file.write(self.indent * '  ' + '</returnStatement>\n')
+  /* "compilationEngine.pyx":435
+ *             self.output_file.write(self.indent * "  " + '</returnStatement>\n')
+ *             return
+ *         self.reverse()             # <<<<<<<<<<<<<<
+ *         self.compileExpression()
+ * 
  */
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 216, __pyx_L1_error)
+  __pyx_t_1 = ((struct __pyx_vtabstruct_17compilationEngine_CompilationEngine *)__pyx_v_self->__pyx_vtab)->reverse(__pyx_v_self); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 435, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+  /* "compilationEngine.pyx":436
+ *             return
+ *         self.reverse()
+ *         self.compileExpression()             # <<<<<<<<<<<<<<
+ * 
+ *         self.advance() # get the next token ;
+ */
+  __pyx_t_1 = ((struct __pyx_vtabstruct_17compilationEngine_CompilationEngine *)__pyx_v_self->__pyx_vtab)->compileExpression(__pyx_v_self); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 436, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+  /* "compilationEngine.pyx":438
+ *         self.compileExpression()
+ * 
+ *         self.advance() # get the next token ;             # <<<<<<<<<<<<<<
+ *         self.output_file.write(self.indent * "  " + self.next_token + '\n')
+ * 
+ */
+  __pyx_t_1 = ((struct __pyx_vtabstruct_17compilationEngine_CompilationEngine *)__pyx_v_self->__pyx_vtab)->advance(__pyx_v_self); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 438, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+  /* "compilationEngine.pyx":439
+ * 
+ *         self.advance() # get the next token ;
+ *         self.output_file.write(self.indent * "  " + self.next_token + '\n')             # <<<<<<<<<<<<<<
+ * 
+ *         self.indent -= 1
+ */
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 439, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_4 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 216, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 439, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_3);
+  __pyx_t_4 = PyNumber_Multiply(__pyx_t_3, __pyx_kp_s_); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 439, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
-  __pyx_t_3 = PyNumber_Multiply(__pyx_t_4, __pyx_kp_s_); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 216, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+  __pyx_t_3 = PyNumber_Add(__pyx_t_4, __pyx_v_self->next_token); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 439, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  __pyx_t_4 = PyNumber_Add(__pyx_t_3, __pyx_kp_s_symbol_symbol_4); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 216, __pyx_L1_error)
+  __pyx_t_4 = PyNumber_Add(__pyx_t_3, __pyx_kp_s__2); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 439, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   __pyx_t_3 = NULL;
@@ -6357,35 +7189,35 @@ static PyObject *__pyx_f_17compilationEngine_17CompilationEngine_compileReturn(s
   __pyx_t_1 = (__pyx_t_3) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_3, __pyx_t_4) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_4);
   __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 216, __pyx_L1_error)
+  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 439, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "compilationEngine.pyx":217
- *             self.compileExpression()
- *         self.output_file.write(self.indent * '  ' + '<symbol> ; </symbol>\n')
+  /* "compilationEngine.pyx":441
+ *         self.output_file.write(self.indent * "  " + self.next_token + '\n')
+ * 
  *         self.indent -= 1             # <<<<<<<<<<<<<<
- *         self.output_file.write(self.indent * '  ' + '</returnStatement>\n')
+ *         self.output_file.write(self.indent * "  " + '</returnStatement>\n')
  * 
  */
   __pyx_v_self->indent = (__pyx_v_self->indent - 1);
 
-  /* "compilationEngine.pyx":218
- *         self.output_file.write(self.indent * '  ' + '<symbol> ; </symbol>\n')
- *         self.indent -= 1
- *         self.output_file.write(self.indent * '  ' + '</returnStatement>\n')             # <<<<<<<<<<<<<<
+  /* "compilationEngine.pyx":442
  * 
- *     # Compiles an if statement, possibly with a trailing else clause
+ *         self.indent -= 1
+ *         self.output_file.write(self.indent * "  " + '</returnStatement>\n')             # <<<<<<<<<<<<<<
+ * 
+ *     # compile an expression
  */
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 218, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 442, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_4 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 218, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 442, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
-  __pyx_t_3 = PyNumber_Multiply(__pyx_t_4, __pyx_kp_s_); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 218, __pyx_L1_error)
+  __pyx_t_3 = PyNumber_Multiply(__pyx_t_4, __pyx_kp_s_); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 442, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  __pyx_t_4 = PyNumber_Add(__pyx_t_3, __pyx_kp_s_returnStatement_2); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 218, __pyx_L1_error)
+  __pyx_t_4 = PyNumber_Add(__pyx_t_3, __pyx_kp_s_returnStatement_2); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 442, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   __pyx_t_3 = NULL;
@@ -6401,16 +7233,16 @@ static PyObject *__pyx_f_17compilationEngine_17CompilationEngine_compileReturn(s
   __pyx_t_1 = (__pyx_t_3) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_3, __pyx_t_4) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_4);
   __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 218, __pyx_L1_error)
+  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 442, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "compilationEngine.pyx":208
+  /* "compilationEngine.pyx":422
  * 
- *     # Compiles a return statement
+ *     # compile a return statement
  *     cdef compileReturn(self):             # <<<<<<<<<<<<<<
- *         self.output_file.write(self.indent * '  ' + '<returnStatement>\n')
+ *         self.output_file.write(self.indent * "  " + '<returnStatement>\n')
  *         self.indent += 1
  */
 
@@ -6430,630 +7262,11 @@ static PyObject *__pyx_f_17compilationEngine_17CompilationEngine_compileReturn(s
   return __pyx_r;
 }
 
-/* "compilationEngine.pyx":221
+/* "compilationEngine.pyx":445
  * 
- *     # Compiles an if statement, possibly with a trailing else clause
- *     cdef compileIf(self):             # <<<<<<<<<<<<<<
- *         self.output_file.write(self.indent * '  ' + '<ifStatement>\n')
- *         self.indent += 1
- */
-
-static PyObject *__pyx_f_17compilationEngine_17CompilationEngine_compileIf(struct __pyx_obj_17compilationEngine_CompilationEngine *__pyx_v_self) {
-  PyObject *__pyx_r = NULL;
-  __Pyx_RefNannyDeclarations
-  PyObject *__pyx_t_1 = NULL;
-  PyObject *__pyx_t_2 = NULL;
-  PyObject *__pyx_t_3 = NULL;
-  PyObject *__pyx_t_4 = NULL;
-  PyObject *__pyx_t_5 = NULL;
-  PyObject *__pyx_t_6 = NULL;
-  int __pyx_t_7;
-  int __pyx_lineno = 0;
-  const char *__pyx_filename = NULL;
-  int __pyx_clineno = 0;
-  __Pyx_RefNannySetupContext("compileIf", 0);
-
-  /* "compilationEngine.pyx":222
- *     # Compiles an if statement, possibly with a trailing else clause
- *     cdef compileIf(self):
- *         self.output_file.write(self.indent * '  ' + '<ifStatement>\n')             # <<<<<<<<<<<<<<
- *         self.indent += 1
- *         self.output_file.write(self.indent * '  ' + self.next_token + '\n') # read if
- */
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 222, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_3 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 222, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_3);
-  __pyx_t_4 = PyNumber_Multiply(__pyx_t_3, __pyx_kp_s_); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 222, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_4);
-  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  __pyx_t_3 = PyNumber_Add(__pyx_t_4, __pyx_kp_s_ifStatement); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 222, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_3);
-  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  __pyx_t_4 = NULL;
-  if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
-    __pyx_t_4 = PyMethod_GET_SELF(__pyx_t_2);
-    if (likely(__pyx_t_4)) {
-      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
-      __Pyx_INCREF(__pyx_t_4);
-      __Pyx_INCREF(function);
-      __Pyx_DECREF_SET(__pyx_t_2, function);
-    }
-  }
-  __pyx_t_1 = (__pyx_t_4) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_4, __pyx_t_3) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_3);
-  __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
-  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 222, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-
-  /* "compilationEngine.pyx":223
- *     cdef compileIf(self):
- *         self.output_file.write(self.indent * '  ' + '<ifStatement>\n')
- *         self.indent += 1             # <<<<<<<<<<<<<<
- *         self.output_file.write(self.indent * '  ' + self.next_token + '\n') # read if
- *         self.output_file.write(self.indent * '  ' + self.getNextToken() + '\n') # read (
- */
-  __pyx_v_self->indent = (__pyx_v_self->indent + 1);
-
-  /* "compilationEngine.pyx":224
- *         self.output_file.write(self.indent * '  ' + '<ifStatement>\n')
- *         self.indent += 1
- *         self.output_file.write(self.indent * '  ' + self.next_token + '\n') # read if             # <<<<<<<<<<<<<<
- *         self.output_file.write(self.indent * '  ' + self.getNextToken() + '\n') # read (
- *         self.compileExpression()
- */
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 224, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_3 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 224, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_3);
-  __pyx_t_4 = PyNumber_Multiply(__pyx_t_3, __pyx_kp_s_); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 224, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_4);
-  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  __pyx_t_3 = PyNumber_Add(__pyx_t_4, __pyx_v_self->next_token); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 224, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_3);
-  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  __pyx_t_4 = PyNumber_Add(__pyx_t_3, __pyx_kp_s__2); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 224, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_4);
-  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  __pyx_t_3 = NULL;
-  if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
-    __pyx_t_3 = PyMethod_GET_SELF(__pyx_t_2);
-    if (likely(__pyx_t_3)) {
-      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
-      __Pyx_INCREF(__pyx_t_3);
-      __Pyx_INCREF(function);
-      __Pyx_DECREF_SET(__pyx_t_2, function);
-    }
-  }
-  __pyx_t_1 = (__pyx_t_3) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_3, __pyx_t_4) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_4);
-  __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
-  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 224, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-
-  /* "compilationEngine.pyx":225
- *         self.indent += 1
- *         self.output_file.write(self.indent * '  ' + self.next_token + '\n') # read if
- *         self.output_file.write(self.indent * '  ' + self.getNextToken() + '\n') # read (             # <<<<<<<<<<<<<<
- *         self.compileExpression()
- *         self.output_file.write(self.indent * '  ' + self.getNextToken() + '\n') # read )
- */
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 225, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_4 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 225, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_4);
-  __pyx_t_3 = PyNumber_Multiply(__pyx_t_4, __pyx_kp_s_); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 225, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_3);
-  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  __pyx_t_5 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_getNextToken); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 225, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_5);
-  __pyx_t_6 = NULL;
-  if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_5))) {
-    __pyx_t_6 = PyMethod_GET_SELF(__pyx_t_5);
-    if (likely(__pyx_t_6)) {
-      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_5);
-      __Pyx_INCREF(__pyx_t_6);
-      __Pyx_INCREF(function);
-      __Pyx_DECREF_SET(__pyx_t_5, function);
-    }
-  }
-  __pyx_t_4 = (__pyx_t_6) ? __Pyx_PyObject_CallOneArg(__pyx_t_5, __pyx_t_6) : __Pyx_PyObject_CallNoArg(__pyx_t_5);
-  __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
-  if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 225, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_4);
-  __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-  __pyx_t_5 = PyNumber_Add(__pyx_t_3, __pyx_t_4); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 225, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_5);
-  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  __pyx_t_4 = PyNumber_Add(__pyx_t_5, __pyx_kp_s__2); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 225, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_4);
-  __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-  __pyx_t_5 = NULL;
-  if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
-    __pyx_t_5 = PyMethod_GET_SELF(__pyx_t_2);
-    if (likely(__pyx_t_5)) {
-      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
-      __Pyx_INCREF(__pyx_t_5);
-      __Pyx_INCREF(function);
-      __Pyx_DECREF_SET(__pyx_t_2, function);
-    }
-  }
-  __pyx_t_1 = (__pyx_t_5) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_5, __pyx_t_4) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_4);
-  __Pyx_XDECREF(__pyx_t_5); __pyx_t_5 = 0;
-  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 225, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-
-  /* "compilationEngine.pyx":226
- *         self.output_file.write(self.indent * '  ' + self.next_token + '\n') # read if
- *         self.output_file.write(self.indent * '  ' + self.getNextToken() + '\n') # read (
- *         self.compileExpression()             # <<<<<<<<<<<<<<
- *         self.output_file.write(self.indent * '  ' + self.getNextToken() + '\n') # read )
- *         self.output_file.write(self.indent * '  ' + self.getNextToken() + '\n') # read {
- */
-  __pyx_t_1 = ((struct __pyx_vtabstruct_17compilationEngine_CompilationEngine *)__pyx_v_self->__pyx_vtab)->compileExpression(__pyx_v_self); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 226, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-
-  /* "compilationEngine.pyx":227
- *         self.output_file.write(self.indent * '  ' + self.getNextToken() + '\n') # read (
- *         self.compileExpression()
- *         self.output_file.write(self.indent * '  ' + self.getNextToken() + '\n') # read )             # <<<<<<<<<<<<<<
- *         self.output_file.write(self.indent * '  ' + self.getNextToken() + '\n') # read {
- *         self.compileStatements()
- */
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 227, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_4 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 227, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_4);
-  __pyx_t_5 = PyNumber_Multiply(__pyx_t_4, __pyx_kp_s_); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 227, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_5);
-  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_getNextToken); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 227, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_3);
-  __pyx_t_6 = NULL;
-  if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_3))) {
-    __pyx_t_6 = PyMethod_GET_SELF(__pyx_t_3);
-    if (likely(__pyx_t_6)) {
-      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_3);
-      __Pyx_INCREF(__pyx_t_6);
-      __Pyx_INCREF(function);
-      __Pyx_DECREF_SET(__pyx_t_3, function);
-    }
-  }
-  __pyx_t_4 = (__pyx_t_6) ? __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_t_6) : __Pyx_PyObject_CallNoArg(__pyx_t_3);
-  __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
-  if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 227, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_4);
-  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  __pyx_t_3 = PyNumber_Add(__pyx_t_5, __pyx_t_4); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 227, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_3);
-  __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  __pyx_t_4 = PyNumber_Add(__pyx_t_3, __pyx_kp_s__2); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 227, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_4);
-  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  __pyx_t_3 = NULL;
-  if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
-    __pyx_t_3 = PyMethod_GET_SELF(__pyx_t_2);
-    if (likely(__pyx_t_3)) {
-      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
-      __Pyx_INCREF(__pyx_t_3);
-      __Pyx_INCREF(function);
-      __Pyx_DECREF_SET(__pyx_t_2, function);
-    }
-  }
-  __pyx_t_1 = (__pyx_t_3) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_3, __pyx_t_4) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_4);
-  __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
-  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 227, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-
-  /* "compilationEngine.pyx":228
- *         self.compileExpression()
- *         self.output_file.write(self.indent * '  ' + self.getNextToken() + '\n') # read )
- *         self.output_file.write(self.indent * '  ' + self.getNextToken() + '\n') # read {             # <<<<<<<<<<<<<<
- *         self.compileStatements()
- *         self.output_file.write(self.indent * '  ' + self.getNextToken() + '\n') # read }
- */
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 228, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_4 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 228, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_4);
-  __pyx_t_3 = PyNumber_Multiply(__pyx_t_4, __pyx_kp_s_); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 228, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_3);
-  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  __pyx_t_5 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_getNextToken); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 228, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_5);
-  __pyx_t_6 = NULL;
-  if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_5))) {
-    __pyx_t_6 = PyMethod_GET_SELF(__pyx_t_5);
-    if (likely(__pyx_t_6)) {
-      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_5);
-      __Pyx_INCREF(__pyx_t_6);
-      __Pyx_INCREF(function);
-      __Pyx_DECREF_SET(__pyx_t_5, function);
-    }
-  }
-  __pyx_t_4 = (__pyx_t_6) ? __Pyx_PyObject_CallOneArg(__pyx_t_5, __pyx_t_6) : __Pyx_PyObject_CallNoArg(__pyx_t_5);
-  __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
-  if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 228, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_4);
-  __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-  __pyx_t_5 = PyNumber_Add(__pyx_t_3, __pyx_t_4); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 228, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_5);
-  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  __pyx_t_4 = PyNumber_Add(__pyx_t_5, __pyx_kp_s__2); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 228, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_4);
-  __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-  __pyx_t_5 = NULL;
-  if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
-    __pyx_t_5 = PyMethod_GET_SELF(__pyx_t_2);
-    if (likely(__pyx_t_5)) {
-      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
-      __Pyx_INCREF(__pyx_t_5);
-      __Pyx_INCREF(function);
-      __Pyx_DECREF_SET(__pyx_t_2, function);
-    }
-  }
-  __pyx_t_1 = (__pyx_t_5) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_5, __pyx_t_4) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_4);
-  __Pyx_XDECREF(__pyx_t_5); __pyx_t_5 = 0;
-  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 228, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-
-  /* "compilationEngine.pyx":229
- *         self.output_file.write(self.indent * '  ' + self.getNextToken() + '\n') # read )
- *         self.output_file.write(self.indent * '  ' + self.getNextToken() + '\n') # read {
- *         self.compileStatements()             # <<<<<<<<<<<<<<
- *         self.output_file.write(self.indent * '  ' + self.getNextToken() + '\n') # read }
- *         # if the next token is else
- */
-  __pyx_t_1 = ((struct __pyx_vtabstruct_17compilationEngine_CompilationEngine *)__pyx_v_self->__pyx_vtab)->compileStatements(__pyx_v_self); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 229, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-
-  /* "compilationEngine.pyx":230
- *         self.output_file.write(self.indent * '  ' + self.getNextToken() + '\n') # read {
- *         self.compileStatements()
- *         self.output_file.write(self.indent * '  ' + self.getNextToken() + '\n') # read }             # <<<<<<<<<<<<<<
- *         # if the next token is else
- *         if self.getNextToken() == "<keyword> else </keyword>":
- */
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 230, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_4 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 230, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_4);
-  __pyx_t_5 = PyNumber_Multiply(__pyx_t_4, __pyx_kp_s_); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 230, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_5);
-  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_getNextToken); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 230, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_3);
-  __pyx_t_6 = NULL;
-  if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_3))) {
-    __pyx_t_6 = PyMethod_GET_SELF(__pyx_t_3);
-    if (likely(__pyx_t_6)) {
-      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_3);
-      __Pyx_INCREF(__pyx_t_6);
-      __Pyx_INCREF(function);
-      __Pyx_DECREF_SET(__pyx_t_3, function);
-    }
-  }
-  __pyx_t_4 = (__pyx_t_6) ? __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_t_6) : __Pyx_PyObject_CallNoArg(__pyx_t_3);
-  __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
-  if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 230, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_4);
-  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  __pyx_t_3 = PyNumber_Add(__pyx_t_5, __pyx_t_4); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 230, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_3);
-  __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  __pyx_t_4 = PyNumber_Add(__pyx_t_3, __pyx_kp_s__2); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 230, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_4);
-  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  __pyx_t_3 = NULL;
-  if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
-    __pyx_t_3 = PyMethod_GET_SELF(__pyx_t_2);
-    if (likely(__pyx_t_3)) {
-      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
-      __Pyx_INCREF(__pyx_t_3);
-      __Pyx_INCREF(function);
-      __Pyx_DECREF_SET(__pyx_t_2, function);
-    }
-  }
-  __pyx_t_1 = (__pyx_t_3) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_3, __pyx_t_4) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_4);
-  __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
-  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 230, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-
-  /* "compilationEngine.pyx":232
- *         self.output_file.write(self.indent * '  ' + self.getNextToken() + '\n') # read }
- *         # if the next token is else
- *         if self.getNextToken() == "<keyword> else </keyword>":             # <<<<<<<<<<<<<<
- *             self.output_file.write(self.indent * '  ' + self.next_token + '\n') # read else
- *             self.output_file.write(self.indent * '  ' + self.getNextToken() + '\n') # read {
- */
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_getNextToken); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 232, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_4 = NULL;
-  if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
-    __pyx_t_4 = PyMethod_GET_SELF(__pyx_t_2);
-    if (likely(__pyx_t_4)) {
-      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
-      __Pyx_INCREF(__pyx_t_4);
-      __Pyx_INCREF(function);
-      __Pyx_DECREF_SET(__pyx_t_2, function);
-    }
-  }
-  __pyx_t_1 = (__pyx_t_4) ? __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_4) : __Pyx_PyObject_CallNoArg(__pyx_t_2);
-  __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
-  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 232, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  __pyx_t_7 = (__Pyx_PyString_Equals(__pyx_t_1, __pyx_kp_s_keyword_else_keyword, Py_EQ)); if (unlikely(__pyx_t_7 < 0)) __PYX_ERR(0, 232, __pyx_L1_error)
-  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  if (__pyx_t_7) {
-
-    /* "compilationEngine.pyx":233
- *         # if the next token is else
- *         if self.getNextToken() == "<keyword> else </keyword>":
- *             self.output_file.write(self.indent * '  ' + self.next_token + '\n') # read else             # <<<<<<<<<<<<<<
- *             self.output_file.write(self.indent * '  ' + self.getNextToken() + '\n') # read {
- *             self.compileStatements()
- */
-    __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 233, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_2);
-    __pyx_t_4 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 233, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_4);
-    __pyx_t_3 = PyNumber_Multiply(__pyx_t_4, __pyx_kp_s_); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 233, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_3);
-    __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-    __pyx_t_4 = PyNumber_Add(__pyx_t_3, __pyx_v_self->next_token); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 233, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_4);
-    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-    __pyx_t_3 = PyNumber_Add(__pyx_t_4, __pyx_kp_s__2); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 233, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_3);
-    __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-    __pyx_t_4 = NULL;
-    if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
-      __pyx_t_4 = PyMethod_GET_SELF(__pyx_t_2);
-      if (likely(__pyx_t_4)) {
-        PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
-        __Pyx_INCREF(__pyx_t_4);
-        __Pyx_INCREF(function);
-        __Pyx_DECREF_SET(__pyx_t_2, function);
-      }
-    }
-    __pyx_t_1 = (__pyx_t_4) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_4, __pyx_t_3) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_3);
-    __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
-    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-    if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 233, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_1);
-    __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-
-    /* "compilationEngine.pyx":234
- *         if self.getNextToken() == "<keyword> else </keyword>":
- *             self.output_file.write(self.indent * '  ' + self.next_token + '\n') # read else
- *             self.output_file.write(self.indent * '  ' + self.getNextToken() + '\n') # read {             # <<<<<<<<<<<<<<
- *             self.compileStatements()
- *             self.output_file.write(self.indent * '  ' + self.getNextToken() + '\n') # read }
- */
-    __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 234, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_2);
-    __pyx_t_3 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 234, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_3);
-    __pyx_t_4 = PyNumber_Multiply(__pyx_t_3, __pyx_kp_s_); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 234, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_4);
-    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-    __pyx_t_5 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_getNextToken); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 234, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_5);
-    __pyx_t_6 = NULL;
-    if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_5))) {
-      __pyx_t_6 = PyMethod_GET_SELF(__pyx_t_5);
-      if (likely(__pyx_t_6)) {
-        PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_5);
-        __Pyx_INCREF(__pyx_t_6);
-        __Pyx_INCREF(function);
-        __Pyx_DECREF_SET(__pyx_t_5, function);
-      }
-    }
-    __pyx_t_3 = (__pyx_t_6) ? __Pyx_PyObject_CallOneArg(__pyx_t_5, __pyx_t_6) : __Pyx_PyObject_CallNoArg(__pyx_t_5);
-    __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
-    if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 234, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_3);
-    __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-    __pyx_t_5 = PyNumber_Add(__pyx_t_4, __pyx_t_3); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 234, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_5);
-    __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-    __pyx_t_3 = PyNumber_Add(__pyx_t_5, __pyx_kp_s__2); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 234, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_3);
-    __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-    __pyx_t_5 = NULL;
-    if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
-      __pyx_t_5 = PyMethod_GET_SELF(__pyx_t_2);
-      if (likely(__pyx_t_5)) {
-        PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
-        __Pyx_INCREF(__pyx_t_5);
-        __Pyx_INCREF(function);
-        __Pyx_DECREF_SET(__pyx_t_2, function);
-      }
-    }
-    __pyx_t_1 = (__pyx_t_5) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_5, __pyx_t_3) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_3);
-    __Pyx_XDECREF(__pyx_t_5); __pyx_t_5 = 0;
-    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-    if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 234, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_1);
-    __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-
-    /* "compilationEngine.pyx":235
- *             self.output_file.write(self.indent * '  ' + self.next_token + '\n') # read else
- *             self.output_file.write(self.indent * '  ' + self.getNextToken() + '\n') # read {
- *             self.compileStatements()             # <<<<<<<<<<<<<<
- *             self.output_file.write(self.indent * '  ' + self.getNextToken() + '\n') # read }
- *         self.indent -= 1
- */
-    __pyx_t_1 = ((struct __pyx_vtabstruct_17compilationEngine_CompilationEngine *)__pyx_v_self->__pyx_vtab)->compileStatements(__pyx_v_self); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 235, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_1);
-    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-
-    /* "compilationEngine.pyx":236
- *             self.output_file.write(self.indent * '  ' + self.getNextToken() + '\n') # read {
- *             self.compileStatements()
- *             self.output_file.write(self.indent * '  ' + self.getNextToken() + '\n') # read }             # <<<<<<<<<<<<<<
- *         self.indent -= 1
- *         self.output_file.write(self.indent * '  ' + '</ifStatement>\n')
- */
-    __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 236, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_2);
-    __pyx_t_3 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 236, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_3);
-    __pyx_t_5 = PyNumber_Multiply(__pyx_t_3, __pyx_kp_s_); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 236, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_5);
-    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-    __pyx_t_4 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_getNextToken); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 236, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_4);
-    __pyx_t_6 = NULL;
-    if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_4))) {
-      __pyx_t_6 = PyMethod_GET_SELF(__pyx_t_4);
-      if (likely(__pyx_t_6)) {
-        PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_4);
-        __Pyx_INCREF(__pyx_t_6);
-        __Pyx_INCREF(function);
-        __Pyx_DECREF_SET(__pyx_t_4, function);
-      }
-    }
-    __pyx_t_3 = (__pyx_t_6) ? __Pyx_PyObject_CallOneArg(__pyx_t_4, __pyx_t_6) : __Pyx_PyObject_CallNoArg(__pyx_t_4);
-    __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
-    if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 236, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_3);
-    __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-    __pyx_t_4 = PyNumber_Add(__pyx_t_5, __pyx_t_3); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 236, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_4);
-    __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-    __pyx_t_3 = PyNumber_Add(__pyx_t_4, __pyx_kp_s__2); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 236, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_3);
-    __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-    __pyx_t_4 = NULL;
-    if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
-      __pyx_t_4 = PyMethod_GET_SELF(__pyx_t_2);
-      if (likely(__pyx_t_4)) {
-        PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
-        __Pyx_INCREF(__pyx_t_4);
-        __Pyx_INCREF(function);
-        __Pyx_DECREF_SET(__pyx_t_2, function);
-      }
-    }
-    __pyx_t_1 = (__pyx_t_4) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_4, __pyx_t_3) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_3);
-    __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
-    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-    if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 236, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_1);
-    __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-
-    /* "compilationEngine.pyx":232
- *         self.output_file.write(self.indent * '  ' + self.getNextToken() + '\n') # read }
- *         # if the next token is else
- *         if self.getNextToken() == "<keyword> else </keyword>":             # <<<<<<<<<<<<<<
- *             self.output_file.write(self.indent * '  ' + self.next_token + '\n') # read else
- *             self.output_file.write(self.indent * '  ' + self.getNextToken() + '\n') # read {
- */
-  }
-
-  /* "compilationEngine.pyx":237
- *             self.compileStatements()
- *             self.output_file.write(self.indent * '  ' + self.getNextToken() + '\n') # read }
- *         self.indent -= 1             # <<<<<<<<<<<<<<
- *         self.output_file.write(self.indent * '  ' + '</ifStatement>\n')
- * 
- */
-  __pyx_v_self->indent = (__pyx_v_self->indent - 1);
-
-  /* "compilationEngine.pyx":238
- *             self.output_file.write(self.indent * '  ' + self.getNextToken() + '\n') # read }
- *         self.indent -= 1
- *         self.output_file.write(self.indent * '  ' + '</ifStatement>\n')             # <<<<<<<<<<<<<<
- * 
- *     # Compiles an expression
- */
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 238, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_3 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 238, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_3);
-  __pyx_t_4 = PyNumber_Multiply(__pyx_t_3, __pyx_kp_s_); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 238, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_4);
-  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  __pyx_t_3 = PyNumber_Add(__pyx_t_4, __pyx_kp_s_ifStatement_2); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 238, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_3);
-  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  __pyx_t_4 = NULL;
-  if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
-    __pyx_t_4 = PyMethod_GET_SELF(__pyx_t_2);
-    if (likely(__pyx_t_4)) {
-      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
-      __Pyx_INCREF(__pyx_t_4);
-      __Pyx_INCREF(function);
-      __Pyx_DECREF_SET(__pyx_t_2, function);
-    }
-  }
-  __pyx_t_1 = (__pyx_t_4) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_4, __pyx_t_3) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_3);
-  __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
-  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 238, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-
-  /* "compilationEngine.pyx":221
- * 
- *     # Compiles an if statement, possibly with a trailing else clause
- *     cdef compileIf(self):             # <<<<<<<<<<<<<<
- *         self.output_file.write(self.indent * '  ' + '<ifStatement>\n')
- *         self.indent += 1
- */
-
-  /* function exit code */
-  __pyx_r = Py_None; __Pyx_INCREF(Py_None);
-  goto __pyx_L0;
-  __pyx_L1_error:;
-  __Pyx_XDECREF(__pyx_t_1);
-  __Pyx_XDECREF(__pyx_t_2);
-  __Pyx_XDECREF(__pyx_t_3);
-  __Pyx_XDECREF(__pyx_t_4);
-  __Pyx_XDECREF(__pyx_t_5);
-  __Pyx_XDECREF(__pyx_t_6);
-  __Pyx_AddTraceback("compilationEngine.CompilationEngine.compileIf", __pyx_clineno, __pyx_lineno, __pyx_filename);
-  __pyx_r = 0;
-  __pyx_L0:;
-  __Pyx_XGIVEREF(__pyx_r);
-  __Pyx_RefNannyFinishContext();
-  return __pyx_r;
-}
-
-/* "compilationEngine.pyx":241
- * 
- *     # Compiles an expression
+ *     # compile an expression
  *     cdef compileExpression(self):             # <<<<<<<<<<<<<<
- *         self.output_file.write(self.indent * '  ' + '<expression>\n')
+ *         self.output_file.write(self.indent * "  " + '<expression>\n')
  *         self.indent += 1
  */
 
@@ -7066,27 +7279,26 @@ static PyObject *__pyx_f_17compilationEngine_17CompilationEngine_compileExpressi
   PyObject *__pyx_t_4 = NULL;
   int __pyx_t_5;
   int __pyx_t_6;
-  int __pyx_t_7;
   int __pyx_lineno = 0;
   const char *__pyx_filename = NULL;
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("compileExpression", 0);
 
-  /* "compilationEngine.pyx":242
- *     # Compiles an expression
+  /* "compilationEngine.pyx":446
+ *     # compile an expression
  *     cdef compileExpression(self):
- *         self.output_file.write(self.indent * '  ' + '<expression>\n')             # <<<<<<<<<<<<<<
+ *         self.output_file.write(self.indent * "  " + '<expression>\n')             # <<<<<<<<<<<<<<
  *         self.indent += 1
- *         self.compileTerm()
+ * 
  */
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 242, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 446, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_3 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 242, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 446, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
-  __pyx_t_4 = PyNumber_Multiply(__pyx_t_3, __pyx_kp_s_); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 242, __pyx_L1_error)
+  __pyx_t_4 = PyNumber_Multiply(__pyx_t_3, __pyx_kp_s_); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 446, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  __pyx_t_3 = PyNumber_Add(__pyx_t_4, __pyx_kp_s_expression); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 242, __pyx_L1_error)
+  __pyx_t_3 = PyNumber_Add(__pyx_t_4, __pyx_kp_s_expression); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 446, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
   __pyx_t_4 = NULL;
@@ -7102,119 +7314,157 @@ static PyObject *__pyx_f_17compilationEngine_17CompilationEngine_compileExpressi
   __pyx_t_1 = (__pyx_t_4) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_4, __pyx_t_3) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_3);
   __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 242, __pyx_L1_error)
+  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 446, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "compilationEngine.pyx":243
+  /* "compilationEngine.pyx":447
  *     cdef compileExpression(self):
- *         self.output_file.write(self.indent * '  ' + '<expression>\n')
+ *         self.output_file.write(self.indent * "  " + '<expression>\n')
  *         self.indent += 1             # <<<<<<<<<<<<<<
- *         self.compileTerm()
- *         # while the next token is an operator or ;
+ * 
+ *         # compile term
  */
   __pyx_v_self->indent = (__pyx_v_self->indent + 1);
 
-  /* "compilationEngine.pyx":244
- *         self.output_file.write(self.indent * '  ' + '<expression>\n')
- *         self.indent += 1
+  /* "compilationEngine.pyx":450
+ * 
+ *         # compile term
  *         self.compileTerm()             # <<<<<<<<<<<<<<
- *         # while the next token is an operator or ;
- *         while self.next_token == '+' or self.next_token == '-' or self.next_token == '*' or self.next_token == '/' or self.next_token == '&' or self.next_token == '|' or self.next_token == '<' or self.next_token == '>' or self.next_token == '=':
+ * 
+ *         # compile (op term)*
  */
-  __pyx_t_1 = ((struct __pyx_vtabstruct_17compilationEngine_CompilationEngine *)__pyx_v_self->__pyx_vtab)->compileTerm(__pyx_v_self); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 244, __pyx_L1_error)
+  __pyx_t_1 = ((struct __pyx_vtabstruct_17compilationEngine_CompilationEngine *)__pyx_v_self->__pyx_vtab)->compileTerm(__pyx_v_self); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 450, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "compilationEngine.pyx":246
- *         self.compileTerm()
- *         # while the next token is an operator or ;
- *         while self.next_token == '+' or self.next_token == '-' or self.next_token == '*' or self.next_token == '/' or self.next_token == '&' or self.next_token == '|' or self.next_token == '<' or self.next_token == '>' or self.next_token == '=':             # <<<<<<<<<<<<<<
- *             self.output_file.write(self.indent * '  ' + self.next_token + '\n')
- *             self.compileTerm()
+  /* "compilationEngine.pyx":453
+ * 
+ *         # compile (op term)*
+ *         self.advance() # get the next token op or not op             # <<<<<<<<<<<<<<
+ *         while self.next_token.startswith("<symbol> &lt; </symbol>") or self.next_token.startswith("<symbol> &gt; </symbol>") or self.next_token.startswith("<symbol> &amp; </symbol>") or self.next_token.startswith("<symbol> + </symbol>") or self.next_token.startswith("<symbol> - </symbol>") or self.next_token.startswith("<symbol> * </symbol>") or self.next_token.startswith("<symbol> / </symbol>") or self.next_token.startswith("<symbol> = </symbol>") or self.next_token.startswith("<symbol> | </symbol>"):
+ * 
+ */
+  __pyx_t_1 = ((struct __pyx_vtabstruct_17compilationEngine_CompilationEngine *)__pyx_v_self->__pyx_vtab)->advance(__pyx_v_self); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 453, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+  /* "compilationEngine.pyx":454
+ *         # compile (op term)*
+ *         self.advance() # get the next token op or not op
+ *         while self.next_token.startswith("<symbol> &lt; </symbol>") or self.next_token.startswith("<symbol> &gt; </symbol>") or self.next_token.startswith("<symbol> &amp; </symbol>") or self.next_token.startswith("<symbol> + </symbol>") or self.next_token.startswith("<symbol> - </symbol>") or self.next_token.startswith("<symbol> * </symbol>") or self.next_token.startswith("<symbol> / </symbol>") or self.next_token.startswith("<symbol> = </symbol>") or self.next_token.startswith("<symbol> | </symbol>"):             # <<<<<<<<<<<<<<
+ * 
+ *             self.output_file.write(self.indent * "  " + self.next_token + '\n')
  */
   while (1) {
-    __pyx_t_6 = (__Pyx_PyString_Equals(__pyx_v_self->next_token, __pyx_kp_s__4, Py_EQ)); if (unlikely(__pyx_t_6 < 0)) __PYX_ERR(0, 246, __pyx_L1_error)
-    __pyx_t_7 = (__pyx_t_6 != 0);
-    if (!__pyx_t_7) {
+    if (unlikely(__pyx_v_self->next_token == Py_None)) {
+      PyErr_Format(PyExc_AttributeError, "'NoneType' object has no attribute '%.30s'", "startswith");
+      __PYX_ERR(0, 454, __pyx_L1_error)
+    }
+    __pyx_t_6 = __Pyx_PyStr_Tailmatch(__pyx_v_self->next_token, __pyx_kp_s_symbol_lt_symbol, 0, PY_SSIZE_T_MAX, -1); if (unlikely(__pyx_t_6 == ((int)-1))) __PYX_ERR(0, 454, __pyx_L1_error)
+    if (!(__pyx_t_6 != 0)) {
     } else {
-      __pyx_t_5 = __pyx_t_7;
+      __pyx_t_5 = (__pyx_t_6 != 0);
       goto __pyx_L5_bool_binop_done;
     }
-    __pyx_t_7 = (__Pyx_PyString_Equals(__pyx_v_self->next_token, __pyx_kp_s__5, Py_EQ)); if (unlikely(__pyx_t_7 < 0)) __PYX_ERR(0, 246, __pyx_L1_error)
-    __pyx_t_6 = (__pyx_t_7 != 0);
-    if (!__pyx_t_6) {
+    if (unlikely(__pyx_v_self->next_token == Py_None)) {
+      PyErr_Format(PyExc_AttributeError, "'NoneType' object has no attribute '%.30s'", "startswith");
+      __PYX_ERR(0, 454, __pyx_L1_error)
+    }
+    __pyx_t_6 = __Pyx_PyStr_Tailmatch(__pyx_v_self->next_token, __pyx_kp_s_symbol_gt_symbol, 0, PY_SSIZE_T_MAX, -1); if (unlikely(__pyx_t_6 == ((int)-1))) __PYX_ERR(0, 454, __pyx_L1_error)
+    if (!(__pyx_t_6 != 0)) {
     } else {
-      __pyx_t_5 = __pyx_t_6;
+      __pyx_t_5 = (__pyx_t_6 != 0);
       goto __pyx_L5_bool_binop_done;
     }
-    __pyx_t_6 = (__Pyx_PyString_Equals(__pyx_v_self->next_token, __pyx_kp_s__6, Py_EQ)); if (unlikely(__pyx_t_6 < 0)) __PYX_ERR(0, 246, __pyx_L1_error)
-    __pyx_t_7 = (__pyx_t_6 != 0);
-    if (!__pyx_t_7) {
+    if (unlikely(__pyx_v_self->next_token == Py_None)) {
+      PyErr_Format(PyExc_AttributeError, "'NoneType' object has no attribute '%.30s'", "startswith");
+      __PYX_ERR(0, 454, __pyx_L1_error)
+    }
+    __pyx_t_6 = __Pyx_PyStr_Tailmatch(__pyx_v_self->next_token, __pyx_kp_s_symbol_amp_symbol, 0, PY_SSIZE_T_MAX, -1); if (unlikely(__pyx_t_6 == ((int)-1))) __PYX_ERR(0, 454, __pyx_L1_error)
+    if (!(__pyx_t_6 != 0)) {
     } else {
-      __pyx_t_5 = __pyx_t_7;
+      __pyx_t_5 = (__pyx_t_6 != 0);
       goto __pyx_L5_bool_binop_done;
     }
-    __pyx_t_7 = (__Pyx_PyString_Equals(__pyx_v_self->next_token, __pyx_kp_s__7, Py_EQ)); if (unlikely(__pyx_t_7 < 0)) __PYX_ERR(0, 246, __pyx_L1_error)
-    __pyx_t_6 = (__pyx_t_7 != 0);
-    if (!__pyx_t_6) {
+    if (unlikely(__pyx_v_self->next_token == Py_None)) {
+      PyErr_Format(PyExc_AttributeError, "'NoneType' object has no attribute '%.30s'", "startswith");
+      __PYX_ERR(0, 454, __pyx_L1_error)
+    }
+    __pyx_t_6 = __Pyx_PyStr_Tailmatch(__pyx_v_self->next_token, __pyx_kp_s_symbol_symbol_6, 0, PY_SSIZE_T_MAX, -1); if (unlikely(__pyx_t_6 == ((int)-1))) __PYX_ERR(0, 454, __pyx_L1_error)
+    if (!(__pyx_t_6 != 0)) {
     } else {
-      __pyx_t_5 = __pyx_t_6;
+      __pyx_t_5 = (__pyx_t_6 != 0);
       goto __pyx_L5_bool_binop_done;
     }
-    __pyx_t_6 = (__Pyx_PyString_Equals(__pyx_v_self->next_token, __pyx_kp_s__8, Py_EQ)); if (unlikely(__pyx_t_6 < 0)) __PYX_ERR(0, 246, __pyx_L1_error)
-    __pyx_t_7 = (__pyx_t_6 != 0);
-    if (!__pyx_t_7) {
+    if (unlikely(__pyx_v_self->next_token == Py_None)) {
+      PyErr_Format(PyExc_AttributeError, "'NoneType' object has no attribute '%.30s'", "startswith");
+      __PYX_ERR(0, 454, __pyx_L1_error)
+    }
+    __pyx_t_6 = __Pyx_PyStr_Tailmatch(__pyx_v_self->next_token, __pyx_kp_s_symbol_symbol_7, 0, PY_SSIZE_T_MAX, -1); if (unlikely(__pyx_t_6 == ((int)-1))) __PYX_ERR(0, 454, __pyx_L1_error)
+    if (!(__pyx_t_6 != 0)) {
     } else {
-      __pyx_t_5 = __pyx_t_7;
+      __pyx_t_5 = (__pyx_t_6 != 0);
       goto __pyx_L5_bool_binop_done;
     }
-    __pyx_t_7 = (__Pyx_PyString_Equals(__pyx_v_self->next_token, __pyx_kp_s__9, Py_EQ)); if (unlikely(__pyx_t_7 < 0)) __PYX_ERR(0, 246, __pyx_L1_error)
-    __pyx_t_6 = (__pyx_t_7 != 0);
-    if (!__pyx_t_6) {
+    if (unlikely(__pyx_v_self->next_token == Py_None)) {
+      PyErr_Format(PyExc_AttributeError, "'NoneType' object has no attribute '%.30s'", "startswith");
+      __PYX_ERR(0, 454, __pyx_L1_error)
+    }
+    __pyx_t_6 = __Pyx_PyStr_Tailmatch(__pyx_v_self->next_token, __pyx_kp_s_symbol_symbol_8, 0, PY_SSIZE_T_MAX, -1); if (unlikely(__pyx_t_6 == ((int)-1))) __PYX_ERR(0, 454, __pyx_L1_error)
+    if (!(__pyx_t_6 != 0)) {
     } else {
-      __pyx_t_5 = __pyx_t_6;
+      __pyx_t_5 = (__pyx_t_6 != 0);
       goto __pyx_L5_bool_binop_done;
     }
-    __pyx_t_6 = (__Pyx_PyString_Equals(__pyx_v_self->next_token, __pyx_kp_s__10, Py_EQ)); if (unlikely(__pyx_t_6 < 0)) __PYX_ERR(0, 246, __pyx_L1_error)
-    __pyx_t_7 = (__pyx_t_6 != 0);
-    if (!__pyx_t_7) {
+    if (unlikely(__pyx_v_self->next_token == Py_None)) {
+      PyErr_Format(PyExc_AttributeError, "'NoneType' object has no attribute '%.30s'", "startswith");
+      __PYX_ERR(0, 454, __pyx_L1_error)
+    }
+    __pyx_t_6 = __Pyx_PyStr_Tailmatch(__pyx_v_self->next_token, __pyx_kp_s_symbol_symbol_9, 0, PY_SSIZE_T_MAX, -1); if (unlikely(__pyx_t_6 == ((int)-1))) __PYX_ERR(0, 454, __pyx_L1_error)
+    if (!(__pyx_t_6 != 0)) {
     } else {
-      __pyx_t_5 = __pyx_t_7;
+      __pyx_t_5 = (__pyx_t_6 != 0);
       goto __pyx_L5_bool_binop_done;
     }
-    __pyx_t_7 = (__Pyx_PyString_Equals(__pyx_v_self->next_token, __pyx_kp_s__11, Py_EQ)); if (unlikely(__pyx_t_7 < 0)) __PYX_ERR(0, 246, __pyx_L1_error)
-    __pyx_t_6 = (__pyx_t_7 != 0);
-    if (!__pyx_t_6) {
+    if (unlikely(__pyx_v_self->next_token == Py_None)) {
+      PyErr_Format(PyExc_AttributeError, "'NoneType' object has no attribute '%.30s'", "startswith");
+      __PYX_ERR(0, 454, __pyx_L1_error)
+    }
+    __pyx_t_6 = __Pyx_PyStr_Tailmatch(__pyx_v_self->next_token, __pyx_kp_s_symbol_symbol_10, 0, PY_SSIZE_T_MAX, -1); if (unlikely(__pyx_t_6 == ((int)-1))) __PYX_ERR(0, 454, __pyx_L1_error)
+    if (!(__pyx_t_6 != 0)) {
     } else {
-      __pyx_t_5 = __pyx_t_6;
+      __pyx_t_5 = (__pyx_t_6 != 0);
       goto __pyx_L5_bool_binop_done;
     }
-    __pyx_t_6 = (__Pyx_PyString_Equals(__pyx_v_self->next_token, __pyx_kp_s__12, Py_EQ)); if (unlikely(__pyx_t_6 < 0)) __PYX_ERR(0, 246, __pyx_L1_error)
-    __pyx_t_7 = (__pyx_t_6 != 0);
-    __pyx_t_5 = __pyx_t_7;
+    if (unlikely(__pyx_v_self->next_token == Py_None)) {
+      PyErr_Format(PyExc_AttributeError, "'NoneType' object has no attribute '%.30s'", "startswith");
+      __PYX_ERR(0, 454, __pyx_L1_error)
+    }
+    __pyx_t_6 = __Pyx_PyStr_Tailmatch(__pyx_v_self->next_token, __pyx_kp_s_symbol_symbol_11, 0, PY_SSIZE_T_MAX, -1); if (unlikely(__pyx_t_6 == ((int)-1))) __PYX_ERR(0, 454, __pyx_L1_error)
+    __pyx_t_5 = (__pyx_t_6 != 0);
     __pyx_L5_bool_binop_done:;
     if (!__pyx_t_5) break;
 
-    /* "compilationEngine.pyx":247
- *         # while the next token is an operator or ;
- *         while self.next_token == '+' or self.next_token == '-' or self.next_token == '*' or self.next_token == '/' or self.next_token == '&' or self.next_token == '|' or self.next_token == '<' or self.next_token == '>' or self.next_token == '=':
- *             self.output_file.write(self.indent * '  ' + self.next_token + '\n')             # <<<<<<<<<<<<<<
- *             self.compileTerm()
- *             self.next_token = self.getNextToken() # read an operator or ;
+    /* "compilationEngine.pyx":456
+ *         while self.next_token.startswith("<symbol> &lt; </symbol>") or self.next_token.startswith("<symbol> &gt; </symbol>") or self.next_token.startswith("<symbol> &amp; </symbol>") or self.next_token.startswith("<symbol> + </symbol>") or self.next_token.startswith("<symbol> - </symbol>") or self.next_token.startswith("<symbol> * </symbol>") or self.next_token.startswith("<symbol> / </symbol>") or self.next_token.startswith("<symbol> = </symbol>") or self.next_token.startswith("<symbol> | </symbol>"):
+ * 
+ *             self.output_file.write(self.indent * "  " + self.next_token + '\n')             # <<<<<<<<<<<<<<
+ * 
+ *             # compile term
  */
-    __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 247, __pyx_L1_error)
+    __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 456, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
-    __pyx_t_3 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 247, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 456, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
-    __pyx_t_4 = PyNumber_Multiply(__pyx_t_3, __pyx_kp_s_); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 247, __pyx_L1_error)
+    __pyx_t_4 = PyNumber_Multiply(__pyx_t_3, __pyx_kp_s_); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 456, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-    __pyx_t_3 = PyNumber_Add(__pyx_t_4, __pyx_v_self->next_token); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 247, __pyx_L1_error)
+    __pyx_t_3 = PyNumber_Add(__pyx_t_4, __pyx_v_self->next_token); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 456, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-    __pyx_t_4 = PyNumber_Add(__pyx_t_3, __pyx_kp_s__2); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 247, __pyx_L1_error)
+    __pyx_t_4 = PyNumber_Add(__pyx_t_3, __pyx_kp_s__2); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 456, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
     __pyx_t_3 = NULL;
@@ -7230,78 +7480,69 @@ static PyObject *__pyx_f_17compilationEngine_17CompilationEngine_compileExpressi
     __pyx_t_1 = (__pyx_t_3) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_3, __pyx_t_4) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_4);
     __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-    if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 247, __pyx_L1_error)
+    if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 456, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-    /* "compilationEngine.pyx":248
- *         while self.next_token == '+' or self.next_token == '-' or self.next_token == '*' or self.next_token == '/' or self.next_token == '&' or self.next_token == '|' or self.next_token == '<' or self.next_token == '>' or self.next_token == '=':
- *             self.output_file.write(self.indent * '  ' + self.next_token + '\n')
+    /* "compilationEngine.pyx":459
+ * 
+ *             # compile term
  *             self.compileTerm()             # <<<<<<<<<<<<<<
- *             self.next_token = self.getNextToken() # read an operator or ;
- *         self.indent -= 1
+ * 
+ *             self.advance() # get the next token op or not op
  */
-    __pyx_t_1 = ((struct __pyx_vtabstruct_17compilationEngine_CompilationEngine *)__pyx_v_self->__pyx_vtab)->compileTerm(__pyx_v_self); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 248, __pyx_L1_error)
+    __pyx_t_1 = ((struct __pyx_vtabstruct_17compilationEngine_CompilationEngine *)__pyx_v_self->__pyx_vtab)->compileTerm(__pyx_v_self); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 459, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-    /* "compilationEngine.pyx":249
- *             self.output_file.write(self.indent * '  ' + self.next_token + '\n')
+    /* "compilationEngine.pyx":461
  *             self.compileTerm()
- *             self.next_token = self.getNextToken() # read an operator or ;             # <<<<<<<<<<<<<<
- *         self.indent -= 1
- *         self.output_file.write(self.indent * '  ' + '</expression>\n')
+ * 
+ *             self.advance() # get the next token op or not op             # <<<<<<<<<<<<<<
+ * 
+ *         self.reverse()
  */
-    __pyx_t_2 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_getNextToken); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 249, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_2);
-    __pyx_t_4 = NULL;
-    if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
-      __pyx_t_4 = PyMethod_GET_SELF(__pyx_t_2);
-      if (likely(__pyx_t_4)) {
-        PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
-        __Pyx_INCREF(__pyx_t_4);
-        __Pyx_INCREF(function);
-        __Pyx_DECREF_SET(__pyx_t_2, function);
-      }
-    }
-    __pyx_t_1 = (__pyx_t_4) ? __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_4) : __Pyx_PyObject_CallNoArg(__pyx_t_2);
-    __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
-    if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 249, __pyx_L1_error)
+    __pyx_t_1 = ((struct __pyx_vtabstruct_17compilationEngine_CompilationEngine *)__pyx_v_self->__pyx_vtab)->advance(__pyx_v_self); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 461, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
-    __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-    if (!(likely(PyString_CheckExact(__pyx_t_1))||((__pyx_t_1) == Py_None)||((void)PyErr_Format(PyExc_TypeError, "Expected %.16s, got %.200s", "str", Py_TYPE(__pyx_t_1)->tp_name), 0))) __PYX_ERR(0, 249, __pyx_L1_error)
-    __Pyx_GIVEREF(__pyx_t_1);
-    __Pyx_GOTREF(__pyx_v_self->next_token);
-    __Pyx_DECREF(__pyx_v_self->next_token);
-    __pyx_v_self->next_token = ((PyObject*)__pyx_t_1);
-    __pyx_t_1 = 0;
+    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   }
 
-  /* "compilationEngine.pyx":250
- *             self.compileTerm()
- *             self.next_token = self.getNextToken() # read an operator or ;
+  /* "compilationEngine.pyx":463
+ *             self.advance() # get the next token op or not op
+ * 
+ *         self.reverse()             # <<<<<<<<<<<<<<
+ * 
+ *         self.indent -= 1
+ */
+  __pyx_t_1 = ((struct __pyx_vtabstruct_17compilationEngine_CompilationEngine *)__pyx_v_self->__pyx_vtab)->reverse(__pyx_v_self); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 463, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+  /* "compilationEngine.pyx":465
+ *         self.reverse()
+ * 
  *         self.indent -= 1             # <<<<<<<<<<<<<<
- *         self.output_file.write(self.indent * '  ' + '</expression>\n')
+ *         self.output_file.write(self.indent * "  " + '</expression>\n')
  * 
  */
   __pyx_v_self->indent = (__pyx_v_self->indent - 1);
 
-  /* "compilationEngine.pyx":251
- *             self.next_token = self.getNextToken() # read an operator or ;
- *         self.indent -= 1
- *         self.output_file.write(self.indent * '  ' + '</expression>\n')             # <<<<<<<<<<<<<<
+  /* "compilationEngine.pyx":466
  * 
- *     # Compiles a term.  If the current token is an identifier, the routine must distinguish between a variable, an array entry, and a subroutine call.  A single look-ahead token, which may be one of "[", "(", or "." suffices to distinguish between the possibilities.  Any other token is not part of this term and should not be advanced over.
+ *         self.indent -= 1
+ *         self.output_file.write(self.indent * "  " + '</expression>\n')             # <<<<<<<<<<<<<<
+ * 
+ *     # compile a term. If the current token is an identifier, the routine must distinguish between a variable, an array entry, and a subroutine call.
  */
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 251, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 466, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_4 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 251, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 466, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
-  __pyx_t_3 = PyNumber_Multiply(__pyx_t_4, __pyx_kp_s_); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 251, __pyx_L1_error)
+  __pyx_t_3 = PyNumber_Multiply(__pyx_t_4, __pyx_kp_s_); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 466, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  __pyx_t_4 = PyNumber_Add(__pyx_t_3, __pyx_kp_s_expression_2); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 251, __pyx_L1_error)
+  __pyx_t_4 = PyNumber_Add(__pyx_t_3, __pyx_kp_s_expression_2); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 466, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   __pyx_t_3 = NULL;
@@ -7317,16 +7558,16 @@ static PyObject *__pyx_f_17compilationEngine_17CompilationEngine_compileExpressi
   __pyx_t_1 = (__pyx_t_3) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_3, __pyx_t_4) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_4);
   __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 251, __pyx_L1_error)
+  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 466, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "compilationEngine.pyx":241
+  /* "compilationEngine.pyx":445
  * 
- *     # Compiles an expression
+ *     # compile an expression
  *     cdef compileExpression(self):             # <<<<<<<<<<<<<<
- *         self.output_file.write(self.indent * '  ' + '<expression>\n')
+ *         self.output_file.write(self.indent * "  " + '<expression>\n')
  *         self.indent += 1
  */
 
@@ -7346,11 +7587,11 @@ static PyObject *__pyx_f_17compilationEngine_17CompilationEngine_compileExpressi
   return __pyx_r;
 }
 
-/* "compilationEngine.pyx":254
- * 
- *     # Compiles a term.  If the current token is an identifier, the routine must distinguish between a variable, an array entry, and a subroutine call.  A single look-ahead token, which may be one of "[", "(", or "." suffices to distinguish between the possibilities.  Any other token is not part of this term and should not be advanced over.
+/* "compilationEngine.pyx":471
+ *     # A single look-ahead token, which may be one of [, (, or . suffices to distinguish between the possibilities.
+ *     # Any other token is not part of this term and should not be advanced over.
  *     cdef compileTerm(self):             # <<<<<<<<<<<<<<
- *         self.output_file.write(self.indent * '  ' + '<term>\n')
+ *         self.output_file.write(self.indent * "  " + '<term>\n')
  *         self.indent += 1
  */
 
@@ -7364,28 +7605,26 @@ static PyObject *__pyx_f_17compilationEngine_17CompilationEngine_compileTerm(str
   int __pyx_t_5;
   int __pyx_t_6;
   int __pyx_t_7;
-  PyObject *__pyx_t_8 = NULL;
-  PyObject *__pyx_t_9 = NULL;
   int __pyx_lineno = 0;
   const char *__pyx_filename = NULL;
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("compileTerm", 0);
 
-  /* "compilationEngine.pyx":255
- *     # Compiles a term.  If the current token is an identifier, the routine must distinguish between a variable, an array entry, and a subroutine call.  A single look-ahead token, which may be one of "[", "(", or "." suffices to distinguish between the possibilities.  Any other token is not part of this term and should not be advanced over.
+  /* "compilationEngine.pyx":472
+ *     # Any other token is not part of this term and should not be advanced over.
  *     cdef compileTerm(self):
- *         self.output_file.write(self.indent * '  ' + '<term>\n')             # <<<<<<<<<<<<<<
+ *         self.output_file.write(self.indent * "  " + '<term>\n')             # <<<<<<<<<<<<<<
  *         self.indent += 1
- *         # if the next token is an integer constant
+ * 
  */
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 255, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 472, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_3 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 255, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 472, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
-  __pyx_t_4 = PyNumber_Multiply(__pyx_t_3, __pyx_kp_s_); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 255, __pyx_L1_error)
+  __pyx_t_4 = PyNumber_Multiply(__pyx_t_3, __pyx_kp_s_); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 472, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  __pyx_t_3 = PyNumber_Add(__pyx_t_4, __pyx_kp_s_term); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 255, __pyx_L1_error)
+  __pyx_t_3 = PyNumber_Add(__pyx_t_4, __pyx_kp_s_term); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 472, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
   __pyx_t_4 = NULL;
@@ -7401,381 +7640,100 @@ static PyObject *__pyx_f_17compilationEngine_17CompilationEngine_compileTerm(str
   __pyx_t_1 = (__pyx_t_4) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_4, __pyx_t_3) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_3);
   __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 255, __pyx_L1_error)
+  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 472, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "compilationEngine.pyx":256
+  /* "compilationEngine.pyx":473
  *     cdef compileTerm(self):
- *         self.output_file.write(self.indent * '  ' + '<term>\n')
+ *         self.output_file.write(self.indent * "  " + '<term>\n')
  *         self.indent += 1             # <<<<<<<<<<<<<<
- *         # if the next token is an integer constant
- *         self.next_token = self.getNextToken() # read integer constant, string constant, keyword constant, identifier, unary operator, (, or subroutine call
+ * 
+ *         self.advance() # get the next token
  */
   __pyx_v_self->indent = (__pyx_v_self->indent + 1);
 
-  /* "compilationEngine.pyx":258
+  /* "compilationEngine.pyx":475
  *         self.indent += 1
- *         # if the next token is an integer constant
- *         self.next_token = self.getNextToken() # read integer constant, string constant, keyword constant, identifier, unary operator, (, or subroutine call             # <<<<<<<<<<<<<<
- *         if self.next_token[:8] == "<integer":
- *             self.output_file.write(self.indent * '  ' + self.next_token + '\n')
+ * 
+ *         self.advance() # get the next token             # <<<<<<<<<<<<<<
+ * 
+ *         # check if it is an identifier
  */
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_getNextToken); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 258, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_3 = NULL;
-  if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
-    __pyx_t_3 = PyMethod_GET_SELF(__pyx_t_2);
-    if (likely(__pyx_t_3)) {
-      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
-      __Pyx_INCREF(__pyx_t_3);
-      __Pyx_INCREF(function);
-      __Pyx_DECREF_SET(__pyx_t_2, function);
-    }
-  }
-  __pyx_t_1 = (__pyx_t_3) ? __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_3) : __Pyx_PyObject_CallNoArg(__pyx_t_2);
-  __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
-  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 258, __pyx_L1_error)
+  __pyx_t_1 = ((struct __pyx_vtabstruct_17compilationEngine_CompilationEngine *)__pyx_v_self->__pyx_vtab)->advance(__pyx_v_self); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 475, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  if (!(likely(PyString_CheckExact(__pyx_t_1))||((__pyx_t_1) == Py_None)||((void)PyErr_Format(PyExc_TypeError, "Expected %.16s, got %.200s", "str", Py_TYPE(__pyx_t_1)->tp_name), 0))) __PYX_ERR(0, 258, __pyx_L1_error)
-  __Pyx_GIVEREF(__pyx_t_1);
-  __Pyx_GOTREF(__pyx_v_self->next_token);
-  __Pyx_DECREF(__pyx_v_self->next_token);
-  __pyx_v_self->next_token = ((PyObject*)__pyx_t_1);
-  __pyx_t_1 = 0;
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "compilationEngine.pyx":259
- *         # if the next token is an integer constant
- *         self.next_token = self.getNextToken() # read integer constant, string constant, keyword constant, identifier, unary operator, (, or subroutine call
- *         if self.next_token[:8] == "<integer":             # <<<<<<<<<<<<<<
- *             self.output_file.write(self.indent * '  ' + self.next_token + '\n')
- *         # if the next token is a string constant
+  /* "compilationEngine.pyx":478
+ * 
+ *         # check if it is an identifier
+ *         if self.next_token.startswith("<identifier>"):             # <<<<<<<<<<<<<<
+ *             # varName|varName '[' expression ']'|subroutineCall
+ *             self.temp = self.next_token # save the token
  */
   if (unlikely(__pyx_v_self->next_token == Py_None)) {
-    PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
-    __PYX_ERR(0, 259, __pyx_L1_error)
+    PyErr_Format(PyExc_AttributeError, "'NoneType' object has no attribute '%.30s'", "startswith");
+    __PYX_ERR(0, 478, __pyx_L1_error)
   }
-  __pyx_t_1 = PySequence_GetSlice(__pyx_v_self->next_token, 0, 8); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 259, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_5 = (__Pyx_PyString_Equals(__pyx_t_1, __pyx_kp_s_integer, Py_EQ)); if (unlikely(__pyx_t_5 < 0)) __PYX_ERR(0, 259, __pyx_L1_error)
-  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __pyx_t_6 = (__pyx_t_5 != 0);
-  if (__pyx_t_6) {
+  __pyx_t_5 = __Pyx_PyStr_Tailmatch(__pyx_v_self->next_token, __pyx_kp_s_identifier, 0, PY_SSIZE_T_MAX, -1); if (unlikely(__pyx_t_5 == ((int)-1))) __PYX_ERR(0, 478, __pyx_L1_error)
+  if ((__pyx_t_5 != 0)) {
 
-    /* "compilationEngine.pyx":260
- *         self.next_token = self.getNextToken() # read integer constant, string constant, keyword constant, identifier, unary operator, (, or subroutine call
- *         if self.next_token[:8] == "<integer":
- *             self.output_file.write(self.indent * '  ' + self.next_token + '\n')             # <<<<<<<<<<<<<<
- *         # if the next token is a string constant
- *         elif self.next_token[:7] == "<string":
+    /* "compilationEngine.pyx":480
+ *         if self.next_token.startswith("<identifier>"):
+ *             # varName|varName '[' expression ']'|subroutineCall
+ *             self.temp = self.next_token # save the token             # <<<<<<<<<<<<<<
+ *             self.advance() # get the next token [ or ( or .
+ *             # varName '[' expression ']'
  */
-    __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 260, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_2);
-    __pyx_t_3 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 260, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_3);
-    __pyx_t_4 = PyNumber_Multiply(__pyx_t_3, __pyx_kp_s_); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 260, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_4);
-    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-    __pyx_t_3 = PyNumber_Add(__pyx_t_4, __pyx_v_self->next_token); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 260, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_3);
-    __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-    __pyx_t_4 = PyNumber_Add(__pyx_t_3, __pyx_kp_s__2); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 260, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_4);
-    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-    __pyx_t_3 = NULL;
-    if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
-      __pyx_t_3 = PyMethod_GET_SELF(__pyx_t_2);
-      if (likely(__pyx_t_3)) {
-        PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
-        __Pyx_INCREF(__pyx_t_3);
-        __Pyx_INCREF(function);
-        __Pyx_DECREF_SET(__pyx_t_2, function);
-      }
-    }
-    __pyx_t_1 = (__pyx_t_3) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_3, __pyx_t_4) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_4);
-    __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
-    __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-    if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 260, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_1);
-    __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-
-    /* "compilationEngine.pyx":259
- *         # if the next token is an integer constant
- *         self.next_token = self.getNextToken() # read integer constant, string constant, keyword constant, identifier, unary operator, (, or subroutine call
- *         if self.next_token[:8] == "<integer":             # <<<<<<<<<<<<<<
- *             self.output_file.write(self.indent * '  ' + self.next_token + '\n')
- *         # if the next token is a string constant
- */
-    goto __pyx_L3;
-  }
-
-  /* "compilationEngine.pyx":262
- *             self.output_file.write(self.indent * '  ' + self.next_token + '\n')
- *         # if the next token is a string constant
- *         elif self.next_token[:7] == "<string":             # <<<<<<<<<<<<<<
- *             self.output_file.write(self.indent * '  ' + self.next_token + '\n')
- *         # if the next token is a keyword constant
- */
-  if (unlikely(__pyx_v_self->next_token == Py_None)) {
-    PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
-    __PYX_ERR(0, 262, __pyx_L1_error)
-  }
-  __pyx_t_1 = PySequence_GetSlice(__pyx_v_self->next_token, 0, 7); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 262, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_6 = (__Pyx_PyString_Equals(__pyx_t_1, __pyx_kp_s_string, Py_EQ)); if (unlikely(__pyx_t_6 < 0)) __PYX_ERR(0, 262, __pyx_L1_error)
-  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __pyx_t_5 = (__pyx_t_6 != 0);
-  if (__pyx_t_5) {
-
-    /* "compilationEngine.pyx":263
- *         # if the next token is a string constant
- *         elif self.next_token[:7] == "<string":
- *             self.output_file.write(self.indent * '  ' + self.next_token + '\n')             # <<<<<<<<<<<<<<
- *         # if the next token is a keyword constant
- *         elif self.next_token == "<keyword> true </keyword>" or self.next_token == "<keyword> false </keyword>" or self.next_token == "<keyword> null </keyword>" or self.next_token == "<keyword> this </keyword>":
- */
-    __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 263, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_2);
-    __pyx_t_4 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 263, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_4);
-    __pyx_t_3 = PyNumber_Multiply(__pyx_t_4, __pyx_kp_s_); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 263, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_3);
-    __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-    __pyx_t_4 = PyNumber_Add(__pyx_t_3, __pyx_v_self->next_token); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 263, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_4);
-    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-    __pyx_t_3 = PyNumber_Add(__pyx_t_4, __pyx_kp_s__2); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 263, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_3);
-    __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-    __pyx_t_4 = NULL;
-    if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
-      __pyx_t_4 = PyMethod_GET_SELF(__pyx_t_2);
-      if (likely(__pyx_t_4)) {
-        PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
-        __Pyx_INCREF(__pyx_t_4);
-        __Pyx_INCREF(function);
-        __Pyx_DECREF_SET(__pyx_t_2, function);
-      }
-    }
-    __pyx_t_1 = (__pyx_t_4) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_4, __pyx_t_3) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_3);
-    __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
-    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-    if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 263, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_1);
-    __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-
-    /* "compilationEngine.pyx":262
- *             self.output_file.write(self.indent * '  ' + self.next_token + '\n')
- *         # if the next token is a string constant
- *         elif self.next_token[:7] == "<string":             # <<<<<<<<<<<<<<
- *             self.output_file.write(self.indent * '  ' + self.next_token + '\n')
- *         # if the next token is a keyword constant
- */
-    goto __pyx_L3;
-  }
-
-  /* "compilationEngine.pyx":265
- *             self.output_file.write(self.indent * '  ' + self.next_token + '\n')
- *         # if the next token is a keyword constant
- *         elif self.next_token == "<keyword> true </keyword>" or self.next_token == "<keyword> false </keyword>" or self.next_token == "<keyword> null </keyword>" or self.next_token == "<keyword> this </keyword>":             # <<<<<<<<<<<<<<
- *             self.output_file.write(self.indent * '  ' + self.next_token + '\n')
- *         # if the next token is an identifier
- */
-  __pyx_t_6 = (__Pyx_PyString_Equals(__pyx_v_self->next_token, __pyx_kp_s_keyword_true_keyword, Py_EQ)); if (unlikely(__pyx_t_6 < 0)) __PYX_ERR(0, 265, __pyx_L1_error)
-  __pyx_t_7 = (__pyx_t_6 != 0);
-  if (!__pyx_t_7) {
-  } else {
-    __pyx_t_5 = __pyx_t_7;
-    goto __pyx_L4_bool_binop_done;
-  }
-  __pyx_t_7 = (__Pyx_PyString_Equals(__pyx_v_self->next_token, __pyx_kp_s_keyword_false_keyword, Py_EQ)); if (unlikely(__pyx_t_7 < 0)) __PYX_ERR(0, 265, __pyx_L1_error)
-  __pyx_t_6 = (__pyx_t_7 != 0);
-  if (!__pyx_t_6) {
-  } else {
-    __pyx_t_5 = __pyx_t_6;
-    goto __pyx_L4_bool_binop_done;
-  }
-  __pyx_t_6 = (__Pyx_PyString_Equals(__pyx_v_self->next_token, __pyx_kp_s_keyword_null_keyword, Py_EQ)); if (unlikely(__pyx_t_6 < 0)) __PYX_ERR(0, 265, __pyx_L1_error)
-  __pyx_t_7 = (__pyx_t_6 != 0);
-  if (!__pyx_t_7) {
-  } else {
-    __pyx_t_5 = __pyx_t_7;
-    goto __pyx_L4_bool_binop_done;
-  }
-  __pyx_t_7 = (__Pyx_PyString_Equals(__pyx_v_self->next_token, __pyx_kp_s_keyword_this_keyword, Py_EQ)); if (unlikely(__pyx_t_7 < 0)) __PYX_ERR(0, 265, __pyx_L1_error)
-  __pyx_t_6 = (__pyx_t_7 != 0);
-  __pyx_t_5 = __pyx_t_6;
-  __pyx_L4_bool_binop_done:;
-  if (__pyx_t_5) {
-
-    /* "compilationEngine.pyx":266
- *         # if the next token is a keyword constant
- *         elif self.next_token == "<keyword> true </keyword>" or self.next_token == "<keyword> false </keyword>" or self.next_token == "<keyword> null </keyword>" or self.next_token == "<keyword> this </keyword>":
- *             self.output_file.write(self.indent * '  ' + self.next_token + '\n')             # <<<<<<<<<<<<<<
- *         # if the next token is an identifier
- *         elif self.next_token[:12] == "<identifier>":
- */
-    __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 266, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_2);
-    __pyx_t_3 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 266, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_3);
-    __pyx_t_4 = PyNumber_Multiply(__pyx_t_3, __pyx_kp_s_); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 266, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_4);
-    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-    __pyx_t_3 = PyNumber_Add(__pyx_t_4, __pyx_v_self->next_token); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 266, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_3);
-    __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-    __pyx_t_4 = PyNumber_Add(__pyx_t_3, __pyx_kp_s__2); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 266, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_4);
-    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-    __pyx_t_3 = NULL;
-    if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
-      __pyx_t_3 = PyMethod_GET_SELF(__pyx_t_2);
-      if (likely(__pyx_t_3)) {
-        PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
-        __Pyx_INCREF(__pyx_t_3);
-        __Pyx_INCREF(function);
-        __Pyx_DECREF_SET(__pyx_t_2, function);
-      }
-    }
-    __pyx_t_1 = (__pyx_t_3) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_3, __pyx_t_4) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_4);
-    __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
-    __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-    if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 266, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_1);
-    __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-
-    /* "compilationEngine.pyx":265
- *             self.output_file.write(self.indent * '  ' + self.next_token + '\n')
- *         # if the next token is a keyword constant
- *         elif self.next_token == "<keyword> true </keyword>" or self.next_token == "<keyword> false </keyword>" or self.next_token == "<keyword> null </keyword>" or self.next_token == "<keyword> this </keyword>":             # <<<<<<<<<<<<<<
- *             self.output_file.write(self.indent * '  ' + self.next_token + '\n')
- *         # if the next token is an identifier
- */
-    goto __pyx_L3;
-  }
-
-  /* "compilationEngine.pyx":268
- *             self.output_file.write(self.indent * '  ' + self.next_token + '\n')
- *         # if the next token is an identifier
- *         elif self.next_token[:12] == "<identifier>":             # <<<<<<<<<<<<<<
- *             self.output_file.write(self.indent * '  ' + self.next_token + '\n')
- *             # if the next token is [ or .
- */
-  if (unlikely(__pyx_v_self->next_token == Py_None)) {
-    PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
-    __PYX_ERR(0, 268, __pyx_L1_error)
-  }
-  __pyx_t_1 = PySequence_GetSlice(__pyx_v_self->next_token, 0, 12); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 268, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_5 = (__Pyx_PyString_Equals(__pyx_t_1, __pyx_kp_s_identifier, Py_EQ)); if (unlikely(__pyx_t_5 < 0)) __PYX_ERR(0, 268, __pyx_L1_error)
-  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __pyx_t_6 = (__pyx_t_5 != 0);
-  if (__pyx_t_6) {
-
-    /* "compilationEngine.pyx":269
- *         # if the next token is an identifier
- *         elif self.next_token[:12] == "<identifier>":
- *             self.output_file.write(self.indent * '  ' + self.next_token + '\n')             # <<<<<<<<<<<<<<
- *             # if the next token is [ or .
- *             self.next_token = self.getNextToken() # read [ or . or ( or an operator or ;
- */
-    __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 269, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_2);
-    __pyx_t_4 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 269, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_4);
-    __pyx_t_3 = PyNumber_Multiply(__pyx_t_4, __pyx_kp_s_); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 269, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_3);
-    __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-    __pyx_t_4 = PyNumber_Add(__pyx_t_3, __pyx_v_self->next_token); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 269, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_4);
-    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-    __pyx_t_3 = PyNumber_Add(__pyx_t_4, __pyx_kp_s__2); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 269, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_3);
-    __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-    __pyx_t_4 = NULL;
-    if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
-      __pyx_t_4 = PyMethod_GET_SELF(__pyx_t_2);
-      if (likely(__pyx_t_4)) {
-        PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
-        __Pyx_INCREF(__pyx_t_4);
-        __Pyx_INCREF(function);
-        __Pyx_DECREF_SET(__pyx_t_2, function);
-      }
-    }
-    __pyx_t_1 = (__pyx_t_4) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_4, __pyx_t_3) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_3);
-    __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
-    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-    if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 269, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_1);
-    __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-
-    /* "compilationEngine.pyx":271
- *             self.output_file.write(self.indent * '  ' + self.next_token + '\n')
- *             # if the next token is [ or .
- *             self.next_token = self.getNextToken() # read [ or . or ( or an operator or ;             # <<<<<<<<<<<<<<
- *             if self.next_token == "<symbol> [ </symbol>":
- *                 self.output_file.write(self.indent * '  ' + self.next_token + '\n')
- */
-    __pyx_t_2 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_getNextToken); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 271, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_2);
-    __pyx_t_3 = NULL;
-    if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
-      __pyx_t_3 = PyMethod_GET_SELF(__pyx_t_2);
-      if (likely(__pyx_t_3)) {
-        PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
-        __Pyx_INCREF(__pyx_t_3);
-        __Pyx_INCREF(function);
-        __Pyx_DECREF_SET(__pyx_t_2, function);
-      }
-    }
-    __pyx_t_1 = (__pyx_t_3) ? __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_3) : __Pyx_PyObject_CallNoArg(__pyx_t_2);
-    __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
-    if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 271, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_1);
-    __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-    if (!(likely(PyString_CheckExact(__pyx_t_1))||((__pyx_t_1) == Py_None)||((void)PyErr_Format(PyExc_TypeError, "Expected %.16s, got %.200s", "str", Py_TYPE(__pyx_t_1)->tp_name), 0))) __PYX_ERR(0, 271, __pyx_L1_error)
+    __pyx_t_1 = __pyx_v_self->next_token;
+    __Pyx_INCREF(__pyx_t_1);
     __Pyx_GIVEREF(__pyx_t_1);
-    __Pyx_GOTREF(__pyx_v_self->next_token);
-    __Pyx_DECREF(__pyx_v_self->next_token);
-    __pyx_v_self->next_token = ((PyObject*)__pyx_t_1);
+    __Pyx_GOTREF(__pyx_v_self->temp);
+    __Pyx_DECREF(__pyx_v_self->temp);
+    __pyx_v_self->temp = ((PyObject*)__pyx_t_1);
     __pyx_t_1 = 0;
 
-    /* "compilationEngine.pyx":272
- *             # if the next token is [ or .
- *             self.next_token = self.getNextToken() # read [ or . or ( or an operator or ;
- *             if self.next_token == "<symbol> [ </symbol>":             # <<<<<<<<<<<<<<
- *                 self.output_file.write(self.indent * '  ' + self.next_token + '\n')
- *                 self.compileExpression()
- */
-    __pyx_t_6 = (__Pyx_PyString_Equals(__pyx_v_self->next_token, __pyx_kp_s_symbol_symbol_5, Py_EQ)); if (unlikely(__pyx_t_6 < 0)) __PYX_ERR(0, 272, __pyx_L1_error)
-    __pyx_t_5 = (__pyx_t_6 != 0);
-    if (__pyx_t_5) {
-
-      /* "compilationEngine.pyx":273
- *             self.next_token = self.getNextToken() # read [ or . or ( or an operator or ;
+    /* "compilationEngine.pyx":481
+ *             # varName|varName '[' expression ']'|subroutineCall
+ *             self.temp = self.next_token # save the token
+ *             self.advance() # get the next token [ or ( or .             # <<<<<<<<<<<<<<
+ *             # varName '[' expression ']'
  *             if self.next_token == "<symbol> [ </symbol>":
- *                 self.output_file.write(self.indent * '  ' + self.next_token + '\n')             # <<<<<<<<<<<<<<
- *                 self.compileExpression()
- *                 self.output_file.write(self.indent * '  ' + self.getNextToken() + '\n') # read ]
  */
-      __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 273, __pyx_L1_error)
+    __pyx_t_1 = ((struct __pyx_vtabstruct_17compilationEngine_CompilationEngine *)__pyx_v_self->__pyx_vtab)->advance(__pyx_v_self); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 481, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_1);
+    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+    /* "compilationEngine.pyx":483
+ *             self.advance() # get the next token [ or ( or .
+ *             # varName '[' expression ']'
+ *             if self.next_token == "<symbol> [ </symbol>":             # <<<<<<<<<<<<<<
+ *                 self.output_file.write(self.indent * "  " + self.temp + '\n')
+ * 
+ */
+    __pyx_t_5 = (__Pyx_PyString_Equals(__pyx_v_self->next_token, __pyx_kp_s_symbol_symbol_5, Py_EQ)); if (unlikely(__pyx_t_5 < 0)) __PYX_ERR(0, 483, __pyx_L1_error)
+    __pyx_t_6 = (__pyx_t_5 != 0);
+    if (__pyx_t_6) {
+
+      /* "compilationEngine.pyx":484
+ *             # varName '[' expression ']'
+ *             if self.next_token == "<symbol> [ </symbol>":
+ *                 self.output_file.write(self.indent * "  " + self.temp + '\n')             # <<<<<<<<<<<<<<
+ * 
+ *                 # this is an array entry
+ */
+      __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 484, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_2);
-      __pyx_t_3 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 273, __pyx_L1_error)
+      __pyx_t_3 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 484, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_3);
-      __pyx_t_4 = PyNumber_Multiply(__pyx_t_3, __pyx_kp_s_); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 273, __pyx_L1_error)
+      __pyx_t_4 = PyNumber_Multiply(__pyx_t_3, __pyx_kp_s_); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 484, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_4);
       __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-      __pyx_t_3 = PyNumber_Add(__pyx_t_4, __pyx_v_self->next_token); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 273, __pyx_L1_error)
+      __pyx_t_3 = PyNumber_Add(__pyx_t_4, __pyx_v_self->temp); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 484, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_3);
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-      __pyx_t_4 = PyNumber_Add(__pyx_t_3, __pyx_kp_s__2); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 273, __pyx_L1_error)
+      __pyx_t_4 = PyNumber_Add(__pyx_t_3, __pyx_kp_s__2); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 484, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_4);
       __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
       __pyx_t_3 = NULL;
@@ -7791,118 +7749,30 @@ static PyObject *__pyx_f_17compilationEngine_17CompilationEngine_compileTerm(str
       __pyx_t_1 = (__pyx_t_3) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_3, __pyx_t_4) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_4);
       __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-      if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 273, __pyx_L1_error)
+      if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 484, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_1);
       __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
       __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-      /* "compilationEngine.pyx":274
- *             if self.next_token == "<symbol> [ </symbol>":
- *                 self.output_file.write(self.indent * '  ' + self.next_token + '\n')
- *                 self.compileExpression()             # <<<<<<<<<<<<<<
- *                 self.output_file.write(self.indent * '  ' + self.getNextToken() + '\n') # read ]
- *             elif self.next_token == "<symbol> . </symbol>": # read . subroutineName or ( expressionList )
+      /* "compilationEngine.pyx":487
+ * 
+ *                 # this is an array entry
+ *                 self.output_file.write(self.indent * "  " + self.next_token + '\n')             # <<<<<<<<<<<<<<
+ * 
+ *                 # compile expression
  */
-      __pyx_t_1 = ((struct __pyx_vtabstruct_17compilationEngine_CompilationEngine *)__pyx_v_self->__pyx_vtab)->compileExpression(__pyx_v_self); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 274, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_1);
-      __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-
-      /* "compilationEngine.pyx":275
- *                 self.output_file.write(self.indent * '  ' + self.next_token + '\n')
- *                 self.compileExpression()
- *                 self.output_file.write(self.indent * '  ' + self.getNextToken() + '\n') # read ]             # <<<<<<<<<<<<<<
- *             elif self.next_token == "<symbol> . </symbol>": # read . subroutineName or ( expressionList )
- *                 self.output_file.write(self.indent * '  ' + self.next_token + '\n') # read .
- */
-      __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 275, __pyx_L1_error)
+      __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 487, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_2);
-      __pyx_t_4 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 275, __pyx_L1_error)
+      __pyx_t_4 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 487, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_4);
-      __pyx_t_3 = PyNumber_Multiply(__pyx_t_4, __pyx_kp_s_); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 275, __pyx_L1_error)
+      __pyx_t_3 = PyNumber_Multiply(__pyx_t_4, __pyx_kp_s_); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 487, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_3);
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-      __pyx_t_8 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_getNextToken); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 275, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_8);
-      __pyx_t_9 = NULL;
-      if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_8))) {
-        __pyx_t_9 = PyMethod_GET_SELF(__pyx_t_8);
-        if (likely(__pyx_t_9)) {
-          PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_8);
-          __Pyx_INCREF(__pyx_t_9);
-          __Pyx_INCREF(function);
-          __Pyx_DECREF_SET(__pyx_t_8, function);
-        }
-      }
-      __pyx_t_4 = (__pyx_t_9) ? __Pyx_PyObject_CallOneArg(__pyx_t_8, __pyx_t_9) : __Pyx_PyObject_CallNoArg(__pyx_t_8);
-      __Pyx_XDECREF(__pyx_t_9); __pyx_t_9 = 0;
-      if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 275, __pyx_L1_error)
+      __pyx_t_4 = PyNumber_Add(__pyx_t_3, __pyx_v_self->next_token); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 487, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_4);
-      __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
-      __pyx_t_8 = PyNumber_Add(__pyx_t_3, __pyx_t_4); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 275, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_8);
       __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-      __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-      __pyx_t_4 = PyNumber_Add(__pyx_t_8, __pyx_kp_s__2); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 275, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_4);
-      __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
-      __pyx_t_8 = NULL;
-      if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
-        __pyx_t_8 = PyMethod_GET_SELF(__pyx_t_2);
-        if (likely(__pyx_t_8)) {
-          PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
-          __Pyx_INCREF(__pyx_t_8);
-          __Pyx_INCREF(function);
-          __Pyx_DECREF_SET(__pyx_t_2, function);
-        }
-      }
-      __pyx_t_1 = (__pyx_t_8) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_8, __pyx_t_4) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_4);
-      __Pyx_XDECREF(__pyx_t_8); __pyx_t_8 = 0;
-      __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-      if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 275, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_1);
-      __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-      __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-
-      /* "compilationEngine.pyx":272
- *             # if the next token is [ or .
- *             self.next_token = self.getNextToken() # read [ or . or ( or an operator or ;
- *             if self.next_token == "<symbol> [ </symbol>":             # <<<<<<<<<<<<<<
- *                 self.output_file.write(self.indent * '  ' + self.next_token + '\n')
- *                 self.compileExpression()
- */
-      goto __pyx_L8;
-    }
-
-    /* "compilationEngine.pyx":276
- *                 self.compileExpression()
- *                 self.output_file.write(self.indent * '  ' + self.getNextToken() + '\n') # read ]
- *             elif self.next_token == "<symbol> . </symbol>": # read . subroutineName or ( expressionList )             # <<<<<<<<<<<<<<
- *                 self.output_file.write(self.indent * '  ' + self.next_token + '\n') # read .
- *                 self.output_file.write(self.indent * '  ' + self.getNextToken() + '\n') # read subroutineName
- */
-    __pyx_t_5 = (__Pyx_PyString_Equals(__pyx_v_self->next_token, __pyx_kp_s_symbol_symbol_7, Py_EQ)); if (unlikely(__pyx_t_5 < 0)) __PYX_ERR(0, 276, __pyx_L1_error)
-    __pyx_t_6 = (__pyx_t_5 != 0);
-    if (__pyx_t_6) {
-
-      /* "compilationEngine.pyx":277
- *                 self.output_file.write(self.indent * '  ' + self.getNextToken() + '\n') # read ]
- *             elif self.next_token == "<symbol> . </symbol>": # read . subroutineName or ( expressionList )
- *                 self.output_file.write(self.indent * '  ' + self.next_token + '\n') # read .             # <<<<<<<<<<<<<<
- *                 self.output_file.write(self.indent * '  ' + self.getNextToken() + '\n') # read subroutineName
- *                 self.output_file.write(self.indent * '  ' + self.getNextToken() + '\n') # read (
- */
-      __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 277, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_2);
-      __pyx_t_4 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 277, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_4);
-      __pyx_t_8 = PyNumber_Multiply(__pyx_t_4, __pyx_kp_s_); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 277, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_8);
-      __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-      __pyx_t_4 = PyNumber_Add(__pyx_t_8, __pyx_v_self->next_token); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 277, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_4);
-      __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
-      __pyx_t_8 = PyNumber_Add(__pyx_t_4, __pyx_kp_s__2); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 277, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_8);
+      __pyx_t_3 = PyNumber_Add(__pyx_t_4, __pyx_kp_s__2); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 487, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_3);
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
       __pyx_t_4 = NULL;
       if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
@@ -7914,51 +7784,55 @@ static PyObject *__pyx_f_17compilationEngine_17CompilationEngine_compileTerm(str
           __Pyx_DECREF_SET(__pyx_t_2, function);
         }
       }
-      __pyx_t_1 = (__pyx_t_4) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_4, __pyx_t_8) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_8);
+      __pyx_t_1 = (__pyx_t_4) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_4, __pyx_t_3) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_3);
       __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
-      __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
-      if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 277, __pyx_L1_error)
+      __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+      if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 487, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_1);
       __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
       __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-      /* "compilationEngine.pyx":278
- *             elif self.next_token == "<symbol> . </symbol>": # read . subroutineName or ( expressionList )
- *                 self.output_file.write(self.indent * '  ' + self.next_token + '\n') # read .
- *                 self.output_file.write(self.indent * '  ' + self.getNextToken() + '\n') # read subroutineName             # <<<<<<<<<<<<<<
- *                 self.output_file.write(self.indent * '  ' + self.getNextToken() + '\n') # read (
- *                 self.compileExpressionList()
+      /* "compilationEngine.pyx":490
+ * 
+ *                 # compile expression
+ *                 self.compileExpression()             # <<<<<<<<<<<<<<
+ * 
+ *                 self.advance() # get the next token ]
  */
-      __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 278, __pyx_L1_error)
+      __pyx_t_1 = ((struct __pyx_vtabstruct_17compilationEngine_CompilationEngine *)__pyx_v_self->__pyx_vtab)->compileExpression(__pyx_v_self); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 490, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_1);
+      __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+      /* "compilationEngine.pyx":492
+ *                 self.compileExpression()
+ * 
+ *                 self.advance() # get the next token ]             # <<<<<<<<<<<<<<
+ *                 self.output_file.write(self.indent * "  " + self.next_token + '\n')
+ * 
+ */
+      __pyx_t_1 = ((struct __pyx_vtabstruct_17compilationEngine_CompilationEngine *)__pyx_v_self->__pyx_vtab)->advance(__pyx_v_self); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 492, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_1);
+      __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+      /* "compilationEngine.pyx":493
+ * 
+ *                 self.advance() # get the next token ]
+ *                 self.output_file.write(self.indent * "  " + self.next_token + '\n')             # <<<<<<<<<<<<<<
+ * 
+ *             # subroutineCall
+ */
+      __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 493, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_2);
-      __pyx_t_8 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 278, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_8);
-      __pyx_t_4 = PyNumber_Multiply(__pyx_t_8, __pyx_kp_s_); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 278, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_4);
-      __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
-      __pyx_t_3 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_getNextToken); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 278, __pyx_L1_error)
+      __pyx_t_3 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 493, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_3);
-      __pyx_t_9 = NULL;
-      if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_3))) {
-        __pyx_t_9 = PyMethod_GET_SELF(__pyx_t_3);
-        if (likely(__pyx_t_9)) {
-          PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_3);
-          __Pyx_INCREF(__pyx_t_9);
-          __Pyx_INCREF(function);
-          __Pyx_DECREF_SET(__pyx_t_3, function);
-        }
-      }
-      __pyx_t_8 = (__pyx_t_9) ? __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_t_9) : __Pyx_PyObject_CallNoArg(__pyx_t_3);
-      __Pyx_XDECREF(__pyx_t_9); __pyx_t_9 = 0;
-      if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 278, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_8);
+      __pyx_t_4 = PyNumber_Multiply(__pyx_t_3, __pyx_kp_s_); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 493, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_4);
       __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-      __pyx_t_3 = PyNumber_Add(__pyx_t_4, __pyx_t_8); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 278, __pyx_L1_error)
+      __pyx_t_3 = PyNumber_Add(__pyx_t_4, __pyx_v_self->next_token); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 493, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_3);
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-      __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
-      __pyx_t_8 = PyNumber_Add(__pyx_t_3, __pyx_kp_s__2); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 278, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_8);
+      __pyx_t_4 = PyNumber_Add(__pyx_t_3, __pyx_kp_s__2); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 493, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_4);
       __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
       __pyx_t_3 = NULL;
       if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
@@ -7970,51 +7844,107 @@ static PyObject *__pyx_f_17compilationEngine_17CompilationEngine_compileTerm(str
           __Pyx_DECREF_SET(__pyx_t_2, function);
         }
       }
-      __pyx_t_1 = (__pyx_t_3) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_3, __pyx_t_8) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_8);
+      __pyx_t_1 = (__pyx_t_3) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_3, __pyx_t_4) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_4);
       __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
-      __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
-      if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 278, __pyx_L1_error)
+      __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+      if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 493, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_1);
       __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
       __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-      /* "compilationEngine.pyx":279
- *                 self.output_file.write(self.indent * '  ' + self.next_token + '\n') # read .
- *                 self.output_file.write(self.indent * '  ' + self.getNextToken() + '\n') # read subroutineName
- *                 self.output_file.write(self.indent * '  ' + self.getNextToken() + '\n') # read (             # <<<<<<<<<<<<<<
- *                 self.compileExpressionList()
- *                 self.output_file.write(self.indent * '  ' + self.next_token + '\n') # read )
+      /* "compilationEngine.pyx":483
+ *             self.advance() # get the next token [ or ( or .
+ *             # varName '[' expression ']'
+ *             if self.next_token == "<symbol> [ </symbol>":             # <<<<<<<<<<<<<<
+ *                 self.output_file.write(self.indent * "  " + self.temp + '\n')
+ * 
  */
-      __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 279, __pyx_L1_error)
+      goto __pyx_L4;
+    }
+
+    /* "compilationEngine.pyx":496
+ * 
+ *             # subroutineCall
+ *             elif self.next_token == "<symbol> ( </symbol>" or self.next_token == "<symbol> . </symbol>":             # <<<<<<<<<<<<<<
+ *                 self.reverse()
+ *                 self.reverse()
+ */
+    __pyx_t_5 = (__Pyx_PyString_Equals(__pyx_v_self->next_token, __pyx_kp_s_symbol_symbol_12, Py_EQ)); if (unlikely(__pyx_t_5 < 0)) __PYX_ERR(0, 496, __pyx_L1_error)
+    __pyx_t_7 = (__pyx_t_5 != 0);
+    if (!__pyx_t_7) {
+    } else {
+      __pyx_t_6 = __pyx_t_7;
+      goto __pyx_L5_bool_binop_done;
+    }
+    __pyx_t_7 = (__Pyx_PyString_Equals(__pyx_v_self->next_token, __pyx_kp_s_symbol_symbol_13, Py_EQ)); if (unlikely(__pyx_t_7 < 0)) __PYX_ERR(0, 496, __pyx_L1_error)
+    __pyx_t_5 = (__pyx_t_7 != 0);
+    __pyx_t_6 = __pyx_t_5;
+    __pyx_L5_bool_binop_done:;
+    if (__pyx_t_6) {
+
+      /* "compilationEngine.pyx":497
+ *             # subroutineCall
+ *             elif self.next_token == "<symbol> ( </symbol>" or self.next_token == "<symbol> . </symbol>":
+ *                 self.reverse()             # <<<<<<<<<<<<<<
+ *                 self.reverse()
+ *                 self.compileSubroutineCall()
+ */
+      __pyx_t_1 = ((struct __pyx_vtabstruct_17compilationEngine_CompilationEngine *)__pyx_v_self->__pyx_vtab)->reverse(__pyx_v_self); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 497, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_1);
+      __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+      /* "compilationEngine.pyx":498
+ *             elif self.next_token == "<symbol> ( </symbol>" or self.next_token == "<symbol> . </symbol>":
+ *                 self.reverse()
+ *                 self.reverse()             # <<<<<<<<<<<<<<
+ *                 self.compileSubroutineCall()
+ * 
+ */
+      __pyx_t_1 = ((struct __pyx_vtabstruct_17compilationEngine_CompilationEngine *)__pyx_v_self->__pyx_vtab)->reverse(__pyx_v_self); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 498, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_1);
+      __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+      /* "compilationEngine.pyx":499
+ *                 self.reverse()
+ *                 self.reverse()
+ *                 self.compileSubroutineCall()             # <<<<<<<<<<<<<<
+ * 
+ * 
+ */
+      __pyx_t_1 = ((struct __pyx_vtabstruct_17compilationEngine_CompilationEngine *)__pyx_v_self->__pyx_vtab)->compileSubroutineCall(__pyx_v_self); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 499, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_1);
+      __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+      /* "compilationEngine.pyx":496
+ * 
+ *             # subroutineCall
+ *             elif self.next_token == "<symbol> ( </symbol>" or self.next_token == "<symbol> . </symbol>":             # <<<<<<<<<<<<<<
+ *                 self.reverse()
+ *                 self.reverse()
+ */
+      goto __pyx_L4;
+    }
+
+    /* "compilationEngine.pyx":504
+ *             # varName
+ *             else:
+ *                 self.output_file.write(self.indent * "  " + self.temp + '\n')             # <<<<<<<<<<<<<<
+ *                 self.reverse()
+ * 
+ */
+    /*else*/ {
+      __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 504, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_2);
-      __pyx_t_8 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 279, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_8);
-      __pyx_t_3 = PyNumber_Multiply(__pyx_t_8, __pyx_kp_s_); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 279, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_3);
-      __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
-      __pyx_t_4 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_getNextToken); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 279, __pyx_L1_error)
+      __pyx_t_4 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 504, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_4);
-      __pyx_t_9 = NULL;
-      if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_4))) {
-        __pyx_t_9 = PyMethod_GET_SELF(__pyx_t_4);
-        if (likely(__pyx_t_9)) {
-          PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_4);
-          __Pyx_INCREF(__pyx_t_9);
-          __Pyx_INCREF(function);
-          __Pyx_DECREF_SET(__pyx_t_4, function);
-        }
-      }
-      __pyx_t_8 = (__pyx_t_9) ? __Pyx_PyObject_CallOneArg(__pyx_t_4, __pyx_t_9) : __Pyx_PyObject_CallNoArg(__pyx_t_4);
-      __Pyx_XDECREF(__pyx_t_9); __pyx_t_9 = 0;
-      if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 279, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_8);
+      __pyx_t_3 = PyNumber_Multiply(__pyx_t_4, __pyx_kp_s_); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 504, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_3);
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-      __pyx_t_4 = PyNumber_Add(__pyx_t_3, __pyx_t_8); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 279, __pyx_L1_error)
+      __pyx_t_4 = PyNumber_Add(__pyx_t_3, __pyx_v_self->temp); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 504, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_4);
       __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-      __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
-      __pyx_t_8 = PyNumber_Add(__pyx_t_4, __pyx_kp_s__2); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 279, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_8);
+      __pyx_t_3 = PyNumber_Add(__pyx_t_4, __pyx_kp_s__2); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 504, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_3);
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
       __pyx_t_4 = NULL;
       if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
@@ -8026,326 +7956,377 @@ static PyObject *__pyx_f_17compilationEngine_17CompilationEngine_compileTerm(str
           __Pyx_DECREF_SET(__pyx_t_2, function);
         }
       }
-      __pyx_t_1 = (__pyx_t_4) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_4, __pyx_t_8) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_8);
+      __pyx_t_1 = (__pyx_t_4) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_4, __pyx_t_3) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_3);
       __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
-      __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
-      if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 279, __pyx_L1_error)
+      __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+      if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 504, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_1);
       __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
       __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-      /* "compilationEngine.pyx":280
- *                 self.output_file.write(self.indent * '  ' + self.getNextToken() + '\n') # read subroutineName
- *                 self.output_file.write(self.indent * '  ' + self.getNextToken() + '\n') # read (
- *                 self.compileExpressionList()             # <<<<<<<<<<<<<<
- *                 self.output_file.write(self.indent * '  ' + self.next_token + '\n') # read )
- *         # if the next token is a unary operator
+      /* "compilationEngine.pyx":505
+ *             else:
+ *                 self.output_file.write(self.indent * "  " + self.temp + '\n')
+ *                 self.reverse()             # <<<<<<<<<<<<<<
+ * 
+ *         # check if it is a constant
  */
-      __pyx_t_1 = ((struct __pyx_vtabstruct_17compilationEngine_CompilationEngine *)__pyx_v_self->__pyx_vtab)->compileExpressionList(__pyx_v_self); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 280, __pyx_L1_error)
+      __pyx_t_1 = ((struct __pyx_vtabstruct_17compilationEngine_CompilationEngine *)__pyx_v_self->__pyx_vtab)->reverse(__pyx_v_self); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 505, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_1);
       __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+    }
+    __pyx_L4:;
 
-      /* "compilationEngine.pyx":281
- *                 self.output_file.write(self.indent * '  ' + self.getNextToken() + '\n') # read (
- *                 self.compileExpressionList()
- *                 self.output_file.write(self.indent * '  ' + self.next_token + '\n') # read )             # <<<<<<<<<<<<<<
- *         # if the next token is a unary operator
- *         elif self.next_token == '-' or self.next_token == '~':
+    /* "compilationEngine.pyx":478
+ * 
+ *         # check if it is an identifier
+ *         if self.next_token.startswith("<identifier>"):             # <<<<<<<<<<<<<<
+ *             # varName|varName '[' expression ']'|subroutineCall
+ *             self.temp = self.next_token # save the token
  */
-      __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 281, __pyx_L1_error)
+    goto __pyx_L3;
+  }
+
+  /* "compilationEngine.pyx":509
+ *         # check if it is a constant
+ *         else:
+ *             if self.next_token.startswith("<integerConstant>") or self.next_token.startswith("<stringConstant>") or self.next_token.startswith("<keyword> true </keyword>") or self.next_token.startswith("<keyword> false </keyword>") or self.next_token.startswith("<keyword> null </keyword>") or self.next_token.startswith("<keyword> this </keyword>"):             # <<<<<<<<<<<<<<
+ *                 # integerConstant|stringConstant|keywordConstant
+ *                 self.output_file.write(self.indent * "  " + self.next_token + '\n')
+ */
+  /*else*/ {
+    if (unlikely(__pyx_v_self->next_token == Py_None)) {
+      PyErr_Format(PyExc_AttributeError, "'NoneType' object has no attribute '%.30s'", "startswith");
+      __PYX_ERR(0, 509, __pyx_L1_error)
+    }
+    __pyx_t_5 = __Pyx_PyStr_Tailmatch(__pyx_v_self->next_token, __pyx_kp_s_integerConstant, 0, PY_SSIZE_T_MAX, -1); if (unlikely(__pyx_t_5 == ((int)-1))) __PYX_ERR(0, 509, __pyx_L1_error)
+    if (!(__pyx_t_5 != 0)) {
+    } else {
+      __pyx_t_6 = (__pyx_t_5 != 0);
+      goto __pyx_L8_bool_binop_done;
+    }
+    if (unlikely(__pyx_v_self->next_token == Py_None)) {
+      PyErr_Format(PyExc_AttributeError, "'NoneType' object has no attribute '%.30s'", "startswith");
+      __PYX_ERR(0, 509, __pyx_L1_error)
+    }
+    __pyx_t_5 = __Pyx_PyStr_Tailmatch(__pyx_v_self->next_token, __pyx_kp_s_stringConstant, 0, PY_SSIZE_T_MAX, -1); if (unlikely(__pyx_t_5 == ((int)-1))) __PYX_ERR(0, 509, __pyx_L1_error)
+    if (!(__pyx_t_5 != 0)) {
+    } else {
+      __pyx_t_6 = (__pyx_t_5 != 0);
+      goto __pyx_L8_bool_binop_done;
+    }
+    if (unlikely(__pyx_v_self->next_token == Py_None)) {
+      PyErr_Format(PyExc_AttributeError, "'NoneType' object has no attribute '%.30s'", "startswith");
+      __PYX_ERR(0, 509, __pyx_L1_error)
+    }
+    __pyx_t_5 = __Pyx_PyStr_Tailmatch(__pyx_v_self->next_token, __pyx_kp_s_keyword_true_keyword, 0, PY_SSIZE_T_MAX, -1); if (unlikely(__pyx_t_5 == ((int)-1))) __PYX_ERR(0, 509, __pyx_L1_error)
+    if (!(__pyx_t_5 != 0)) {
+    } else {
+      __pyx_t_6 = (__pyx_t_5 != 0);
+      goto __pyx_L8_bool_binop_done;
+    }
+    if (unlikely(__pyx_v_self->next_token == Py_None)) {
+      PyErr_Format(PyExc_AttributeError, "'NoneType' object has no attribute '%.30s'", "startswith");
+      __PYX_ERR(0, 509, __pyx_L1_error)
+    }
+    __pyx_t_5 = __Pyx_PyStr_Tailmatch(__pyx_v_self->next_token, __pyx_kp_s_keyword_false_keyword, 0, PY_SSIZE_T_MAX, -1); if (unlikely(__pyx_t_5 == ((int)-1))) __PYX_ERR(0, 509, __pyx_L1_error)
+    if (!(__pyx_t_5 != 0)) {
+    } else {
+      __pyx_t_6 = (__pyx_t_5 != 0);
+      goto __pyx_L8_bool_binop_done;
+    }
+    if (unlikely(__pyx_v_self->next_token == Py_None)) {
+      PyErr_Format(PyExc_AttributeError, "'NoneType' object has no attribute '%.30s'", "startswith");
+      __PYX_ERR(0, 509, __pyx_L1_error)
+    }
+    __pyx_t_5 = __Pyx_PyStr_Tailmatch(__pyx_v_self->next_token, __pyx_kp_s_keyword_null_keyword, 0, PY_SSIZE_T_MAX, -1); if (unlikely(__pyx_t_5 == ((int)-1))) __PYX_ERR(0, 509, __pyx_L1_error)
+    if (!(__pyx_t_5 != 0)) {
+    } else {
+      __pyx_t_6 = (__pyx_t_5 != 0);
+      goto __pyx_L8_bool_binop_done;
+    }
+    if (unlikely(__pyx_v_self->next_token == Py_None)) {
+      PyErr_Format(PyExc_AttributeError, "'NoneType' object has no attribute '%.30s'", "startswith");
+      __PYX_ERR(0, 509, __pyx_L1_error)
+    }
+    __pyx_t_5 = __Pyx_PyStr_Tailmatch(__pyx_v_self->next_token, __pyx_kp_s_keyword_this_keyword, 0, PY_SSIZE_T_MAX, -1); if (unlikely(__pyx_t_5 == ((int)-1))) __PYX_ERR(0, 509, __pyx_L1_error)
+    __pyx_t_6 = (__pyx_t_5 != 0);
+    __pyx_L8_bool_binop_done:;
+    if (__pyx_t_6) {
+
+      /* "compilationEngine.pyx":511
+ *             if self.next_token.startswith("<integerConstant>") or self.next_token.startswith("<stringConstant>") or self.next_token.startswith("<keyword> true </keyword>") or self.next_token.startswith("<keyword> false </keyword>") or self.next_token.startswith("<keyword> null </keyword>") or self.next_token.startswith("<keyword> this </keyword>"):
+ *                 # integerConstant|stringConstant|keywordConstant
+ *                 self.output_file.write(self.indent * "  " + self.next_token + '\n')             # <<<<<<<<<<<<<<
+ * 
+ *             elif self.next_token == "<symbol> ( </symbol>":
+ */
+      __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 511, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_2);
-      __pyx_t_8 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 281, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_8);
-      __pyx_t_4 = PyNumber_Multiply(__pyx_t_8, __pyx_kp_s_); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 281, __pyx_L1_error)
+      __pyx_t_3 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 511, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_3);
+      __pyx_t_4 = PyNumber_Multiply(__pyx_t_3, __pyx_kp_s_); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 511, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_4);
-      __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
-      __pyx_t_8 = PyNumber_Add(__pyx_t_4, __pyx_v_self->next_token); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 281, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_8);
+      __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+      __pyx_t_3 = PyNumber_Add(__pyx_t_4, __pyx_v_self->next_token); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 511, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_3);
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-      __pyx_t_4 = PyNumber_Add(__pyx_t_8, __pyx_kp_s__2); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 281, __pyx_L1_error)
+      __pyx_t_4 = PyNumber_Add(__pyx_t_3, __pyx_kp_s__2); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 511, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_4);
-      __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
-      __pyx_t_8 = NULL;
+      __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+      __pyx_t_3 = NULL;
       if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
-        __pyx_t_8 = PyMethod_GET_SELF(__pyx_t_2);
-        if (likely(__pyx_t_8)) {
+        __pyx_t_3 = PyMethod_GET_SELF(__pyx_t_2);
+        if (likely(__pyx_t_3)) {
           PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
-          __Pyx_INCREF(__pyx_t_8);
+          __Pyx_INCREF(__pyx_t_3);
           __Pyx_INCREF(function);
           __Pyx_DECREF_SET(__pyx_t_2, function);
         }
       }
-      __pyx_t_1 = (__pyx_t_8) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_8, __pyx_t_4) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_4);
-      __Pyx_XDECREF(__pyx_t_8); __pyx_t_8 = 0;
+      __pyx_t_1 = (__pyx_t_3) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_3, __pyx_t_4) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_4);
+      __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-      if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 281, __pyx_L1_error)
+      if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 511, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_1);
       __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
       __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-      /* "compilationEngine.pyx":276
+      /* "compilationEngine.pyx":509
+ *         # check if it is a constant
+ *         else:
+ *             if self.next_token.startswith("<integerConstant>") or self.next_token.startswith("<stringConstant>") or self.next_token.startswith("<keyword> true </keyword>") or self.next_token.startswith("<keyword> false </keyword>") or self.next_token.startswith("<keyword> null </keyword>") or self.next_token.startswith("<keyword> this </keyword>"):             # <<<<<<<<<<<<<<
+ *                 # integerConstant|stringConstant|keywordConstant
+ *                 self.output_file.write(self.indent * "  " + self.next_token + '\n')
+ */
+      goto __pyx_L7;
+    }
+
+    /* "compilationEngine.pyx":513
+ *                 self.output_file.write(self.indent * "  " + self.next_token + '\n')
+ * 
+ *             elif self.next_token == "<symbol> ( </symbol>":             # <<<<<<<<<<<<<<
+ *                 self.output_file.write(self.indent * "  " + self.next_token + '\n')
+ * 
+ */
+    __pyx_t_6 = (__Pyx_PyString_Equals(__pyx_v_self->next_token, __pyx_kp_s_symbol_symbol_12, Py_EQ)); if (unlikely(__pyx_t_6 < 0)) __PYX_ERR(0, 513, __pyx_L1_error)
+    __pyx_t_5 = (__pyx_t_6 != 0);
+    if (__pyx_t_5) {
+
+      /* "compilationEngine.pyx":514
+ * 
+ *             elif self.next_token == "<symbol> ( </symbol>":
+ *                 self.output_file.write(self.indent * "  " + self.next_token + '\n')             # <<<<<<<<<<<<<<
+ * 
+ *                 # compile expression
+ */
+      __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 514, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_2);
+      __pyx_t_4 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 514, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_4);
+      __pyx_t_3 = PyNumber_Multiply(__pyx_t_4, __pyx_kp_s_); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 514, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_3);
+      __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+      __pyx_t_4 = PyNumber_Add(__pyx_t_3, __pyx_v_self->next_token); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 514, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_4);
+      __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+      __pyx_t_3 = PyNumber_Add(__pyx_t_4, __pyx_kp_s__2); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 514, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_3);
+      __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+      __pyx_t_4 = NULL;
+      if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
+        __pyx_t_4 = PyMethod_GET_SELF(__pyx_t_2);
+        if (likely(__pyx_t_4)) {
+          PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
+          __Pyx_INCREF(__pyx_t_4);
+          __Pyx_INCREF(function);
+          __Pyx_DECREF_SET(__pyx_t_2, function);
+        }
+      }
+      __pyx_t_1 = (__pyx_t_4) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_4, __pyx_t_3) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_3);
+      __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
+      __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+      if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 514, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_1);
+      __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+      __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+      /* "compilationEngine.pyx":517
+ * 
+ *                 # compile expression
+ *                 self.compileExpression()             # <<<<<<<<<<<<<<
+ * 
+ *                 self.advance() # get the next token )
+ */
+      __pyx_t_1 = ((struct __pyx_vtabstruct_17compilationEngine_CompilationEngine *)__pyx_v_self->__pyx_vtab)->compileExpression(__pyx_v_self); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 517, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_1);
+      __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+      /* "compilationEngine.pyx":519
  *                 self.compileExpression()
- *                 self.output_file.write(self.indent * '  ' + self.getNextToken() + '\n') # read ]
- *             elif self.next_token == "<symbol> . </symbol>": # read . subroutineName or ( expressionList )             # <<<<<<<<<<<<<<
- *                 self.output_file.write(self.indent * '  ' + self.next_token + '\n') # read .
- *                 self.output_file.write(self.indent * '  ' + self.getNextToken() + '\n') # read subroutineName
+ * 
+ *                 self.advance() # get the next token )             # <<<<<<<<<<<<<<
+ *                 self.output_file.write(self.indent * "  " + self.next_token + '\n')
+ * 
  */
-    }
-    __pyx_L8:;
+      __pyx_t_1 = ((struct __pyx_vtabstruct_17compilationEngine_CompilationEngine *)__pyx_v_self->__pyx_vtab)->advance(__pyx_v_self); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 519, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_1);
+      __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-    /* "compilationEngine.pyx":268
- *             self.output_file.write(self.indent * '  ' + self.next_token + '\n')
- *         # if the next token is an identifier
- *         elif self.next_token[:12] == "<identifier>":             # <<<<<<<<<<<<<<
- *             self.output_file.write(self.indent * '  ' + self.next_token + '\n')
- *             # if the next token is [ or .
+      /* "compilationEngine.pyx":520
+ * 
+ *                 self.advance() # get the next token )
+ *                 self.output_file.write(self.indent * "  " + self.next_token + '\n')             # <<<<<<<<<<<<<<
+ * 
+ *             elif self.next_token == "<symbol> - </symbol>" or self.next_token == "<symbol> ~ </symbol>":
  */
-    goto __pyx_L3;
-  }
-
-  /* "compilationEngine.pyx":283
- *                 self.output_file.write(self.indent * '  ' + self.next_token + '\n') # read )
- *         # if the next token is a unary operator
- *         elif self.next_token == '-' or self.next_token == '~':             # <<<<<<<<<<<<<<
- *             self.output_file.write(self.indent * '  ' + self.next_token + '\n')
- *             self.compileTerm()
- */
-  __pyx_t_5 = (__Pyx_PyString_Equals(__pyx_v_self->next_token, __pyx_kp_s__5, Py_EQ)); if (unlikely(__pyx_t_5 < 0)) __PYX_ERR(0, 283, __pyx_L1_error)
-  __pyx_t_7 = (__pyx_t_5 != 0);
-  if (!__pyx_t_7) {
-  } else {
-    __pyx_t_6 = __pyx_t_7;
-    goto __pyx_L9_bool_binop_done;
-  }
-  __pyx_t_7 = (__Pyx_PyString_Equals(__pyx_v_self->next_token, __pyx_kp_s__13, Py_EQ)); if (unlikely(__pyx_t_7 < 0)) __PYX_ERR(0, 283, __pyx_L1_error)
-  __pyx_t_5 = (__pyx_t_7 != 0);
-  __pyx_t_6 = __pyx_t_5;
-  __pyx_L9_bool_binop_done:;
-  if (__pyx_t_6) {
-
-    /* "compilationEngine.pyx":284
- *         # if the next token is a unary operator
- *         elif self.next_token == '-' or self.next_token == '~':
- *             self.output_file.write(self.indent * '  ' + self.next_token + '\n')             # <<<<<<<<<<<<<<
- *             self.compileTerm()
- *         # if the next token is (
- */
-    __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 284, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_2);
-    __pyx_t_4 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 284, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_4);
-    __pyx_t_8 = PyNumber_Multiply(__pyx_t_4, __pyx_kp_s_); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 284, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_8);
-    __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-    __pyx_t_4 = PyNumber_Add(__pyx_t_8, __pyx_v_self->next_token); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 284, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_4);
-    __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
-    __pyx_t_8 = PyNumber_Add(__pyx_t_4, __pyx_kp_s__2); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 284, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_8);
-    __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-    __pyx_t_4 = NULL;
-    if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
-      __pyx_t_4 = PyMethod_GET_SELF(__pyx_t_2);
-      if (likely(__pyx_t_4)) {
-        PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
-        __Pyx_INCREF(__pyx_t_4);
-        __Pyx_INCREF(function);
-        __Pyx_DECREF_SET(__pyx_t_2, function);
+      __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 520, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_2);
+      __pyx_t_3 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 520, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_3);
+      __pyx_t_4 = PyNumber_Multiply(__pyx_t_3, __pyx_kp_s_); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 520, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_4);
+      __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+      __pyx_t_3 = PyNumber_Add(__pyx_t_4, __pyx_v_self->next_token); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 520, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_3);
+      __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+      __pyx_t_4 = PyNumber_Add(__pyx_t_3, __pyx_kp_s__2); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 520, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_4);
+      __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+      __pyx_t_3 = NULL;
+      if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
+        __pyx_t_3 = PyMethod_GET_SELF(__pyx_t_2);
+        if (likely(__pyx_t_3)) {
+          PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
+          __Pyx_INCREF(__pyx_t_3);
+          __Pyx_INCREF(function);
+          __Pyx_DECREF_SET(__pyx_t_2, function);
+        }
       }
+      __pyx_t_1 = (__pyx_t_3) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_3, __pyx_t_4) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_4);
+      __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
+      __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+      if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 520, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_1);
+      __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+      __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+      /* "compilationEngine.pyx":513
+ *                 self.output_file.write(self.indent * "  " + self.next_token + '\n')
+ * 
+ *             elif self.next_token == "<symbol> ( </symbol>":             # <<<<<<<<<<<<<<
+ *                 self.output_file.write(self.indent * "  " + self.next_token + '\n')
+ * 
+ */
+      goto __pyx_L7;
     }
-    __pyx_t_1 = (__pyx_t_4) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_4, __pyx_t_8) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_8);
-    __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
-    __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
-    if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 284, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_1);
-    __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-    /* "compilationEngine.pyx":285
- *         elif self.next_token == '-' or self.next_token == '~':
- *             self.output_file.write(self.indent * '  ' + self.next_token + '\n')
- *             self.compileTerm()             # <<<<<<<<<<<<<<
- *         # if the next token is (
- *         elif self.next_token == "<symbol> ( </symbol>":
+    /* "compilationEngine.pyx":522
+ *                 self.output_file.write(self.indent * "  " + self.next_token + '\n')
+ * 
+ *             elif self.next_token == "<symbol> - </symbol>" or self.next_token == "<symbol> ~ </symbol>":             # <<<<<<<<<<<<<<
+ *                 self.output_file.write(self.indent * "  " + self.next_token + '\n')
+ * 
  */
-    __pyx_t_1 = ((struct __pyx_vtabstruct_17compilationEngine_CompilationEngine *)__pyx_v_self->__pyx_vtab)->compileTerm(__pyx_v_self); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 285, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_1);
-    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+    __pyx_t_6 = (__Pyx_PyString_Equals(__pyx_v_self->next_token, __pyx_kp_s_symbol_symbol_7, Py_EQ)); if (unlikely(__pyx_t_6 < 0)) __PYX_ERR(0, 522, __pyx_L1_error)
+    __pyx_t_7 = (__pyx_t_6 != 0);
+    if (!__pyx_t_7) {
+    } else {
+      __pyx_t_5 = __pyx_t_7;
+      goto __pyx_L14_bool_binop_done;
+    }
+    __pyx_t_7 = (__Pyx_PyString_Equals(__pyx_v_self->next_token, __pyx_kp_s_symbol_symbol_14, Py_EQ)); if (unlikely(__pyx_t_7 < 0)) __PYX_ERR(0, 522, __pyx_L1_error)
+    __pyx_t_6 = (__pyx_t_7 != 0);
+    __pyx_t_5 = __pyx_t_6;
+    __pyx_L14_bool_binop_done:;
+    if (__pyx_t_5) {
 
-    /* "compilationEngine.pyx":283
- *                 self.output_file.write(self.indent * '  ' + self.next_token + '\n') # read )
- *         # if the next token is a unary operator
- *         elif self.next_token == '-' or self.next_token == '~':             # <<<<<<<<<<<<<<
- *             self.output_file.write(self.indent * '  ' + self.next_token + '\n')
- *             self.compileTerm()
+      /* "compilationEngine.pyx":523
+ * 
+ *             elif self.next_token == "<symbol> - </symbol>" or self.next_token == "<symbol> ~ </symbol>":
+ *                 self.output_file.write(self.indent * "  " + self.next_token + '\n')             # <<<<<<<<<<<<<<
+ * 
+ *                 # compile term
  */
-    goto __pyx_L3;
-  }
-
-  /* "compilationEngine.pyx":287
- *             self.compileTerm()
- *         # if the next token is (
- *         elif self.next_token == "<symbol> ( </symbol>":             # <<<<<<<<<<<<<<
- *             self.output_file.write(self.indent * '  ' + self.next_token + '\n')
- *             self.compileExpression()
- */
-  __pyx_t_6 = (__Pyx_PyString_Equals(__pyx_v_self->next_token, __pyx_kp_s_symbol_symbol_8, Py_EQ)); if (unlikely(__pyx_t_6 < 0)) __PYX_ERR(0, 287, __pyx_L1_error)
-  __pyx_t_5 = (__pyx_t_6 != 0);
-  if (__pyx_t_5) {
-
-    /* "compilationEngine.pyx":288
- *         # if the next token is (
- *         elif self.next_token == "<symbol> ( </symbol>":
- *             self.output_file.write(self.indent * '  ' + self.next_token + '\n')             # <<<<<<<<<<<<<<
- *             self.compileExpression()
- *             self.output_file.write(self.indent * '  ' + self.next_token + '\n') # read )
- */
-    __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 288, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_2);
-    __pyx_t_8 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 288, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_8);
-    __pyx_t_4 = PyNumber_Multiply(__pyx_t_8, __pyx_kp_s_); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 288, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_4);
-    __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
-    __pyx_t_8 = PyNumber_Add(__pyx_t_4, __pyx_v_self->next_token); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 288, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_8);
-    __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-    __pyx_t_4 = PyNumber_Add(__pyx_t_8, __pyx_kp_s__2); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 288, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_4);
-    __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
-    __pyx_t_8 = NULL;
-    if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
-      __pyx_t_8 = PyMethod_GET_SELF(__pyx_t_2);
-      if (likely(__pyx_t_8)) {
-        PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
-        __Pyx_INCREF(__pyx_t_8);
-        __Pyx_INCREF(function);
-        __Pyx_DECREF_SET(__pyx_t_2, function);
+      __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 523, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_2);
+      __pyx_t_4 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 523, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_4);
+      __pyx_t_3 = PyNumber_Multiply(__pyx_t_4, __pyx_kp_s_); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 523, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_3);
+      __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+      __pyx_t_4 = PyNumber_Add(__pyx_t_3, __pyx_v_self->next_token); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 523, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_4);
+      __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+      __pyx_t_3 = PyNumber_Add(__pyx_t_4, __pyx_kp_s__2); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 523, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_3);
+      __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+      __pyx_t_4 = NULL;
+      if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
+        __pyx_t_4 = PyMethod_GET_SELF(__pyx_t_2);
+        if (likely(__pyx_t_4)) {
+          PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
+          __Pyx_INCREF(__pyx_t_4);
+          __Pyx_INCREF(function);
+          __Pyx_DECREF_SET(__pyx_t_2, function);
+        }
       }
-    }
-    __pyx_t_1 = (__pyx_t_8) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_8, __pyx_t_4) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_4);
-    __Pyx_XDECREF(__pyx_t_8); __pyx_t_8 = 0;
-    __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-    if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 288, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_1);
-    __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+      __pyx_t_1 = (__pyx_t_4) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_4, __pyx_t_3) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_3);
+      __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
+      __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+      if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 523, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_1);
+      __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+      __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-    /* "compilationEngine.pyx":289
- *         elif self.next_token == "<symbol> ( </symbol>":
- *             self.output_file.write(self.indent * '  ' + self.next_token + '\n')
- *             self.compileExpression()             # <<<<<<<<<<<<<<
- *             self.output_file.write(self.indent * '  ' + self.next_token + '\n') # read )
- *         self.next_token = self.getNextToken() # read an operator or ;
- */
-    __pyx_t_1 = ((struct __pyx_vtabstruct_17compilationEngine_CompilationEngine *)__pyx_v_self->__pyx_vtab)->compileExpression(__pyx_v_self); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 289, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_1);
-    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-
-    /* "compilationEngine.pyx":290
- *             self.output_file.write(self.indent * '  ' + self.next_token + '\n')
- *             self.compileExpression()
- *             self.output_file.write(self.indent * '  ' + self.next_token + '\n') # read )             # <<<<<<<<<<<<<<
- *         self.next_token = self.getNextToken() # read an operator or ;
+      /* "compilationEngine.pyx":526
+ * 
+ *                 # compile term
+ *                 self.compileTerm()             # <<<<<<<<<<<<<<
+ * 
  *         self.indent -= 1
  */
-    __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 290, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_2);
-    __pyx_t_4 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 290, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_4);
-    __pyx_t_8 = PyNumber_Multiply(__pyx_t_4, __pyx_kp_s_); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 290, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_8);
-    __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-    __pyx_t_4 = PyNumber_Add(__pyx_t_8, __pyx_v_self->next_token); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 290, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_4);
-    __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
-    __pyx_t_8 = PyNumber_Add(__pyx_t_4, __pyx_kp_s__2); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 290, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_8);
-    __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-    __pyx_t_4 = NULL;
-    if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
-      __pyx_t_4 = PyMethod_GET_SELF(__pyx_t_2);
-      if (likely(__pyx_t_4)) {
-        PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
-        __Pyx_INCREF(__pyx_t_4);
-        __Pyx_INCREF(function);
-        __Pyx_DECREF_SET(__pyx_t_2, function);
-      }
-    }
-    __pyx_t_1 = (__pyx_t_4) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_4, __pyx_t_8) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_8);
-    __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
-    __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
-    if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 290, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_1);
-    __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+      __pyx_t_1 = ((struct __pyx_vtabstruct_17compilationEngine_CompilationEngine *)__pyx_v_self->__pyx_vtab)->compileTerm(__pyx_v_self); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 526, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_1);
+      __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-    /* "compilationEngine.pyx":287
- *             self.compileTerm()
- *         # if the next token is (
- *         elif self.next_token == "<symbol> ( </symbol>":             # <<<<<<<<<<<<<<
- *             self.output_file.write(self.indent * '  ' + self.next_token + '\n')
- *             self.compileExpression()
+      /* "compilationEngine.pyx":522
+ *                 self.output_file.write(self.indent * "  " + self.next_token + '\n')
+ * 
+ *             elif self.next_token == "<symbol> - </symbol>" or self.next_token == "<symbol> ~ </symbol>":             # <<<<<<<<<<<<<<
+ *                 self.output_file.write(self.indent * "  " + self.next_token + '\n')
+ * 
  */
+    }
+    __pyx_L7:;
   }
   __pyx_L3:;
 
-  /* "compilationEngine.pyx":291
- *             self.compileExpression()
- *             self.output_file.write(self.indent * '  ' + self.next_token + '\n') # read )
- *         self.next_token = self.getNextToken() # read an operator or ;             # <<<<<<<<<<<<<<
- *         self.indent -= 1
- *         self.output_file.write(self.indent * '  ' + '</term>\n')
- */
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_getNextToken); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 291, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_8 = NULL;
-  if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
-    __pyx_t_8 = PyMethod_GET_SELF(__pyx_t_2);
-    if (likely(__pyx_t_8)) {
-      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
-      __Pyx_INCREF(__pyx_t_8);
-      __Pyx_INCREF(function);
-      __Pyx_DECREF_SET(__pyx_t_2, function);
-    }
-  }
-  __pyx_t_1 = (__pyx_t_8) ? __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_8) : __Pyx_PyObject_CallNoArg(__pyx_t_2);
-  __Pyx_XDECREF(__pyx_t_8); __pyx_t_8 = 0;
-  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 291, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  if (!(likely(PyString_CheckExact(__pyx_t_1))||((__pyx_t_1) == Py_None)||((void)PyErr_Format(PyExc_TypeError, "Expected %.16s, got %.200s", "str", Py_TYPE(__pyx_t_1)->tp_name), 0))) __PYX_ERR(0, 291, __pyx_L1_error)
-  __Pyx_GIVEREF(__pyx_t_1);
-  __Pyx_GOTREF(__pyx_v_self->next_token);
-  __Pyx_DECREF(__pyx_v_self->next_token);
-  __pyx_v_self->next_token = ((PyObject*)__pyx_t_1);
-  __pyx_t_1 = 0;
-
-  /* "compilationEngine.pyx":292
- *             self.output_file.write(self.indent * '  ' + self.next_token + '\n') # read )
- *         self.next_token = self.getNextToken() # read an operator or ;
+  /* "compilationEngine.pyx":528
+ *                 self.compileTerm()
+ * 
  *         self.indent -= 1             # <<<<<<<<<<<<<<
- *         self.output_file.write(self.indent * '  ' + '</term>\n')
+ *         self.output_file.write(self.indent * "  " + '</term>\n')
  * 
  */
   __pyx_v_self->indent = (__pyx_v_self->indent - 1);
 
-  /* "compilationEngine.pyx":293
- *         self.next_token = self.getNextToken() # read an operator or ;
- *         self.indent -= 1
- *         self.output_file.write(self.indent * '  ' + '</term>\n')             # <<<<<<<<<<<<<<
+  /* "compilationEngine.pyx":529
  * 
- *     # Compiles a (possibly empty) comma-separated list of expressions
+ *         self.indent -= 1
+ *         self.output_file.write(self.indent * "  " + '</term>\n')             # <<<<<<<<<<<<<<
+ * 
+ * 
  */
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 293, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 529, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_8 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 293, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_8);
-  __pyx_t_4 = PyNumber_Multiply(__pyx_t_8, __pyx_kp_s_); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 293, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 529, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_3);
+  __pyx_t_4 = PyNumber_Multiply(__pyx_t_3, __pyx_kp_s_); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 529, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
-  __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
-  __pyx_t_8 = PyNumber_Add(__pyx_t_4, __pyx_kp_s_term_2); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 293, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_8);
+  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+  __pyx_t_3 = PyNumber_Add(__pyx_t_4, __pyx_kp_s_term_2); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 529, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
   __pyx_t_4 = NULL;
   if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
@@ -8357,19 +8338,19 @@ static PyObject *__pyx_f_17compilationEngine_17CompilationEngine_compileTerm(str
       __Pyx_DECREF_SET(__pyx_t_2, function);
     }
   }
-  __pyx_t_1 = (__pyx_t_4) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_4, __pyx_t_8) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_8);
+  __pyx_t_1 = (__pyx_t_4) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_4, __pyx_t_3) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_3);
   __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
-  __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
-  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 293, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 529, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "compilationEngine.pyx":254
- * 
- *     # Compiles a term.  If the current token is an identifier, the routine must distinguish between a variable, an array entry, and a subroutine call.  A single look-ahead token, which may be one of "[", "(", or "." suffices to distinguish between the possibilities.  Any other token is not part of this term and should not be advanced over.
+  /* "compilationEngine.pyx":471
+ *     # A single look-ahead token, which may be one of [, (, or . suffices to distinguish between the possibilities.
+ *     # Any other token is not part of this term and should not be advanced over.
  *     cdef compileTerm(self):             # <<<<<<<<<<<<<<
- *         self.output_file.write(self.indent * '  ' + '<term>\n')
+ *         self.output_file.write(self.indent * "  " + '<term>\n')
  *         self.indent += 1
  */
 
@@ -8381,8 +8362,6 @@ static PyObject *__pyx_f_17compilationEngine_17CompilationEngine_compileTerm(str
   __Pyx_XDECREF(__pyx_t_2);
   __Pyx_XDECREF(__pyx_t_3);
   __Pyx_XDECREF(__pyx_t_4);
-  __Pyx_XDECREF(__pyx_t_8);
-  __Pyx_XDECREF(__pyx_t_9);
   __Pyx_AddTraceback("compilationEngine.CompilationEngine.compileTerm", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = 0;
   __pyx_L0:;
@@ -8391,15 +8370,224 @@ static PyObject *__pyx_f_17compilationEngine_17CompilationEngine_compileTerm(str
   return __pyx_r;
 }
 
-/* "compilationEngine.pyx":296
+/* "compilationEngine.pyx":533
  * 
- *     # Compiles a (possibly empty) comma-separated list of expressions
+ *     # compile a (possibly empty) comma-separated list of expressions
  *     cdef compileExpressionList(self):             # <<<<<<<<<<<<<<
- *         self.output_file.write(self.indent * '  ' + '<expressionList>\n')
- *         self.indent += 1
+ * 
+ *         self.advance() # get the next token ) or not )
  */
 
 static PyObject *__pyx_f_17compilationEngine_17CompilationEngine_compileExpressionList(struct __pyx_obj_17compilationEngine_CompilationEngine *__pyx_v_self) {
+  PyObject *__pyx_r = NULL;
+  __Pyx_RefNannyDeclarations
+  PyObject *__pyx_t_1 = NULL;
+  int __pyx_t_2;
+  int __pyx_t_3;
+  PyObject *__pyx_t_4 = NULL;
+  PyObject *__pyx_t_5 = NULL;
+  PyObject *__pyx_t_6 = NULL;
+  int __pyx_lineno = 0;
+  const char *__pyx_filename = NULL;
+  int __pyx_clineno = 0;
+  __Pyx_RefNannySetupContext("compileExpressionList", 0);
+
+  /* "compilationEngine.pyx":535
+ *     cdef compileExpressionList(self):
+ * 
+ *         self.advance() # get the next token ) or not )             # <<<<<<<<<<<<<<
+ *         if self.next_token == "<symbol> ) </symbol>":
+ *             self.reverse()
+ */
+  __pyx_t_1 = ((struct __pyx_vtabstruct_17compilationEngine_CompilationEngine *)__pyx_v_self->__pyx_vtab)->advance(__pyx_v_self); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 535, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+  /* "compilationEngine.pyx":536
+ * 
+ *         self.advance() # get the next token ) or not )
+ *         if self.next_token == "<symbol> ) </symbol>":             # <<<<<<<<<<<<<<
+ *             self.reverse()
+ *         else:
+ */
+  __pyx_t_2 = (__Pyx_PyString_Equals(__pyx_v_self->next_token, __pyx_kp_s_symbol_symbol_4, Py_EQ)); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 536, __pyx_L1_error)
+  __pyx_t_3 = (__pyx_t_2 != 0);
+  if (__pyx_t_3) {
+
+    /* "compilationEngine.pyx":537
+ *         self.advance() # get the next token ) or not )
+ *         if self.next_token == "<symbol> ) </symbol>":
+ *             self.reverse()             # <<<<<<<<<<<<<<
+ *         else:
+ *             self.reverse()
+ */
+    __pyx_t_1 = ((struct __pyx_vtabstruct_17compilationEngine_CompilationEngine *)__pyx_v_self->__pyx_vtab)->reverse(__pyx_v_self); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 537, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_1);
+    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+    /* "compilationEngine.pyx":536
+ * 
+ *         self.advance() # get the next token ) or not )
+ *         if self.next_token == "<symbol> ) </symbol>":             # <<<<<<<<<<<<<<
+ *             self.reverse()
+ *         else:
+ */
+    goto __pyx_L3;
+  }
+
+  /* "compilationEngine.pyx":539
+ *             self.reverse()
+ *         else:
+ *             self.reverse()             # <<<<<<<<<<<<<<
+ *             self.compileExpression()
+ * 
+ */
+  /*else*/ {
+    __pyx_t_1 = ((struct __pyx_vtabstruct_17compilationEngine_CompilationEngine *)__pyx_v_self->__pyx_vtab)->reverse(__pyx_v_self); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 539, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_1);
+    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+    /* "compilationEngine.pyx":540
+ *         else:
+ *             self.reverse()
+ *             self.compileExpression()             # <<<<<<<<<<<<<<
+ * 
+ *             # compile (, expression)*
+ */
+    __pyx_t_1 = ((struct __pyx_vtabstruct_17compilationEngine_CompilationEngine *)__pyx_v_self->__pyx_vtab)->compileExpression(__pyx_v_self); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 540, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_1);
+    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+    /* "compilationEngine.pyx":543
+ * 
+ *             # compile (, expression)*
+ *             self.advance() # get the next token , or )             # <<<<<<<<<<<<<<
+ *             while self.next_token == "<symbol> , </symbol>":
+ *                 self.output_file.write(self.indent * "  " + self.next_token + '\n')
+ */
+    __pyx_t_1 = ((struct __pyx_vtabstruct_17compilationEngine_CompilationEngine *)__pyx_v_self->__pyx_vtab)->advance(__pyx_v_self); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 543, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_1);
+    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+    /* "compilationEngine.pyx":544
+ *             # compile (, expression)*
+ *             self.advance() # get the next token , or )
+ *             while self.next_token == "<symbol> , </symbol>":             # <<<<<<<<<<<<<<
+ *                 self.output_file.write(self.indent * "  " + self.next_token + '\n')
+ * 
+ */
+    while (1) {
+      __pyx_t_3 = (__Pyx_PyString_Equals(__pyx_v_self->next_token, __pyx_kp_s_symbol_symbol_2, Py_EQ)); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(0, 544, __pyx_L1_error)
+      __pyx_t_2 = (__pyx_t_3 != 0);
+      if (!__pyx_t_2) break;
+
+      /* "compilationEngine.pyx":545
+ *             self.advance() # get the next token , or )
+ *             while self.next_token == "<symbol> , </symbol>":
+ *                 self.output_file.write(self.indent * "  " + self.next_token + '\n')             # <<<<<<<<<<<<<<
+ * 
+ *                 # compile expression
+ */
+      __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 545, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_4);
+      __pyx_t_5 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 545, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_5);
+      __pyx_t_6 = PyNumber_Multiply(__pyx_t_5, __pyx_kp_s_); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 545, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_6);
+      __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
+      __pyx_t_5 = PyNumber_Add(__pyx_t_6, __pyx_v_self->next_token); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 545, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_5);
+      __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
+      __pyx_t_6 = PyNumber_Add(__pyx_t_5, __pyx_kp_s__2); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 545, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_6);
+      __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
+      __pyx_t_5 = NULL;
+      if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_4))) {
+        __pyx_t_5 = PyMethod_GET_SELF(__pyx_t_4);
+        if (likely(__pyx_t_5)) {
+          PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_4);
+          __Pyx_INCREF(__pyx_t_5);
+          __Pyx_INCREF(function);
+          __Pyx_DECREF_SET(__pyx_t_4, function);
+        }
+      }
+      __pyx_t_1 = (__pyx_t_5) ? __Pyx_PyObject_Call2Args(__pyx_t_4, __pyx_t_5, __pyx_t_6) : __Pyx_PyObject_CallOneArg(__pyx_t_4, __pyx_t_6);
+      __Pyx_XDECREF(__pyx_t_5); __pyx_t_5 = 0;
+      __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
+      if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 545, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_1);
+      __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+      __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+      /* "compilationEngine.pyx":548
+ * 
+ *                 # compile expression
+ *                 self.compileExpression()             # <<<<<<<<<<<<<<
+ * 
+ *                 self.advance() # get the next token , or )
+ */
+      __pyx_t_1 = ((struct __pyx_vtabstruct_17compilationEngine_CompilationEngine *)__pyx_v_self->__pyx_vtab)->compileExpression(__pyx_v_self); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 548, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_1);
+      __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+      /* "compilationEngine.pyx":550
+ *                 self.compileExpression()
+ * 
+ *                 self.advance() # get the next token , or )             # <<<<<<<<<<<<<<
+ * 
+ *             self.reverse()
+ */
+      __pyx_t_1 = ((struct __pyx_vtabstruct_17compilationEngine_CompilationEngine *)__pyx_v_self->__pyx_vtab)->advance(__pyx_v_self); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 550, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_1);
+      __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+    }
+
+    /* "compilationEngine.pyx":552
+ *                 self.advance() # get the next token , or )
+ * 
+ *             self.reverse()             # <<<<<<<<<<<<<<
+ * 
+ * 
+ */
+    __pyx_t_1 = ((struct __pyx_vtabstruct_17compilationEngine_CompilationEngine *)__pyx_v_self->__pyx_vtab)->reverse(__pyx_v_self); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 552, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_1);
+    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  }
+  __pyx_L3:;
+
+  /* "compilationEngine.pyx":533
+ * 
+ *     # compile a (possibly empty) comma-separated list of expressions
+ *     cdef compileExpressionList(self):             # <<<<<<<<<<<<<<
+ * 
+ *         self.advance() # get the next token ) or not )
+ */
+
+  /* function exit code */
+  __pyx_r = Py_None; __Pyx_INCREF(Py_None);
+  goto __pyx_L0;
+  __pyx_L1_error:;
+  __Pyx_XDECREF(__pyx_t_1);
+  __Pyx_XDECREF(__pyx_t_4);
+  __Pyx_XDECREF(__pyx_t_5);
+  __Pyx_XDECREF(__pyx_t_6);
+  __Pyx_AddTraceback("compilationEngine.CompilationEngine.compileExpressionList", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __pyx_r = 0;
+  __pyx_L0:;
+  __Pyx_XGIVEREF(__pyx_r);
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+/* "compilationEngine.pyx":556
+ * 
+ *     # compile a subroutine call
+ *     cdef compileSubroutineCall(self):             # <<<<<<<<<<<<<<
+ *         self.advance() # get the next token subroutineName or className or varName
+ * 
+ */
+
+static PyObject *__pyx_f_17compilationEngine_17CompilationEngine_compileSubroutineCall(struct __pyx_obj_17compilationEngine_CompilationEngine *__pyx_v_self) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
@@ -8411,230 +8599,37 @@ static PyObject *__pyx_f_17compilationEngine_17CompilationEngine_compileExpressi
   int __pyx_lineno = 0;
   const char *__pyx_filename = NULL;
   int __pyx_clineno = 0;
-  __Pyx_RefNannySetupContext("compileExpressionList", 0);
+  __Pyx_RefNannySetupContext("compileSubroutineCall", 0);
 
-  /* "compilationEngine.pyx":297
- *     # Compiles a (possibly empty) comma-separated list of expressions
- *     cdef compileExpressionList(self):
- *         self.output_file.write(self.indent * '  ' + '<expressionList>\n')             # <<<<<<<<<<<<<<
- *         self.indent += 1
- *         # if the next token is an expression
+  /* "compilationEngine.pyx":557
+ *     # compile a subroutine call
+ *     cdef compileSubroutineCall(self):
+ *         self.advance() # get the next token subroutineName or className or varName             # <<<<<<<<<<<<<<
+ * 
+ *         self.output_file.write(self.indent * "  " + self.next_token + '\n')
  */
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 297, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_3 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 297, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_3);
-  __pyx_t_4 = PyNumber_Multiply(__pyx_t_3, __pyx_kp_s_); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 297, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_4);
-  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  __pyx_t_3 = PyNumber_Add(__pyx_t_4, __pyx_kp_s_expressionList); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 297, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_3);
-  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  __pyx_t_4 = NULL;
-  if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
-    __pyx_t_4 = PyMethod_GET_SELF(__pyx_t_2);
-    if (likely(__pyx_t_4)) {
-      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
-      __Pyx_INCREF(__pyx_t_4);
-      __Pyx_INCREF(function);
-      __Pyx_DECREF_SET(__pyx_t_2, function);
-    }
-  }
-  __pyx_t_1 = (__pyx_t_4) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_4, __pyx_t_3) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_3);
-  __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
-  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 297, __pyx_L1_error)
+  __pyx_t_1 = ((struct __pyx_vtabstruct_17compilationEngine_CompilationEngine *)__pyx_v_self->__pyx_vtab)->advance(__pyx_v_self); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 557, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "compilationEngine.pyx":298
- *     cdef compileExpressionList(self):
- *         self.output_file.write(self.indent * '  ' + '<expressionList>\n')
- *         self.indent += 1             # <<<<<<<<<<<<<<
- *         # if the next token is an expression
- *         if self.next_token != "<symbol> ) </symbol>":
- */
-  __pyx_v_self->indent = (__pyx_v_self->indent + 1);
-
-  /* "compilationEngine.pyx":300
- *         self.indent += 1
- *         # if the next token is an expression
- *         if self.next_token != "<symbol> ) </symbol>":             # <<<<<<<<<<<<<<
- *             self.compileExpression()
- *             # while the next token is a comma
- */
-  __pyx_t_5 = (__Pyx_PyString_Equals(__pyx_v_self->next_token, __pyx_kp_s_symbol_symbol, Py_NE)); if (unlikely(__pyx_t_5 < 0)) __PYX_ERR(0, 300, __pyx_L1_error)
-  __pyx_t_6 = (__pyx_t_5 != 0);
-  if (__pyx_t_6) {
-
-    /* "compilationEngine.pyx":301
- *         # if the next token is an expression
- *         if self.next_token != "<symbol> ) </symbol>":
- *             self.compileExpression()             # <<<<<<<<<<<<<<
- *             # while the next token is a comma
- *             while self.next_token == ',':  # read ,
- */
-    __pyx_t_1 = ((struct __pyx_vtabstruct_17compilationEngine_CompilationEngine *)__pyx_v_self->__pyx_vtab)->compileExpression(__pyx_v_self); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 301, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_1);
-    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-
-    /* "compilationEngine.pyx":303
- *             self.compileExpression()
- *             # while the next token is a comma
- *             while self.next_token == ',':  # read ,             # <<<<<<<<<<<<<<
- *                 self.output_file.write(self.indent * '  ' + self.next_token + '\n')
- *                 self.compileExpression()
- */
-    while (1) {
-      __pyx_t_6 = (__Pyx_PyString_Equals(__pyx_v_self->next_token, __pyx_kp_s__3, Py_EQ)); if (unlikely(__pyx_t_6 < 0)) __PYX_ERR(0, 303, __pyx_L1_error)
-      __pyx_t_5 = (__pyx_t_6 != 0);
-      if (!__pyx_t_5) break;
-
-      /* "compilationEngine.pyx":304
- *             # while the next token is a comma
- *             while self.next_token == ',':  # read ,
- *                 self.output_file.write(self.indent * '  ' + self.next_token + '\n')             # <<<<<<<<<<<<<<
- *                 self.compileExpression()
- *                 if self.next_token == "<symbol> ) </symbol>":
- */
-      __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 304, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_2);
-      __pyx_t_3 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 304, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_3);
-      __pyx_t_4 = PyNumber_Multiply(__pyx_t_3, __pyx_kp_s_); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 304, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_4);
-      __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-      __pyx_t_3 = PyNumber_Add(__pyx_t_4, __pyx_v_self->next_token); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 304, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_3);
-      __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-      __pyx_t_4 = PyNumber_Add(__pyx_t_3, __pyx_kp_s__2); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 304, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_4);
-      __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-      __pyx_t_3 = NULL;
-      if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
-        __pyx_t_3 = PyMethod_GET_SELF(__pyx_t_2);
-        if (likely(__pyx_t_3)) {
-          PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
-          __Pyx_INCREF(__pyx_t_3);
-          __Pyx_INCREF(function);
-          __Pyx_DECREF_SET(__pyx_t_2, function);
-        }
-      }
-      __pyx_t_1 = (__pyx_t_3) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_3, __pyx_t_4) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_4);
-      __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
-      __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-      if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 304, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_1);
-      __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-      __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-
-      /* "compilationEngine.pyx":305
- *             while self.next_token == ',':  # read ,
- *                 self.output_file.write(self.indent * '  ' + self.next_token + '\n')
- *                 self.compileExpression()             # <<<<<<<<<<<<<<
- *                 if self.next_token == "<symbol> ) </symbol>":
- *                     break
- */
-      __pyx_t_1 = ((struct __pyx_vtabstruct_17compilationEngine_CompilationEngine *)__pyx_v_self->__pyx_vtab)->compileExpression(__pyx_v_self); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 305, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_1);
-      __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-
-      /* "compilationEngine.pyx":306
- *                 self.output_file.write(self.indent * '  ' + self.next_token + '\n')
- *                 self.compileExpression()
- *                 if self.next_token == "<symbol> ) </symbol>":             # <<<<<<<<<<<<<<
- *                     break
- *                 self.next_token = self.getNextToken() # read ',' or ')'
- */
-      __pyx_t_5 = (__Pyx_PyString_Equals(__pyx_v_self->next_token, __pyx_kp_s_symbol_symbol, Py_EQ)); if (unlikely(__pyx_t_5 < 0)) __PYX_ERR(0, 306, __pyx_L1_error)
-      __pyx_t_6 = (__pyx_t_5 != 0);
-      if (__pyx_t_6) {
-
-        /* "compilationEngine.pyx":307
- *                 self.compileExpression()
- *                 if self.next_token == "<symbol> ) </symbol>":
- *                     break             # <<<<<<<<<<<<<<
- *                 self.next_token = self.getNextToken() # read ',' or ')'
- *         self.indent -= 1
- */
-        goto __pyx_L5_break;
-
-        /* "compilationEngine.pyx":306
- *                 self.output_file.write(self.indent * '  ' + self.next_token + '\n')
- *                 self.compileExpression()
- *                 if self.next_token == "<symbol> ) </symbol>":             # <<<<<<<<<<<<<<
- *                     break
- *                 self.next_token = self.getNextToken() # read ',' or ')'
- */
-      }
-
-      /* "compilationEngine.pyx":308
- *                 if self.next_token == "<symbol> ) </symbol>":
- *                     break
- *                 self.next_token = self.getNextToken() # read ',' or ')'             # <<<<<<<<<<<<<<
- *         self.indent -= 1
- *         self.output_file.write(self.indent * '  ' + '</expressionList>\n')
- */
-      __pyx_t_2 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_getNextToken); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 308, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_2);
-      __pyx_t_4 = NULL;
-      if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
-        __pyx_t_4 = PyMethod_GET_SELF(__pyx_t_2);
-        if (likely(__pyx_t_4)) {
-          PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
-          __Pyx_INCREF(__pyx_t_4);
-          __Pyx_INCREF(function);
-          __Pyx_DECREF_SET(__pyx_t_2, function);
-        }
-      }
-      __pyx_t_1 = (__pyx_t_4) ? __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_4) : __Pyx_PyObject_CallNoArg(__pyx_t_2);
-      __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
-      if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 308, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_1);
-      __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-      if (!(likely(PyString_CheckExact(__pyx_t_1))||((__pyx_t_1) == Py_None)||((void)PyErr_Format(PyExc_TypeError, "Expected %.16s, got %.200s", "str", Py_TYPE(__pyx_t_1)->tp_name), 0))) __PYX_ERR(0, 308, __pyx_L1_error)
-      __Pyx_GIVEREF(__pyx_t_1);
-      __Pyx_GOTREF(__pyx_v_self->next_token);
-      __Pyx_DECREF(__pyx_v_self->next_token);
-      __pyx_v_self->next_token = ((PyObject*)__pyx_t_1);
-      __pyx_t_1 = 0;
-    }
-    __pyx_L5_break:;
-
-    /* "compilationEngine.pyx":300
- *         self.indent += 1
- *         # if the next token is an expression
- *         if self.next_token != "<symbol> ) </symbol>":             # <<<<<<<<<<<<<<
- *             self.compileExpression()
- *             # while the next token is a comma
- */
-  }
-
-  /* "compilationEngine.pyx":309
- *                     break
- *                 self.next_token = self.getNextToken() # read ',' or ')'
- *         self.indent -= 1             # <<<<<<<<<<<<<<
- *         self.output_file.write(self.indent * '  ' + '</expressionList>\n')
+  /* "compilationEngine.pyx":559
+ *         self.advance() # get the next token subroutineName or className or varName
  * 
- */
-  __pyx_v_self->indent = (__pyx_v_self->indent - 1);
-
-  /* "compilationEngine.pyx":310
- *                 self.next_token = self.getNextToken() # read ',' or ')'
- *         self.indent -= 1
- *         self.output_file.write(self.indent * '  ' + '</expressionList>\n')             # <<<<<<<<<<<<<<
+ *         self.output_file.write(self.indent * "  " + self.next_token + '\n')             # <<<<<<<<<<<<<<
  * 
- * 
+ *         self.advance() # get the next token ( or .
  */
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 310, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 559, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_4 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 310, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 559, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_3);
+  __pyx_t_4 = PyNumber_Multiply(__pyx_t_3, __pyx_kp_s_); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 559, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
-  __pyx_t_3 = PyNumber_Multiply(__pyx_t_4, __pyx_kp_s_); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 310, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+  __pyx_t_3 = PyNumber_Add(__pyx_t_4, __pyx_v_self->next_token); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 559, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  __pyx_t_4 = PyNumber_Add(__pyx_t_3, __pyx_kp_s_expressionList_2); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 310, __pyx_L1_error)
+  __pyx_t_4 = PyNumber_Add(__pyx_t_3, __pyx_kp_s__2); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 559, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   __pyx_t_3 = NULL;
@@ -8650,17 +8645,539 @@ static PyObject *__pyx_f_17compilationEngine_17CompilationEngine_compileExpressi
   __pyx_t_1 = (__pyx_t_3) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_3, __pyx_t_4) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_4);
   __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 310, __pyx_L1_error)
+  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 559, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "compilationEngine.pyx":296
+  /* "compilationEngine.pyx":561
+ *         self.output_file.write(self.indent * "  " + self.next_token + '\n')
  * 
- *     # Compiles a (possibly empty) comma-separated list of expressions
- *     cdef compileExpressionList(self):             # <<<<<<<<<<<<<<
- *         self.output_file.write(self.indent * '  ' + '<expressionList>\n')
- *         self.indent += 1
+ *         self.advance() # get the next token ( or .             # <<<<<<<<<<<<<<
+ * 
+ *         if self.next_token == "<symbol> ( </symbol>":
+ */
+  __pyx_t_1 = ((struct __pyx_vtabstruct_17compilationEngine_CompilationEngine *)__pyx_v_self->__pyx_vtab)->advance(__pyx_v_self); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 561, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+  /* "compilationEngine.pyx":563
+ *         self.advance() # get the next token ( or .
+ * 
+ *         if self.next_token == "<symbol> ( </symbol>":             # <<<<<<<<<<<<<<
+ *             self.output_file.write(self.indent * "  " + self.next_token + '\n')
+ * 
+ */
+  __pyx_t_5 = (__Pyx_PyString_Equals(__pyx_v_self->next_token, __pyx_kp_s_symbol_symbol_12, Py_EQ)); if (unlikely(__pyx_t_5 < 0)) __PYX_ERR(0, 563, __pyx_L1_error)
+  __pyx_t_6 = (__pyx_t_5 != 0);
+  if (__pyx_t_6) {
+
+    /* "compilationEngine.pyx":564
+ * 
+ *         if self.next_token == "<symbol> ( </symbol>":
+ *             self.output_file.write(self.indent * "  " + self.next_token + '\n')             # <<<<<<<<<<<<<<
+ * 
+ *             # compile expressionList
+ */
+    __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 564, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_2);
+    __pyx_t_4 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 564, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_4);
+    __pyx_t_3 = PyNumber_Multiply(__pyx_t_4, __pyx_kp_s_); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 564, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_3);
+    __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+    __pyx_t_4 = PyNumber_Add(__pyx_t_3, __pyx_v_self->next_token); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 564, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_4);
+    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+    __pyx_t_3 = PyNumber_Add(__pyx_t_4, __pyx_kp_s__2); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 564, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_3);
+    __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+    __pyx_t_4 = NULL;
+    if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
+      __pyx_t_4 = PyMethod_GET_SELF(__pyx_t_2);
+      if (likely(__pyx_t_4)) {
+        PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
+        __Pyx_INCREF(__pyx_t_4);
+        __Pyx_INCREF(function);
+        __Pyx_DECREF_SET(__pyx_t_2, function);
+      }
+    }
+    __pyx_t_1 = (__pyx_t_4) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_4, __pyx_t_3) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_3);
+    __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
+    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+    if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 564, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_1);
+    __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+    /* "compilationEngine.pyx":567
+ * 
+ *             # compile expressionList
+ *             self.output_file.write(self.indent * "  " + '<expressionList>\n')             # <<<<<<<<<<<<<<
+ *             self.indent += 1
+ *             self.compileExpressionList()
+ */
+    __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 567, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_2);
+    __pyx_t_3 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 567, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_3);
+    __pyx_t_4 = PyNumber_Multiply(__pyx_t_3, __pyx_kp_s_); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 567, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_4);
+    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+    __pyx_t_3 = PyNumber_Add(__pyx_t_4, __pyx_kp_s_expressionList); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 567, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_3);
+    __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+    __pyx_t_4 = NULL;
+    if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
+      __pyx_t_4 = PyMethod_GET_SELF(__pyx_t_2);
+      if (likely(__pyx_t_4)) {
+        PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
+        __Pyx_INCREF(__pyx_t_4);
+        __Pyx_INCREF(function);
+        __Pyx_DECREF_SET(__pyx_t_2, function);
+      }
+    }
+    __pyx_t_1 = (__pyx_t_4) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_4, __pyx_t_3) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_3);
+    __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
+    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+    if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 567, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_1);
+    __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+    /* "compilationEngine.pyx":568
+ *             # compile expressionList
+ *             self.output_file.write(self.indent * "  " + '<expressionList>\n')
+ *             self.indent += 1             # <<<<<<<<<<<<<<
+ *             self.compileExpressionList()
+ *             self.indent -= 1
+ */
+    __pyx_v_self->indent = (__pyx_v_self->indent + 1);
+
+    /* "compilationEngine.pyx":569
+ *             self.output_file.write(self.indent * "  " + '<expressionList>\n')
+ *             self.indent += 1
+ *             self.compileExpressionList()             # <<<<<<<<<<<<<<
+ *             self.indent -= 1
+ *             self.output_file.write(self.indent * "  " + '</expressionList>\n')
+ */
+    __pyx_t_1 = ((struct __pyx_vtabstruct_17compilationEngine_CompilationEngine *)__pyx_v_self->__pyx_vtab)->compileExpressionList(__pyx_v_self); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 569, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_1);
+    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+    /* "compilationEngine.pyx":570
+ *             self.indent += 1
+ *             self.compileExpressionList()
+ *             self.indent -= 1             # <<<<<<<<<<<<<<
+ *             self.output_file.write(self.indent * "  " + '</expressionList>\n')
+ * 
+ */
+    __pyx_v_self->indent = (__pyx_v_self->indent - 1);
+
+    /* "compilationEngine.pyx":571
+ *             self.compileExpressionList()
+ *             self.indent -= 1
+ *             self.output_file.write(self.indent * "  " + '</expressionList>\n')             # <<<<<<<<<<<<<<
+ * 
+ *             self.advance() # get the next token )
+ */
+    __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 571, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_2);
+    __pyx_t_3 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 571, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_3);
+    __pyx_t_4 = PyNumber_Multiply(__pyx_t_3, __pyx_kp_s_); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 571, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_4);
+    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+    __pyx_t_3 = PyNumber_Add(__pyx_t_4, __pyx_kp_s_expressionList_2); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 571, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_3);
+    __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+    __pyx_t_4 = NULL;
+    if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
+      __pyx_t_4 = PyMethod_GET_SELF(__pyx_t_2);
+      if (likely(__pyx_t_4)) {
+        PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
+        __Pyx_INCREF(__pyx_t_4);
+        __Pyx_INCREF(function);
+        __Pyx_DECREF_SET(__pyx_t_2, function);
+      }
+    }
+    __pyx_t_1 = (__pyx_t_4) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_4, __pyx_t_3) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_3);
+    __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
+    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+    if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 571, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_1);
+    __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+    /* "compilationEngine.pyx":573
+ *             self.output_file.write(self.indent * "  " + '</expressionList>\n')
+ * 
+ *             self.advance() # get the next token )             # <<<<<<<<<<<<<<
+ *             self.output_file.write(self.indent * "  " + self.next_token + '\n')
+ * 
+ */
+    __pyx_t_1 = ((struct __pyx_vtabstruct_17compilationEngine_CompilationEngine *)__pyx_v_self->__pyx_vtab)->advance(__pyx_v_self); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 573, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_1);
+    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+    /* "compilationEngine.pyx":574
+ * 
+ *             self.advance() # get the next token )
+ *             self.output_file.write(self.indent * "  " + self.next_token + '\n')             # <<<<<<<<<<<<<<
+ * 
+ *         elif self.next_token == "<symbol> . </symbol>":
+ */
+    __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 574, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_2);
+    __pyx_t_3 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 574, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_3);
+    __pyx_t_4 = PyNumber_Multiply(__pyx_t_3, __pyx_kp_s_); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 574, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_4);
+    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+    __pyx_t_3 = PyNumber_Add(__pyx_t_4, __pyx_v_self->next_token); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 574, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_3);
+    __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+    __pyx_t_4 = PyNumber_Add(__pyx_t_3, __pyx_kp_s__2); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 574, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_4);
+    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+    __pyx_t_3 = NULL;
+    if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
+      __pyx_t_3 = PyMethod_GET_SELF(__pyx_t_2);
+      if (likely(__pyx_t_3)) {
+        PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
+        __Pyx_INCREF(__pyx_t_3);
+        __Pyx_INCREF(function);
+        __Pyx_DECREF_SET(__pyx_t_2, function);
+      }
+    }
+    __pyx_t_1 = (__pyx_t_3) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_3, __pyx_t_4) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_4);
+    __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
+    __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+    if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 574, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_1);
+    __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+    /* "compilationEngine.pyx":563
+ *         self.advance() # get the next token ( or .
+ * 
+ *         if self.next_token == "<symbol> ( </symbol>":             # <<<<<<<<<<<<<<
+ *             self.output_file.write(self.indent * "  " + self.next_token + '\n')
+ * 
+ */
+    goto __pyx_L3;
+  }
+
+  /* "compilationEngine.pyx":576
+ *             self.output_file.write(self.indent * "  " + self.next_token + '\n')
+ * 
+ *         elif self.next_token == "<symbol> . </symbol>":             # <<<<<<<<<<<<<<
+ *             self.output_file.write(self.indent * "  " + self.next_token + '\n')
+ * 
+ */
+  __pyx_t_6 = (__Pyx_PyString_Equals(__pyx_v_self->next_token, __pyx_kp_s_symbol_symbol_13, Py_EQ)); if (unlikely(__pyx_t_6 < 0)) __PYX_ERR(0, 576, __pyx_L1_error)
+  __pyx_t_5 = (__pyx_t_6 != 0);
+  if (__pyx_t_5) {
+
+    /* "compilationEngine.pyx":577
+ * 
+ *         elif self.next_token == "<symbol> . </symbol>":
+ *             self.output_file.write(self.indent * "  " + self.next_token + '\n')             # <<<<<<<<<<<<<<
+ * 
+ *             self.advance() # get the next token subroutineName
+ */
+    __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 577, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_2);
+    __pyx_t_4 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 577, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_4);
+    __pyx_t_3 = PyNumber_Multiply(__pyx_t_4, __pyx_kp_s_); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 577, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_3);
+    __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+    __pyx_t_4 = PyNumber_Add(__pyx_t_3, __pyx_v_self->next_token); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 577, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_4);
+    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+    __pyx_t_3 = PyNumber_Add(__pyx_t_4, __pyx_kp_s__2); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 577, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_3);
+    __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+    __pyx_t_4 = NULL;
+    if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
+      __pyx_t_4 = PyMethod_GET_SELF(__pyx_t_2);
+      if (likely(__pyx_t_4)) {
+        PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
+        __Pyx_INCREF(__pyx_t_4);
+        __Pyx_INCREF(function);
+        __Pyx_DECREF_SET(__pyx_t_2, function);
+      }
+    }
+    __pyx_t_1 = (__pyx_t_4) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_4, __pyx_t_3) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_3);
+    __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
+    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+    if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 577, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_1);
+    __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+    /* "compilationEngine.pyx":579
+ *             self.output_file.write(self.indent * "  " + self.next_token + '\n')
+ * 
+ *             self.advance() # get the next token subroutineName             # <<<<<<<<<<<<<<
+ *             self.output_file.write(self.indent * "  " + self.next_token + '\n')
+ * 
+ */
+    __pyx_t_1 = ((struct __pyx_vtabstruct_17compilationEngine_CompilationEngine *)__pyx_v_self->__pyx_vtab)->advance(__pyx_v_self); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 579, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_1);
+    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+    /* "compilationEngine.pyx":580
+ * 
+ *             self.advance() # get the next token subroutineName
+ *             self.output_file.write(self.indent * "  " + self.next_token + '\n')             # <<<<<<<<<<<<<<
+ * 
+ *             self.advance() # get the next token (
+ */
+    __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 580, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_2);
+    __pyx_t_3 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 580, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_3);
+    __pyx_t_4 = PyNumber_Multiply(__pyx_t_3, __pyx_kp_s_); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 580, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_4);
+    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+    __pyx_t_3 = PyNumber_Add(__pyx_t_4, __pyx_v_self->next_token); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 580, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_3);
+    __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+    __pyx_t_4 = PyNumber_Add(__pyx_t_3, __pyx_kp_s__2); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 580, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_4);
+    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+    __pyx_t_3 = NULL;
+    if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
+      __pyx_t_3 = PyMethod_GET_SELF(__pyx_t_2);
+      if (likely(__pyx_t_3)) {
+        PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
+        __Pyx_INCREF(__pyx_t_3);
+        __Pyx_INCREF(function);
+        __Pyx_DECREF_SET(__pyx_t_2, function);
+      }
+    }
+    __pyx_t_1 = (__pyx_t_3) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_3, __pyx_t_4) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_4);
+    __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
+    __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+    if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 580, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_1);
+    __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+    /* "compilationEngine.pyx":582
+ *             self.output_file.write(self.indent * "  " + self.next_token + '\n')
+ * 
+ *             self.advance() # get the next token (             # <<<<<<<<<<<<<<
+ *             self.output_file.write(self.indent * "  " + self.next_token + '\n')
+ * 
+ */
+    __pyx_t_1 = ((struct __pyx_vtabstruct_17compilationEngine_CompilationEngine *)__pyx_v_self->__pyx_vtab)->advance(__pyx_v_self); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 582, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_1);
+    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+    /* "compilationEngine.pyx":583
+ * 
+ *             self.advance() # get the next token (
+ *             self.output_file.write(self.indent * "  " + self.next_token + '\n')             # <<<<<<<<<<<<<<
+ * 
+ *             # compile expressionList
+ */
+    __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 583, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_2);
+    __pyx_t_4 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 583, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_4);
+    __pyx_t_3 = PyNumber_Multiply(__pyx_t_4, __pyx_kp_s_); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 583, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_3);
+    __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+    __pyx_t_4 = PyNumber_Add(__pyx_t_3, __pyx_v_self->next_token); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 583, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_4);
+    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+    __pyx_t_3 = PyNumber_Add(__pyx_t_4, __pyx_kp_s__2); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 583, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_3);
+    __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+    __pyx_t_4 = NULL;
+    if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
+      __pyx_t_4 = PyMethod_GET_SELF(__pyx_t_2);
+      if (likely(__pyx_t_4)) {
+        PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
+        __Pyx_INCREF(__pyx_t_4);
+        __Pyx_INCREF(function);
+        __Pyx_DECREF_SET(__pyx_t_2, function);
+      }
+    }
+    __pyx_t_1 = (__pyx_t_4) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_4, __pyx_t_3) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_3);
+    __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
+    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+    if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 583, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_1);
+    __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+    /* "compilationEngine.pyx":586
+ * 
+ *             # compile expressionList
+ *             self.output_file.write(self.indent * "  " + '<expressionList>\n')             # <<<<<<<<<<<<<<
+ *             self.indent += 1
+ *             self.compileExpressionList()
+ */
+    __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 586, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_2);
+    __pyx_t_3 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 586, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_3);
+    __pyx_t_4 = PyNumber_Multiply(__pyx_t_3, __pyx_kp_s_); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 586, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_4);
+    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+    __pyx_t_3 = PyNumber_Add(__pyx_t_4, __pyx_kp_s_expressionList); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 586, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_3);
+    __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+    __pyx_t_4 = NULL;
+    if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
+      __pyx_t_4 = PyMethod_GET_SELF(__pyx_t_2);
+      if (likely(__pyx_t_4)) {
+        PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
+        __Pyx_INCREF(__pyx_t_4);
+        __Pyx_INCREF(function);
+        __Pyx_DECREF_SET(__pyx_t_2, function);
+      }
+    }
+    __pyx_t_1 = (__pyx_t_4) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_4, __pyx_t_3) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_3);
+    __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
+    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+    if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 586, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_1);
+    __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+    /* "compilationEngine.pyx":587
+ *             # compile expressionList
+ *             self.output_file.write(self.indent * "  " + '<expressionList>\n')
+ *             self.indent += 1             # <<<<<<<<<<<<<<
+ *             self.compileExpressionList()
+ *             self.indent -= 1
+ */
+    __pyx_v_self->indent = (__pyx_v_self->indent + 1);
+
+    /* "compilationEngine.pyx":588
+ *             self.output_file.write(self.indent * "  " + '<expressionList>\n')
+ *             self.indent += 1
+ *             self.compileExpressionList()             # <<<<<<<<<<<<<<
+ *             self.indent -= 1
+ *             self.output_file.write(self.indent * "  " + '</expressionList>\n')
+ */
+    __pyx_t_1 = ((struct __pyx_vtabstruct_17compilationEngine_CompilationEngine *)__pyx_v_self->__pyx_vtab)->compileExpressionList(__pyx_v_self); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 588, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_1);
+    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+    /* "compilationEngine.pyx":589
+ *             self.indent += 1
+ *             self.compileExpressionList()
+ *             self.indent -= 1             # <<<<<<<<<<<<<<
+ *             self.output_file.write(self.indent * "  " + '</expressionList>\n')
+ * 
+ */
+    __pyx_v_self->indent = (__pyx_v_self->indent - 1);
+
+    /* "compilationEngine.pyx":590
+ *             self.compileExpressionList()
+ *             self.indent -= 1
+ *             self.output_file.write(self.indent * "  " + '</expressionList>\n')             # <<<<<<<<<<<<<<
+ * 
+ *             self.advance() # get the next token )
+ */
+    __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 590, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_2);
+    __pyx_t_3 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 590, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_3);
+    __pyx_t_4 = PyNumber_Multiply(__pyx_t_3, __pyx_kp_s_); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 590, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_4);
+    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+    __pyx_t_3 = PyNumber_Add(__pyx_t_4, __pyx_kp_s_expressionList_2); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 590, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_3);
+    __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+    __pyx_t_4 = NULL;
+    if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
+      __pyx_t_4 = PyMethod_GET_SELF(__pyx_t_2);
+      if (likely(__pyx_t_4)) {
+        PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
+        __Pyx_INCREF(__pyx_t_4);
+        __Pyx_INCREF(function);
+        __Pyx_DECREF_SET(__pyx_t_2, function);
+      }
+    }
+    __pyx_t_1 = (__pyx_t_4) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_4, __pyx_t_3) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_3);
+    __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
+    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+    if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 590, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_1);
+    __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+    /* "compilationEngine.pyx":592
+ *             self.output_file.write(self.indent * "  " + '</expressionList>\n')
+ * 
+ *             self.advance() # get the next token )             # <<<<<<<<<<<<<<
+ *             self.output_file.write(self.indent * "  " + self.next_token + '\n')
+ * 
+ */
+    __pyx_t_1 = ((struct __pyx_vtabstruct_17compilationEngine_CompilationEngine *)__pyx_v_self->__pyx_vtab)->advance(__pyx_v_self); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 592, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_1);
+    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+    /* "compilationEngine.pyx":593
+ * 
+ *             self.advance() # get the next token )
+ *             self.output_file.write(self.indent * "  " + self.next_token + '\n')             # <<<<<<<<<<<<<<
+ * 
+ */
+    __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 593, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_2);
+    __pyx_t_3 = __Pyx_PyInt_From_int(__pyx_v_self->indent); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 593, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_3);
+    __pyx_t_4 = PyNumber_Multiply(__pyx_t_3, __pyx_kp_s_); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 593, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_4);
+    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+    __pyx_t_3 = PyNumber_Add(__pyx_t_4, __pyx_v_self->next_token); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 593, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_3);
+    __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+    __pyx_t_4 = PyNumber_Add(__pyx_t_3, __pyx_kp_s__2); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 593, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_4);
+    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+    __pyx_t_3 = NULL;
+    if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
+      __pyx_t_3 = PyMethod_GET_SELF(__pyx_t_2);
+      if (likely(__pyx_t_3)) {
+        PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
+        __Pyx_INCREF(__pyx_t_3);
+        __Pyx_INCREF(function);
+        __Pyx_DECREF_SET(__pyx_t_2, function);
+      }
+    }
+    __pyx_t_1 = (__pyx_t_3) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_3, __pyx_t_4) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_4);
+    __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
+    __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+    if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 593, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_1);
+    __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+    /* "compilationEngine.pyx":576
+ *             self.output_file.write(self.indent * "  " + self.next_token + '\n')
+ * 
+ *         elif self.next_token == "<symbol> . </symbol>":             # <<<<<<<<<<<<<<
+ *             self.output_file.write(self.indent * "  " + self.next_token + '\n')
+ * 
+ */
+  }
+  __pyx_L3:;
+
+  /* "compilationEngine.pyx":556
+ * 
+ *     # compile a subroutine call
+ *     cdef compileSubroutineCall(self):             # <<<<<<<<<<<<<<
+ *         self.advance() # get the next token subroutineName or className or varName
+ * 
  */
 
   /* function exit code */
@@ -8671,7 +9188,7 @@ static PyObject *__pyx_f_17compilationEngine_17CompilationEngine_compileExpressi
   __Pyx_XDECREF(__pyx_t_2);
   __Pyx_XDECREF(__pyx_t_3);
   __Pyx_XDECREF(__pyx_t_4);
-  __Pyx_AddTraceback("compilationEngine.CompilationEngine.compileExpressionList", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("compilationEngine.CompilationEngine.compileSubroutineCall", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = 0;
   __pyx_L0:;
   __Pyx_XGIVEREF(__pyx_r);
@@ -8686,19 +9203,19 @@ static PyObject *__pyx_f_17compilationEngine_17CompilationEngine_compileExpressi
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_17compilationEngine_17CompilationEngine_5__reduce_cython__(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
-static PyObject *__pyx_pw_17compilationEngine_17CompilationEngine_5__reduce_cython__(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
+static PyObject *__pyx_pw_17compilationEngine_17CompilationEngine_3__reduce_cython__(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
+static PyObject *__pyx_pw_17compilationEngine_17CompilationEngine_3__reduce_cython__(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__reduce_cython__ (wrapper)", 0);
-  __pyx_r = __pyx_pf_17compilationEngine_17CompilationEngine_4__reduce_cython__(((struct __pyx_obj_17compilationEngine_CompilationEngine *)__pyx_v_self));
+  __pyx_r = __pyx_pf_17compilationEngine_17CompilationEngine_2__reduce_cython__(((struct __pyx_obj_17compilationEngine_CompilationEngine *)__pyx_v_self));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_17compilationEngine_17CompilationEngine_4__reduce_cython__(CYTHON_UNUSED struct __pyx_obj_17compilationEngine_CompilationEngine *__pyx_v_self) {
+static PyObject *__pyx_pf_17compilationEngine_17CompilationEngine_2__reduce_cython__(CYTHON_UNUSED struct __pyx_obj_17compilationEngine_CompilationEngine *__pyx_v_self) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
@@ -8713,7 +9230,7 @@ static PyObject *__pyx_pf_17compilationEngine_17CompilationEngine_4__reduce_cyth
  * def __setstate_cython__(self, __pyx_state):
  *     raise TypeError("no default __reduce__ due to non-trivial __cinit__")
  */
-  __pyx_t_1 = __Pyx_PyObject_Call(__pyx_builtin_TypeError, __pyx_tuple__14, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 2, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_Call(__pyx_builtin_TypeError, __pyx_tuple__3, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 2, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_Raise(__pyx_t_1, 0, 0, 0);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
@@ -8743,19 +9260,19 @@ static PyObject *__pyx_pf_17compilationEngine_17CompilationEngine_4__reduce_cyth
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_17compilationEngine_17CompilationEngine_7__setstate_cython__(PyObject *__pyx_v_self, PyObject *__pyx_v___pyx_state); /*proto*/
-static PyObject *__pyx_pw_17compilationEngine_17CompilationEngine_7__setstate_cython__(PyObject *__pyx_v_self, PyObject *__pyx_v___pyx_state) {
+static PyObject *__pyx_pw_17compilationEngine_17CompilationEngine_5__setstate_cython__(PyObject *__pyx_v_self, PyObject *__pyx_v___pyx_state); /*proto*/
+static PyObject *__pyx_pw_17compilationEngine_17CompilationEngine_5__setstate_cython__(PyObject *__pyx_v_self, PyObject *__pyx_v___pyx_state) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__setstate_cython__ (wrapper)", 0);
-  __pyx_r = __pyx_pf_17compilationEngine_17CompilationEngine_6__setstate_cython__(((struct __pyx_obj_17compilationEngine_CompilationEngine *)__pyx_v_self), ((PyObject *)__pyx_v___pyx_state));
+  __pyx_r = __pyx_pf_17compilationEngine_17CompilationEngine_4__setstate_cython__(((struct __pyx_obj_17compilationEngine_CompilationEngine *)__pyx_v_self), ((PyObject *)__pyx_v___pyx_state));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_17compilationEngine_17CompilationEngine_6__setstate_cython__(CYTHON_UNUSED struct __pyx_obj_17compilationEngine_CompilationEngine *__pyx_v_self, CYTHON_UNUSED PyObject *__pyx_v___pyx_state) {
+static PyObject *__pyx_pf_17compilationEngine_17CompilationEngine_4__setstate_cython__(CYTHON_UNUSED struct __pyx_obj_17compilationEngine_CompilationEngine *__pyx_v_self, CYTHON_UNUSED PyObject *__pyx_v___pyx_state) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
@@ -8769,7 +9286,7 @@ static PyObject *__pyx_pf_17compilationEngine_17CompilationEngine_6__setstate_cy
  * def __setstate_cython__(self, __pyx_state):
  *     raise TypeError("no default __reduce__ due to non-trivial __cinit__")             # <<<<<<<<<<<<<<
  */
-  __pyx_t_1 = __Pyx_PyObject_Call(__pyx_builtin_TypeError, __pyx_tuple__15, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 4, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_Call(__pyx_builtin_TypeError, __pyx_tuple__4, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 4, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_Raise(__pyx_t_1, 0, 0, 0);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
@@ -8807,6 +9324,7 @@ static PyObject *__pyx_tp_new_17compilationEngine_CompilationEngine(PyTypeObject
   p->input_file = Py_None; Py_INCREF(Py_None);
   p->output_file = Py_None; Py_INCREF(Py_None);
   p->next_token = ((PyObject*)Py_None); Py_INCREF(Py_None);
+  p->temp = ((PyObject*)Py_None); Py_INCREF(Py_None);
   if (unlikely(__pyx_pw_17compilationEngine_17CompilationEngine_1__cinit__(o, a, k) < 0)) goto bad;
   return o;
   bad:
@@ -8825,6 +9343,7 @@ static void __pyx_tp_dealloc_17compilationEngine_CompilationEngine(PyObject *o) 
   Py_CLEAR(p->input_file);
   Py_CLEAR(p->output_file);
   Py_CLEAR(p->next_token);
+  Py_CLEAR(p->temp);
   (*Py_TYPE(o)->tp_free)(o);
 }
 
@@ -8853,9 +9372,8 @@ static int __pyx_tp_clear_17compilationEngine_CompilationEngine(PyObject *o) {
 }
 
 static PyMethodDef __pyx_methods_17compilationEngine_CompilationEngine[] = {
-  {"getNextToken", (PyCFunction)__pyx_pw_17compilationEngine_17CompilationEngine_3getNextToken, METH_NOARGS, 0},
-  {"__reduce_cython__", (PyCFunction)__pyx_pw_17compilationEngine_17CompilationEngine_5__reduce_cython__, METH_NOARGS, 0},
-  {"__setstate_cython__", (PyCFunction)__pyx_pw_17compilationEngine_17CompilationEngine_7__setstate_cython__, METH_O, 0},
+  {"__reduce_cython__", (PyCFunction)__pyx_pw_17compilationEngine_17CompilationEngine_3__reduce_cython__, METH_NOARGS, 0},
+  {"__setstate_cython__", (PyCFunction)__pyx_pw_17compilationEngine_17CompilationEngine_5__setstate_cython__, METH_O, 0},
   {0, 0, 0, 0}
 };
 
@@ -8980,50 +9498,35 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_kp_s_, __pyx_k_, sizeof(__pyx_k_), 0, 0, 1, 0},
   {&__pyx_n_s_CompilationEngine, __pyx_k_CompilationEngine, sizeof(__pyx_k_CompilationEngine), 0, 0, 1, 1},
   {&__pyx_n_s_TypeError, __pyx_k_TypeError, sizeof(__pyx_k_TypeError), 0, 0, 1, 1},
-  {&__pyx_kp_s__10, __pyx_k__10, sizeof(__pyx_k__10), 0, 0, 1, 0},
-  {&__pyx_kp_s__11, __pyx_k__11, sizeof(__pyx_k__11), 0, 0, 1, 0},
-  {&__pyx_kp_s__12, __pyx_k__12, sizeof(__pyx_k__12), 0, 0, 1, 0},
-  {&__pyx_kp_s__13, __pyx_k__13, sizeof(__pyx_k__13), 0, 0, 1, 0},
   {&__pyx_kp_s__2, __pyx_k__2, sizeof(__pyx_k__2), 0, 0, 1, 0},
-  {&__pyx_kp_s__3, __pyx_k__3, sizeof(__pyx_k__3), 0, 0, 1, 0},
-  {&__pyx_kp_s__4, __pyx_k__4, sizeof(__pyx_k__4), 0, 0, 1, 0},
-  {&__pyx_kp_s__5, __pyx_k__5, sizeof(__pyx_k__5), 0, 0, 1, 0},
-  {&__pyx_kp_s__6, __pyx_k__6, sizeof(__pyx_k__6), 0, 0, 1, 0},
-  {&__pyx_kp_s__7, __pyx_k__7, sizeof(__pyx_k__7), 0, 0, 1, 0},
-  {&__pyx_kp_s__8, __pyx_k__8, sizeof(__pyx_k__8), 0, 0, 1, 0},
-  {&__pyx_kp_s__9, __pyx_k__9, sizeof(__pyx_k__9), 0, 0, 1, 0},
   {&__pyx_kp_s_class, __pyx_k_class, sizeof(__pyx_k_class), 0, 0, 1, 0},
   {&__pyx_kp_s_classVarDec, __pyx_k_classVarDec, sizeof(__pyx_k_classVarDec), 0, 0, 1, 0},
   {&__pyx_kp_s_classVarDec_2, __pyx_k_classVarDec_2, sizeof(__pyx_k_classVarDec_2), 0, 0, 1, 0},
   {&__pyx_kp_s_class_2, __pyx_k_class_2, sizeof(__pyx_k_class_2), 0, 0, 1, 0},
   {&__pyx_n_s_cline_in_traceback, __pyx_k_cline_in_traceback, sizeof(__pyx_k_cline_in_traceback), 0, 0, 1, 1},
   {&__pyx_n_s_close, __pyx_k_close, sizeof(__pyx_k_close), 0, 0, 1, 1},
-  {&__pyx_n_s_compileSubroutineCall, __pyx_k_compileSubroutineCall, sizeof(__pyx_k_compileSubroutineCall), 0, 0, 1, 1},
   {&__pyx_kp_s_doStatement, __pyx_k_doStatement, sizeof(__pyx_k_doStatement), 0, 0, 1, 0},
   {&__pyx_kp_s_doStatement_2, __pyx_k_doStatement_2, sizeof(__pyx_k_doStatement_2), 0, 0, 1, 0},
   {&__pyx_kp_s_expression, __pyx_k_expression, sizeof(__pyx_k_expression), 0, 0, 1, 0},
   {&__pyx_kp_s_expressionList, __pyx_k_expressionList, sizeof(__pyx_k_expressionList), 0, 0, 1, 0},
   {&__pyx_kp_s_expressionList_2, __pyx_k_expressionList_2, sizeof(__pyx_k_expressionList_2), 0, 0, 1, 0},
   {&__pyx_kp_s_expression_2, __pyx_k_expression_2, sizeof(__pyx_k_expression_2), 0, 0, 1, 0},
-  {&__pyx_n_s_getNextToken, __pyx_k_getNextToken, sizeof(__pyx_k_getNextToken), 0, 0, 1, 1},
   {&__pyx_n_s_getstate, __pyx_k_getstate, sizeof(__pyx_k_getstate), 0, 0, 1, 1},
   {&__pyx_kp_s_identifier, __pyx_k_identifier, sizeof(__pyx_k_identifier), 0, 0, 1, 0},
   {&__pyx_kp_s_ifStatement, __pyx_k_ifStatement, sizeof(__pyx_k_ifStatement), 0, 0, 1, 0},
   {&__pyx_kp_s_ifStatement_2, __pyx_k_ifStatement_2, sizeof(__pyx_k_ifStatement_2), 0, 0, 1, 0},
   {&__pyx_n_s_input_file, __pyx_k_input_file, sizeof(__pyx_k_input_file), 0, 0, 1, 1},
-  {&__pyx_kp_s_integer, __pyx_k_integer, sizeof(__pyx_k_integer), 0, 0, 1, 0},
+  {&__pyx_kp_s_integerConstant, __pyx_k_integerConstant, sizeof(__pyx_k_integerConstant), 0, 0, 1, 0},
   {&__pyx_kp_s_keyword_constructor_keyword, __pyx_k_keyword_constructor_keyword, sizeof(__pyx_k_keyword_constructor_keyword), 0, 0, 1, 0},
   {&__pyx_kp_s_keyword_do_keyword, __pyx_k_keyword_do_keyword, sizeof(__pyx_k_keyword_do_keyword), 0, 0, 1, 0},
   {&__pyx_kp_s_keyword_else_keyword, __pyx_k_keyword_else_keyword, sizeof(__pyx_k_keyword_else_keyword), 0, 0, 1, 0},
   {&__pyx_kp_s_keyword_false_keyword, __pyx_k_keyword_false_keyword, sizeof(__pyx_k_keyword_false_keyword), 0, 0, 1, 0},
-  {&__pyx_kp_s_keyword_field_keyword, __pyx_k_keyword_field_keyword, sizeof(__pyx_k_keyword_field_keyword), 0, 0, 1, 0},
   {&__pyx_kp_s_keyword_function_keyword, __pyx_k_keyword_function_keyword, sizeof(__pyx_k_keyword_function_keyword), 0, 0, 1, 0},
   {&__pyx_kp_s_keyword_if_keyword, __pyx_k_keyword_if_keyword, sizeof(__pyx_k_keyword_if_keyword), 0, 0, 1, 0},
   {&__pyx_kp_s_keyword_let_keyword, __pyx_k_keyword_let_keyword, sizeof(__pyx_k_keyword_let_keyword), 0, 0, 1, 0},
   {&__pyx_kp_s_keyword_method_keyword, __pyx_k_keyword_method_keyword, sizeof(__pyx_k_keyword_method_keyword), 0, 0, 1, 0},
   {&__pyx_kp_s_keyword_null_keyword, __pyx_k_keyword_null_keyword, sizeof(__pyx_k_keyword_null_keyword), 0, 0, 1, 0},
   {&__pyx_kp_s_keyword_return_keyword, __pyx_k_keyword_return_keyword, sizeof(__pyx_k_keyword_return_keyword), 0, 0, 1, 0},
-  {&__pyx_kp_s_keyword_static_keyword, __pyx_k_keyword_static_keyword, sizeof(__pyx_k_keyword_static_keyword), 0, 0, 1, 0},
   {&__pyx_kp_s_keyword_this_keyword, __pyx_k_keyword_this_keyword, sizeof(__pyx_k_keyword_this_keyword), 0, 0, 1, 0},
   {&__pyx_kp_s_keyword_true_keyword, __pyx_k_keyword_true_keyword, sizeof(__pyx_k_keyword_true_keyword), 0, 0, 1, 0},
   {&__pyx_kp_s_keyword_var_keyword, __pyx_k_keyword_var_keyword, sizeof(__pyx_k_keyword_var_keyword), 0, 0, 1, 0},
@@ -9039,7 +9542,7 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_kp_s_parameterList_2, __pyx_k_parameterList_2, sizeof(__pyx_k_parameterList_2), 0, 0, 1, 0},
   {&__pyx_n_s_pyx_vtable, __pyx_k_pyx_vtable, sizeof(__pyx_k_pyx_vtable), 0, 0, 1, 1},
   {&__pyx_n_s_r, __pyx_k_r, sizeof(__pyx_k_r), 0, 0, 1, 1},
-  {&__pyx_n_s_readline, __pyx_k_readline, sizeof(__pyx_k_readline), 0, 0, 1, 1},
+  {&__pyx_n_s_readlines, __pyx_k_readlines, sizeof(__pyx_k_readlines), 0, 0, 1, 1},
   {&__pyx_n_s_reduce, __pyx_k_reduce, sizeof(__pyx_k_reduce), 0, 0, 1, 1},
   {&__pyx_n_s_reduce_cython, __pyx_k_reduce_cython, sizeof(__pyx_k_reduce_cython), 0, 0, 1, 1},
   {&__pyx_n_s_reduce_ex, __pyx_k_reduce_ex, sizeof(__pyx_k_reduce_ex), 0, 0, 1, 1},
@@ -9049,13 +9552,21 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_setstate_cython, __pyx_k_setstate_cython, sizeof(__pyx_k_setstate_cython), 0, 0, 1, 1},
   {&__pyx_kp_s_statements, __pyx_k_statements, sizeof(__pyx_k_statements), 0, 0, 1, 0},
   {&__pyx_kp_s_statements_2, __pyx_k_statements_2, sizeof(__pyx_k_statements_2), 0, 0, 1, 0},
-  {&__pyx_kp_s_string, __pyx_k_string, sizeof(__pyx_k_string), 0, 0, 1, 0},
+  {&__pyx_kp_s_stringConstant, __pyx_k_stringConstant, sizeof(__pyx_k_stringConstant), 0, 0, 1, 0},
   {&__pyx_n_s_strip, __pyx_k_strip, sizeof(__pyx_k_strip), 0, 0, 1, 1},
   {&__pyx_kp_s_subroutineBody, __pyx_k_subroutineBody, sizeof(__pyx_k_subroutineBody), 0, 0, 1, 0},
   {&__pyx_kp_s_subroutineBody_2, __pyx_k_subroutineBody_2, sizeof(__pyx_k_subroutineBody_2), 0, 0, 1, 0},
   {&__pyx_kp_s_subroutineDec, __pyx_k_subroutineDec, sizeof(__pyx_k_subroutineDec), 0, 0, 1, 0},
   {&__pyx_kp_s_subroutineDec_2, __pyx_k_subroutineDec_2, sizeof(__pyx_k_subroutineDec_2), 0, 0, 1, 0},
+  {&__pyx_kp_s_symbol_amp_symbol, __pyx_k_symbol_amp_symbol, sizeof(__pyx_k_symbol_amp_symbol), 0, 0, 1, 0},
+  {&__pyx_kp_s_symbol_gt_symbol, __pyx_k_symbol_gt_symbol, sizeof(__pyx_k_symbol_gt_symbol), 0, 0, 1, 0},
+  {&__pyx_kp_s_symbol_lt_symbol, __pyx_k_symbol_lt_symbol, sizeof(__pyx_k_symbol_lt_symbol), 0, 0, 1, 0},
   {&__pyx_kp_s_symbol_symbol, __pyx_k_symbol_symbol, sizeof(__pyx_k_symbol_symbol), 0, 0, 1, 0},
+  {&__pyx_kp_s_symbol_symbol_10, __pyx_k_symbol_symbol_10, sizeof(__pyx_k_symbol_symbol_10), 0, 0, 1, 0},
+  {&__pyx_kp_s_symbol_symbol_11, __pyx_k_symbol_symbol_11, sizeof(__pyx_k_symbol_symbol_11), 0, 0, 1, 0},
+  {&__pyx_kp_s_symbol_symbol_12, __pyx_k_symbol_symbol_12, sizeof(__pyx_k_symbol_symbol_12), 0, 0, 1, 0},
+  {&__pyx_kp_s_symbol_symbol_13, __pyx_k_symbol_symbol_13, sizeof(__pyx_k_symbol_symbol_13), 0, 0, 1, 0},
+  {&__pyx_kp_s_symbol_symbol_14, __pyx_k_symbol_symbol_14, sizeof(__pyx_k_symbol_symbol_14), 0, 0, 1, 0},
   {&__pyx_kp_s_symbol_symbol_2, __pyx_k_symbol_symbol_2, sizeof(__pyx_k_symbol_symbol_2), 0, 0, 1, 0},
   {&__pyx_kp_s_symbol_symbol_3, __pyx_k_symbol_symbol_3, sizeof(__pyx_k_symbol_symbol_3), 0, 0, 1, 0},
   {&__pyx_kp_s_symbol_symbol_4, __pyx_k_symbol_symbol_4, sizeof(__pyx_k_symbol_symbol_4), 0, 0, 1, 0},
@@ -9063,6 +9574,7 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_kp_s_symbol_symbol_6, __pyx_k_symbol_symbol_6, sizeof(__pyx_k_symbol_symbol_6), 0, 0, 1, 0},
   {&__pyx_kp_s_symbol_symbol_7, __pyx_k_symbol_symbol_7, sizeof(__pyx_k_symbol_symbol_7), 0, 0, 1, 0},
   {&__pyx_kp_s_symbol_symbol_8, __pyx_k_symbol_symbol_8, sizeof(__pyx_k_symbol_symbol_8), 0, 0, 1, 0},
+  {&__pyx_kp_s_symbol_symbol_9, __pyx_k_symbol_symbol_9, sizeof(__pyx_k_symbol_symbol_9), 0, 0, 1, 0},
   {&__pyx_kp_s_term, __pyx_k_term, sizeof(__pyx_k_term), 0, 0, 1, 0},
   {&__pyx_kp_s_term_2, __pyx_k_term_2, sizeof(__pyx_k_term_2), 0, 0, 1, 0},
   {&__pyx_n_s_test, __pyx_k_test, sizeof(__pyx_k_test), 0, 0, 1, 1},
@@ -9074,7 +9586,7 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {0, 0, 0, 0, 0, 0, 0}
 };
 static CYTHON_SMALL_CODE int __Pyx_InitCachedBuiltins(void) {
-  __pyx_builtin_open = __Pyx_GetBuiltinName(__pyx_n_s_open); if (!__pyx_builtin_open) __PYX_ERR(0, 21, __pyx_L1_error)
+  __pyx_builtin_open = __Pyx_GetBuiltinName(__pyx_n_s_open); if (!__pyx_builtin_open) __PYX_ERR(0, 25, __pyx_L1_error)
   __pyx_builtin_TypeError = __Pyx_GetBuiltinName(__pyx_n_s_TypeError); if (!__pyx_builtin_TypeError) __PYX_ERR(1, 2, __pyx_L1_error)
   return 0;
   __pyx_L1_error:;
@@ -9091,18 +9603,18 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
  * def __setstate_cython__(self, __pyx_state):
  *     raise TypeError("no default __reduce__ due to non-trivial __cinit__")
  */
-  __pyx_tuple__14 = PyTuple_Pack(1, __pyx_kp_s_no_default___reduce___due_to_non); if (unlikely(!__pyx_tuple__14)) __PYX_ERR(1, 2, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__14);
-  __Pyx_GIVEREF(__pyx_tuple__14);
+  __pyx_tuple__3 = PyTuple_Pack(1, __pyx_kp_s_no_default___reduce___due_to_non); if (unlikely(!__pyx_tuple__3)) __PYX_ERR(1, 2, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__3);
+  __Pyx_GIVEREF(__pyx_tuple__3);
 
   /* "(tree fragment)":4
  *     raise TypeError("no default __reduce__ due to non-trivial __cinit__")
  * def __setstate_cython__(self, __pyx_state):
  *     raise TypeError("no default __reduce__ due to non-trivial __cinit__")             # <<<<<<<<<<<<<<
  */
-  __pyx_tuple__15 = PyTuple_Pack(1, __pyx_kp_s_no_default___reduce___due_to_non); if (unlikely(!__pyx_tuple__15)) __PYX_ERR(1, 4, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__15);
-  __Pyx_GIVEREF(__pyx_tuple__15);
+  __pyx_tuple__4 = PyTuple_Pack(1, __pyx_kp_s_no_default___reduce___due_to_non); if (unlikely(!__pyx_tuple__4)) __PYX_ERR(1, 4, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__4);
+  __Pyx_GIVEREF(__pyx_tuple__4);
   __Pyx_RefNannyFinishContext();
   return 0;
   __pyx_L1_error:;
@@ -9157,31 +9669,34 @@ static int __Pyx_modinit_type_init_code(void) {
   __Pyx_RefNannySetupContext("__Pyx_modinit_type_init_code", 0);
   /*--- Type init code ---*/
   __pyx_vtabptr_17compilationEngine_CompilationEngine = &__pyx_vtable_17compilationEngine_CompilationEngine;
+  __pyx_vtable_17compilationEngine_CompilationEngine.advance = (PyObject *(*)(struct __pyx_obj_17compilationEngine_CompilationEngine *))__pyx_f_17compilationEngine_17CompilationEngine_advance;
+  __pyx_vtable_17compilationEngine_CompilationEngine.reverse = (PyObject *(*)(struct __pyx_obj_17compilationEngine_CompilationEngine *))__pyx_f_17compilationEngine_17CompilationEngine_reverse;
   __pyx_vtable_17compilationEngine_CompilationEngine.compileClass = (PyObject *(*)(struct __pyx_obj_17compilationEngine_CompilationEngine *))__pyx_f_17compilationEngine_17CompilationEngine_compileClass;
   __pyx_vtable_17compilationEngine_CompilationEngine.compileClassVarDec = (PyObject *(*)(struct __pyx_obj_17compilationEngine_CompilationEngine *))__pyx_f_17compilationEngine_17CompilationEngine_compileClassVarDec;
-  __pyx_vtable_17compilationEngine_CompilationEngine.compileSubroutine = (PyObject *(*)(struct __pyx_obj_17compilationEngine_CompilationEngine *))__pyx_f_17compilationEngine_17CompilationEngine_compileSubroutine;
+  __pyx_vtable_17compilationEngine_CompilationEngine.compileSubroutineDec = (PyObject *(*)(struct __pyx_obj_17compilationEngine_CompilationEngine *))__pyx_f_17compilationEngine_17CompilationEngine_compileSubroutineDec;
   __pyx_vtable_17compilationEngine_CompilationEngine.compileParameterList = (PyObject *(*)(struct __pyx_obj_17compilationEngine_CompilationEngine *))__pyx_f_17compilationEngine_17CompilationEngine_compileParameterList;
   __pyx_vtable_17compilationEngine_CompilationEngine.compileSubroutineBody = (PyObject *(*)(struct __pyx_obj_17compilationEngine_CompilationEngine *))__pyx_f_17compilationEngine_17CompilationEngine_compileSubroutineBody;
   __pyx_vtable_17compilationEngine_CompilationEngine.compileVarDec = (PyObject *(*)(struct __pyx_obj_17compilationEngine_CompilationEngine *))__pyx_f_17compilationEngine_17CompilationEngine_compileVarDec;
   __pyx_vtable_17compilationEngine_CompilationEngine.compileStatements = (PyObject *(*)(struct __pyx_obj_17compilationEngine_CompilationEngine *))__pyx_f_17compilationEngine_17CompilationEngine_compileStatements;
-  __pyx_vtable_17compilationEngine_CompilationEngine.compileDo = (PyObject *(*)(struct __pyx_obj_17compilationEngine_CompilationEngine *))__pyx_f_17compilationEngine_17CompilationEngine_compileDo;
   __pyx_vtable_17compilationEngine_CompilationEngine.compileLet = (PyObject *(*)(struct __pyx_obj_17compilationEngine_CompilationEngine *))__pyx_f_17compilationEngine_17CompilationEngine_compileLet;
-  __pyx_vtable_17compilationEngine_CompilationEngine.compileWhile = (PyObject *(*)(struct __pyx_obj_17compilationEngine_CompilationEngine *))__pyx_f_17compilationEngine_17CompilationEngine_compileWhile;
-  __pyx_vtable_17compilationEngine_CompilationEngine.compileReturn = (PyObject *(*)(struct __pyx_obj_17compilationEngine_CompilationEngine *))__pyx_f_17compilationEngine_17CompilationEngine_compileReturn;
   __pyx_vtable_17compilationEngine_CompilationEngine.compileIf = (PyObject *(*)(struct __pyx_obj_17compilationEngine_CompilationEngine *))__pyx_f_17compilationEngine_17CompilationEngine_compileIf;
+  __pyx_vtable_17compilationEngine_CompilationEngine.compileWhile = (PyObject *(*)(struct __pyx_obj_17compilationEngine_CompilationEngine *))__pyx_f_17compilationEngine_17CompilationEngine_compileWhile;
+  __pyx_vtable_17compilationEngine_CompilationEngine.compileDo = (PyObject *(*)(struct __pyx_obj_17compilationEngine_CompilationEngine *))__pyx_f_17compilationEngine_17CompilationEngine_compileDo;
+  __pyx_vtable_17compilationEngine_CompilationEngine.compileReturn = (PyObject *(*)(struct __pyx_obj_17compilationEngine_CompilationEngine *))__pyx_f_17compilationEngine_17CompilationEngine_compileReturn;
   __pyx_vtable_17compilationEngine_CompilationEngine.compileExpression = (PyObject *(*)(struct __pyx_obj_17compilationEngine_CompilationEngine *))__pyx_f_17compilationEngine_17CompilationEngine_compileExpression;
   __pyx_vtable_17compilationEngine_CompilationEngine.compileTerm = (PyObject *(*)(struct __pyx_obj_17compilationEngine_CompilationEngine *))__pyx_f_17compilationEngine_17CompilationEngine_compileTerm;
   __pyx_vtable_17compilationEngine_CompilationEngine.compileExpressionList = (PyObject *(*)(struct __pyx_obj_17compilationEngine_CompilationEngine *))__pyx_f_17compilationEngine_17CompilationEngine_compileExpressionList;
-  if (PyType_Ready(&__pyx_type_17compilationEngine_CompilationEngine) < 0) __PYX_ERR(0, 11, __pyx_L1_error)
+  __pyx_vtable_17compilationEngine_CompilationEngine.compileSubroutineCall = (PyObject *(*)(struct __pyx_obj_17compilationEngine_CompilationEngine *))__pyx_f_17compilationEngine_17CompilationEngine_compileSubroutineCall;
+  if (PyType_Ready(&__pyx_type_17compilationEngine_CompilationEngine) < 0) __PYX_ERR(0, 12, __pyx_L1_error)
   #if PY_VERSION_HEX < 0x030800B1
   __pyx_type_17compilationEngine_CompilationEngine.tp_print = 0;
   #endif
   if ((CYTHON_USE_TYPE_SLOTS && CYTHON_USE_PYTYPE_LOOKUP) && likely(!__pyx_type_17compilationEngine_CompilationEngine.tp_dictoffset && __pyx_type_17compilationEngine_CompilationEngine.tp_getattro == PyObject_GenericGetAttr)) {
     __pyx_type_17compilationEngine_CompilationEngine.tp_getattro = __Pyx_PyObject_GenericGetAttr;
   }
-  if (__Pyx_SetVtable(__pyx_type_17compilationEngine_CompilationEngine.tp_dict, __pyx_vtabptr_17compilationEngine_CompilationEngine) < 0) __PYX_ERR(0, 11, __pyx_L1_error)
-  if (PyObject_SetAttr(__pyx_m, __pyx_n_s_CompilationEngine, (PyObject *)&__pyx_type_17compilationEngine_CompilationEngine) < 0) __PYX_ERR(0, 11, __pyx_L1_error)
-  if (__Pyx_setup_reduce((PyObject*)&__pyx_type_17compilationEngine_CompilationEngine) < 0) __PYX_ERR(0, 11, __pyx_L1_error)
+  if (__Pyx_SetVtable(__pyx_type_17compilationEngine_CompilationEngine.tp_dict, __pyx_vtabptr_17compilationEngine_CompilationEngine) < 0) __PYX_ERR(0, 12, __pyx_L1_error)
+  if (PyObject_SetAttr(__pyx_m, __pyx_n_s_CompilationEngine, (PyObject *)&__pyx_type_17compilationEngine_CompilationEngine) < 0) __PYX_ERR(0, 12, __pyx_L1_error)
+  if (__Pyx_setup_reduce((PyObject*)&__pyx_type_17compilationEngine_CompilationEngine) < 0) __PYX_ERR(0, 12, __pyx_L1_error)
   __pyx_ptype_17compilationEngine_CompilationEngine = &__pyx_type_17compilationEngine_CompilationEngine;
   __Pyx_RefNannyFinishContext();
   return 0;
@@ -9880,6 +10395,93 @@ static CYTHON_INLINE PyObject* __Pyx_PyObject_CallOneArg(PyObject *func, PyObjec
 }
 #endif
 
+/* GetItemInt */
+static PyObject *__Pyx_GetItemInt_Generic(PyObject *o, PyObject* j) {
+    PyObject *r;
+    if (!j) return NULL;
+    r = PyObject_GetItem(o, j);
+    Py_DECREF(j);
+    return r;
+}
+static CYTHON_INLINE PyObject *__Pyx_GetItemInt_List_Fast(PyObject *o, Py_ssize_t i,
+                                                              CYTHON_NCP_UNUSED int wraparound,
+                                                              CYTHON_NCP_UNUSED int boundscheck) {
+#if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
+    Py_ssize_t wrapped_i = i;
+    if (wraparound & unlikely(i < 0)) {
+        wrapped_i += PyList_GET_SIZE(o);
+    }
+    if ((!boundscheck) || likely(__Pyx_is_valid_index(wrapped_i, PyList_GET_SIZE(o)))) {
+        PyObject *r = PyList_GET_ITEM(o, wrapped_i);
+        Py_INCREF(r);
+        return r;
+    }
+    return __Pyx_GetItemInt_Generic(o, PyInt_FromSsize_t(i));
+#else
+    return PySequence_GetItem(o, i);
+#endif
+}
+static CYTHON_INLINE PyObject *__Pyx_GetItemInt_Tuple_Fast(PyObject *o, Py_ssize_t i,
+                                                              CYTHON_NCP_UNUSED int wraparound,
+                                                              CYTHON_NCP_UNUSED int boundscheck) {
+#if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
+    Py_ssize_t wrapped_i = i;
+    if (wraparound & unlikely(i < 0)) {
+        wrapped_i += PyTuple_GET_SIZE(o);
+    }
+    if ((!boundscheck) || likely(__Pyx_is_valid_index(wrapped_i, PyTuple_GET_SIZE(o)))) {
+        PyObject *r = PyTuple_GET_ITEM(o, wrapped_i);
+        Py_INCREF(r);
+        return r;
+    }
+    return __Pyx_GetItemInt_Generic(o, PyInt_FromSsize_t(i));
+#else
+    return PySequence_GetItem(o, i);
+#endif
+}
+static CYTHON_INLINE PyObject *__Pyx_GetItemInt_Fast(PyObject *o, Py_ssize_t i, int is_list,
+                                                     CYTHON_NCP_UNUSED int wraparound,
+                                                     CYTHON_NCP_UNUSED int boundscheck) {
+#if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS && CYTHON_USE_TYPE_SLOTS
+    if (is_list || PyList_CheckExact(o)) {
+        Py_ssize_t n = ((!wraparound) | likely(i >= 0)) ? i : i + PyList_GET_SIZE(o);
+        if ((!boundscheck) || (likely(__Pyx_is_valid_index(n, PyList_GET_SIZE(o))))) {
+            PyObject *r = PyList_GET_ITEM(o, n);
+            Py_INCREF(r);
+            return r;
+        }
+    }
+    else if (PyTuple_CheckExact(o)) {
+        Py_ssize_t n = ((!wraparound) | likely(i >= 0)) ? i : i + PyTuple_GET_SIZE(o);
+        if ((!boundscheck) || likely(__Pyx_is_valid_index(n, PyTuple_GET_SIZE(o)))) {
+            PyObject *r = PyTuple_GET_ITEM(o, n);
+            Py_INCREF(r);
+            return r;
+        }
+    } else {
+        PySequenceMethods *m = Py_TYPE(o)->tp_as_sequence;
+        if (likely(m && m->sq_item)) {
+            if (wraparound && unlikely(i < 0) && likely(m->sq_length)) {
+                Py_ssize_t l = m->sq_length(o);
+                if (likely(l >= 0)) {
+                    i += l;
+                } else {
+                    if (!PyErr_ExceptionMatches(PyExc_OverflowError))
+                        return NULL;
+                    PyErr_Clear();
+                }
+            }
+            return m->sq_item(o, i);
+        }
+    }
+#else
+    if (is_list || PySequence_Check(o)) {
+        return PySequence_GetItem(o, i);
+    }
+#endif
+    return __Pyx_GetItemInt_Generic(o, PyInt_FromSsize_t(i));
+}
+
 /* PyObjectCall2Args */
 static CYTHON_UNUSED PyObject* __Pyx_PyObject_Call2Args(PyObject* function, PyObject* arg1, PyObject* arg2) {
     PyObject *args, *result = NULL;
@@ -10056,6 +10658,120 @@ return_ne:
     #endif
     return (equals == Py_NE);
 #endif
+}
+
+/* bytes_tailmatch */
+static int __Pyx_PyBytes_SingleTailmatch(PyObject* self, PyObject* arg,
+                                         Py_ssize_t start, Py_ssize_t end, int direction) {
+    const char* self_ptr = PyBytes_AS_STRING(self);
+    Py_ssize_t self_len = PyBytes_GET_SIZE(self);
+    const char* sub_ptr;
+    Py_ssize_t sub_len;
+    int retval;
+    Py_buffer view;
+    view.obj = NULL;
+    if ( PyBytes_Check(arg) ) {
+        sub_ptr = PyBytes_AS_STRING(arg);
+        sub_len = PyBytes_GET_SIZE(arg);
+    }
+#if PY_MAJOR_VERSION < 3
+    else if ( PyUnicode_Check(arg) ) {
+        return (int) PyUnicode_Tailmatch(self, arg, start, end, direction);
+    }
+#endif
+    else {
+        if (unlikely(PyObject_GetBuffer(self, &view, PyBUF_SIMPLE) == -1))
+            return -1;
+        sub_ptr = (const char*) view.buf;
+        sub_len = view.len;
+    }
+    if (end > self_len)
+        end = self_len;
+    else if (end < 0)
+        end += self_len;
+    if (end < 0)
+        end = 0;
+    if (start < 0)
+        start += self_len;
+    if (start < 0)
+        start = 0;
+    if (direction > 0) {
+        if (end-sub_len > start)
+            start = end - sub_len;
+    }
+    if (start + sub_len <= end)
+        retval = !memcmp(self_ptr+start, sub_ptr, (size_t)sub_len);
+    else
+        retval = 0;
+    if (view.obj)
+        PyBuffer_Release(&view);
+    return retval;
+}
+static int __Pyx_PyBytes_TailmatchTuple(PyObject* self, PyObject* substrings,
+                                        Py_ssize_t start, Py_ssize_t end, int direction) {
+    Py_ssize_t i, count = PyTuple_GET_SIZE(substrings);
+    for (i = 0; i < count; i++) {
+        int result;
+#if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
+        result = __Pyx_PyBytes_SingleTailmatch(self, PyTuple_GET_ITEM(substrings, i),
+                                               start, end, direction);
+#else
+        PyObject* sub = PySequence_ITEM(substrings, i);
+        if (unlikely(!sub)) return -1;
+        result = __Pyx_PyBytes_SingleTailmatch(self, sub, start, end, direction);
+        Py_DECREF(sub);
+#endif
+        if (result) {
+            return result;
+        }
+    }
+    return 0;
+}
+static int __Pyx_PyBytes_Tailmatch(PyObject* self, PyObject* substr,
+                                   Py_ssize_t start, Py_ssize_t end, int direction) {
+    if (unlikely(PyTuple_Check(substr))) {
+        return __Pyx_PyBytes_TailmatchTuple(self, substr, start, end, direction);
+    }
+    return __Pyx_PyBytes_SingleTailmatch(self, substr, start, end, direction);
+}
+
+/* unicode_tailmatch */
+static int __Pyx_PyUnicode_TailmatchTuple(PyObject* s, PyObject* substrings,
+                                          Py_ssize_t start, Py_ssize_t end, int direction) {
+    Py_ssize_t i, count = PyTuple_GET_SIZE(substrings);
+    for (i = 0; i < count; i++) {
+        Py_ssize_t result;
+#if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
+        result = PyUnicode_Tailmatch(s, PyTuple_GET_ITEM(substrings, i),
+                                     start, end, direction);
+#else
+        PyObject* sub = PySequence_ITEM(substrings, i);
+        if (unlikely(!sub)) return -1;
+        result = PyUnicode_Tailmatch(s, sub, start, end, direction);
+        Py_DECREF(sub);
+#endif
+        if (result) {
+            return (int) result;
+        }
+    }
+    return 0;
+}
+static int __Pyx_PyUnicode_Tailmatch(PyObject* s, PyObject* substr,
+                                     Py_ssize_t start, Py_ssize_t end, int direction) {
+    if (unlikely(PyTuple_Check(substr))) {
+        return __Pyx_PyUnicode_TailmatchTuple(s, substr, start, end, direction);
+    }
+    return (int) PyUnicode_Tailmatch(s, substr, start, end, direction);
+}
+
+/* str_tailmatch */
+static CYTHON_INLINE int __Pyx_PyStr_Tailmatch(PyObject* self, PyObject* arg, Py_ssize_t start,
+                                               Py_ssize_t end, int direction)
+{
+    if (PY_MAJOR_VERSION < 3)
+        return __Pyx_PyBytes_Tailmatch(self, arg, start, end, direction);
+    else
+        return __Pyx_PyUnicode_Tailmatch(self, arg, start, end, direction);
 }
 
 /* PyErrFetchRestore */

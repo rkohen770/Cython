@@ -8,305 +8,587 @@
 
 # Thus, compilexxx may only be called if indeed xxx is the next thing in the input.
 
+
 cdef class CompilationEngine:
     cdef input_file
     cdef output_file
     cdef int indent
     cdef str next_token
+    cdef str temp
+    cdef int pointer
     
     # Constructor
     def __cinit__(self, input_file, output_file):
+        self.pointer = 0
         self.output_file = output_file
         self.indent = 0
-        self.input_file = open(input_file, 'r')
-        self.getNextToken() # read  <tokens>
+        self.input_file = open(input_file, 'r').readlines()
+        self.advance() # get the first token <tokens>
 
         self.compileClass()
 
-    #Get the next token from the input
-    def getNextToken(self):
-        return self.input_file.readline().strip()
-            
-    # Compiles a complete class
+        self.output_file.close()  
+
+    # Get the next token from the input
+    cdef advance(self):
+        self.next_token = self.input_file[self.pointer].strip()
+        self.pointer += 1
+
+    # reverse the last advance
+    cdef reverse(self):
+        self.pointer -= 1
+
+    # compile a complete class
     cdef compileClass(self):
         self.output_file.write('<class>\n')
         self.indent += 1
-        self.output_file.write(self.indent * '  ' + self.getNextToken() + '\n') # read class
-        self.output_file.write(self.indent * '  ' + self.getNextToken() + '\n') # read class name
-        self.output_file.write(self.indent * '  ' + self.getNextToken() + '\n') # read {
+
+        self.advance() # get the next token <class>
+        self.output_file.write(self.indent * "  " + self.next_token + '\n')
+
+        self.advance() # get the next token <class_name>
+        self.output_file.write(self.indent * "  " + self.next_token + '\n')
+
+        self.advance() # get the next token {
+        self.output_file.write(self.indent * "  " + self.next_token + '\n')
+
+        # compile classVarDec*
         self.compileClassVarDec()
-        self.compileSubroutine()
-        self.output_file.write(self.indent * '  ' + self.getNextToken() + '\n') # read }
+
+        # compile subroutineDec*
+        self.compileSubroutineDec()
+
+        self.advance() # get the next token }
+        self.output_file.write(self.indent * "  " + self.next_token + '\n')
+
         self.indent -= 1
         self.output_file.write('</class>\n')
+
         self.output_file.close()
 
-    # Compiles a static declaration or a field declaration
+    # compile a static declaration or a field declaration
     cdef compileClassVarDec(self):
-        # if the next token is not static or field then return
-        self.next_token = self.getNextToken()
-        if self.next_token != "<keyword> static </keyword>" and self.next_token != "<keyword> field </keyword>":
+        # first determine whether there is a classVarDec, nextToken is } or start subroutineDec
+        self.advance()
+        if self.next_token == "<symbol> } </symbol>":
+            self.reverse()
             return
-        self.output_file.write(self.indent * '  ' + '<classVarDec>\n')
-        self.indent += 1
-        # if the next token is static or field
-        self.output_file.write(self.indent * '  ' +  self.next_token + '\n') # read static or field
-        self.output_file.write(self.indent * '  ' +  self.getNextToken() + '\n') # read type
-        self.output_file.write(self.indent * '  ' +  self.getNextToken() + '\n') # read varName
-        # while the next token is a comma
-        self.next_token = self.getNextToken() # read ',' or ';'
-        while self.next_token == ',':  # read ,
-            self.output_file.write(self.indent * '  ' + self.next_token + '\n')
-            self.output_file.write(self.indent * '  ' + self.getNextToken() + '\n') # read varName
-            self.next_token = self.getNextToken() # read ',' or ';'
-        self.output_file.write(self.indent * '  ' + self.next_token) # read ;
-        self.indent -= 1
-        self.output_file.write(self.indent * '  ' + '</classVarDec>\n')
 
-    # Compiles a complete method, function, or constructor
-    cdef compileSubroutine(self):
-        cdef temp
-        # if the next token is not a constructor, function, or method then return
+        # next is subroutineDec
         if self.next_token == "<keyword> constructor </keyword>" or self.next_token == "<keyword> function </keyword>" or self.next_token == "<keyword> method </keyword>":
-            temp = self.next_token
-        else:
-            temp = self.getNextToken() # read constructor, function, or method
-        self.output_file.write(self.indent * '  ' + '<subroutineDec>\n')
-        self.indent += 1
-        # if the next token is a constructor, function, or method
-        self.output_file.write(self.indent * '  ' + temp + '\n')
-        # if the next token is void or a type
-        self.output_file.write(self.indent * '  ' + self.getNextToken() + '\n') # read void or type
-        self.output_file.write(self.indent * '  ' + self.getNextToken() + '\n') # read subroutineName
-        self.output_file.write(self.indent * '  ' + self.getNextToken() + '\n') # read (
-        self.compileParameterList()
-        if self.next_token == "<symbol> ) </symbol>":
-            temp = self.next_token
-        else:
-            temp = self.getNextToken() # read )
-        self.output_file.write(self.indent * '  ' + temp + '\n')
-        self.compileSubroutineBody()
-        self.indent -= 1
-        self.output_file.write(self.indent * '  ' + '</subroutineDec>\n')
-
-    # Compiles a (possibly empty) parameter list, not including the enclosing “()”
-    cdef compileParameterList(self):
-        self.output_file.write(self.indent * '  ' + '<parameterList>\n')
-        self.next_token = self.getNextToken()
-        # if the next token is a type
-        if self.next_token != "<symbol> ) </symbol>":
-            self.indent += 1
-            self.output_file.write(self.indent * '  ' +  self.next_token + '\n') # read type
-            self.output_file.write(self.indent * '  ' +  self.getNextToken() + '\n') # read varName
-            # while the next token is a comma
-            self.next_token = self.getNextToken()
-            while self.next_token == ',':  # read ,
-                self.output_file.write(self.indent * '  ' + '<symbol> , </symbol>\n')
-                self.output_file.write(self.indent * '  ' +  self.getNextToken() + '\n') # read type
-                self.output_file.write(self.indent * '  ' +  self.getNextToken() + '\n') # read varName
-                self.next_token = self.getNextToken() # read ',' or ')'
-            self.indent -= 1
-        self.output_file.write(self.indent * '  ' + '</parameterList>\n')
-
-    # Compiles a subroutine's body
-    cdef compileSubroutineBody(self):
-        self.output_file.write(self.indent * '  ' + '<subroutineBody>\n')
-        self.indent += 1
-        self.output_file.write(self.indent * '  ' + self.getNextToken() + '\n') # read {
-        self.compileVarDec()
-        self.compileStatements()
-        self.output_file.write(self.indent * '  ' + self.getNextToken() + '\n') # read }
-        self.indent -= 1
-        self.output_file.write(self.indent * '  ' + '</subroutineBody>\n')
-
-    # Compiles a var declaration
-    cdef compileVarDec(self):
-        # if the next token is not var then return
-        self.next_token = self.getNextToken()
-        if self.next_token != "<keyword> var </keyword>":
+            self.reverse()
             return
-        self.output_file.write(self.indent * '  ' + '<varDec>\n')
+
+        # next is classVarDec
+        self.output_file.write(self.indent * "  " + '<classVarDec>\n')
         self.indent += 1
-        # if the next token is var
-        self.output_file.write(self.indent * '  ' + self.next_token + '\n') # read var
-        self.output_file.write(self.indent * '  ' + self.getNextToken() + '\n') # read type
-        self.output_file.write(self.indent * '  ' + self.getNextToken() + '\n') # read varName
-        # while the next token is a comma
-        self.next_token = self.getNextToken() # read ',' or ';'
-        while self.next_token == "<symbol> , </symbol>": # read ,
-            self.output_file.write(self.indent * '  ' + self.next_token + '\n')
-            self.output_file.write(self.indent * '  ' + self.getNextToken() + '\n') # read varName
-            self.next_token = self.getNextToken() # read ',' or ';'
-        self.output_file.write(self.indent * '  ' + self.next_token + '\n') # read ;
+
+        self.output_file.write(self.indent * "  " + self.next_token + '\n')
+
+        self.advance() # get the next token <type>
+        self.output_file.write(self.indent * "  " + self.next_token + '\n')
+
+        self.advance() # get the next token <varName>
+        self.output_file.write(self.indent * "  " + self.next_token + '\n')
+
+        # compile (, varName)*
+        self.advance() # get the next token , or ;
+        while self.next_token == "<symbol> , </symbol>":
+            self.output_file.write(self.indent * "  " + self.next_token + '\n')
+
+            self.advance() # get the next token <varName>
+            self.output_file.write(self.indent * "  " + self.next_token + '\n')
+
+            self.advance() # get the next token , or ;
+        if self.next_token == "<symbol> ; </symbol>":
+            self.output_file.write(self.indent * "  " + self.next_token + '\n')
+
         self.indent -= 1
-        self.output_file.write(self.indent * '  ' + '</varDec>\n')
+        self.output_file.write(self.indent * "  " + '</classVarDec>\n')
+
+        # compile classVarDec*
+        self.compileClassVarDec()
+
+    # compile a complete method, function, or constructor
+    cdef compileSubroutineDec(self):
+        # first determine whether there is a subroutineDec, nextToken is }
+        self.advance() # get the next token <keyword> or }
+        if self.next_token == "<symbol> } </symbol>":
+            self.reverse()
+            return
+
+        # next is subroutineDec
+        self.output_file.write(self.indent * "  " + '<subroutineDec>\n')
+        self.indent += 1
+
+        self.output_file.write(self.indent * "  " + self.next_token + '\n') # get the next token <keyword>
+
+        self.advance() # get the next token <type> or void
+        self.output_file.write(self.indent * "  " + self.next_token + '\n')
+
+        self.advance() # get the next token <subroutineName>
+        self.output_file.write(self.indent * "  " + self.next_token + '\n')
+
+        self.advance() # get the next token (
+        self.output_file.write(self.indent * "  " + self.next_token + '\n')
+
+        # compile parameterList
+        self.compileParameterList()
+
+        self.advance() # get the next token )
+        self.output_file.write(self.indent * "  " + self.next_token + '\n')
+
+        # compile subroutineBody
+        self.compileSubroutineBody()
+
+        self.indent -= 1
+        self.output_file.write(self.indent * "  " + '</subroutineDec>\n')
+
+        # compile subroutineDec*
+        self.compileSubroutineDec()
+
+    # compile a (possibly empty) parameter list, not including the enclosing ()
+    cdef compileParameterList(self):
+
+        self.output_file.write(self.indent * "  " + '<parameterList>\n')
+        self.indent += 1
+
+        # first determine whether there is a parameterList, nextToken is )
+        self.advance() # get the next token ) or <type>
+        if self.next_token == "<symbol> ) </symbol>":
+            self.reverse()
+            self.indent -= 1
+            self.output_file.write(self.indent * "  " + '</parameterList>\n')
+            return
+
+        # next is parameterList
+        self.output_file.write(self.indent * "  " + self.next_token + '\n') # get the next token <type>
+        self.advance() # get the next token <varName>
+        self.output_file.write(self.indent * "  " + self.next_token + '\n')
+
+        # compile (, type varName)*
+        self.advance() # get the next token , or )
+        while self.next_token == "<symbol> , </symbol>":
+            self.output_file.write(self.indent * "  " + self.next_token + '\n')
+
+            self.advance() # get the next token <type>
+            self.output_file.write(self.indent * "  " + self.next_token + '\n')
+
+            self.advance() # get the next token <varName>
+            self.output_file.write(self.indent * "  " + self.next_token + '\n')
+
+            self.advance() # get the next token , or )
+        
+        if self.next_token == "<symbol> ) </symbol>":
+            self.reverse()
+
+        self.indent -= 1
+        self.output_file.write(self.indent * "  " + '</parameterList>\n')
+
+    # compile a subroutine's body
+    cdef compileSubroutineBody(self):
+        self.output_file.write(self.indent * "  " + '<subroutineBody>\n')
+        self.indent += 1
+
+        self.advance() # get the next token {
+        self.output_file.write(self.indent * "  " + self.next_token + '\n')
+
+        # compile varDec*
         self.compileVarDec()
 
-    # Compiles a sequence of statements, not including the enclosing “{}”
-    cdef compileStatements(self):
-        self.output_file.write(self.indent * '  ' + '<statements>\n')
+        # compile statements
+        self.output_file.write(self.indent * "  " + '<statements>\n')
         self.indent += 1
-        # while the next token is a statement
-        while self.next_token == "<keyword> let </keyword>" or self.next_token == "<keyword> if </keyword>" or self.next_token == "<keyword> while </keyword>" or self.next_token == "<keyword> do </keyword>" or self.next_token == "<keyword> return </keyword>":
-            if self.next_token == "<keyword> let </keyword>":
-                self.compileLet()
-            elif self.next_token == "<keyword> if </keyword>":
-                self.compileIf()
-            elif self.next_token == "<keyword> while </keyword>":
-                self.compileWhile()
-            elif self.next_token == "<keyword> do </keyword>":
-                self.compileDo()
-            elif self.next_token == "<keyword> return </keyword>":
-                self.compileReturn()
-            self.next_token = self.getNextToken()
+        self.compileStatements()
         self.indent -= 1
-        self.output_file.write(self.indent * '  ' + '</statements>\n')
+        self.output_file.write(self.indent * "  " + '</statements>\n')
 
-    # Compiles a do statement
-    cdef compileDo(self):
-        self.output_file.write(self.indent * '  ' + '<doStatement>\n')
-        self.indent += 1
-        self.output_file.write(self.indent * '  ' + self.next_token + '\n') # read do
-        self.compileSubroutineCall()
-        self.output_file.write(self.indent * '  ' + '<symbol> ; </symbol>\n') # read ;
+        self.advance() # get the next token }
+        self.output_file.write(self.indent * "  " + self.next_token + '\n')
+
         self.indent -= 1
-        self.output_file.write(self.indent * '  ' + '</doStatement>\n')
+        self.output_file.write(self.indent * "  " + '</subroutineBody>\n')
+
+    # compile a var declaration
+    cdef compileVarDec(self):
+        # determine if there is a varDec
+        self.advance() # get the next token } or <keyword> var </keyword>
+
+        # no 'var' go back
+        if self.next_token != "<keyword> var </keyword>":
+            self.reverse()
+            return
+
+        # next is varDec
+        self.output_file.write(self.indent * "  " + '<varDec>\n')
+        self.indent += 1
+
+        self.output_file.write(self.indent * "  " + self.next_token + '\n') # get the next token <keyword> var </keyword>
+
+        self.advance() # get the next token <type>
+        self.output_file.write(self.indent * "  " + self.next_token + '\n')
+
+        self.advance() # get the next token <varName>
+        self.output_file.write(self.indent * "  " + self.next_token + '\n') # get the next token <varName>
+           
+        self.advance() # get the next token , or ;
+
+        # compile (, varName)*
+        while self.next_token == "<symbol> , </symbol>":
+            self.output_file.write(self.indent * "  " + self.next_token + '\n') # get the next token ,
+            self.advance() # get the next token <varName>
+            self.output_file.write(self.indent * "  " + self.next_token + '\n') # get the next token <varName>
+            self.advance() # get the next token , or ;
+
+        self.output_file.write(self.indent * "  " + self.next_token + '\n') # get the next token ;
+
+        self.indent -= 1
+        self.output_file.write(self.indent * "  " + '</varDec>\n')
+
+        # compile varDec*
+        self.compileVarDec()
         
-    # Compiles a let statement
+    # compile a sequence of statements, not including the enclosing {}
+    cdef compileStatements(self):
+
+        # first determine whether there is a statement, nextToken is }
+        self.advance() # get the next token } or <keyword>
+        if self.next_token == "<symbol> } </symbol>":
+            self.reverse()
+            return
+
+        # next is statement
+        if self.next_token == "<keyword> let </keyword>":
+            self.compileLet()
+        elif self.next_token == "<keyword> if </keyword>":
+            self.compileIf()
+        elif self.next_token == "<keyword> while </keyword>":
+            self.compileWhile()
+        elif self.next_token == "<keyword> do </keyword>":
+            self.compileDo()
+        elif self.next_token == "<keyword> return </keyword>":
+            self.compileReturn()
+
+        # compile statement*
+        self.compileStatements()
+
+
+    # compile a let statement
     cdef compileLet(self):
-        self.output_file.write(self.indent * '  ' + '<letStatement>\n')
+        self.output_file.write(self.indent * "  " + '<letStatement>\n')
         self.indent += 1
-        self.output_file.write(self.indent * '  ' + self.next_token + '\n') # read let
-        self.output_file.write(self.indent * '  ' + self.getNextToken() + '\n') # read varName
-        # if the next token is [
-        self.next_token = self.getNextToken()
+
+        self.output_file.write(self.indent * "  " + self.next_token + '\n') # get the next token <keyword> let </keyword>
+
+        self.advance() # get the next token <varName>
+        self.output_file.write(self.indent * "  " + self.next_token + '\n')
+
+        # compile ([expression])?
+        self.advance() # get the next token [ or =
+
+        isExpression = False
+
+        # '[' expression ']'
         if self.next_token == "<symbol> [ </symbol>":
-            self.output_file.write(self.indent * '  ' + self.next_token + '\n')
+            isExpression = True
+            self.output_file.write(self.indent * "  " + self.next_token + '\n') # get the next token [
+
+            # compile expression
             self.compileExpression()
-            self.output_file.write(self.indent * '  ' + self.next_token + '\n') # read ]
-        self.output_file.write(self.indent * '  ' + self.next_token + '\n') # read =
+
+            self.advance() # get the next token ]
+            self.output_file.write(self.indent * "  " + self.next_token + '\n')
+
+        if isExpression == True:
+            self.advance() # get the next token =
+
+        # '='
+        self.output_file.write(self.indent * "  " + self.next_token + '\n')
+
+        # compile expression
         self.compileExpression()
-        self.output_file.write(self.indent * '  ' + '<symbol> ; </symbol>\n')
-        self.indent -= 1
-        self.output_file.write(self.indent * '  ' + '</letStatement>\n')
 
-    # Compiles a while statement
-    cdef compileWhile(self):
-        self.output_file.write(self.indent * '  ' + '<whileStatement>\n')
-        self.indent += 1
-        self.output_file.write(self.indent * '  ' + self.next_token + '\n') # read while
-        self.output_file.write(self.indent * '  ' + self.getNextToken() + '\n') # read (
-        self.compileExpression()
-        self.output_file.write(self.indent * '  ' + self.getNextToken() + '\n') # read )
-        self.output_file.write(self.indent * '  ' + self.getNextToken() + '\n') # read {
-        self.compileStatements()
-        self.output_file.write(self.indent * '  ' + self.getNextToken() + '\n') # read }
-        self.indent -= 1
-        self.output_file.write(self.indent * '  ' + '</whileStatement>\n')
+        self.advance() # get the next token ;
+        self.output_file.write(self.indent * "  " + self.next_token + '\n')
 
-    # Compiles a return statement
-    cdef compileReturn(self):
-        self.output_file.write(self.indent * '  ' + '<returnStatement>\n')
-        self.indent += 1
-        self.output_file.write(self.indent * '  ' + self.next_token + '\n') # read return
-        # if the next token is not ;
-        self.next_token = self.getNextToken()
-        if self.next_token != "<symbol> ; </symbol>":
-            self.compileExpression()
-        self.output_file.write(self.indent * '  ' + '<symbol> ; </symbol>\n')
         self.indent -= 1
-        self.output_file.write(self.indent * '  ' + '</returnStatement>\n')
+        self.output_file.write(self.indent * "  " + "</letStatement>\n")
 
-    # Compiles an if statement, possibly with a trailing else clause
+    # compile an if statement, possibly with a trailing else clause
     cdef compileIf(self):
-        self.output_file.write(self.indent * '  ' + '<ifStatement>\n')
+        self.output_file.write(self.indent * "  " + '<ifStatement>\n')
         self.indent += 1
-        self.output_file.write(self.indent * '  ' + self.next_token + '\n') # read if
-        self.output_file.write(self.indent * '  ' + self.getNextToken() + '\n') # read (
+
+        self.output_file.write(self.indent * "  " + self.next_token + '\n') # get the next token <keyword> if </keyword>
+
+        self.advance() # get the next token (
+        self.output_file.write(self.indent * "  " + self.next_token + '\n')
+
+        # compile expression
         self.compileExpression()
-        self.output_file.write(self.indent * '  ' + self.getNextToken() + '\n') # read )
-        self.output_file.write(self.indent * '  ' + self.getNextToken() + '\n') # read {
+
+        self.advance() # get the next token )
+        self.output_file.write(self.indent * "  " + self.next_token + '\n')
+
+        self.advance() # get the next token {
+        self.output_file.write(self.indent * "  " + self.next_token + '\n')
+
+        # compile statements
+        self.output_file.write(self.indent * "  " + '<statements>\n')
+        self.indent += 1
         self.compileStatements()
-        self.output_file.write(self.indent * '  ' + self.getNextToken() + '\n') # read }
-        # if the next token is else
-        if self.getNextToken() == "<keyword> else </keyword>":
-            self.output_file.write(self.indent * '  ' + self.next_token + '\n') # read else
-            self.output_file.write(self.indent * '  ' + self.getNextToken() + '\n') # read {
+        self.indent -= 1
+        self.output_file.write(self.indent * "  " + '</statements>\n')
+
+
+        self.advance() # get the next token }
+        self.output_file.write(self.indent * "  " + self.next_token + '\n')
+
+        # compile (else { statements })?
+        self.advance() # get the next token else or not else
+        if self.next_token == "<keyword> else </keyword>":
+            self.output_file.write(self.indent * "  " + self.next_token + '\n')
+
+            self.advance() # get the next token {
+            self.output_file.write(self.indent * "  " + self.next_token + '\n')
+
+            # compile statements
+            self.output_file.write(self.indent * "  " + '<statements>\n')
+            self.indent += 1
             self.compileStatements()
-            self.output_file.write(self.indent * '  ' + self.getNextToken() + '\n') # read }
-        self.indent -= 1
-        self.output_file.write(self.indent * '  ' + '</ifStatement>\n')
+            self.indent -= 1
+            self.output_file.write(self.indent * "  " + '</statements>\n')
 
-    # Compiles an expression
+
+            self.advance() # get the next token }
+            self.output_file.write(self.indent * "  " + self.next_token + '\n')
+
+        else:
+            self.reverse()
+
+        self.indent -= 1
+        self.output_file.write(self.indent * "  " + '</ifStatement>\n')
+
+    # compile a while statement
+    cdef compileWhile(self):
+        self.output_file.write(self.indent * "  " + '<whileStatement>\n')
+        self.indent += 1
+
+        self.output_file.write(self.indent * "  " + self.next_token + '\n') # get the next token <keyword> while </keyword>
+
+        self.advance() # get the next token (
+        self.output_file.write(self.indent * "  " + self.next_token + '\n')
+
+        # compile expression
+        self.compileExpression()
+
+        self.advance() # get the next token )
+        self.output_file.write(self.indent * "  " + self.next_token + '\n')
+
+        self.advance() # get the next token {
+        self.output_file.write(self.indent * "  " + self.next_token + '\n')
+
+        # compile statements
+        self.output_file.write(self.indent * "  " + '<statements>\n')
+        self.indent += 1
+        self.compileStatements()
+        self.indent -= 1
+        self.output_file.write(self.indent * "  " + '</statements>\n')
+
+
+        self.advance() # get the next token }
+        self.output_file.write(self.indent * "  " + self.next_token + '\n')
+
+        self.indent -= 1
+        self.output_file.write(self.indent * "  " + '</whileStatement>\n')
+
+    # compile a do statement
+    cdef compileDo(self):
+        self.output_file.write(self.indent * "  " + '<doStatement>\n')
+        self.indent += 1
+
+        self.output_file.write(self.indent * "  " + self.next_token + '\n') # get the next token <keyword> do </keyword>
+
+        # compile subroutineCall
+        self.compileSubroutineCall()
+
+        self.advance() # get the next token ;
+        self.output_file.write(self.indent * "  " + self.next_token + '\n')
+
+        self.indent -= 1
+        self.output_file.write(self.indent * "  " + '</doStatement>\n')
+
+    # compile a return statement
+    cdef compileReturn(self):
+        self.output_file.write(self.indent * "  " + '<returnStatement>\n')
+        self.indent += 1
+
+        self.output_file.write(self.indent * "  " + self.next_token + '\n') # get the next token <keyword> return </keyword>
+
+        # compile expression?
+        self.advance() # get the next token ; or not ;
+        if self.next_token == "<symbol> ; </symbol>":
+            self.output_file.write(self.indent * "  " + self.next_token + '\n')
+            self.indent -= 1
+            self.output_file.write(self.indent * "  " + '</returnStatement>\n')
+            return
+        self.reverse()
+        self.compileExpression()
+
+        self.advance() # get the next token ;
+        self.output_file.write(self.indent * "  " + self.next_token + '\n')
+
+        self.indent -= 1
+        self.output_file.write(self.indent * "  " + '</returnStatement>\n')
+        
+    # compile an expression
     cdef compileExpression(self):
-        self.output_file.write(self.indent * '  ' + '<expression>\n')
+        self.output_file.write(self.indent * "  " + '<expression>\n')
         self.indent += 1
+
+        # compile term
         self.compileTerm()
-        # while the next token is an operator or ;
-        while self.next_token == '+' or self.next_token == '-' or self.next_token == '*' or self.next_token == '/' or self.next_token == '&' or self.next_token == '|' or self.next_token == '<' or self.next_token == '>' or self.next_token == '=':
-            self.output_file.write(self.indent * '  ' + self.next_token + '\n')
-            self.compileTerm()
-            self.next_token = self.getNextToken() # read an operator or ;
-        self.indent -= 1
-        self.output_file.write(self.indent * '  ' + '</expression>\n')
 
-    # Compiles a term.  If the current token is an identifier, the routine must distinguish between a variable, an array entry, and a subroutine call.  A single look-ahead token, which may be one of "[", "(", or "." suffices to distinguish between the possibilities.  Any other token is not part of this term and should not be advanced over.
+        # compile (op term)* 
+        self.advance() # get the next token op or not op
+        while self.next_token.startswith("<symbol> &lt; </symbol>") or self.next_token.startswith("<symbol> &gt; </symbol>") or self.next_token.startswith("<symbol> &amp; </symbol>") or self.next_token.startswith("<symbol> + </symbol>") or self.next_token.startswith("<symbol> - </symbol>") or self.next_token.startswith("<symbol> * </symbol>") or self.next_token.startswith("<symbol> / </symbol>") or self.next_token.startswith("<symbol> = </symbol>") or self.next_token.startswith("<symbol> | </symbol>"):
+
+            self.output_file.write(self.indent * "  " + self.next_token + '\n')
+
+            # compile term
+            self.compileTerm()
+
+            self.advance() # get the next token op or not op
+
+        self.reverse()
+
+        self.indent -= 1
+        self.output_file.write(self.indent * "  " + '</expression>\n')
+
+    # compile a term. If the current token is an identifier, the routine must distinguish between a variable, an array entry, and a subroutine call.
+    # A single look-ahead token, which may be one of [, (, or . suffices to distinguish between the possibilities.
+    # Any other token is not part of this term and should not be advanced over.
     cdef compileTerm(self):
-        self.output_file.write(self.indent * '  ' + '<term>\n')
+        self.output_file.write(self.indent * "  " + '<term>\n')
         self.indent += 1
-        # if the next token is an integer constant
-        self.next_token = self.getNextToken() # read integer constant, string constant, keyword constant, identifier, unary operator, (, or subroutine call
-        if self.next_token[:8] == "<integer":
-            self.output_file.write(self.indent * '  ' + self.next_token + '\n')
-        # if the next token is a string constant
-        elif self.next_token[:7] == "<string":
-            self.output_file.write(self.indent * '  ' + self.next_token + '\n')
-        # if the next token is a keyword constant
-        elif self.next_token == "<keyword> true </keyword>" or self.next_token == "<keyword> false </keyword>" or self.next_token == "<keyword> null </keyword>" or self.next_token == "<keyword> this </keyword>":
-            self.output_file.write(self.indent * '  ' + self.next_token + '\n')
-        # if the next token is an identifier
-        elif self.next_token[:12] == "<identifier>":
-            self.output_file.write(self.indent * '  ' + self.next_token + '\n')
-            # if the next token is [ or .
-            self.next_token = self.getNextToken() # read [ or . or ( or an operator or ;
+        
+        self.advance() # get the next token
+
+        # check if it is an identifier
+        if self.next_token.startswith("<identifier>"):
+            # varName|varName '[' expression ']'|subroutineCall
+            self.temp = self.next_token # save the token
+            self.advance() # get the next token [ or ( or .
+            # varName '[' expression ']'
             if self.next_token == "<symbol> [ </symbol>":
-                self.output_file.write(self.indent * '  ' + self.next_token + '\n')
-                self.compileExpression()
-                self.output_file.write(self.indent * '  ' + self.getNextToken() + '\n') # read ]
-            elif self.next_token == "<symbol> . </symbol>": # read . subroutineName or ( expressionList )
-                self.output_file.write(self.indent * '  ' + self.next_token + '\n') # read .
-                self.output_file.write(self.indent * '  ' + self.getNextToken() + '\n') # read subroutineName
-                self.output_file.write(self.indent * '  ' + self.getNextToken() + '\n') # read (
-                self.compileExpressionList()
-                self.output_file.write(self.indent * '  ' + self.next_token + '\n') # read )
-        # if the next token is a unary operator
-        elif self.next_token == '-' or self.next_token == '~':
-            self.output_file.write(self.indent * '  ' + self.next_token + '\n')
-            self.compileTerm()
-        # if the next token is (
-        elif self.next_token == "<symbol> ( </symbol>":
-            self.output_file.write(self.indent * '  ' + self.next_token + '\n')
-            self.compileExpression()
-            self.output_file.write(self.indent * '  ' + self.next_token + '\n') # read )
-        self.next_token = self.getNextToken() # read an operator or ;
-        self.indent -= 1
-        self.output_file.write(self.indent * '  ' + '</term>\n')
+                self.output_file.write(self.indent * "  " + self.temp + '\n')
+         
+                # this is an array entry
+                self.output_file.write(self.indent * "  " + self.next_token + '\n')
 
-    # Compiles a (possibly empty) comma-separated list of expressions
+                # compile expression
+                self.compileExpression()
+
+                self.advance() # get the next token ]
+                self.output_file.write(self.indent * "  " + self.next_token + '\n')
+
+            # subroutineCall
+            elif self.next_token == "<symbol> ( </symbol>" or self.next_token == "<symbol> . </symbol>":
+                self.reverse()
+                self.reverse()
+                self.compileSubroutineCall()
+
+
+            # varName
+            else:
+                self.output_file.write(self.indent * "  " + self.temp + '\n')
+                self.reverse()
+
+        # check if it is a constant
+        else:
+            if self.next_token.startswith("<integerConstant>") or self.next_token.startswith("<stringConstant>") or self.next_token.startswith("<keyword> true </keyword>") or self.next_token.startswith("<keyword> false </keyword>") or self.next_token.startswith("<keyword> null </keyword>") or self.next_token.startswith("<keyword> this </keyword>"):
+                # integerConstant|stringConstant|keywordConstant
+                self.output_file.write(self.indent * "  " + self.next_token + '\n')
+
+            elif self.next_token == "<symbol> ( </symbol>":
+                self.output_file.write(self.indent * "  " + self.next_token + '\n')
+
+                # compile expression
+                self.compileExpression()
+
+                self.advance() # get the next token )
+                self.output_file.write(self.indent * "  " + self.next_token + '\n')
+
+            elif self.next_token == "<symbol> - </symbol>" or self.next_token == "<symbol> ~ </symbol>":
+                self.output_file.write(self.indent * "  " + self.next_token + '\n')
+
+                # compile term
+                self.compileTerm()
+
+        self.indent -= 1
+        self.output_file.write(self.indent * "  " + '</term>\n')
+
+
+    # compile a (possibly empty) comma-separated list of expressions
     cdef compileExpressionList(self):
-        self.output_file.write(self.indent * '  ' + '<expressionList>\n')
-        self.indent += 1
-        # if the next token is an expression
-        if self.next_token != "<symbol> ) </symbol>":
+        
+        self.advance() # get the next token ) or not )
+        if self.next_token == "<symbol> ) </symbol>":
+            self.reverse()
+        else:
+            self.reverse()
             self.compileExpression()
-            # while the next token is a comma
-            while self.next_token == ',':  # read ,
-                self.output_file.write(self.indent * '  ' + self.next_token + '\n')
+
+            # compile (, expression)*
+            self.advance() # get the next token , or )
+            while self.next_token == "<symbol> , </symbol>":
+                self.output_file.write(self.indent * "  " + self.next_token + '\n')
+
+                # compile expression
                 self.compileExpression()
-                if self.next_token == "<symbol> ) </symbol>":
-                    break
-                self.next_token = self.getNextToken() # read ',' or ')'
-        self.indent -= 1
-        self.output_file.write(self.indent * '  ' + '</expressionList>\n')
 
+                self.advance() # get the next token , or )
 
+            self.reverse()
+            
+
+    # compile a subroutine call
+    cdef compileSubroutineCall(self):
+        self.advance() # get the next token subroutineName or className or varName
+
+        self.output_file.write(self.indent * "  " + self.next_token + '\n')
+
+        self.advance() # get the next token ( or .
+
+        if self.next_token == "<symbol> ( </symbol>":
+            self.output_file.write(self.indent * "  " + self.next_token + '\n')
+
+            # compile expressionList
+            self.output_file.write(self.indent * "  " + '<expressionList>\n')   
+            self.indent += 1
+            self.compileExpressionList()
+            self.indent -= 1
+            self.output_file.write(self.indent * "  " + '</expressionList>\n')
+
+            self.advance() # get the next token )
+            self.output_file.write(self.indent * "  " + self.next_token + '\n')
+
+        elif self.next_token == "<symbol> . </symbol>":
+            self.output_file.write(self.indent * "  " + self.next_token + '\n')
+
+            self.advance() # get the next token subroutineName
+            self.output_file.write(self.indent * "  " + self.next_token + '\n')
+
+            self.advance() # get the next token (
+            self.output_file.write(self.indent * "  " + self.next_token + '\n')
+
+            # compile expressionList
+            self.output_file.write(self.indent * "  " + '<expressionList>\n')   
+            self.indent += 1
+            self.compileExpressionList()
+            self.indent -= 1
+            self.output_file.write(self.indent * "  " + '</expressionList>\n')
+
+            self.advance() # get the next token )
+            self.output_file.write(self.indent * "  " + self.next_token + '\n')
+            
