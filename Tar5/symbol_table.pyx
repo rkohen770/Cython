@@ -51,7 +51,7 @@ cdef class SymbolTable:
     cdef kind_of(self, name):
         cdef str identifier = self.find_by_name(name)
         if identifier:
-            return identifier.kind]
+            return identifier.kind
         else:
             return None
 

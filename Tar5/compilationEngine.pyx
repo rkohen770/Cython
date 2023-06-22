@@ -8,6 +8,7 @@
 
 # Thus, compilexxx may only be called if indeed xxx is the next thing in the input.
 
+from symbol_table import SymbolTable
 
 cdef class CompilationEngine:
     cdef input_file
@@ -21,6 +22,7 @@ cdef class CompilationEngine:
     def __cinit__(self, input_file, output_file):
         self.pointer = 0
         self.output_file = output_file
+        self.symbol_table = SymbolTable()
         self.indent = 0
         self.input_file = open(input_file, 'r').readlines()
         self.advance() # get the first token <tokens>
