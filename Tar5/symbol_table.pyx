@@ -14,12 +14,11 @@ cdef class SymbolTable:
 
     # Define a new identifier of a given name, type, and kind and assign it a running index.
     cdef define(self, name, identifier_type, kind):
-        cdef class Identifier:
+        class Identifier:
             def __init__(self, identifier_type, kind, index):
                 self.type = identifier_type
                 self.kind = kind
                 self.index = index
-
 
         if kind == self.IdentifierKind.index('STATIC'):
             self.static_table[name] = Identifier(identifier_type, kind, len(self.static_table))

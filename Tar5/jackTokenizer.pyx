@@ -4,6 +4,7 @@
 
 import os
 from jackAnalyzer import JackAnalyzer
+from vm_writer import VmWriter
 
 cdef class JackTokenizer:
 
@@ -46,6 +47,20 @@ cdef class JackTokenizer:
 
                 # Call the compile method on the analyzer instance, passing the output file and directory as arguments
                 analyzer.compile(output_file_name, file_path , file_name)
+
+                # Extract the name of the file in the path without the 'T' extension
+                file_name = os.path.splitext(os.path.basename(file_path))[0]
+
+                # Build the output file name
+                output_file = os.path.join(file_path, output_file_name.replace('T.xml', '.vm'))
+
+                # Open the output file for writing
+                output_file = open(output_file, 'w')
+        
+                # create an instance of the VMWriter class
+                vm_writer = VmWriter(output_file)
+
+
 
             elif entry.is_dir():
                 self.recursive_process(entry.path)
