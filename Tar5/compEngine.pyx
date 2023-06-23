@@ -1,22 +1,36 @@
 from jack_tokenizer import JackTokenizer
 from symbol_table import SymbolTable
+import os
 
 cdef class CompilationEngine():
     cdef int pointer
     cdef str current_token
     cdef str next_token
     cdef str temp
+    cdef wf
+    cdef input_file
+    cdef symbol_table
+    cdef vmw
+    cdef compiled_class_name
+    cdef label_num
+
     
     
     
-    def __cinit__(self, filepath, vm_writer):
+    
+    def __cinit__(self, filepath, input_file, vm_writer):
         self.wf = open(filepath[:-5] + ".myImpl.xml", 'w')
+        self.input_file =  open(input_file, 'r').readlines()
         self.symbol_table = SymbolTable()
         self.vmw = vm_writer
         self.current_token = None
         self.compiled_class_name = None
         self.label_num = 0
         self.pointer = 0
+        
+        self.advance() # get the first token <tokens>
+
+        self.compile()
 
 
     cdef __enter__(self):
@@ -513,7 +527,7 @@ cdef class CompilationEngine():
 
     cdef compile_symbol(self, symbol):
         self.advance()
-        if type(symbol, list):
+        if type(symbol) == list:
             if self.current_token in symbol:
                 self.write_element('symbol', self.current_token.token_escaped)
                 return self.current_token
@@ -528,7 +542,7 @@ cdef class CompilationEngine():
 
     cdef compile_keyword(self, keyword):
         self.advance()
-        if type(keyword, list):
+        if type(keyword) == list:
             if self.current_token in keyword:
                 self.write_element('keyword', self.current_token.token_escaped)
                 return self.current_token
@@ -539,6 +553,7 @@ cdef class CompilationEngine():
                 self.write_element('keyword', self.current_token.token_escaped)
                 return self.current_token
             else:
+                print(self.current_token)
                 self.raise_syntax_error('Unexpected token')
 
     cdef compile_identifier(self):

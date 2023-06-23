@@ -3,12 +3,12 @@
 /* BEGIN: Cython Metadata
 {
     "distutils": {
-        "name": "jackTokenizer",
+        "name": "jack_tokenizer",
         "sources": [
-            "jackTokenizer.pyx"
+            "jack_tokenizer.pyx"
         ]
     },
-    "module_name": "jackTokenizer"
+    "module_name": "jack_tokenizer"
 }
 END: Cython Metadata */
 
@@ -750,8 +750,8 @@ static CYTHON_INLINE float __PYX_NAN() {
   #endif
 #endif
 
-#define __PYX_HAVE__jackTokenizer
-#define __PYX_HAVE_API__jackTokenizer
+#define __PYX_HAVE__jack_tokenizer
+#define __PYX_HAVE_API__jack_tokenizer
 /* Early includes */
 #ifdef _OPENMP
 #include <omp.h>
@@ -962,23 +962,23 @@ static const char *__pyx_filename;
 
 
 static const char *__pyx_f[] = {
-  "jackTokenizer.pyx",
+  "jack_tokenizer.pyx",
   "stringsource",
 };
 
 /*--- Type declarations ---*/
-struct __pyx_obj_13jackTokenizer_JackTokenizer;
+struct __pyx_obj_14jack_tokenizer_JackTokenizer;
 
-/* "jackTokenizer.pyx":9
- * from vm_writer import VmWriter
+/* "jack_tokenizer.pyx":10
+ * from compEngine import CompilationEngine
  * 
  * cdef class JackTokenizer:             # <<<<<<<<<<<<<<
  * 
  *     # Constants
  */
-struct __pyx_obj_13jackTokenizer_JackTokenizer {
+struct __pyx_obj_14jack_tokenizer_JackTokenizer {
   PyObject_HEAD
-  struct __pyx_vtabstruct_13jackTokenizer_JackTokenizer *__pyx_vtab;
+  struct __pyx_vtabstruct_14jack_tokenizer_JackTokenizer *__pyx_vtab;
   PyObject *input_file_path;
   PyObject *current_token;
   PyObject *current_token_type;
@@ -986,13 +986,13 @@ struct __pyx_obj_13jackTokenizer_JackTokenizer {
 
 
 
-struct __pyx_vtabstruct_13jackTokenizer_JackTokenizer {
-  PyObject *(*recursive_process)(struct __pyx_obj_13jackTokenizer_JackTokenizer *, PyObject *, int __pyx_skip_dispatch);
-  PyObject *(*process_file)(struct __pyx_obj_13jackTokenizer_JackTokenizer *, PyObject *, PyObject *);
-  PyObject *(*processLine)(struct __pyx_obj_13jackTokenizer_JackTokenizer *, PyObject *, PyObject *);
-  PyObject *(*tipulInWord)(struct __pyx_obj_13jackTokenizer_JackTokenizer *, PyObject *, PyObject *);
+struct __pyx_vtabstruct_14jack_tokenizer_JackTokenizer {
+  PyObject *(*recursive_process)(struct __pyx_obj_14jack_tokenizer_JackTokenizer *, PyObject *, int __pyx_skip_dispatch);
+  PyObject *(*process_file)(struct __pyx_obj_14jack_tokenizer_JackTokenizer *, PyObject *, PyObject *);
+  PyObject *(*processLine)(struct __pyx_obj_14jack_tokenizer_JackTokenizer *, PyObject *, PyObject *);
+  PyObject *(*tipulInWord)(struct __pyx_obj_14jack_tokenizer_JackTokenizer *, PyObject *, PyObject *);
 };
-static struct __pyx_vtabstruct_13jackTokenizer_JackTokenizer *__pyx_vtabptr_13jackTokenizer_JackTokenizer;
+static struct __pyx_vtabstruct_14jack_tokenizer_JackTokenizer *__pyx_vtabptr_14jack_tokenizer_JackTokenizer;
 
 /* --- Runtime support code (head) --- */
 /* Refnanny.proto */
@@ -1448,21 +1448,20 @@ static int __Pyx_check_binary_version(void);
 /* InitStrings.proto */
 static int __Pyx_InitStrings(__Pyx_StringTabEntry *t);
 
-static PyObject *__pyx_f_13jackTokenizer_13JackTokenizer_recursive_process(struct __pyx_obj_13jackTokenizer_JackTokenizer *__pyx_v_self, PyObject *__pyx_v_file_path, int __pyx_skip_dispatch); /* proto*/
-static PyObject *__pyx_f_13jackTokenizer_13JackTokenizer_process_file(struct __pyx_obj_13jackTokenizer_JackTokenizer *__pyx_v_self, PyObject *__pyx_v_input_file, PyObject *__pyx_v_output_file); /* proto*/
-static PyObject *__pyx_f_13jackTokenizer_13JackTokenizer_processLine(struct __pyx_obj_13jackTokenizer_JackTokenizer *__pyx_v_self, PyObject *__pyx_v_line, PyObject *__pyx_v_output_file); /* proto*/
-static PyObject *__pyx_f_13jackTokenizer_13JackTokenizer_tipulInWord(struct __pyx_obj_13jackTokenizer_JackTokenizer *__pyx_v_self, PyObject *__pyx_v_word, PyObject *__pyx_v_output_file); /* proto*/
+static PyObject *__pyx_f_14jack_tokenizer_13JackTokenizer_recursive_process(struct __pyx_obj_14jack_tokenizer_JackTokenizer *__pyx_v_self, PyObject *__pyx_v_file_path, int __pyx_skip_dispatch); /* proto*/
+static PyObject *__pyx_f_14jack_tokenizer_13JackTokenizer_process_file(struct __pyx_obj_14jack_tokenizer_JackTokenizer *__pyx_v_self, PyObject *__pyx_v_input_file, PyObject *__pyx_v_output_file); /* proto*/
+static PyObject *__pyx_f_14jack_tokenizer_13JackTokenizer_processLine(struct __pyx_obj_14jack_tokenizer_JackTokenizer *__pyx_v_self, PyObject *__pyx_v_line, PyObject *__pyx_v_output_file); /* proto*/
+static PyObject *__pyx_f_14jack_tokenizer_13JackTokenizer_tipulInWord(struct __pyx_obj_14jack_tokenizer_JackTokenizer *__pyx_v_self, PyObject *__pyx_v_word, PyObject *__pyx_v_output_file); /* proto*/
 
-/* Module declarations from 'jackTokenizer' */
-static PyTypeObject *__pyx_ptype_13jackTokenizer_JackTokenizer = 0;
-static PyObject *__pyx_f_13jackTokenizer___pyx_unpickle_JackTokenizer__set_state(struct __pyx_obj_13jackTokenizer_JackTokenizer *, PyObject *); /*proto*/
-#define __Pyx_MODULE_NAME "jackTokenizer"
-extern int __pyx_module_is_main_jackTokenizer;
-int __pyx_module_is_main_jackTokenizer = 0;
+/* Module declarations from 'jack_tokenizer' */
+static PyTypeObject *__pyx_ptype_14jack_tokenizer_JackTokenizer = 0;
+static PyObject *__pyx_f_14jack_tokenizer___pyx_unpickle_JackTokenizer__set_state(struct __pyx_obj_14jack_tokenizer_JackTokenizer *, PyObject *); /*proto*/
+#define __Pyx_MODULE_NAME "jack_tokenizer"
+extern int __pyx_module_is_main_jack_tokenizer;
+int __pyx_module_is_main_jack_tokenizer = 0;
 
-/* Implementation of 'jackTokenizer' */
+/* Implementation of 'jack_tokenizer' */
 static PyObject *__pyx_builtin_open;
-static const char __pyx_k_T[] = "T";
 static const char __pyx_k_r[] = "r";
 static const char __pyx_k_t[] = "/t";
 static const char __pyx_k_w[] = "w";
@@ -1503,7 +1502,6 @@ static const char __pyx_k_int[] = "int";
 static const char __pyx_k_let[] = "let";
 static const char __pyx_k_new[] = "__new__";
 static const char __pyx_k_var[] = "var";
-static const char __pyx_k_xml[] = ".xml";
 static const char __pyx_k_char[] = "char";
 static const char __pyx_k_dict[] = "__dict__";
 static const char __pyx_k_else[] = "else";
@@ -1569,6 +1567,7 @@ static const char __pyx_k_pyx_state[] = "__pyx_state";
 static const char __pyx_k_reduce_ex[] = "__reduce_ex__";
 static const char __pyx_k_vm_writer[] = "vm_writer";
 static const char __pyx_k_IDENTIFIER[] = "IDENTIFIER";
+static const char __pyx_k_compEngine[] = "compEngine";
 static const char __pyx_k_identifier[] = "<identifier> ";
 static const char __pyx_k_pyx_result[] = "__pyx_result";
 static const char __pyx_k_pyx_vtable[] = "__pyx_vtable__";
@@ -1582,8 +1581,8 @@ static const char __pyx_k_jackAnalyzer[] = "jackAnalyzer";
 static const char __pyx_k_pyx_checksum[] = "__pyx_checksum";
 static const char __pyx_k_stringsource[] = "stringsource";
 static const char __pyx_k_JackTokenizer[] = "JackTokenizer";
-static const char __pyx_k_jackTokenizer[] = "jackTokenizer";
 static const char __pyx_k_reduce_cython[] = "__reduce_cython__";
+static const char __pyx_k_jack_tokenizer[] = "jack_tokenizer";
 static const char __pyx_k_stringConstant[] = "<stringConstant> ";
 static const char __pyx_k_integerConstant[] = "<integerConstant> ";
 static const char __pyx_k_pyx_PickleError[] = "__pyx_PickleError";
@@ -1591,12 +1590,14 @@ static const char __pyx_k_setstate_cython[] = "__setstate_cython__";
 static const char __pyx_k_stringConstant_2[] = " </stringConstant>\n";
 static const char __pyx_k_symbol_gt_symbol[] = "<symbol> &gt; </symbol>\n";
 static const char __pyx_k_symbol_lt_symbol[] = "<symbol> &lt; </symbol>\n";
+static const char __pyx_k_CompilationEngine[] = "CompilationEngine";
 static const char __pyx_k_integerConstant_2[] = " </integerConstant>\n";
 static const char __pyx_k_recursive_process[] = "recursive_process";
 static const char __pyx_k_symbol_amp_symbol[] = "<symbol> &amp; </symbol>\n";
 static const char __pyx_k_cline_in_traceback[] = "cline_in_traceback";
 static const char __pyx_k_pyx_unpickle_JackTokenizer[] = "__pyx_unpickle_JackTokenizer";
 static const char __pyx_k_Incompatible_checksums_0x_x_vs_0[] = "Incompatible checksums (0x%x vs (0xf794c57, 0x027e375, 0xc6606cb) = (current_token, current_token_type, input_file_path))";
+static PyObject *__pyx_n_s_CompilationEngine;
 static PyObject *__pyx_n_s_IDENTIFIER;
 static PyObject *__pyx_n_s_INT_CONST;
 static PyObject *__pyx_kp_s_Incompatible_checksums_0x_x_vs_0;
@@ -1608,7 +1609,6 @@ static PyObject *__pyx_n_s_PickleError;
 static PyObject *__pyx_n_s_STRING_CONST;
 static PyObject *__pyx_n_s_SYMBOL;
 static PyObject *__pyx_n_s_SYMBOLS;
-static PyObject *__pyx_n_s_T;
 static PyObject *__pyx_kp_s_T_xml;
 static PyObject *__pyx_n_s_VmWriter;
 static PyObject *__pyx_kp_s__10;
@@ -1645,6 +1645,7 @@ static PyObject *__pyx_n_s_char;
 static PyObject *__pyx_n_s_class;
 static PyObject *__pyx_n_s_cline_in_traceback;
 static PyObject *__pyx_n_s_close;
+static PyObject *__pyx_n_s_compEngine;
 static PyObject *__pyx_n_s_compile;
 static PyObject *__pyx_n_s_constructor;
 static PyObject *__pyx_n_s_dict;
@@ -1672,7 +1673,7 @@ static PyObject *__pyx_n_s_is_file;
 static PyObject *__pyx_n_s_isdigit;
 static PyObject *__pyx_kp_s_jack;
 static PyObject *__pyx_n_s_jackAnalyzer;
-static PyObject *__pyx_n_s_jackTokenizer;
+static PyObject *__pyx_n_s_jack_tokenizer;
 static PyObject *__pyx_n_s_join;
 static PyObject *__pyx_kp_s_keyword;
 static PyObject *__pyx_kp_s_keyword_2;
@@ -1731,12 +1732,11 @@ static PyObject *__pyx_n_s_void;
 static PyObject *__pyx_n_s_w;
 static PyObject *__pyx_n_s_while;
 static PyObject *__pyx_n_s_write;
-static PyObject *__pyx_kp_s_xml;
-static PyObject *__pyx_pf_13jackTokenizer_13JackTokenizer_recursive_process(struct __pyx_obj_13jackTokenizer_JackTokenizer *__pyx_v_self, PyObject *__pyx_v_file_path); /* proto */
-static PyObject *__pyx_pf_13jackTokenizer_13JackTokenizer_2__reduce_cython__(struct __pyx_obj_13jackTokenizer_JackTokenizer *__pyx_v_self); /* proto */
-static PyObject *__pyx_pf_13jackTokenizer_13JackTokenizer_4__setstate_cython__(struct __pyx_obj_13jackTokenizer_JackTokenizer *__pyx_v_self, PyObject *__pyx_v___pyx_state); /* proto */
-static PyObject *__pyx_pf_13jackTokenizer___pyx_unpickle_JackTokenizer(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v___pyx_type, long __pyx_v___pyx_checksum, PyObject *__pyx_v___pyx_state); /* proto */
-static PyObject *__pyx_tp_new_13jackTokenizer_JackTokenizer(PyTypeObject *t, PyObject *a, PyObject *k); /*proto*/
+static PyObject *__pyx_pf_14jack_tokenizer_13JackTokenizer_recursive_process(struct __pyx_obj_14jack_tokenizer_JackTokenizer *__pyx_v_self, PyObject *__pyx_v_file_path); /* proto */
+static PyObject *__pyx_pf_14jack_tokenizer_13JackTokenizer_2__reduce_cython__(struct __pyx_obj_14jack_tokenizer_JackTokenizer *__pyx_v_self); /* proto */
+static PyObject *__pyx_pf_14jack_tokenizer_13JackTokenizer_4__setstate_cython__(struct __pyx_obj_14jack_tokenizer_JackTokenizer *__pyx_v_self, PyObject *__pyx_v___pyx_state); /* proto */
+static PyObject *__pyx_pf_14jack_tokenizer___pyx_unpickle_JackTokenizer(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v___pyx_type, long __pyx_v___pyx_checksum, PyObject *__pyx_v___pyx_state); /* proto */
+static PyObject *__pyx_tp_new_14jack_tokenizer_JackTokenizer(PyTypeObject *t, PyObject *a, PyObject *k); /*proto*/
 static PyObject *__pyx_int_2614133;
 static PyObject *__pyx_int_208013003;
 static PyObject *__pyx_int_259607639;
@@ -1747,7 +1747,7 @@ static PyObject *__pyx_tuple__32;
 static PyObject *__pyx_codeobj__33;
 /* Late includes */
 
-/* "jackTokenizer.pyx":26
+/* "jack_tokenizer.pyx":27
  * 
  *     # recursive function to process each file in the folder
  *     cpdef recursive_process(self, file_path):             # <<<<<<<<<<<<<<
@@ -1755,14 +1755,16 @@ static PyObject *__pyx_codeobj__33;
  *             print(entry.path)
  */
 
-static PyObject *__pyx_pw_13jackTokenizer_13JackTokenizer_1recursive_process(PyObject *__pyx_v_self, PyObject *__pyx_v_file_path); /*proto*/
-static PyObject *__pyx_f_13jackTokenizer_13JackTokenizer_recursive_process(struct __pyx_obj_13jackTokenizer_JackTokenizer *__pyx_v_self, PyObject *__pyx_v_file_path, int __pyx_skip_dispatch) {
+static PyObject *__pyx_pw_14jack_tokenizer_13JackTokenizer_1recursive_process(PyObject *__pyx_v_self, PyObject *__pyx_v_file_path); /*proto*/
+static PyObject *__pyx_f_14jack_tokenizer_13JackTokenizer_recursive_process(struct __pyx_obj_14jack_tokenizer_JackTokenizer *__pyx_v_self, PyObject *__pyx_v_file_path, int __pyx_skip_dispatch) {
   PyObject *__pyx_v_entry = NULL;
   PyObject *__pyx_v_file_name = NULL;
   PyObject *__pyx_v_output_file_name = NULL;
   PyObject *__pyx_v_output_file = NULL;
   PyObject *__pyx_v_analyzer = NULL;
-  CYTHON_UNUSED PyObject *__pyx_v_vm_writer = NULL;
+  PyObject *__pyx_v_output_file1 = NULL;
+  PyObject *__pyx_v_vm_writer = NULL;
+  CYTHON_UNUSED PyObject *__pyx_v_compE = NULL;
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
@@ -1789,9 +1791,9 @@ static PyObject *__pyx_f_13jackTokenizer_13JackTokenizer_recursive_process(struc
     if (unlikely(!__Pyx_object_dict_version_matches(((PyObject *)__pyx_v_self), __pyx_tp_dict_version, __pyx_obj_dict_version))) {
       PY_UINT64_T __pyx_type_dict_guard = __Pyx_get_tp_dict_version(((PyObject *)__pyx_v_self));
       #endif
-      __pyx_t_1 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_recursive_process); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 26, __pyx_L1_error)
+      __pyx_t_1 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_recursive_process); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 27, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_1);
-      if (!PyCFunction_Check(__pyx_t_1) || (PyCFunction_GET_FUNCTION(__pyx_t_1) != (PyCFunction)(void*)__pyx_pw_13jackTokenizer_13JackTokenizer_1recursive_process)) {
+      if (!PyCFunction_Check(__pyx_t_1) || (PyCFunction_GET_FUNCTION(__pyx_t_1) != (PyCFunction)(void*)__pyx_pw_14jack_tokenizer_13JackTokenizer_1recursive_process)) {
         __Pyx_XDECREF(__pyx_r);
         __Pyx_INCREF(__pyx_t_1);
         __pyx_t_3 = __pyx_t_1; __pyx_t_4 = NULL;
@@ -1806,7 +1808,7 @@ static PyObject *__pyx_f_13jackTokenizer_13JackTokenizer_recursive_process(struc
         }
         __pyx_t_2 = (__pyx_t_4) ? __Pyx_PyObject_Call2Args(__pyx_t_3, __pyx_t_4, __pyx_v_file_path) : __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_v_file_path);
         __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
-        if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 26, __pyx_L1_error)
+        if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 27, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_2);
         __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
         __pyx_r = __pyx_t_2;
@@ -1827,16 +1829,16 @@ static PyObject *__pyx_f_13jackTokenizer_13JackTokenizer_recursive_process(struc
     #endif
   }
 
-  /* "jackTokenizer.pyx":27
+  /* "jack_tokenizer.pyx":28
  *     # recursive function to process each file in the folder
  *     cpdef recursive_process(self, file_path):
  *         for entry in os.scandir(file_path):             # <<<<<<<<<<<<<<
  *             print(entry.path)
  * 
  */
-  __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_os); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 27, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_os); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 28, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_scandir); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 27, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_scandir); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 28, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __pyx_t_2 = NULL;
@@ -1851,16 +1853,16 @@ static PyObject *__pyx_f_13jackTokenizer_13JackTokenizer_recursive_process(struc
   }
   __pyx_t_1 = (__pyx_t_2) ? __Pyx_PyObject_Call2Args(__pyx_t_3, __pyx_t_2, __pyx_v_file_path) : __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_v_file_path);
   __Pyx_XDECREF(__pyx_t_2); __pyx_t_2 = 0;
-  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 27, __pyx_L1_error)
+  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 28, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   if (likely(PyList_CheckExact(__pyx_t_1)) || PyTuple_CheckExact(__pyx_t_1)) {
     __pyx_t_3 = __pyx_t_1; __Pyx_INCREF(__pyx_t_3); __pyx_t_5 = 0;
     __pyx_t_6 = NULL;
   } else {
-    __pyx_t_5 = -1; __pyx_t_3 = PyObject_GetIter(__pyx_t_1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 27, __pyx_L1_error)
+    __pyx_t_5 = -1; __pyx_t_3 = PyObject_GetIter(__pyx_t_1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 28, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
-    __pyx_t_6 = Py_TYPE(__pyx_t_3)->tp_iternext; if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 27, __pyx_L1_error)
+    __pyx_t_6 = Py_TYPE(__pyx_t_3)->tp_iternext; if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 28, __pyx_L1_error)
   }
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   for (;;) {
@@ -1868,17 +1870,17 @@ static PyObject *__pyx_f_13jackTokenizer_13JackTokenizer_recursive_process(struc
       if (likely(PyList_CheckExact(__pyx_t_3))) {
         if (__pyx_t_5 >= PyList_GET_SIZE(__pyx_t_3)) break;
         #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-        __pyx_t_1 = PyList_GET_ITEM(__pyx_t_3, __pyx_t_5); __Pyx_INCREF(__pyx_t_1); __pyx_t_5++; if (unlikely(0 < 0)) __PYX_ERR(0, 27, __pyx_L1_error)
+        __pyx_t_1 = PyList_GET_ITEM(__pyx_t_3, __pyx_t_5); __Pyx_INCREF(__pyx_t_1); __pyx_t_5++; if (unlikely(0 < 0)) __PYX_ERR(0, 28, __pyx_L1_error)
         #else
-        __pyx_t_1 = PySequence_ITEM(__pyx_t_3, __pyx_t_5); __pyx_t_5++; if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 27, __pyx_L1_error)
+        __pyx_t_1 = PySequence_ITEM(__pyx_t_3, __pyx_t_5); __pyx_t_5++; if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 28, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_1);
         #endif
       } else {
         if (__pyx_t_5 >= PyTuple_GET_SIZE(__pyx_t_3)) break;
         #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-        __pyx_t_1 = PyTuple_GET_ITEM(__pyx_t_3, __pyx_t_5); __Pyx_INCREF(__pyx_t_1); __pyx_t_5++; if (unlikely(0 < 0)) __PYX_ERR(0, 27, __pyx_L1_error)
+        __pyx_t_1 = PyTuple_GET_ITEM(__pyx_t_3, __pyx_t_5); __Pyx_INCREF(__pyx_t_1); __pyx_t_5++; if (unlikely(0 < 0)) __PYX_ERR(0, 28, __pyx_L1_error)
         #else
-        __pyx_t_1 = PySequence_ITEM(__pyx_t_3, __pyx_t_5); __pyx_t_5++; if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 27, __pyx_L1_error)
+        __pyx_t_1 = PySequence_ITEM(__pyx_t_3, __pyx_t_5); __pyx_t_5++; if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 28, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_1);
         #endif
       }
@@ -1888,7 +1890,7 @@ static PyObject *__pyx_f_13jackTokenizer_13JackTokenizer_recursive_process(struc
         PyObject* exc_type = PyErr_Occurred();
         if (exc_type) {
           if (likely(__Pyx_PyErr_GivenExceptionMatches(exc_type, PyExc_StopIteration))) PyErr_Clear();
-          else __PYX_ERR(0, 27, __pyx_L1_error)
+          else __PYX_ERR(0, 28, __pyx_L1_error)
         }
         break;
       }
@@ -1897,26 +1899,26 @@ static PyObject *__pyx_f_13jackTokenizer_13JackTokenizer_recursive_process(struc
     __Pyx_XDECREF_SET(__pyx_v_entry, __pyx_t_1);
     __pyx_t_1 = 0;
 
-    /* "jackTokenizer.pyx":28
+    /* "jack_tokenizer.pyx":29
  *     cpdef recursive_process(self, file_path):
  *         for entry in os.scandir(file_path):
  *             print(entry.path)             # <<<<<<<<<<<<<<
  * 
  *             if entry.is_file() and entry.name.endswith('.jack'):
  */
-    __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_entry, __pyx_n_s_path); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 28, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_entry, __pyx_n_s_path); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 29, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
-    if (__Pyx_PrintOne(0, __pyx_t_1) < 0) __PYX_ERR(0, 28, __pyx_L1_error)
+    if (__Pyx_PrintOne(0, __pyx_t_1) < 0) __PYX_ERR(0, 29, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-    /* "jackTokenizer.pyx":30
+    /* "jack_tokenizer.pyx":31
  *             print(entry.path)
  * 
  *             if entry.is_file() and entry.name.endswith('.jack'):             # <<<<<<<<<<<<<<
  * 
  *                 # Extract the name of the file in the path without the extension
  */
-    __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_entry, __pyx_n_s_is_file); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 30, __pyx_L1_error)
+    __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_entry, __pyx_n_s_is_file); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 31, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
     __pyx_t_4 = NULL;
     if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
@@ -1930,19 +1932,19 @@ static PyObject *__pyx_f_13jackTokenizer_13JackTokenizer_recursive_process(struc
     }
     __pyx_t_1 = (__pyx_t_4) ? __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_4) : __Pyx_PyObject_CallNoArg(__pyx_t_2);
     __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
-    if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 30, __pyx_L1_error)
+    if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 31, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-    __pyx_t_8 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_8 < 0)) __PYX_ERR(0, 30, __pyx_L1_error)
+    __pyx_t_8 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_8 < 0)) __PYX_ERR(0, 31, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
     if (__pyx_t_8) {
     } else {
       __pyx_t_7 = __pyx_t_8;
       goto __pyx_L6_bool_binop_done;
     }
-    __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_entry, __pyx_n_s_name); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 30, __pyx_L1_error)
+    __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_entry, __pyx_n_s_name); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 31, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
-    __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_endswith); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 30, __pyx_L1_error)
+    __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_endswith); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 31, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
     __pyx_t_2 = NULL;
@@ -1957,31 +1959,31 @@ static PyObject *__pyx_f_13jackTokenizer_13JackTokenizer_recursive_process(struc
     }
     __pyx_t_1 = (__pyx_t_2) ? __Pyx_PyObject_Call2Args(__pyx_t_4, __pyx_t_2, __pyx_kp_s_jack) : __Pyx_PyObject_CallOneArg(__pyx_t_4, __pyx_kp_s_jack);
     __Pyx_XDECREF(__pyx_t_2); __pyx_t_2 = 0;
-    if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 30, __pyx_L1_error)
+    if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 31, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-    __pyx_t_8 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_8 < 0)) __PYX_ERR(0, 30, __pyx_L1_error)
+    __pyx_t_8 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_8 < 0)) __PYX_ERR(0, 31, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
     __pyx_t_7 = __pyx_t_8;
     __pyx_L6_bool_binop_done:;
     if (__pyx_t_7) {
 
-      /* "jackTokenizer.pyx":33
+      /* "jack_tokenizer.pyx":34
  * 
  *                 # Extract the name of the file in the path without the extension
  *                 file_name = os.path.splitext(entry.name)[0]             # <<<<<<<<<<<<<<
  *                 print(file_name)
  * 
  */
-      __Pyx_GetModuleGlobalName(__pyx_t_4, __pyx_n_s_os); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 33, __pyx_L1_error)
+      __Pyx_GetModuleGlobalName(__pyx_t_4, __pyx_n_s_os); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 34, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_4);
-      __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_4, __pyx_n_s_path); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 33, __pyx_L1_error)
+      __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_4, __pyx_n_s_path); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 34, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_2);
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-      __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_splitext); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 33, __pyx_L1_error)
+      __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_splitext); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 34, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_4);
       __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-      __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_entry, __pyx_n_s_name); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 33, __pyx_L1_error)
+      __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_entry, __pyx_n_s_name); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 34, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_2);
       __pyx_t_9 = NULL;
       if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_4))) {
@@ -1996,51 +1998,48 @@ static PyObject *__pyx_f_13jackTokenizer_13JackTokenizer_recursive_process(struc
       __pyx_t_1 = (__pyx_t_9) ? __Pyx_PyObject_Call2Args(__pyx_t_4, __pyx_t_9, __pyx_t_2) : __Pyx_PyObject_CallOneArg(__pyx_t_4, __pyx_t_2);
       __Pyx_XDECREF(__pyx_t_9); __pyx_t_9 = 0;
       __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-      if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 33, __pyx_L1_error)
+      if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 34, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_1);
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-      __pyx_t_4 = __Pyx_GetItemInt(__pyx_t_1, 0, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 33, __pyx_L1_error)
+      __pyx_t_4 = __Pyx_GetItemInt(__pyx_t_1, 0, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 34, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_4);
       __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
       __Pyx_XDECREF_SET(__pyx_v_file_name, __pyx_t_4);
       __pyx_t_4 = 0;
 
-      /* "jackTokenizer.pyx":34
+      /* "jack_tokenizer.pyx":35
  *                 # Extract the name of the file in the path without the extension
  *                 file_name = os.path.splitext(entry.name)[0]
  *                 print(file_name)             # <<<<<<<<<<<<<<
  * 
  *                  # Build the output file name
  */
-      if (__Pyx_PrintOne(0, __pyx_v_file_name) < 0) __PYX_ERR(0, 34, __pyx_L1_error)
+      if (__Pyx_PrintOne(0, __pyx_v_file_name) < 0) __PYX_ERR(0, 35, __pyx_L1_error)
 
-      /* "jackTokenizer.pyx":37
+      /* "jack_tokenizer.pyx":38
  * 
  *                  # Build the output file name
- *                 output_file_name = os.path.join(file_path, file_name + 'T' + '.xml')             # <<<<<<<<<<<<<<
+ *                 output_file_name = os.path.join(file_path, file_name + '.vm')             # <<<<<<<<<<<<<<
  * 
  *                 # Open the output file for writing
  */
-      __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_os); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 37, __pyx_L1_error)
+      __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_os); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 38, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_1);
-      __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_path); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 37, __pyx_L1_error)
+      __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_path); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 38, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_2);
       __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-      __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_join); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 37, __pyx_L1_error)
+      __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_join); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 38, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_1);
       __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-      __pyx_t_2 = PyNumber_Add(__pyx_v_file_name, __pyx_n_s_T); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 37, __pyx_L1_error)
+      __pyx_t_2 = PyNumber_Add(__pyx_v_file_name, __pyx_kp_s_vm); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 38, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_2);
-      __pyx_t_9 = PyNumber_Add(__pyx_t_2, __pyx_kp_s_xml); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 37, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_9);
-      __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-      __pyx_t_2 = NULL;
+      __pyx_t_9 = NULL;
       __pyx_t_10 = 0;
       if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_1))) {
-        __pyx_t_2 = PyMethod_GET_SELF(__pyx_t_1);
-        if (likely(__pyx_t_2)) {
+        __pyx_t_9 = PyMethod_GET_SELF(__pyx_t_1);
+        if (likely(__pyx_t_9)) {
           PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_1);
-          __Pyx_INCREF(__pyx_t_2);
+          __Pyx_INCREF(__pyx_t_9);
           __Pyx_INCREF(function);
           __Pyx_DECREF_SET(__pyx_t_1, function);
           __pyx_t_10 = 1;
@@ -2048,35 +2047,35 @@ static PyObject *__pyx_f_13jackTokenizer_13JackTokenizer_recursive_process(struc
       }
       #if CYTHON_FAST_PYCALL
       if (PyFunction_Check(__pyx_t_1)) {
-        PyObject *__pyx_temp[3] = {__pyx_t_2, __pyx_v_file_path, __pyx_t_9};
-        __pyx_t_4 = __Pyx_PyFunction_FastCall(__pyx_t_1, __pyx_temp+1-__pyx_t_10, 2+__pyx_t_10); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 37, __pyx_L1_error)
-        __Pyx_XDECREF(__pyx_t_2); __pyx_t_2 = 0;
+        PyObject *__pyx_temp[3] = {__pyx_t_9, __pyx_v_file_path, __pyx_t_2};
+        __pyx_t_4 = __Pyx_PyFunction_FastCall(__pyx_t_1, __pyx_temp+1-__pyx_t_10, 2+__pyx_t_10); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 38, __pyx_L1_error)
+        __Pyx_XDECREF(__pyx_t_9); __pyx_t_9 = 0;
         __Pyx_GOTREF(__pyx_t_4);
-        __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
+        __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
       } else
       #endif
       #if CYTHON_FAST_PYCCALL
       if (__Pyx_PyFastCFunction_Check(__pyx_t_1)) {
-        PyObject *__pyx_temp[3] = {__pyx_t_2, __pyx_v_file_path, __pyx_t_9};
-        __pyx_t_4 = __Pyx_PyCFunction_FastCall(__pyx_t_1, __pyx_temp+1-__pyx_t_10, 2+__pyx_t_10); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 37, __pyx_L1_error)
-        __Pyx_XDECREF(__pyx_t_2); __pyx_t_2 = 0;
+        PyObject *__pyx_temp[3] = {__pyx_t_9, __pyx_v_file_path, __pyx_t_2};
+        __pyx_t_4 = __Pyx_PyCFunction_FastCall(__pyx_t_1, __pyx_temp+1-__pyx_t_10, 2+__pyx_t_10); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 38, __pyx_L1_error)
+        __Pyx_XDECREF(__pyx_t_9); __pyx_t_9 = 0;
         __Pyx_GOTREF(__pyx_t_4);
-        __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
+        __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
       } else
       #endif
       {
-        __pyx_t_11 = PyTuple_New(2+__pyx_t_10); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 37, __pyx_L1_error)
+        __pyx_t_11 = PyTuple_New(2+__pyx_t_10); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 38, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_11);
-        if (__pyx_t_2) {
-          __Pyx_GIVEREF(__pyx_t_2); PyTuple_SET_ITEM(__pyx_t_11, 0, __pyx_t_2); __pyx_t_2 = NULL;
+        if (__pyx_t_9) {
+          __Pyx_GIVEREF(__pyx_t_9); PyTuple_SET_ITEM(__pyx_t_11, 0, __pyx_t_9); __pyx_t_9 = NULL;
         }
         __Pyx_INCREF(__pyx_v_file_path);
         __Pyx_GIVEREF(__pyx_v_file_path);
         PyTuple_SET_ITEM(__pyx_t_11, 0+__pyx_t_10, __pyx_v_file_path);
-        __Pyx_GIVEREF(__pyx_t_9);
-        PyTuple_SET_ITEM(__pyx_t_11, 1+__pyx_t_10, __pyx_t_9);
-        __pyx_t_9 = 0;
-        __pyx_t_4 = __Pyx_PyObject_Call(__pyx_t_1, __pyx_t_11, NULL); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 37, __pyx_L1_error)
+        __Pyx_GIVEREF(__pyx_t_2);
+        PyTuple_SET_ITEM(__pyx_t_11, 1+__pyx_t_10, __pyx_t_2);
+        __pyx_t_2 = 0;
+        __pyx_t_4 = __Pyx_PyObject_Call(__pyx_t_1, __pyx_t_11, NULL); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 38, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_4);
         __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
       }
@@ -2084,14 +2083,14 @@ static PyObject *__pyx_f_13jackTokenizer_13JackTokenizer_recursive_process(struc
       __Pyx_XDECREF_SET(__pyx_v_output_file_name, __pyx_t_4);
       __pyx_t_4 = 0;
 
-      /* "jackTokenizer.pyx":40
+      /* "jack_tokenizer.pyx":41
  * 
  *                 # Open the output file for writing
  *                 output_file = open(output_file_name, 'w')             # <<<<<<<<<<<<<<
  * 
  *                 self.process_file(entry.path, output_file)
  */
-      __pyx_t_4 = PyTuple_New(2); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 40, __pyx_L1_error)
+      __pyx_t_4 = PyTuple_New(2); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 41, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_4);
       __Pyx_INCREF(__pyx_v_output_file_name);
       __Pyx_GIVEREF(__pyx_v_output_file_name);
@@ -2099,34 +2098,34 @@ static PyObject *__pyx_f_13jackTokenizer_13JackTokenizer_recursive_process(struc
       __Pyx_INCREF(__pyx_n_s_w);
       __Pyx_GIVEREF(__pyx_n_s_w);
       PyTuple_SET_ITEM(__pyx_t_4, 1, __pyx_n_s_w);
-      __pyx_t_1 = __Pyx_PyObject_Call(__pyx_builtin_open, __pyx_t_4, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 40, __pyx_L1_error)
+      __pyx_t_1 = __Pyx_PyObject_Call(__pyx_builtin_open, __pyx_t_4, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 41, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_1);
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
       __Pyx_XDECREF_SET(__pyx_v_output_file, __pyx_t_1);
       __pyx_t_1 = 0;
 
-      /* "jackTokenizer.pyx":42
+      /* "jack_tokenizer.pyx":43
  *                 output_file = open(output_file_name, 'w')
  * 
  *                 self.process_file(entry.path, output_file)             # <<<<<<<<<<<<<<
  *                 output_file.close()
  * 
  */
-      __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_entry, __pyx_n_s_path); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 42, __pyx_L1_error)
+      __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_entry, __pyx_n_s_path); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 43, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_1);
-      __pyx_t_4 = ((struct __pyx_vtabstruct_13jackTokenizer_JackTokenizer *)__pyx_v_self->__pyx_vtab)->process_file(__pyx_v_self, __pyx_t_1, __pyx_v_output_file); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 42, __pyx_L1_error)
+      __pyx_t_4 = ((struct __pyx_vtabstruct_14jack_tokenizer_JackTokenizer *)__pyx_v_self->__pyx_vtab)->process_file(__pyx_v_self, __pyx_t_1, __pyx_v_output_file); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 43, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_4);
       __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
 
-      /* "jackTokenizer.pyx":43
+      /* "jack_tokenizer.pyx":44
  * 
  *                 self.process_file(entry.path, output_file)
  *                 output_file.close()             # <<<<<<<<<<<<<<
  * 
  *                 # Create an instance of the JackAnalyzer class
  */
-      __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_output_file, __pyx_n_s_close); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 43, __pyx_L1_error)
+      __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_output_file, __pyx_n_s_close); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 44, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_1);
       __pyx_t_11 = NULL;
       if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_1))) {
@@ -2140,19 +2139,19 @@ static PyObject *__pyx_f_13jackTokenizer_13JackTokenizer_recursive_process(struc
       }
       __pyx_t_4 = (__pyx_t_11) ? __Pyx_PyObject_CallOneArg(__pyx_t_1, __pyx_t_11) : __Pyx_PyObject_CallNoArg(__pyx_t_1);
       __Pyx_XDECREF(__pyx_t_11); __pyx_t_11 = 0;
-      if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 43, __pyx_L1_error)
+      if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 44, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_4);
       __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
 
-      /* "jackTokenizer.pyx":46
+      /* "jack_tokenizer.pyx":47
  * 
  *                 # Create an instance of the JackAnalyzer class
  *                 analyzer = JackAnalyzer()             # <<<<<<<<<<<<<<
  * 
  *                 # Call the compile method on the analyzer instance, passing the output file and directory as arguments
  */
-      __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_JackAnalyzer); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 46, __pyx_L1_error)
+      __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_JackAnalyzer); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 47, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_1);
       __pyx_t_11 = NULL;
       if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_1))) {
@@ -2166,20 +2165,20 @@ static PyObject *__pyx_f_13jackTokenizer_13JackTokenizer_recursive_process(struc
       }
       __pyx_t_4 = (__pyx_t_11) ? __Pyx_PyObject_CallOneArg(__pyx_t_1, __pyx_t_11) : __Pyx_PyObject_CallNoArg(__pyx_t_1);
       __Pyx_XDECREF(__pyx_t_11); __pyx_t_11 = 0;
-      if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 46, __pyx_L1_error)
+      if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 47, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_4);
       __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
       __Pyx_XDECREF_SET(__pyx_v_analyzer, __pyx_t_4);
       __pyx_t_4 = 0;
 
-      /* "jackTokenizer.pyx":49
+      /* "jack_tokenizer.pyx":50
  * 
  *                 # Call the compile method on the analyzer instance, passing the output file and directory as arguments
  *                 analyzer.compile(output_file_name, file_path , file_name)             # <<<<<<<<<<<<<<
  * 
  *                 # Extract the name of the file in the path without the 'T' extension
  */
-      __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_analyzer, __pyx_n_s_compile); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 49, __pyx_L1_error)
+      __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_analyzer, __pyx_n_s_compile); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 50, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_1);
       __pyx_t_11 = NULL;
       __pyx_t_10 = 0;
@@ -2196,7 +2195,7 @@ static PyObject *__pyx_f_13jackTokenizer_13JackTokenizer_recursive_process(struc
       #if CYTHON_FAST_PYCALL
       if (PyFunction_Check(__pyx_t_1)) {
         PyObject *__pyx_temp[4] = {__pyx_t_11, __pyx_v_output_file_name, __pyx_v_file_path, __pyx_v_file_name};
-        __pyx_t_4 = __Pyx_PyFunction_FastCall(__pyx_t_1, __pyx_temp+1-__pyx_t_10, 3+__pyx_t_10); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 49, __pyx_L1_error)
+        __pyx_t_4 = __Pyx_PyFunction_FastCall(__pyx_t_1, __pyx_temp+1-__pyx_t_10, 3+__pyx_t_10); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 50, __pyx_L1_error)
         __Pyx_XDECREF(__pyx_t_11); __pyx_t_11 = 0;
         __Pyx_GOTREF(__pyx_t_4);
       } else
@@ -2204,70 +2203,70 @@ static PyObject *__pyx_f_13jackTokenizer_13JackTokenizer_recursive_process(struc
       #if CYTHON_FAST_PYCCALL
       if (__Pyx_PyFastCFunction_Check(__pyx_t_1)) {
         PyObject *__pyx_temp[4] = {__pyx_t_11, __pyx_v_output_file_name, __pyx_v_file_path, __pyx_v_file_name};
-        __pyx_t_4 = __Pyx_PyCFunction_FastCall(__pyx_t_1, __pyx_temp+1-__pyx_t_10, 3+__pyx_t_10); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 49, __pyx_L1_error)
+        __pyx_t_4 = __Pyx_PyCFunction_FastCall(__pyx_t_1, __pyx_temp+1-__pyx_t_10, 3+__pyx_t_10); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 50, __pyx_L1_error)
         __Pyx_XDECREF(__pyx_t_11); __pyx_t_11 = 0;
         __Pyx_GOTREF(__pyx_t_4);
       } else
       #endif
       {
-        __pyx_t_9 = PyTuple_New(3+__pyx_t_10); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 49, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_9);
+        __pyx_t_2 = PyTuple_New(3+__pyx_t_10); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 50, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_2);
         if (__pyx_t_11) {
-          __Pyx_GIVEREF(__pyx_t_11); PyTuple_SET_ITEM(__pyx_t_9, 0, __pyx_t_11); __pyx_t_11 = NULL;
+          __Pyx_GIVEREF(__pyx_t_11); PyTuple_SET_ITEM(__pyx_t_2, 0, __pyx_t_11); __pyx_t_11 = NULL;
         }
         __Pyx_INCREF(__pyx_v_output_file_name);
         __Pyx_GIVEREF(__pyx_v_output_file_name);
-        PyTuple_SET_ITEM(__pyx_t_9, 0+__pyx_t_10, __pyx_v_output_file_name);
+        PyTuple_SET_ITEM(__pyx_t_2, 0+__pyx_t_10, __pyx_v_output_file_name);
         __Pyx_INCREF(__pyx_v_file_path);
         __Pyx_GIVEREF(__pyx_v_file_path);
-        PyTuple_SET_ITEM(__pyx_t_9, 1+__pyx_t_10, __pyx_v_file_path);
+        PyTuple_SET_ITEM(__pyx_t_2, 1+__pyx_t_10, __pyx_v_file_path);
         __Pyx_INCREF(__pyx_v_file_name);
         __Pyx_GIVEREF(__pyx_v_file_name);
-        PyTuple_SET_ITEM(__pyx_t_9, 2+__pyx_t_10, __pyx_v_file_name);
-        __pyx_t_4 = __Pyx_PyObject_Call(__pyx_t_1, __pyx_t_9, NULL); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 49, __pyx_L1_error)
+        PyTuple_SET_ITEM(__pyx_t_2, 2+__pyx_t_10, __pyx_v_file_name);
+        __pyx_t_4 = __Pyx_PyObject_Call(__pyx_t_1, __pyx_t_2, NULL); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 50, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_4);
-        __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
+        __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
       }
       __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
 
-      /* "jackTokenizer.pyx":52
+      /* "jack_tokenizer.pyx":53
  * 
  *                 # Extract the name of the file in the path without the 'T' extension
  *                 file_name = os.path.splitext(os.path.basename(file_path))[0]             # <<<<<<<<<<<<<<
  * 
  *                 # Build the output file name
  */
-      __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_os); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 52, __pyx_L1_error)
+      __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_os); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 53, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_1);
-      __pyx_t_9 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_path); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 52, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_9);
-      __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-      __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_t_9, __pyx_n_s_splitext); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 52, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_1);
-      __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
-      __Pyx_GetModuleGlobalName(__pyx_t_11, __pyx_n_s_os); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 52, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_11);
-      __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_11, __pyx_n_s_path); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 52, __pyx_L1_error)
+      __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_path); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 53, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_2);
-      __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
-      __pyx_t_11 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_basename); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 52, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_11);
+      __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+      __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_splitext); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 53, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_1);
       __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-      __pyx_t_2 = NULL;
+      __Pyx_GetModuleGlobalName(__pyx_t_11, __pyx_n_s_os); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 53, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_11);
+      __pyx_t_9 = __Pyx_PyObject_GetAttrStr(__pyx_t_11, __pyx_n_s_path); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 53, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_9);
+      __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
+      __pyx_t_11 = __Pyx_PyObject_GetAttrStr(__pyx_t_9, __pyx_n_s_basename); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 53, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_11);
+      __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
+      __pyx_t_9 = NULL;
       if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_11))) {
-        __pyx_t_2 = PyMethod_GET_SELF(__pyx_t_11);
-        if (likely(__pyx_t_2)) {
+        __pyx_t_9 = PyMethod_GET_SELF(__pyx_t_11);
+        if (likely(__pyx_t_9)) {
           PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_11);
-          __Pyx_INCREF(__pyx_t_2);
+          __Pyx_INCREF(__pyx_t_9);
           __Pyx_INCREF(function);
           __Pyx_DECREF_SET(__pyx_t_11, function);
         }
       }
-      __pyx_t_9 = (__pyx_t_2) ? __Pyx_PyObject_Call2Args(__pyx_t_11, __pyx_t_2, __pyx_v_file_path) : __Pyx_PyObject_CallOneArg(__pyx_t_11, __pyx_v_file_path);
-      __Pyx_XDECREF(__pyx_t_2); __pyx_t_2 = 0;
-      if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 52, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_9);
+      __pyx_t_2 = (__pyx_t_9) ? __Pyx_PyObject_Call2Args(__pyx_t_11, __pyx_t_9, __pyx_v_file_path) : __Pyx_PyObject_CallOneArg(__pyx_t_11, __pyx_v_file_path);
+      __Pyx_XDECREF(__pyx_t_9); __pyx_t_9 = 0;
+      if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 53, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_2);
       __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
       __pyx_t_11 = NULL;
       if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_1))) {
@@ -2279,45 +2278,45 @@ static PyObject *__pyx_f_13jackTokenizer_13JackTokenizer_recursive_process(struc
           __Pyx_DECREF_SET(__pyx_t_1, function);
         }
       }
-      __pyx_t_4 = (__pyx_t_11) ? __Pyx_PyObject_Call2Args(__pyx_t_1, __pyx_t_11, __pyx_t_9) : __Pyx_PyObject_CallOneArg(__pyx_t_1, __pyx_t_9);
+      __pyx_t_4 = (__pyx_t_11) ? __Pyx_PyObject_Call2Args(__pyx_t_1, __pyx_t_11, __pyx_t_2) : __Pyx_PyObject_CallOneArg(__pyx_t_1, __pyx_t_2);
       __Pyx_XDECREF(__pyx_t_11); __pyx_t_11 = 0;
-      __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
-      if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 52, __pyx_L1_error)
+      __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+      if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 53, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_4);
       __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-      __pyx_t_1 = __Pyx_GetItemInt(__pyx_t_4, 0, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 52, __pyx_L1_error)
+      __pyx_t_1 = __Pyx_GetItemInt(__pyx_t_4, 0, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 53, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_1);
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
       __Pyx_DECREF_SET(__pyx_v_file_name, __pyx_t_1);
       __pyx_t_1 = 0;
 
-      /* "jackTokenizer.pyx":55
+      /* "jack_tokenizer.pyx":56
  * 
  *                 # Build the output file name
- *                 output_file = os.path.join(file_path, output_file_name.replace('T.xml', '.vm'))             # <<<<<<<<<<<<<<
+ *                 output_file1 = os.path.join(file_path, output_file_name.replace('T.xml', '.vm'))             # <<<<<<<<<<<<<<
  * 
  *                 # Open the output file for writing
  */
-      __Pyx_GetModuleGlobalName(__pyx_t_4, __pyx_n_s_os); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 55, __pyx_L1_error)
+      __Pyx_GetModuleGlobalName(__pyx_t_4, __pyx_n_s_os); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 56, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_4);
-      __pyx_t_9 = __Pyx_PyObject_GetAttrStr(__pyx_t_4, __pyx_n_s_path); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 55, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_9);
+      __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_4, __pyx_n_s_path); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 56, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_2);
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-      __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_t_9, __pyx_n_s_join); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 55, __pyx_L1_error)
+      __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_join); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 56, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_4);
-      __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
-      __pyx_t_9 = __Pyx_PyObject_GetAttrStr(__pyx_v_output_file_name, __pyx_n_s_replace); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 55, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_9);
-      __pyx_t_11 = __Pyx_PyObject_Call(__pyx_t_9, __pyx_tuple_, NULL); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 55, __pyx_L1_error)
+      __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+      __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_output_file_name, __pyx_n_s_replace); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 56, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_2);
+      __pyx_t_11 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_tuple_, NULL); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 56, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_11);
-      __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
-      __pyx_t_9 = NULL;
+      __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+      __pyx_t_2 = NULL;
       __pyx_t_10 = 0;
       if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_4))) {
-        __pyx_t_9 = PyMethod_GET_SELF(__pyx_t_4);
-        if (likely(__pyx_t_9)) {
+        __pyx_t_2 = PyMethod_GET_SELF(__pyx_t_4);
+        if (likely(__pyx_t_2)) {
           PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_4);
-          __Pyx_INCREF(__pyx_t_9);
+          __Pyx_INCREF(__pyx_t_2);
           __Pyx_INCREF(function);
           __Pyx_DECREF_SET(__pyx_t_4, function);
           __pyx_t_10 = 1;
@@ -2325,91 +2324,155 @@ static PyObject *__pyx_f_13jackTokenizer_13JackTokenizer_recursive_process(struc
       }
       #if CYTHON_FAST_PYCALL
       if (PyFunction_Check(__pyx_t_4)) {
-        PyObject *__pyx_temp[3] = {__pyx_t_9, __pyx_v_file_path, __pyx_t_11};
-        __pyx_t_1 = __Pyx_PyFunction_FastCall(__pyx_t_4, __pyx_temp+1-__pyx_t_10, 2+__pyx_t_10); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 55, __pyx_L1_error)
-        __Pyx_XDECREF(__pyx_t_9); __pyx_t_9 = 0;
+        PyObject *__pyx_temp[3] = {__pyx_t_2, __pyx_v_file_path, __pyx_t_11};
+        __pyx_t_1 = __Pyx_PyFunction_FastCall(__pyx_t_4, __pyx_temp+1-__pyx_t_10, 2+__pyx_t_10); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 56, __pyx_L1_error)
+        __Pyx_XDECREF(__pyx_t_2); __pyx_t_2 = 0;
         __Pyx_GOTREF(__pyx_t_1);
         __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
       } else
       #endif
       #if CYTHON_FAST_PYCCALL
       if (__Pyx_PyFastCFunction_Check(__pyx_t_4)) {
-        PyObject *__pyx_temp[3] = {__pyx_t_9, __pyx_v_file_path, __pyx_t_11};
-        __pyx_t_1 = __Pyx_PyCFunction_FastCall(__pyx_t_4, __pyx_temp+1-__pyx_t_10, 2+__pyx_t_10); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 55, __pyx_L1_error)
-        __Pyx_XDECREF(__pyx_t_9); __pyx_t_9 = 0;
+        PyObject *__pyx_temp[3] = {__pyx_t_2, __pyx_v_file_path, __pyx_t_11};
+        __pyx_t_1 = __Pyx_PyCFunction_FastCall(__pyx_t_4, __pyx_temp+1-__pyx_t_10, 2+__pyx_t_10); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 56, __pyx_L1_error)
+        __Pyx_XDECREF(__pyx_t_2); __pyx_t_2 = 0;
         __Pyx_GOTREF(__pyx_t_1);
         __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
       } else
       #endif
       {
-        __pyx_t_2 = PyTuple_New(2+__pyx_t_10); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 55, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_2);
-        if (__pyx_t_9) {
-          __Pyx_GIVEREF(__pyx_t_9); PyTuple_SET_ITEM(__pyx_t_2, 0, __pyx_t_9); __pyx_t_9 = NULL;
+        __pyx_t_9 = PyTuple_New(2+__pyx_t_10); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 56, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_9);
+        if (__pyx_t_2) {
+          __Pyx_GIVEREF(__pyx_t_2); PyTuple_SET_ITEM(__pyx_t_9, 0, __pyx_t_2); __pyx_t_2 = NULL;
         }
         __Pyx_INCREF(__pyx_v_file_path);
         __Pyx_GIVEREF(__pyx_v_file_path);
-        PyTuple_SET_ITEM(__pyx_t_2, 0+__pyx_t_10, __pyx_v_file_path);
+        PyTuple_SET_ITEM(__pyx_t_9, 0+__pyx_t_10, __pyx_v_file_path);
         __Pyx_GIVEREF(__pyx_t_11);
-        PyTuple_SET_ITEM(__pyx_t_2, 1+__pyx_t_10, __pyx_t_11);
+        PyTuple_SET_ITEM(__pyx_t_9, 1+__pyx_t_10, __pyx_t_11);
         __pyx_t_11 = 0;
-        __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_4, __pyx_t_2, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 55, __pyx_L1_error)
+        __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_4, __pyx_t_9, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 56, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_1);
-        __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+        __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
       }
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-      __Pyx_DECREF_SET(__pyx_v_output_file, __pyx_t_1);
+      __Pyx_XDECREF_SET(__pyx_v_output_file1, __pyx_t_1);
       __pyx_t_1 = 0;
 
-      /* "jackTokenizer.pyx":58
+      /* "jack_tokenizer.pyx":59
  * 
  *                 # Open the output file for writing
- *                 output_file = open(output_file, 'w')             # <<<<<<<<<<<<<<
+ *                 output_file1 = open(output_file1, 'w')             # <<<<<<<<<<<<<<
  * 
  *                 # create an instance of the VMWriter class
  */
-      __pyx_t_1 = PyTuple_New(2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 58, __pyx_L1_error)
+      __pyx_t_1 = PyTuple_New(2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 59, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_1);
-      __Pyx_INCREF(__pyx_v_output_file);
-      __Pyx_GIVEREF(__pyx_v_output_file);
-      PyTuple_SET_ITEM(__pyx_t_1, 0, __pyx_v_output_file);
+      __Pyx_INCREF(__pyx_v_output_file1);
+      __Pyx_GIVEREF(__pyx_v_output_file1);
+      PyTuple_SET_ITEM(__pyx_t_1, 0, __pyx_v_output_file1);
       __Pyx_INCREF(__pyx_n_s_w);
       __Pyx_GIVEREF(__pyx_n_s_w);
       PyTuple_SET_ITEM(__pyx_t_1, 1, __pyx_n_s_w);
-      __pyx_t_4 = __Pyx_PyObject_Call(__pyx_builtin_open, __pyx_t_1, NULL); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 58, __pyx_L1_error)
+      __pyx_t_4 = __Pyx_PyObject_Call(__pyx_builtin_open, __pyx_t_1, NULL); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 59, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_4);
       __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-      __Pyx_DECREF_SET(__pyx_v_output_file, __pyx_t_4);
+      __Pyx_DECREF_SET(__pyx_v_output_file1, __pyx_t_4);
       __pyx_t_4 = 0;
 
-      /* "jackTokenizer.pyx":61
+      /* "jack_tokenizer.pyx":62
  * 
  *                 # create an instance of the VMWriter class
- *                 vm_writer = VmWriter(output_file)             # <<<<<<<<<<<<<<
- * 
+ *                 vm_writer = VmWriter(output_file1)             # <<<<<<<<<<<<<<
+ *                 compE = CompilationEngine(file_path, entry.path , vm_writer)
  * 
  */
-      __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_VmWriter); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 61, __pyx_L1_error)
+      __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_VmWriter); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 62, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_1);
-      __pyx_t_2 = NULL;
+      __pyx_t_9 = NULL;
       if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_1))) {
-        __pyx_t_2 = PyMethod_GET_SELF(__pyx_t_1);
-        if (likely(__pyx_t_2)) {
+        __pyx_t_9 = PyMethod_GET_SELF(__pyx_t_1);
+        if (likely(__pyx_t_9)) {
           PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_1);
-          __Pyx_INCREF(__pyx_t_2);
+          __Pyx_INCREF(__pyx_t_9);
           __Pyx_INCREF(function);
           __Pyx_DECREF_SET(__pyx_t_1, function);
         }
       }
-      __pyx_t_4 = (__pyx_t_2) ? __Pyx_PyObject_Call2Args(__pyx_t_1, __pyx_t_2, __pyx_v_output_file) : __Pyx_PyObject_CallOneArg(__pyx_t_1, __pyx_v_output_file);
-      __Pyx_XDECREF(__pyx_t_2); __pyx_t_2 = 0;
-      if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 61, __pyx_L1_error)
+      __pyx_t_4 = (__pyx_t_9) ? __Pyx_PyObject_Call2Args(__pyx_t_1, __pyx_t_9, __pyx_v_output_file1) : __Pyx_PyObject_CallOneArg(__pyx_t_1, __pyx_v_output_file1);
+      __Pyx_XDECREF(__pyx_t_9); __pyx_t_9 = 0;
+      if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 62, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_4);
       __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
       __Pyx_XDECREF_SET(__pyx_v_vm_writer, __pyx_t_4);
       __pyx_t_4 = 0;
 
-      /* "jackTokenizer.pyx":30
+      /* "jack_tokenizer.pyx":63
+ *                 # create an instance of the VMWriter class
+ *                 vm_writer = VmWriter(output_file1)
+ *                 compE = CompilationEngine(file_path, entry.path , vm_writer)             # <<<<<<<<<<<<<<
+ * 
+ * 
+ */
+      __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_CompilationEngine); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 63, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_1);
+      __pyx_t_9 = __Pyx_PyObject_GetAttrStr(__pyx_v_entry, __pyx_n_s_path); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 63, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_9);
+      __pyx_t_11 = NULL;
+      __pyx_t_10 = 0;
+      if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_1))) {
+        __pyx_t_11 = PyMethod_GET_SELF(__pyx_t_1);
+        if (likely(__pyx_t_11)) {
+          PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_1);
+          __Pyx_INCREF(__pyx_t_11);
+          __Pyx_INCREF(function);
+          __Pyx_DECREF_SET(__pyx_t_1, function);
+          __pyx_t_10 = 1;
+        }
+      }
+      #if CYTHON_FAST_PYCALL
+      if (PyFunction_Check(__pyx_t_1)) {
+        PyObject *__pyx_temp[4] = {__pyx_t_11, __pyx_v_file_path, __pyx_t_9, __pyx_v_vm_writer};
+        __pyx_t_4 = __Pyx_PyFunction_FastCall(__pyx_t_1, __pyx_temp+1-__pyx_t_10, 3+__pyx_t_10); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 63, __pyx_L1_error)
+        __Pyx_XDECREF(__pyx_t_11); __pyx_t_11 = 0;
+        __Pyx_GOTREF(__pyx_t_4);
+        __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
+      } else
+      #endif
+      #if CYTHON_FAST_PYCCALL
+      if (__Pyx_PyFastCFunction_Check(__pyx_t_1)) {
+        PyObject *__pyx_temp[4] = {__pyx_t_11, __pyx_v_file_path, __pyx_t_9, __pyx_v_vm_writer};
+        __pyx_t_4 = __Pyx_PyCFunction_FastCall(__pyx_t_1, __pyx_temp+1-__pyx_t_10, 3+__pyx_t_10); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 63, __pyx_L1_error)
+        __Pyx_XDECREF(__pyx_t_11); __pyx_t_11 = 0;
+        __Pyx_GOTREF(__pyx_t_4);
+        __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
+      } else
+      #endif
+      {
+        __pyx_t_2 = PyTuple_New(3+__pyx_t_10); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 63, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_2);
+        if (__pyx_t_11) {
+          __Pyx_GIVEREF(__pyx_t_11); PyTuple_SET_ITEM(__pyx_t_2, 0, __pyx_t_11); __pyx_t_11 = NULL;
+        }
+        __Pyx_INCREF(__pyx_v_file_path);
+        __Pyx_GIVEREF(__pyx_v_file_path);
+        PyTuple_SET_ITEM(__pyx_t_2, 0+__pyx_t_10, __pyx_v_file_path);
+        __Pyx_GIVEREF(__pyx_t_9);
+        PyTuple_SET_ITEM(__pyx_t_2, 1+__pyx_t_10, __pyx_t_9);
+        __Pyx_INCREF(__pyx_v_vm_writer);
+        __Pyx_GIVEREF(__pyx_v_vm_writer);
+        PyTuple_SET_ITEM(__pyx_t_2, 2+__pyx_t_10, __pyx_v_vm_writer);
+        __pyx_t_9 = 0;
+        __pyx_t_4 = __Pyx_PyObject_Call(__pyx_t_1, __pyx_t_2, NULL); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 63, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_4);
+        __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+      }
+      __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+      __Pyx_XDECREF_SET(__pyx_v_compE, __pyx_t_4);
+      __pyx_t_4 = 0;
+
+      /* "jack_tokenizer.pyx":31
  *             print(entry.path)
  * 
  *             if entry.is_file() and entry.name.endswith('.jack'):             # <<<<<<<<<<<<<<
@@ -2419,14 +2482,14 @@ static PyObject *__pyx_f_13jackTokenizer_13JackTokenizer_recursive_process(struc
       goto __pyx_L5;
     }
 
-    /* "jackTokenizer.pyx":65
+    /* "jack_tokenizer.pyx":67
  * 
  * 
  *             elif entry.is_dir():             # <<<<<<<<<<<<<<
  *                 self.recursive_process(entry.path)
  * 
  */
-    __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_entry, __pyx_n_s_is_dir); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 65, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_entry, __pyx_n_s_is_dir); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 67, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     __pyx_t_2 = NULL;
     if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_1))) {
@@ -2440,28 +2503,28 @@ static PyObject *__pyx_f_13jackTokenizer_13JackTokenizer_recursive_process(struc
     }
     __pyx_t_4 = (__pyx_t_2) ? __Pyx_PyObject_CallOneArg(__pyx_t_1, __pyx_t_2) : __Pyx_PyObject_CallNoArg(__pyx_t_1);
     __Pyx_XDECREF(__pyx_t_2); __pyx_t_2 = 0;
-    if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 65, __pyx_L1_error)
+    if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 67, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-    __pyx_t_7 = __Pyx_PyObject_IsTrue(__pyx_t_4); if (unlikely(__pyx_t_7 < 0)) __PYX_ERR(0, 65, __pyx_L1_error)
+    __pyx_t_7 = __Pyx_PyObject_IsTrue(__pyx_t_4); if (unlikely(__pyx_t_7 < 0)) __PYX_ERR(0, 67, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
     if (__pyx_t_7) {
 
-      /* "jackTokenizer.pyx":66
+      /* "jack_tokenizer.pyx":68
  * 
  *             elif entry.is_dir():
  *                 self.recursive_process(entry.path)             # <<<<<<<<<<<<<<
  * 
  * 
  */
-      __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_v_entry, __pyx_n_s_path); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 66, __pyx_L1_error)
+      __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_v_entry, __pyx_n_s_path); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 68, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_4);
-      __pyx_t_1 = ((struct __pyx_vtabstruct_13jackTokenizer_JackTokenizer *)__pyx_v_self->__pyx_vtab)->recursive_process(__pyx_v_self, __pyx_t_4, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 66, __pyx_L1_error)
+      __pyx_t_1 = ((struct __pyx_vtabstruct_14jack_tokenizer_JackTokenizer *)__pyx_v_self->__pyx_vtab)->recursive_process(__pyx_v_self, __pyx_t_4, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 68, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_1);
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
       __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-      /* "jackTokenizer.pyx":65
+      /* "jack_tokenizer.pyx":67
  * 
  * 
  *             elif entry.is_dir():             # <<<<<<<<<<<<<<
@@ -2471,7 +2534,7 @@ static PyObject *__pyx_f_13jackTokenizer_13JackTokenizer_recursive_process(struc
     }
     __pyx_L5:;
 
-    /* "jackTokenizer.pyx":27
+    /* "jack_tokenizer.pyx":28
  *     # recursive function to process each file in the folder
  *     cpdef recursive_process(self, file_path):
  *         for entry in os.scandir(file_path):             # <<<<<<<<<<<<<<
@@ -2481,7 +2544,7 @@ static PyObject *__pyx_f_13jackTokenizer_13JackTokenizer_recursive_process(struc
   }
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
 
-  /* "jackTokenizer.pyx":26
+  /* "jack_tokenizer.pyx":27
  * 
  *     # recursive function to process each file in the folder
  *     cpdef recursive_process(self, file_path):             # <<<<<<<<<<<<<<
@@ -2499,7 +2562,7 @@ static PyObject *__pyx_f_13jackTokenizer_13JackTokenizer_recursive_process(struc
   __Pyx_XDECREF(__pyx_t_4);
   __Pyx_XDECREF(__pyx_t_9);
   __Pyx_XDECREF(__pyx_t_11);
-  __Pyx_AddTraceback("jackTokenizer.JackTokenizer.recursive_process", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("jack_tokenizer.JackTokenizer.recursive_process", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = 0;
   __pyx_L0:;
   __Pyx_XDECREF(__pyx_v_entry);
@@ -2507,26 +2570,28 @@ static PyObject *__pyx_f_13jackTokenizer_13JackTokenizer_recursive_process(struc
   __Pyx_XDECREF(__pyx_v_output_file_name);
   __Pyx_XDECREF(__pyx_v_output_file);
   __Pyx_XDECREF(__pyx_v_analyzer);
+  __Pyx_XDECREF(__pyx_v_output_file1);
   __Pyx_XDECREF(__pyx_v_vm_writer);
+  __Pyx_XDECREF(__pyx_v_compE);
   __Pyx_XGIVEREF(__pyx_r);
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
 /* Python wrapper */
-static PyObject *__pyx_pw_13jackTokenizer_13JackTokenizer_1recursive_process(PyObject *__pyx_v_self, PyObject *__pyx_v_file_path); /*proto*/
-static PyObject *__pyx_pw_13jackTokenizer_13JackTokenizer_1recursive_process(PyObject *__pyx_v_self, PyObject *__pyx_v_file_path) {
+static PyObject *__pyx_pw_14jack_tokenizer_13JackTokenizer_1recursive_process(PyObject *__pyx_v_self, PyObject *__pyx_v_file_path); /*proto*/
+static PyObject *__pyx_pw_14jack_tokenizer_13JackTokenizer_1recursive_process(PyObject *__pyx_v_self, PyObject *__pyx_v_file_path) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("recursive_process (wrapper)", 0);
-  __pyx_r = __pyx_pf_13jackTokenizer_13JackTokenizer_recursive_process(((struct __pyx_obj_13jackTokenizer_JackTokenizer *)__pyx_v_self), ((PyObject *)__pyx_v_file_path));
+  __pyx_r = __pyx_pf_14jack_tokenizer_13JackTokenizer_recursive_process(((struct __pyx_obj_14jack_tokenizer_JackTokenizer *)__pyx_v_self), ((PyObject *)__pyx_v_file_path));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_13jackTokenizer_13JackTokenizer_recursive_process(struct __pyx_obj_13jackTokenizer_JackTokenizer *__pyx_v_self, PyObject *__pyx_v_file_path) {
+static PyObject *__pyx_pf_14jack_tokenizer_13JackTokenizer_recursive_process(struct __pyx_obj_14jack_tokenizer_JackTokenizer *__pyx_v_self, PyObject *__pyx_v_file_path) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
@@ -2535,7 +2600,7 @@ static PyObject *__pyx_pf_13jackTokenizer_13JackTokenizer_recursive_process(stru
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("recursive_process", 0);
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __pyx_f_13jackTokenizer_13JackTokenizer_recursive_process(__pyx_v_self, __pyx_v_file_path, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 26, __pyx_L1_error)
+  __pyx_t_1 = __pyx_f_14jack_tokenizer_13JackTokenizer_recursive_process(__pyx_v_self, __pyx_v_file_path, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 27, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
@@ -2544,7 +2609,7 @@ static PyObject *__pyx_pf_13jackTokenizer_13JackTokenizer_recursive_process(stru
   /* function exit code */
   __pyx_L1_error:;
   __Pyx_XDECREF(__pyx_t_1);
-  __Pyx_AddTraceback("jackTokenizer.JackTokenizer.recursive_process", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("jack_tokenizer.JackTokenizer.recursive_process", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   __pyx_L0:;
   __Pyx_XGIVEREF(__pyx_r);
@@ -2552,7 +2617,7 @@ static PyObject *__pyx_pf_13jackTokenizer_13JackTokenizer_recursive_process(stru
   return __pyx_r;
 }
 
-/* "jackTokenizer.pyx":71
+/* "jack_tokenizer.pyx":73
  * 
  *     # process each file
  *     cdef process_file(self, input_file, output_file):             # <<<<<<<<<<<<<<
@@ -2560,7 +2625,7 @@ static PyObject *__pyx_pf_13jackTokenizer_13JackTokenizer_recursive_process(stru
  *         output_file.write("<tokens>\n")
  */
 
-static PyObject *__pyx_f_13jackTokenizer_13JackTokenizer_process_file(struct __pyx_obj_13jackTokenizer_JackTokenizer *__pyx_v_self, PyObject *__pyx_v_input_file, PyObject *__pyx_v_output_file) {
+static PyObject *__pyx_f_14jack_tokenizer_13JackTokenizer_process_file(struct __pyx_obj_14jack_tokenizer_JackTokenizer *__pyx_v_self, PyObject *__pyx_v_input_file, PyObject *__pyx_v_output_file) {
   PyObject *__pyx_v_f = NULL;
   PyObject *__pyx_v_line = NULL;
   PyObject *__pyx_r = NULL;
@@ -2583,14 +2648,14 @@ static PyObject *__pyx_f_13jackTokenizer_13JackTokenizer_process_file(struct __p
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("process_file", 0);
 
-  /* "jackTokenizer.pyx":73
+  /* "jack_tokenizer.pyx":75
  *     cdef process_file(self, input_file, output_file):
  * 
  *         output_file.write("<tokens>\n")             # <<<<<<<<<<<<<<
  *         # open the input file
  *         with open(input_file, 'r') as f:
  */
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 73, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 75, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __pyx_t_3 = NULL;
   if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
@@ -2604,12 +2669,12 @@ static PyObject *__pyx_f_13jackTokenizer_13JackTokenizer_process_file(struct __p
   }
   __pyx_t_1 = (__pyx_t_3) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_3, __pyx_kp_s_tokens) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_kp_s_tokens);
   __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
-  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 73, __pyx_L1_error)
+  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 75, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "jackTokenizer.pyx":75
+  /* "jack_tokenizer.pyx":77
  *         output_file.write("<tokens>\n")
  *         # open the input file
  *         with open(input_file, 'r') as f:             # <<<<<<<<<<<<<<
@@ -2617,7 +2682,7 @@ static PyObject *__pyx_f_13jackTokenizer_13JackTokenizer_process_file(struct __p
  *             for line in f:
  */
   /*with:*/ {
-    __pyx_t_1 = PyTuple_New(2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 75, __pyx_L1_error)
+    __pyx_t_1 = PyTuple_New(2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 77, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     __Pyx_INCREF(__pyx_v_input_file);
     __Pyx_GIVEREF(__pyx_v_input_file);
@@ -2625,12 +2690,12 @@ static PyObject *__pyx_f_13jackTokenizer_13JackTokenizer_process_file(struct __p
     __Pyx_INCREF(__pyx_n_s_r);
     __Pyx_GIVEREF(__pyx_n_s_r);
     PyTuple_SET_ITEM(__pyx_t_1, 1, __pyx_n_s_r);
-    __pyx_t_2 = __Pyx_PyObject_Call(__pyx_builtin_open, __pyx_t_1, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 75, __pyx_L1_error)
+    __pyx_t_2 = __Pyx_PyObject_Call(__pyx_builtin_open, __pyx_t_1, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 77, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-    __pyx_t_4 = __Pyx_PyObject_LookupSpecial(__pyx_t_2, __pyx_n_s_exit); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 75, __pyx_L1_error)
+    __pyx_t_4 = __Pyx_PyObject_LookupSpecial(__pyx_t_2, __pyx_n_s_exit); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 77, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
-    __pyx_t_3 = __Pyx_PyObject_LookupSpecial(__pyx_t_2, __pyx_n_s_enter); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 75, __pyx_L3_error)
+    __pyx_t_3 = __Pyx_PyObject_LookupSpecial(__pyx_t_2, __pyx_n_s_enter); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 77, __pyx_L3_error)
     __Pyx_GOTREF(__pyx_t_3);
     __pyx_t_5 = NULL;
     if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_3))) {
@@ -2644,7 +2709,7 @@ static PyObject *__pyx_f_13jackTokenizer_13JackTokenizer_process_file(struct __p
     }
     __pyx_t_1 = (__pyx_t_5) ? __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_t_5) : __Pyx_PyObject_CallNoArg(__pyx_t_3);
     __Pyx_XDECREF(__pyx_t_5); __pyx_t_5 = 0;
-    if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 75, __pyx_L3_error)
+    if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 77, __pyx_L3_error)
     __Pyx_GOTREF(__pyx_t_1);
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
     __pyx_t_3 = __pyx_t_1;
@@ -2662,7 +2727,7 @@ static PyObject *__pyx_f_13jackTokenizer_13JackTokenizer_process_file(struct __p
           __pyx_v_f = __pyx_t_3;
           __pyx_t_3 = 0;
 
-          /* "jackTokenizer.pyx":77
+          /* "jack_tokenizer.pyx":79
  *         with open(input_file, 'r') as f:
  *             # open the output file
  *             for line in f:             # <<<<<<<<<<<<<<
@@ -2673,26 +2738,26 @@ static PyObject *__pyx_f_13jackTokenizer_13JackTokenizer_process_file(struct __p
             __pyx_t_3 = __pyx_v_f; __Pyx_INCREF(__pyx_t_3); __pyx_t_9 = 0;
             __pyx_t_10 = NULL;
           } else {
-            __pyx_t_9 = -1; __pyx_t_3 = PyObject_GetIter(__pyx_v_f); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 77, __pyx_L7_error)
+            __pyx_t_9 = -1; __pyx_t_3 = PyObject_GetIter(__pyx_v_f); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 79, __pyx_L7_error)
             __Pyx_GOTREF(__pyx_t_3);
-            __pyx_t_10 = Py_TYPE(__pyx_t_3)->tp_iternext; if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 77, __pyx_L7_error)
+            __pyx_t_10 = Py_TYPE(__pyx_t_3)->tp_iternext; if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 79, __pyx_L7_error)
           }
           for (;;) {
             if (likely(!__pyx_t_10)) {
               if (likely(PyList_CheckExact(__pyx_t_3))) {
                 if (__pyx_t_9 >= PyList_GET_SIZE(__pyx_t_3)) break;
                 #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-                __pyx_t_2 = PyList_GET_ITEM(__pyx_t_3, __pyx_t_9); __Pyx_INCREF(__pyx_t_2); __pyx_t_9++; if (unlikely(0 < 0)) __PYX_ERR(0, 77, __pyx_L7_error)
+                __pyx_t_2 = PyList_GET_ITEM(__pyx_t_3, __pyx_t_9); __Pyx_INCREF(__pyx_t_2); __pyx_t_9++; if (unlikely(0 < 0)) __PYX_ERR(0, 79, __pyx_L7_error)
                 #else
-                __pyx_t_2 = PySequence_ITEM(__pyx_t_3, __pyx_t_9); __pyx_t_9++; if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 77, __pyx_L7_error)
+                __pyx_t_2 = PySequence_ITEM(__pyx_t_3, __pyx_t_9); __pyx_t_9++; if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 79, __pyx_L7_error)
                 __Pyx_GOTREF(__pyx_t_2);
                 #endif
               } else {
                 if (__pyx_t_9 >= PyTuple_GET_SIZE(__pyx_t_3)) break;
                 #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-                __pyx_t_2 = PyTuple_GET_ITEM(__pyx_t_3, __pyx_t_9); __Pyx_INCREF(__pyx_t_2); __pyx_t_9++; if (unlikely(0 < 0)) __PYX_ERR(0, 77, __pyx_L7_error)
+                __pyx_t_2 = PyTuple_GET_ITEM(__pyx_t_3, __pyx_t_9); __Pyx_INCREF(__pyx_t_2); __pyx_t_9++; if (unlikely(0 < 0)) __PYX_ERR(0, 79, __pyx_L7_error)
                 #else
-                __pyx_t_2 = PySequence_ITEM(__pyx_t_3, __pyx_t_9); __pyx_t_9++; if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 77, __pyx_L7_error)
+                __pyx_t_2 = PySequence_ITEM(__pyx_t_3, __pyx_t_9); __pyx_t_9++; if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 79, __pyx_L7_error)
                 __Pyx_GOTREF(__pyx_t_2);
                 #endif
               }
@@ -2702,7 +2767,7 @@ static PyObject *__pyx_f_13jackTokenizer_13JackTokenizer_process_file(struct __p
                 PyObject* exc_type = PyErr_Occurred();
                 if (exc_type) {
                   if (likely(__Pyx_PyErr_GivenExceptionMatches(exc_type, PyExc_StopIteration))) PyErr_Clear();
-                  else __PYX_ERR(0, 77, __pyx_L7_error)
+                  else __PYX_ERR(0, 79, __pyx_L7_error)
                 }
                 break;
               }
@@ -2711,14 +2776,14 @@ static PyObject *__pyx_f_13jackTokenizer_13JackTokenizer_process_file(struct __p
             __Pyx_XDECREF_SET(__pyx_v_line, __pyx_t_2);
             __pyx_t_2 = 0;
 
-            /* "jackTokenizer.pyx":79
+            /* "jack_tokenizer.pyx":81
  *             for line in f:
  *                 # remove white spaces and tabs in the beginning and end of the line
  *                 line = line.strip()             # <<<<<<<<<<<<<<
  * 
  *                 # ignore comments and empty lines
  */
-            __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_line, __pyx_n_s_strip); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 79, __pyx_L7_error)
+            __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_line, __pyx_n_s_strip); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 81, __pyx_L7_error)
             __Pyx_GOTREF(__pyx_t_1);
             __pyx_t_5 = NULL;
             if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_1))) {
@@ -2732,20 +2797,20 @@ static PyObject *__pyx_f_13jackTokenizer_13JackTokenizer_process_file(struct __p
             }
             __pyx_t_2 = (__pyx_t_5) ? __Pyx_PyObject_CallOneArg(__pyx_t_1, __pyx_t_5) : __Pyx_PyObject_CallNoArg(__pyx_t_1);
             __Pyx_XDECREF(__pyx_t_5); __pyx_t_5 = 0;
-            if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 79, __pyx_L7_error)
+            if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 81, __pyx_L7_error)
             __Pyx_GOTREF(__pyx_t_2);
             __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
             __Pyx_DECREF_SET(__pyx_v_line, __pyx_t_2);
             __pyx_t_2 = 0;
 
-            /* "jackTokenizer.pyx":82
+            /* "jack_tokenizer.pyx":84
  * 
  *                 # ignore comments and empty lines
  *                 if line.startswith("//") or line.startswith("/[inserted by cython to avoid comment start]**") or line.startswith("\n") or line.startswith("*"):             # <<<<<<<<<<<<<<
  *                     continue
  *                 # remove comments
  */
-            __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_line, __pyx_n_s_startswith); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 82, __pyx_L7_error)
+            __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_line, __pyx_n_s_startswith); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 84, __pyx_L7_error)
             __Pyx_GOTREF(__pyx_t_1);
             __pyx_t_5 = NULL;
             if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_1))) {
@@ -2759,17 +2824,17 @@ static PyObject *__pyx_f_13jackTokenizer_13JackTokenizer_process_file(struct __p
             }
             __pyx_t_2 = (__pyx_t_5) ? __Pyx_PyObject_Call2Args(__pyx_t_1, __pyx_t_5, __pyx_kp_s__2) : __Pyx_PyObject_CallOneArg(__pyx_t_1, __pyx_kp_s__2);
             __Pyx_XDECREF(__pyx_t_5); __pyx_t_5 = 0;
-            if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 82, __pyx_L7_error)
+            if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 84, __pyx_L7_error)
             __Pyx_GOTREF(__pyx_t_2);
             __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-            __pyx_t_12 = __Pyx_PyObject_IsTrue(__pyx_t_2); if (unlikely(__pyx_t_12 < 0)) __PYX_ERR(0, 82, __pyx_L7_error)
+            __pyx_t_12 = __Pyx_PyObject_IsTrue(__pyx_t_2); if (unlikely(__pyx_t_12 < 0)) __PYX_ERR(0, 84, __pyx_L7_error)
             __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
             if (!__pyx_t_12) {
             } else {
               __pyx_t_11 = __pyx_t_12;
               goto __pyx_L16_bool_binop_done;
             }
-            __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_line, __pyx_n_s_startswith); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 82, __pyx_L7_error)
+            __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_line, __pyx_n_s_startswith); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 84, __pyx_L7_error)
             __Pyx_GOTREF(__pyx_t_1);
             __pyx_t_5 = NULL;
             if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_1))) {
@@ -2783,17 +2848,17 @@ static PyObject *__pyx_f_13jackTokenizer_13JackTokenizer_process_file(struct __p
             }
             __pyx_t_2 = (__pyx_t_5) ? __Pyx_PyObject_Call2Args(__pyx_t_1, __pyx_t_5, __pyx_kp_s__3) : __Pyx_PyObject_CallOneArg(__pyx_t_1, __pyx_kp_s__3);
             __Pyx_XDECREF(__pyx_t_5); __pyx_t_5 = 0;
-            if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 82, __pyx_L7_error)
+            if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 84, __pyx_L7_error)
             __Pyx_GOTREF(__pyx_t_2);
             __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-            __pyx_t_12 = __Pyx_PyObject_IsTrue(__pyx_t_2); if (unlikely(__pyx_t_12 < 0)) __PYX_ERR(0, 82, __pyx_L7_error)
+            __pyx_t_12 = __Pyx_PyObject_IsTrue(__pyx_t_2); if (unlikely(__pyx_t_12 < 0)) __PYX_ERR(0, 84, __pyx_L7_error)
             __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
             if (!__pyx_t_12) {
             } else {
               __pyx_t_11 = __pyx_t_12;
               goto __pyx_L16_bool_binop_done;
             }
-            __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_line, __pyx_n_s_startswith); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 82, __pyx_L7_error)
+            __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_line, __pyx_n_s_startswith); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 84, __pyx_L7_error)
             __Pyx_GOTREF(__pyx_t_1);
             __pyx_t_5 = NULL;
             if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_1))) {
@@ -2807,17 +2872,17 @@ static PyObject *__pyx_f_13jackTokenizer_13JackTokenizer_process_file(struct __p
             }
             __pyx_t_2 = (__pyx_t_5) ? __Pyx_PyObject_Call2Args(__pyx_t_1, __pyx_t_5, __pyx_kp_s__4) : __Pyx_PyObject_CallOneArg(__pyx_t_1, __pyx_kp_s__4);
             __Pyx_XDECREF(__pyx_t_5); __pyx_t_5 = 0;
-            if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 82, __pyx_L7_error)
+            if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 84, __pyx_L7_error)
             __Pyx_GOTREF(__pyx_t_2);
             __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-            __pyx_t_12 = __Pyx_PyObject_IsTrue(__pyx_t_2); if (unlikely(__pyx_t_12 < 0)) __PYX_ERR(0, 82, __pyx_L7_error)
+            __pyx_t_12 = __Pyx_PyObject_IsTrue(__pyx_t_2); if (unlikely(__pyx_t_12 < 0)) __PYX_ERR(0, 84, __pyx_L7_error)
             __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
             if (!__pyx_t_12) {
             } else {
               __pyx_t_11 = __pyx_t_12;
               goto __pyx_L16_bool_binop_done;
             }
-            __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_line, __pyx_n_s_startswith); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 82, __pyx_L7_error)
+            __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_line, __pyx_n_s_startswith); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 84, __pyx_L7_error)
             __Pyx_GOTREF(__pyx_t_1);
             __pyx_t_5 = NULL;
             if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_1))) {
@@ -2831,16 +2896,16 @@ static PyObject *__pyx_f_13jackTokenizer_13JackTokenizer_process_file(struct __p
             }
             __pyx_t_2 = (__pyx_t_5) ? __Pyx_PyObject_Call2Args(__pyx_t_1, __pyx_t_5, __pyx_kp_s__5) : __Pyx_PyObject_CallOneArg(__pyx_t_1, __pyx_kp_s__5);
             __Pyx_XDECREF(__pyx_t_5); __pyx_t_5 = 0;
-            if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 82, __pyx_L7_error)
+            if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 84, __pyx_L7_error)
             __Pyx_GOTREF(__pyx_t_2);
             __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-            __pyx_t_12 = __Pyx_PyObject_IsTrue(__pyx_t_2); if (unlikely(__pyx_t_12 < 0)) __PYX_ERR(0, 82, __pyx_L7_error)
+            __pyx_t_12 = __Pyx_PyObject_IsTrue(__pyx_t_2); if (unlikely(__pyx_t_12 < 0)) __PYX_ERR(0, 84, __pyx_L7_error)
             __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
             __pyx_t_11 = __pyx_t_12;
             __pyx_L16_bool_binop_done:;
             if (__pyx_t_11) {
 
-              /* "jackTokenizer.pyx":83
+              /* "jack_tokenizer.pyx":85
  *                 # ignore comments and empty lines
  *                 if line.startswith("//") or line.startswith("/[inserted by cython to avoid comment start]**") or line.startswith("\n") or line.startswith("*"):
  *                     continue             # <<<<<<<<<<<<<<
@@ -2849,7 +2914,7 @@ static PyObject *__pyx_f_13jackTokenizer_13JackTokenizer_process_file(struct __p
  */
               goto __pyx_L13_continue;
 
-              /* "jackTokenizer.pyx":82
+              /* "jack_tokenizer.pyx":84
  * 
  *                 # ignore comments and empty lines
  *                 if line.startswith("//") or line.startswith("/[inserted by cython to avoid comment start]**") or line.startswith("\n") or line.startswith("*"):             # <<<<<<<<<<<<<<
@@ -2858,25 +2923,25 @@ static PyObject *__pyx_f_13jackTokenizer_13JackTokenizer_process_file(struct __p
  */
             }
 
-            /* "jackTokenizer.pyx":85
+            /* "jack_tokenizer.pyx":87
  *                     continue
  *                 # remove comments
  *                 elif "//" in line:             # <<<<<<<<<<<<<<
  *                     line = line[:line.index("//")]
  *                 elif "/[inserted by cython to avoid comment start]*" in line:
  */
-            __pyx_t_11 = (__Pyx_PySequence_ContainsTF(__pyx_kp_s__2, __pyx_v_line, Py_EQ)); if (unlikely(__pyx_t_11 < 0)) __PYX_ERR(0, 85, __pyx_L7_error)
+            __pyx_t_11 = (__Pyx_PySequence_ContainsTF(__pyx_kp_s__2, __pyx_v_line, Py_EQ)); if (unlikely(__pyx_t_11 < 0)) __PYX_ERR(0, 87, __pyx_L7_error)
             __pyx_t_12 = (__pyx_t_11 != 0);
             if (__pyx_t_12) {
 
-              /* "jackTokenizer.pyx":86
+              /* "jack_tokenizer.pyx":88
  *                 # remove comments
  *                 elif "//" in line:
  *                     line = line[:line.index("//")]             # <<<<<<<<<<<<<<
  *                 elif "/[inserted by cython to avoid comment start]*" in line:
  *                     line = line[:line.index("/[inserted by cython to avoid comment start]*")]
  */
-              __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_line, __pyx_n_s_index); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 86, __pyx_L7_error)
+              __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_line, __pyx_n_s_index); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 88, __pyx_L7_error)
               __Pyx_GOTREF(__pyx_t_1);
               __pyx_t_5 = NULL;
               if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_1))) {
@@ -2890,16 +2955,16 @@ static PyObject *__pyx_f_13jackTokenizer_13JackTokenizer_process_file(struct __p
               }
               __pyx_t_2 = (__pyx_t_5) ? __Pyx_PyObject_Call2Args(__pyx_t_1, __pyx_t_5, __pyx_kp_s__2) : __Pyx_PyObject_CallOneArg(__pyx_t_1, __pyx_kp_s__2);
               __Pyx_XDECREF(__pyx_t_5); __pyx_t_5 = 0;
-              if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 86, __pyx_L7_error)
+              if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 88, __pyx_L7_error)
               __Pyx_GOTREF(__pyx_t_2);
               __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-              __pyx_t_1 = __Pyx_PyObject_GetSlice(__pyx_v_line, 0, 0, NULL, &__pyx_t_2, NULL, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 86, __pyx_L7_error)
+              __pyx_t_1 = __Pyx_PyObject_GetSlice(__pyx_v_line, 0, 0, NULL, &__pyx_t_2, NULL, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 88, __pyx_L7_error)
               __Pyx_GOTREF(__pyx_t_1);
               __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
               __Pyx_DECREF_SET(__pyx_v_line, __pyx_t_1);
               __pyx_t_1 = 0;
 
-              /* "jackTokenizer.pyx":85
+              /* "jack_tokenizer.pyx":87
  *                     continue
  *                 # remove comments
  *                 elif "//" in line:             # <<<<<<<<<<<<<<
@@ -2909,25 +2974,25 @@ static PyObject *__pyx_f_13jackTokenizer_13JackTokenizer_process_file(struct __p
               goto __pyx_L15;
             }
 
-            /* "jackTokenizer.pyx":87
+            /* "jack_tokenizer.pyx":89
  *                 elif "//" in line:
  *                     line = line[:line.index("//")]
  *                 elif "/[inserted by cython to avoid comment start]*" in line:             # <<<<<<<<<<<<<<
  *                     line = line[:line.index("/[inserted by cython to avoid comment start]*")]
  *                     while "*[inserted by cython to avoid comment closer]/" not in line:
  */
-            __pyx_t_12 = (__Pyx_PySequence_ContainsTF(__pyx_kp_s__6, __pyx_v_line, Py_EQ)); if (unlikely(__pyx_t_12 < 0)) __PYX_ERR(0, 87, __pyx_L7_error)
+            __pyx_t_12 = (__Pyx_PySequence_ContainsTF(__pyx_kp_s__6, __pyx_v_line, Py_EQ)); if (unlikely(__pyx_t_12 < 0)) __PYX_ERR(0, 89, __pyx_L7_error)
             __pyx_t_11 = (__pyx_t_12 != 0);
             if (__pyx_t_11) {
 
-              /* "jackTokenizer.pyx":88
+              /* "jack_tokenizer.pyx":90
  *                     line = line[:line.index("//")]
  *                 elif "/[inserted by cython to avoid comment start]*" in line:
  *                     line = line[:line.index("/[inserted by cython to avoid comment start]*")]             # <<<<<<<<<<<<<<
  *                     while "*[inserted by cython to avoid comment closer]/" not in line:
  *                         line += next(f)
  */
-              __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_line, __pyx_n_s_index); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 88, __pyx_L7_error)
+              __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_line, __pyx_n_s_index); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 90, __pyx_L7_error)
               __Pyx_GOTREF(__pyx_t_2);
               __pyx_t_5 = NULL;
               if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
@@ -2941,16 +3006,16 @@ static PyObject *__pyx_f_13jackTokenizer_13JackTokenizer_process_file(struct __p
               }
               __pyx_t_1 = (__pyx_t_5) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_5, __pyx_kp_s__6) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_kp_s__6);
               __Pyx_XDECREF(__pyx_t_5); __pyx_t_5 = 0;
-              if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 88, __pyx_L7_error)
+              if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 90, __pyx_L7_error)
               __Pyx_GOTREF(__pyx_t_1);
               __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-              __pyx_t_2 = __Pyx_PyObject_GetSlice(__pyx_v_line, 0, 0, NULL, &__pyx_t_1, NULL, 0, 0, 1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 88, __pyx_L7_error)
+              __pyx_t_2 = __Pyx_PyObject_GetSlice(__pyx_v_line, 0, 0, NULL, &__pyx_t_1, NULL, 0, 0, 1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 90, __pyx_L7_error)
               __Pyx_GOTREF(__pyx_t_2);
               __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
               __Pyx_DECREF_SET(__pyx_v_line, __pyx_t_2);
               __pyx_t_2 = 0;
 
-              /* "jackTokenizer.pyx":89
+              /* "jack_tokenizer.pyx":91
  *                 elif "/[inserted by cython to avoid comment start]*" in line:
  *                     line = line[:line.index("/[inserted by cython to avoid comment start]*")]
  *                     while "*[inserted by cython to avoid comment closer]/" not in line:             # <<<<<<<<<<<<<<
@@ -2958,34 +3023,34 @@ static PyObject *__pyx_f_13jackTokenizer_13JackTokenizer_process_file(struct __p
  *                     line = line[line.index("*[inserted by cython to avoid comment closer]/"):]
  */
               while (1) {
-                __pyx_t_11 = (__Pyx_PySequence_ContainsTF(__pyx_kp_s__7, __pyx_v_line, Py_NE)); if (unlikely(__pyx_t_11 < 0)) __PYX_ERR(0, 89, __pyx_L7_error)
+                __pyx_t_11 = (__Pyx_PySequence_ContainsTF(__pyx_kp_s__7, __pyx_v_line, Py_NE)); if (unlikely(__pyx_t_11 < 0)) __PYX_ERR(0, 91, __pyx_L7_error)
                 __pyx_t_12 = (__pyx_t_11 != 0);
                 if (!__pyx_t_12) break;
 
-                /* "jackTokenizer.pyx":90
+                /* "jack_tokenizer.pyx":92
  *                     line = line[:line.index("/[inserted by cython to avoid comment start]*")]
  *                     while "*[inserted by cython to avoid comment closer]/" not in line:
  *                         line += next(f)             # <<<<<<<<<<<<<<
  *                     line = line[line.index("*[inserted by cython to avoid comment closer]/"):]
  * 
  */
-                __pyx_t_2 = __Pyx_PyIter_Next(__pyx_v_f); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 90, __pyx_L7_error)
+                __pyx_t_2 = __Pyx_PyIter_Next(__pyx_v_f); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 92, __pyx_L7_error)
                 __Pyx_GOTREF(__pyx_t_2);
-                __pyx_t_1 = PyNumber_InPlaceAdd(__pyx_v_line, __pyx_t_2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 90, __pyx_L7_error)
+                __pyx_t_1 = PyNumber_InPlaceAdd(__pyx_v_line, __pyx_t_2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 92, __pyx_L7_error)
                 __Pyx_GOTREF(__pyx_t_1);
                 __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
                 __Pyx_DECREF_SET(__pyx_v_line, __pyx_t_1);
                 __pyx_t_1 = 0;
               }
 
-              /* "jackTokenizer.pyx":91
+              /* "jack_tokenizer.pyx":93
  *                     while "*[inserted by cython to avoid comment closer]/" not in line:
  *                         line += next(f)
  *                     line = line[line.index("*[inserted by cython to avoid comment closer]/"):]             # <<<<<<<<<<<<<<
  * 
  *                 # remove empty lines
  */
-              __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_line, __pyx_n_s_index); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 91, __pyx_L7_error)
+              __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_line, __pyx_n_s_index); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 93, __pyx_L7_error)
               __Pyx_GOTREF(__pyx_t_2);
               __pyx_t_5 = NULL;
               if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
@@ -2999,16 +3064,16 @@ static PyObject *__pyx_f_13jackTokenizer_13JackTokenizer_process_file(struct __p
               }
               __pyx_t_1 = (__pyx_t_5) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_5, __pyx_kp_s__7) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_kp_s__7);
               __Pyx_XDECREF(__pyx_t_5); __pyx_t_5 = 0;
-              if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 91, __pyx_L7_error)
+              if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 93, __pyx_L7_error)
               __Pyx_GOTREF(__pyx_t_1);
               __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-              __pyx_t_2 = __Pyx_PyObject_GetSlice(__pyx_v_line, 0, 0, &__pyx_t_1, NULL, NULL, 0, 0, 1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 91, __pyx_L7_error)
+              __pyx_t_2 = __Pyx_PyObject_GetSlice(__pyx_v_line, 0, 0, &__pyx_t_1, NULL, NULL, 0, 0, 1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 93, __pyx_L7_error)
               __Pyx_GOTREF(__pyx_t_2);
               __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
               __Pyx_DECREF_SET(__pyx_v_line, __pyx_t_2);
               __pyx_t_2 = 0;
 
-              /* "jackTokenizer.pyx":87
+              /* "jack_tokenizer.pyx":89
  *                 elif "//" in line:
  *                     line = line[:line.index("//")]
  *                 elif "/[inserted by cython to avoid comment start]*" in line:             # <<<<<<<<<<<<<<
@@ -3018,14 +3083,14 @@ static PyObject *__pyx_f_13jackTokenizer_13JackTokenizer_process_file(struct __p
             }
             __pyx_L15:;
 
-            /* "jackTokenizer.pyx":94
+            /* "jack_tokenizer.pyx":96
  * 
  *                 # remove empty lines
  *                 if line.strip() == "":             # <<<<<<<<<<<<<<
  *                     continue
  *                 # remove white spaces and tabs in the beginning and end of the line
  */
-            __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_line, __pyx_n_s_strip); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 94, __pyx_L7_error)
+            __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_line, __pyx_n_s_strip); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 96, __pyx_L7_error)
             __Pyx_GOTREF(__pyx_t_1);
             __pyx_t_5 = NULL;
             if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_1))) {
@@ -3039,14 +3104,14 @@ static PyObject *__pyx_f_13jackTokenizer_13JackTokenizer_process_file(struct __p
             }
             __pyx_t_2 = (__pyx_t_5) ? __Pyx_PyObject_CallOneArg(__pyx_t_1, __pyx_t_5) : __Pyx_PyObject_CallNoArg(__pyx_t_1);
             __Pyx_XDECREF(__pyx_t_5); __pyx_t_5 = 0;
-            if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 94, __pyx_L7_error)
+            if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 96, __pyx_L7_error)
             __Pyx_GOTREF(__pyx_t_2);
             __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-            __pyx_t_12 = (__Pyx_PyString_Equals(__pyx_t_2, __pyx_kp_s__8, Py_EQ)); if (unlikely(__pyx_t_12 < 0)) __PYX_ERR(0, 94, __pyx_L7_error)
+            __pyx_t_12 = (__Pyx_PyString_Equals(__pyx_t_2, __pyx_kp_s__8, Py_EQ)); if (unlikely(__pyx_t_12 < 0)) __PYX_ERR(0, 96, __pyx_L7_error)
             __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
             if (__pyx_t_12) {
 
-              /* "jackTokenizer.pyx":95
+              /* "jack_tokenizer.pyx":97
  *                 # remove empty lines
  *                 if line.strip() == "":
  *                     continue             # <<<<<<<<<<<<<<
@@ -3055,7 +3120,7 @@ static PyObject *__pyx_f_13jackTokenizer_13JackTokenizer_process_file(struct __p
  */
               goto __pyx_L13_continue;
 
-              /* "jackTokenizer.pyx":94
+              /* "jack_tokenizer.pyx":96
  * 
  *                 # remove empty lines
  *                 if line.strip() == "":             # <<<<<<<<<<<<<<
@@ -3064,14 +3129,14 @@ static PyObject *__pyx_f_13jackTokenizer_13JackTokenizer_process_file(struct __p
  */
             }
 
-            /* "jackTokenizer.pyx":97
+            /* "jack_tokenizer.pyx":99
  *                     continue
  *                 # remove white spaces and tabs in the beginning and end of the line
  *                 line = line.strip()             # <<<<<<<<<<<<<<
  *                 # add the line to the output file
  *                 self.processLine(line, output_file)
  */
-            __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_line, __pyx_n_s_strip); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 97, __pyx_L7_error)
+            __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_line, __pyx_n_s_strip); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 99, __pyx_L7_error)
             __Pyx_GOTREF(__pyx_t_1);
             __pyx_t_5 = NULL;
             if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_1))) {
@@ -3085,24 +3150,24 @@ static PyObject *__pyx_f_13jackTokenizer_13JackTokenizer_process_file(struct __p
             }
             __pyx_t_2 = (__pyx_t_5) ? __Pyx_PyObject_CallOneArg(__pyx_t_1, __pyx_t_5) : __Pyx_PyObject_CallNoArg(__pyx_t_1);
             __Pyx_XDECREF(__pyx_t_5); __pyx_t_5 = 0;
-            if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 97, __pyx_L7_error)
+            if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 99, __pyx_L7_error)
             __Pyx_GOTREF(__pyx_t_2);
             __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
             __Pyx_DECREF_SET(__pyx_v_line, __pyx_t_2);
             __pyx_t_2 = 0;
 
-            /* "jackTokenizer.pyx":99
+            /* "jack_tokenizer.pyx":101
  *                 line = line.strip()
  *                 # add the line to the output file
  *                 self.processLine(line, output_file)             # <<<<<<<<<<<<<<
  * 
  * 
  */
-            __pyx_t_2 = ((struct __pyx_vtabstruct_13jackTokenizer_JackTokenizer *)__pyx_v_self->__pyx_vtab)->processLine(__pyx_v_self, __pyx_v_line, __pyx_v_output_file); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 99, __pyx_L7_error)
+            __pyx_t_2 = ((struct __pyx_vtabstruct_14jack_tokenizer_JackTokenizer *)__pyx_v_self->__pyx_vtab)->processLine(__pyx_v_self, __pyx_v_line, __pyx_v_output_file); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 101, __pyx_L7_error)
             __Pyx_GOTREF(__pyx_t_2);
             __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-            /* "jackTokenizer.pyx":77
+            /* "jack_tokenizer.pyx":79
  *         with open(input_file, 'r') as f:
  *             # open the output file
  *             for line in f:             # <<<<<<<<<<<<<<
@@ -3113,14 +3178,14 @@ static PyObject *__pyx_f_13jackTokenizer_13JackTokenizer_process_file(struct __p
           }
           __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
 
-          /* "jackTokenizer.pyx":104
+          /* "jack_tokenizer.pyx":106
  * 
  * 
  *             output_file.write("</tokens>\n")             # <<<<<<<<<<<<<<
  * 
  * 
  */
-          __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 104, __pyx_L7_error)
+          __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 106, __pyx_L7_error)
           __Pyx_GOTREF(__pyx_t_2);
           __pyx_t_1 = NULL;
           if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
@@ -3134,12 +3199,12 @@ static PyObject *__pyx_f_13jackTokenizer_13JackTokenizer_process_file(struct __p
           }
           __pyx_t_3 = (__pyx_t_1) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_1, __pyx_kp_s_tokens_2) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_kp_s_tokens_2);
           __Pyx_XDECREF(__pyx_t_1); __pyx_t_1 = 0;
-          if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 104, __pyx_L7_error)
+          if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 106, __pyx_L7_error)
           __Pyx_GOTREF(__pyx_t_3);
           __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
           __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
 
-          /* "jackTokenizer.pyx":75
+          /* "jack_tokenizer.pyx":77
  *         output_file.write("<tokens>\n")
  *         # open the input file
  *         with open(input_file, 'r') as f:             # <<<<<<<<<<<<<<
@@ -3157,21 +3222,21 @@ static PyObject *__pyx_f_13jackTokenizer_13JackTokenizer_process_file(struct __p
         __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
         __Pyx_XDECREF(__pyx_t_5); __pyx_t_5 = 0;
         /*except:*/ {
-          __Pyx_AddTraceback("jackTokenizer.JackTokenizer.process_file", __pyx_clineno, __pyx_lineno, __pyx_filename);
-          if (__Pyx_GetException(&__pyx_t_3, &__pyx_t_2, &__pyx_t_1) < 0) __PYX_ERR(0, 75, __pyx_L9_except_error)
+          __Pyx_AddTraceback("jack_tokenizer.JackTokenizer.process_file", __pyx_clineno, __pyx_lineno, __pyx_filename);
+          if (__Pyx_GetException(&__pyx_t_3, &__pyx_t_2, &__pyx_t_1) < 0) __PYX_ERR(0, 77, __pyx_L9_except_error)
           __Pyx_GOTREF(__pyx_t_3);
           __Pyx_GOTREF(__pyx_t_2);
           __Pyx_GOTREF(__pyx_t_1);
-          __pyx_t_5 = PyTuple_Pack(3, __pyx_t_3, __pyx_t_2, __pyx_t_1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 75, __pyx_L9_except_error)
+          __pyx_t_5 = PyTuple_Pack(3, __pyx_t_3, __pyx_t_2, __pyx_t_1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 77, __pyx_L9_except_error)
           __Pyx_GOTREF(__pyx_t_5);
           __pyx_t_13 = __Pyx_PyObject_Call(__pyx_t_4, __pyx_t_5, NULL);
           __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
           __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-          if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 75, __pyx_L9_except_error)
+          if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 77, __pyx_L9_except_error)
           __Pyx_GOTREF(__pyx_t_13);
           __pyx_t_12 = __Pyx_PyObject_IsTrue(__pyx_t_13);
           __Pyx_DECREF(__pyx_t_13); __pyx_t_13 = 0;
-          if (__pyx_t_12 < 0) __PYX_ERR(0, 75, __pyx_L9_except_error)
+          if (__pyx_t_12 < 0) __PYX_ERR(0, 77, __pyx_L9_except_error)
           __pyx_t_11 = ((!(__pyx_t_12 != 0)) != 0);
           if (__pyx_t_11) {
             __Pyx_GIVEREF(__pyx_t_3);
@@ -3179,7 +3244,7 @@ static PyObject *__pyx_f_13jackTokenizer_13JackTokenizer_process_file(struct __p
             __Pyx_XGIVEREF(__pyx_t_1);
             __Pyx_ErrRestoreWithState(__pyx_t_3, __pyx_t_2, __pyx_t_1);
             __pyx_t_3 = 0; __pyx_t_2 = 0; __pyx_t_1 = 0; 
-            __PYX_ERR(0, 75, __pyx_L9_except_error)
+            __PYX_ERR(0, 77, __pyx_L9_except_error)
           }
           __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
           __Pyx_XDECREF(__pyx_t_2); __pyx_t_2 = 0;
@@ -3205,7 +3270,7 @@ static PyObject *__pyx_f_13jackTokenizer_13JackTokenizer_process_file(struct __p
         if (__pyx_t_4) {
           __pyx_t_8 = __Pyx_PyObject_Call(__pyx_t_4, __pyx_tuple__9, NULL);
           __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-          if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 75, __pyx_L1_error)
+          if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 77, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_8);
           __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
         }
@@ -3220,7 +3285,7 @@ static PyObject *__pyx_f_13jackTokenizer_13JackTokenizer_process_file(struct __p
     __pyx_L26:;
   }
 
-  /* "jackTokenizer.pyx":71
+  /* "jack_tokenizer.pyx":73
  * 
  *     # process each file
  *     cdef process_file(self, input_file, output_file):             # <<<<<<<<<<<<<<
@@ -3236,7 +3301,7 @@ static PyObject *__pyx_f_13jackTokenizer_13JackTokenizer_process_file(struct __p
   __Pyx_XDECREF(__pyx_t_2);
   __Pyx_XDECREF(__pyx_t_3);
   __Pyx_XDECREF(__pyx_t_5);
-  __Pyx_AddTraceback("jackTokenizer.JackTokenizer.process_file", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("jack_tokenizer.JackTokenizer.process_file", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = 0;
   __pyx_L0:;
   __Pyx_XDECREF(__pyx_v_f);
@@ -3246,7 +3311,7 @@ static PyObject *__pyx_f_13jackTokenizer_13JackTokenizer_process_file(struct __p
   return __pyx_r;
 }
 
-/* "jackTokenizer.pyx":108
+/* "jack_tokenizer.pyx":110
  * 
  *     # process each line
  *     cdef processLine(self, line, output_file):             # <<<<<<<<<<<<<<
@@ -3254,7 +3319,7 @@ static PyObject *__pyx_f_13jackTokenizer_13JackTokenizer_process_file(struct __p
  *         flag = False
  */
 
-static PyObject *__pyx_f_13jackTokenizer_13JackTokenizer_processLine(struct __pyx_obj_13jackTokenizer_JackTokenizer *__pyx_v_self, PyObject *__pyx_v_line, PyObject *__pyx_v_output_file) {
+static PyObject *__pyx_f_14jack_tokenizer_13JackTokenizer_processLine(struct __pyx_obj_14jack_tokenizer_JackTokenizer *__pyx_v_self, PyObject *__pyx_v_line, PyObject *__pyx_v_output_file) {
   PyObject *__pyx_v_token = NULL;
   int __pyx_v_flag;
   PyObject *__pyx_v_sign = NULL;
@@ -3275,7 +3340,7 @@ static PyObject *__pyx_f_13jackTokenizer_13JackTokenizer_processLine(struct __py
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("processLine", 0);
 
-  /* "jackTokenizer.pyx":109
+  /* "jack_tokenizer.pyx":111
  *     # process each line
  *     cdef processLine(self, line, output_file):
  *         token = ''             # <<<<<<<<<<<<<<
@@ -3285,7 +3350,7 @@ static PyObject *__pyx_f_13jackTokenizer_13JackTokenizer_processLine(struct __py
   __Pyx_INCREF(__pyx_kp_s__8);
   __pyx_v_token = __pyx_kp_s__8;
 
-  /* "jackTokenizer.pyx":110
+  /* "jack_tokenizer.pyx":112
  *     cdef processLine(self, line, output_file):
  *         token = ''
  *         flag = False             # <<<<<<<<<<<<<<
@@ -3294,7 +3359,7 @@ static PyObject *__pyx_f_13jackTokenizer_13JackTokenizer_processLine(struct __py
  */
   __pyx_v_flag = 0;
 
-  /* "jackTokenizer.pyx":111
+  /* "jack_tokenizer.pyx":113
  *         token = ''
  *         flag = False
  *         for sign in line:             # <<<<<<<<<<<<<<
@@ -3305,26 +3370,26 @@ static PyObject *__pyx_f_13jackTokenizer_13JackTokenizer_processLine(struct __py
     __pyx_t_1 = __pyx_v_line; __Pyx_INCREF(__pyx_t_1); __pyx_t_2 = 0;
     __pyx_t_3 = NULL;
   } else {
-    __pyx_t_2 = -1; __pyx_t_1 = PyObject_GetIter(__pyx_v_line); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 111, __pyx_L1_error)
+    __pyx_t_2 = -1; __pyx_t_1 = PyObject_GetIter(__pyx_v_line); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 113, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
-    __pyx_t_3 = Py_TYPE(__pyx_t_1)->tp_iternext; if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 111, __pyx_L1_error)
+    __pyx_t_3 = Py_TYPE(__pyx_t_1)->tp_iternext; if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 113, __pyx_L1_error)
   }
   for (;;) {
     if (likely(!__pyx_t_3)) {
       if (likely(PyList_CheckExact(__pyx_t_1))) {
         if (__pyx_t_2 >= PyList_GET_SIZE(__pyx_t_1)) break;
         #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-        __pyx_t_4 = PyList_GET_ITEM(__pyx_t_1, __pyx_t_2); __Pyx_INCREF(__pyx_t_4); __pyx_t_2++; if (unlikely(0 < 0)) __PYX_ERR(0, 111, __pyx_L1_error)
+        __pyx_t_4 = PyList_GET_ITEM(__pyx_t_1, __pyx_t_2); __Pyx_INCREF(__pyx_t_4); __pyx_t_2++; if (unlikely(0 < 0)) __PYX_ERR(0, 113, __pyx_L1_error)
         #else
-        __pyx_t_4 = PySequence_ITEM(__pyx_t_1, __pyx_t_2); __pyx_t_2++; if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 111, __pyx_L1_error)
+        __pyx_t_4 = PySequence_ITEM(__pyx_t_1, __pyx_t_2); __pyx_t_2++; if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 113, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_4);
         #endif
       } else {
         if (__pyx_t_2 >= PyTuple_GET_SIZE(__pyx_t_1)) break;
         #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-        __pyx_t_4 = PyTuple_GET_ITEM(__pyx_t_1, __pyx_t_2); __Pyx_INCREF(__pyx_t_4); __pyx_t_2++; if (unlikely(0 < 0)) __PYX_ERR(0, 111, __pyx_L1_error)
+        __pyx_t_4 = PyTuple_GET_ITEM(__pyx_t_1, __pyx_t_2); __Pyx_INCREF(__pyx_t_4); __pyx_t_2++; if (unlikely(0 < 0)) __PYX_ERR(0, 113, __pyx_L1_error)
         #else
-        __pyx_t_4 = PySequence_ITEM(__pyx_t_1, __pyx_t_2); __pyx_t_2++; if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 111, __pyx_L1_error)
+        __pyx_t_4 = PySequence_ITEM(__pyx_t_1, __pyx_t_2); __pyx_t_2++; if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 113, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_4);
         #endif
       }
@@ -3334,7 +3399,7 @@ static PyObject *__pyx_f_13jackTokenizer_13JackTokenizer_processLine(struct __py
         PyObject* exc_type = PyErr_Occurred();
         if (exc_type) {
           if (likely(__Pyx_PyErr_GivenExceptionMatches(exc_type, PyExc_StopIteration))) PyErr_Clear();
-          else __PYX_ERR(0, 111, __pyx_L1_error)
+          else __PYX_ERR(0, 113, __pyx_L1_error)
         }
         break;
       }
@@ -3343,16 +3408,16 @@ static PyObject *__pyx_f_13jackTokenizer_13JackTokenizer_processLine(struct __py
     __Pyx_XDECREF_SET(__pyx_v_sign, __pyx_t_4);
     __pyx_t_4 = 0;
 
-    /* "jackTokenizer.pyx":112
+    /* "jack_tokenizer.pyx":114
  *         flag = False
  *         for sign in line:
  *             if sign in self.SYMBOLS and not flag:             # <<<<<<<<<<<<<<
  *                 self.tipulInWord(token, output_file)
  *                 if sign =='<' and not flag:
  */
-    __pyx_t_4 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_SYMBOLS); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 112, __pyx_L1_error)
+    __pyx_t_4 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_SYMBOLS); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 114, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
-    __pyx_t_6 = (__Pyx_PySequence_ContainsTF(__pyx_v_sign, __pyx_t_4, Py_EQ)); if (unlikely(__pyx_t_6 < 0)) __PYX_ERR(0, 112, __pyx_L1_error)
+    __pyx_t_6 = (__Pyx_PySequence_ContainsTF(__pyx_v_sign, __pyx_t_4, Py_EQ)); if (unlikely(__pyx_t_6 < 0)) __PYX_ERR(0, 114, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
     __pyx_t_7 = (__pyx_t_6 != 0);
     if (__pyx_t_7) {
@@ -3365,25 +3430,25 @@ static PyObject *__pyx_f_13jackTokenizer_13JackTokenizer_processLine(struct __py
     __pyx_L6_bool_binop_done:;
     if (__pyx_t_5) {
 
-      /* "jackTokenizer.pyx":113
+      /* "jack_tokenizer.pyx":115
  *         for sign in line:
  *             if sign in self.SYMBOLS and not flag:
  *                 self.tipulInWord(token, output_file)             # <<<<<<<<<<<<<<
  *                 if sign =='<' and not flag:
  *                     output_file.write("<symbol> &lt; </symbol>\n")
  */
-      __pyx_t_4 = ((struct __pyx_vtabstruct_13jackTokenizer_JackTokenizer *)__pyx_v_self->__pyx_vtab)->tipulInWord(__pyx_v_self, __pyx_v_token, __pyx_v_output_file); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 113, __pyx_L1_error)
+      __pyx_t_4 = ((struct __pyx_vtabstruct_14jack_tokenizer_JackTokenizer *)__pyx_v_self->__pyx_vtab)->tipulInWord(__pyx_v_self, __pyx_v_token, __pyx_v_output_file); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 115, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_4);
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
 
-      /* "jackTokenizer.pyx":114
+      /* "jack_tokenizer.pyx":116
  *             if sign in self.SYMBOLS and not flag:
  *                 self.tipulInWord(token, output_file)
  *                 if sign =='<' and not flag:             # <<<<<<<<<<<<<<
  *                     output_file.write("<symbol> &lt; </symbol>\n")
  *                 elif sign =='>' and not flag:
  */
-      __pyx_t_7 = (__Pyx_PyString_Equals(__pyx_v_sign, __pyx_kp_s__10, Py_EQ)); if (unlikely(__pyx_t_7 < 0)) __PYX_ERR(0, 114, __pyx_L1_error)
+      __pyx_t_7 = (__Pyx_PyString_Equals(__pyx_v_sign, __pyx_kp_s__10, Py_EQ)); if (unlikely(__pyx_t_7 < 0)) __PYX_ERR(0, 116, __pyx_L1_error)
       if (__pyx_t_7) {
       } else {
         __pyx_t_5 = __pyx_t_7;
@@ -3394,66 +3459,12 @@ static PyObject *__pyx_f_13jackTokenizer_13JackTokenizer_processLine(struct __py
       __pyx_L9_bool_binop_done:;
       if (__pyx_t_5) {
 
-        /* "jackTokenizer.pyx":115
+        /* "jack_tokenizer.pyx":117
  *                 self.tipulInWord(token, output_file)
  *                 if sign =='<' and not flag:
  *                     output_file.write("<symbol> &lt; </symbol>\n")             # <<<<<<<<<<<<<<
  *                 elif sign =='>' and not flag:
  *                     output_file.write("<symbol> &gt; </symbol>\n")
- */
-        __pyx_t_8 = __Pyx_PyObject_GetAttrStr(__pyx_v_output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 115, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_8);
-        __pyx_t_9 = NULL;
-        if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_8))) {
-          __pyx_t_9 = PyMethod_GET_SELF(__pyx_t_8);
-          if (likely(__pyx_t_9)) {
-            PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_8);
-            __Pyx_INCREF(__pyx_t_9);
-            __Pyx_INCREF(function);
-            __Pyx_DECREF_SET(__pyx_t_8, function);
-          }
-        }
-        __pyx_t_4 = (__pyx_t_9) ? __Pyx_PyObject_Call2Args(__pyx_t_8, __pyx_t_9, __pyx_kp_s_symbol_lt_symbol) : __Pyx_PyObject_CallOneArg(__pyx_t_8, __pyx_kp_s_symbol_lt_symbol);
-        __Pyx_XDECREF(__pyx_t_9); __pyx_t_9 = 0;
-        if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 115, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_4);
-        __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
-        __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-
-        /* "jackTokenizer.pyx":114
- *             if sign in self.SYMBOLS and not flag:
- *                 self.tipulInWord(token, output_file)
- *                 if sign =='<' and not flag:             # <<<<<<<<<<<<<<
- *                     output_file.write("<symbol> &lt; </symbol>\n")
- *                 elif sign =='>' and not flag:
- */
-        goto __pyx_L8;
-      }
-
-      /* "jackTokenizer.pyx":116
- *                 if sign =='<' and not flag:
- *                     output_file.write("<symbol> &lt; </symbol>\n")
- *                 elif sign =='>' and not flag:             # <<<<<<<<<<<<<<
- *                     output_file.write("<symbol> &gt; </symbol>\n")
- *                 elif sign =='&' and not flag:
- */
-      __pyx_t_7 = (__Pyx_PyString_Equals(__pyx_v_sign, __pyx_kp_s__11, Py_EQ)); if (unlikely(__pyx_t_7 < 0)) __PYX_ERR(0, 116, __pyx_L1_error)
-      if (__pyx_t_7) {
-      } else {
-        __pyx_t_5 = __pyx_t_7;
-        goto __pyx_L11_bool_binop_done;
-      }
-      __pyx_t_7 = ((!(__pyx_v_flag != 0)) != 0);
-      __pyx_t_5 = __pyx_t_7;
-      __pyx_L11_bool_binop_done:;
-      if (__pyx_t_5) {
-
-        /* "jackTokenizer.pyx":117
- *                     output_file.write("<symbol> &lt; </symbol>\n")
- *                 elif sign =='>' and not flag:
- *                     output_file.write("<symbol> &gt; </symbol>\n")             # <<<<<<<<<<<<<<
- *                 elif sign =='&' and not flag:
- *                     output_file.write("<symbol> &amp; </symbol>\n")
  */
         __pyx_t_8 = __Pyx_PyObject_GetAttrStr(__pyx_v_output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 117, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_8);
@@ -3467,47 +3478,47 @@ static PyObject *__pyx_f_13jackTokenizer_13JackTokenizer_processLine(struct __py
             __Pyx_DECREF_SET(__pyx_t_8, function);
           }
         }
-        __pyx_t_4 = (__pyx_t_9) ? __Pyx_PyObject_Call2Args(__pyx_t_8, __pyx_t_9, __pyx_kp_s_symbol_gt_symbol) : __Pyx_PyObject_CallOneArg(__pyx_t_8, __pyx_kp_s_symbol_gt_symbol);
+        __pyx_t_4 = (__pyx_t_9) ? __Pyx_PyObject_Call2Args(__pyx_t_8, __pyx_t_9, __pyx_kp_s_symbol_lt_symbol) : __Pyx_PyObject_CallOneArg(__pyx_t_8, __pyx_kp_s_symbol_lt_symbol);
         __Pyx_XDECREF(__pyx_t_9); __pyx_t_9 = 0;
         if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 117, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_4);
         __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
         __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
 
-        /* "jackTokenizer.pyx":116
+        /* "jack_tokenizer.pyx":116
+ *             if sign in self.SYMBOLS and not flag:
+ *                 self.tipulInWord(token, output_file)
+ *                 if sign =='<' and not flag:             # <<<<<<<<<<<<<<
+ *                     output_file.write("<symbol> &lt; </symbol>\n")
+ *                 elif sign =='>' and not flag:
+ */
+        goto __pyx_L8;
+      }
+
+      /* "jack_tokenizer.pyx":118
  *                 if sign =='<' and not flag:
  *                     output_file.write("<symbol> &lt; </symbol>\n")
  *                 elif sign =='>' and not flag:             # <<<<<<<<<<<<<<
  *                     output_file.write("<symbol> &gt; </symbol>\n")
  *                 elif sign =='&' and not flag:
  */
-        goto __pyx_L8;
-      }
-
-      /* "jackTokenizer.pyx":118
- *                 elif sign =='>' and not flag:
- *                     output_file.write("<symbol> &gt; </symbol>\n")
- *                 elif sign =='&' and not flag:             # <<<<<<<<<<<<<<
- *                     output_file.write("<symbol> &amp; </symbol>\n")
- *                 else:
- */
-      __pyx_t_7 = (__Pyx_PyString_Equals(__pyx_v_sign, __pyx_kp_s__12, Py_EQ)); if (unlikely(__pyx_t_7 < 0)) __PYX_ERR(0, 118, __pyx_L1_error)
+      __pyx_t_7 = (__Pyx_PyString_Equals(__pyx_v_sign, __pyx_kp_s__11, Py_EQ)); if (unlikely(__pyx_t_7 < 0)) __PYX_ERR(0, 118, __pyx_L1_error)
       if (__pyx_t_7) {
       } else {
         __pyx_t_5 = __pyx_t_7;
-        goto __pyx_L13_bool_binop_done;
+        goto __pyx_L11_bool_binop_done;
       }
       __pyx_t_7 = ((!(__pyx_v_flag != 0)) != 0);
       __pyx_t_5 = __pyx_t_7;
-      __pyx_L13_bool_binop_done:;
+      __pyx_L11_bool_binop_done:;
       if (__pyx_t_5) {
 
-        /* "jackTokenizer.pyx":119
- *                     output_file.write("<symbol> &gt; </symbol>\n")
+        /* "jack_tokenizer.pyx":119
+ *                     output_file.write("<symbol> &lt; </symbol>\n")
+ *                 elif sign =='>' and not flag:
+ *                     output_file.write("<symbol> &gt; </symbol>\n")             # <<<<<<<<<<<<<<
  *                 elif sign =='&' and not flag:
- *                     output_file.write("<symbol> &amp; </symbol>\n")             # <<<<<<<<<<<<<<
- *                 else:
- *                     output_file.write("<symbol> " + sign + " </symbol>\n")
+ *                     output_file.write("<symbol> &amp; </symbol>\n")
  */
         __pyx_t_8 = __Pyx_PyObject_GetAttrStr(__pyx_v_output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 119, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_8);
@@ -3521,14 +3532,68 @@ static PyObject *__pyx_f_13jackTokenizer_13JackTokenizer_processLine(struct __py
             __Pyx_DECREF_SET(__pyx_t_8, function);
           }
         }
-        __pyx_t_4 = (__pyx_t_9) ? __Pyx_PyObject_Call2Args(__pyx_t_8, __pyx_t_9, __pyx_kp_s_symbol_amp_symbol) : __Pyx_PyObject_CallOneArg(__pyx_t_8, __pyx_kp_s_symbol_amp_symbol);
+        __pyx_t_4 = (__pyx_t_9) ? __Pyx_PyObject_Call2Args(__pyx_t_8, __pyx_t_9, __pyx_kp_s_symbol_gt_symbol) : __Pyx_PyObject_CallOneArg(__pyx_t_8, __pyx_kp_s_symbol_gt_symbol);
         __Pyx_XDECREF(__pyx_t_9); __pyx_t_9 = 0;
         if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 119, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_4);
         __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
         __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
 
-        /* "jackTokenizer.pyx":118
+        /* "jack_tokenizer.pyx":118
+ *                 if sign =='<' and not flag:
+ *                     output_file.write("<symbol> &lt; </symbol>\n")
+ *                 elif sign =='>' and not flag:             # <<<<<<<<<<<<<<
+ *                     output_file.write("<symbol> &gt; </symbol>\n")
+ *                 elif sign =='&' and not flag:
+ */
+        goto __pyx_L8;
+      }
+
+      /* "jack_tokenizer.pyx":120
+ *                 elif sign =='>' and not flag:
+ *                     output_file.write("<symbol> &gt; </symbol>\n")
+ *                 elif sign =='&' and not flag:             # <<<<<<<<<<<<<<
+ *                     output_file.write("<symbol> &amp; </symbol>\n")
+ *                 else:
+ */
+      __pyx_t_7 = (__Pyx_PyString_Equals(__pyx_v_sign, __pyx_kp_s__12, Py_EQ)); if (unlikely(__pyx_t_7 < 0)) __PYX_ERR(0, 120, __pyx_L1_error)
+      if (__pyx_t_7) {
+      } else {
+        __pyx_t_5 = __pyx_t_7;
+        goto __pyx_L13_bool_binop_done;
+      }
+      __pyx_t_7 = ((!(__pyx_v_flag != 0)) != 0);
+      __pyx_t_5 = __pyx_t_7;
+      __pyx_L13_bool_binop_done:;
+      if (__pyx_t_5) {
+
+        /* "jack_tokenizer.pyx":121
+ *                     output_file.write("<symbol> &gt; </symbol>\n")
+ *                 elif sign =='&' and not flag:
+ *                     output_file.write("<symbol> &amp; </symbol>\n")             # <<<<<<<<<<<<<<
+ *                 else:
+ *                     output_file.write("<symbol> " + sign + " </symbol>\n")
+ */
+        __pyx_t_8 = __Pyx_PyObject_GetAttrStr(__pyx_v_output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 121, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_8);
+        __pyx_t_9 = NULL;
+        if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_8))) {
+          __pyx_t_9 = PyMethod_GET_SELF(__pyx_t_8);
+          if (likely(__pyx_t_9)) {
+            PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_8);
+            __Pyx_INCREF(__pyx_t_9);
+            __Pyx_INCREF(function);
+            __Pyx_DECREF_SET(__pyx_t_8, function);
+          }
+        }
+        __pyx_t_4 = (__pyx_t_9) ? __Pyx_PyObject_Call2Args(__pyx_t_8, __pyx_t_9, __pyx_kp_s_symbol_amp_symbol) : __Pyx_PyObject_CallOneArg(__pyx_t_8, __pyx_kp_s_symbol_amp_symbol);
+        __Pyx_XDECREF(__pyx_t_9); __pyx_t_9 = 0;
+        if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 121, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_4);
+        __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
+        __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+
+        /* "jack_tokenizer.pyx":120
  *                 elif sign =='>' and not flag:
  *                     output_file.write("<symbol> &gt; </symbol>\n")
  *                 elif sign =='&' and not flag:             # <<<<<<<<<<<<<<
@@ -3538,7 +3603,7 @@ static PyObject *__pyx_f_13jackTokenizer_13JackTokenizer_processLine(struct __py
         goto __pyx_L8;
       }
 
-      /* "jackTokenizer.pyx":121
+      /* "jack_tokenizer.pyx":123
  *                     output_file.write("<symbol> &amp; </symbol>\n")
  *                 else:
  *                     output_file.write("<symbol> " + sign + " </symbol>\n")             # <<<<<<<<<<<<<<
@@ -3546,11 +3611,11 @@ static PyObject *__pyx_f_13jackTokenizer_13JackTokenizer_processLine(struct __py
  *             elif sign == ' ' and not flag:
  */
       /*else*/ {
-        __pyx_t_8 = __Pyx_PyObject_GetAttrStr(__pyx_v_output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 121, __pyx_L1_error)
+        __pyx_t_8 = __Pyx_PyObject_GetAttrStr(__pyx_v_output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 123, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_8);
-        __pyx_t_9 = PyNumber_Add(__pyx_kp_s_symbol, __pyx_v_sign); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 121, __pyx_L1_error)
+        __pyx_t_9 = PyNumber_Add(__pyx_kp_s_symbol, __pyx_v_sign); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 123, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_9);
-        __pyx_t_10 = PyNumber_Add(__pyx_t_9, __pyx_kp_s_symbol_2); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 121, __pyx_L1_error)
+        __pyx_t_10 = PyNumber_Add(__pyx_t_9, __pyx_kp_s_symbol_2); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 123, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_10);
         __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
         __pyx_t_9 = NULL;
@@ -3566,14 +3631,14 @@ static PyObject *__pyx_f_13jackTokenizer_13JackTokenizer_processLine(struct __py
         __pyx_t_4 = (__pyx_t_9) ? __Pyx_PyObject_Call2Args(__pyx_t_8, __pyx_t_9, __pyx_t_10) : __Pyx_PyObject_CallOneArg(__pyx_t_8, __pyx_t_10);
         __Pyx_XDECREF(__pyx_t_9); __pyx_t_9 = 0;
         __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
-        if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 121, __pyx_L1_error)
+        if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 123, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_4);
         __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
         __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
       }
       __pyx_L8:;
 
-      /* "jackTokenizer.pyx":122
+      /* "jack_tokenizer.pyx":124
  *                 else:
  *                     output_file.write("<symbol> " + sign + " </symbol>\n")
  *                 token = ""             # <<<<<<<<<<<<<<
@@ -3583,7 +3648,7 @@ static PyObject *__pyx_f_13jackTokenizer_13JackTokenizer_processLine(struct __py
       __Pyx_INCREF(__pyx_kp_s__8);
       __Pyx_DECREF_SET(__pyx_v_token, __pyx_kp_s__8);
 
-      /* "jackTokenizer.pyx":112
+      /* "jack_tokenizer.pyx":114
  *         flag = False
  *         for sign in line:
  *             if sign in self.SYMBOLS and not flag:             # <<<<<<<<<<<<<<
@@ -3593,14 +3658,14 @@ static PyObject *__pyx_f_13jackTokenizer_13JackTokenizer_processLine(struct __py
       goto __pyx_L5;
     }
 
-    /* "jackTokenizer.pyx":123
+    /* "jack_tokenizer.pyx":125
  *                     output_file.write("<symbol> " + sign + " </symbol>\n")
  *                 token = ""
  *             elif sign == ' ' and not flag:             # <<<<<<<<<<<<<<
  *                 self.tipulInWord(token, output_file)
  *                 token = ""
  */
-    __pyx_t_7 = (__Pyx_PyString_Equals(__pyx_v_sign, __pyx_kp_s__13, Py_EQ)); if (unlikely(__pyx_t_7 < 0)) __PYX_ERR(0, 123, __pyx_L1_error)
+    __pyx_t_7 = (__Pyx_PyString_Equals(__pyx_v_sign, __pyx_kp_s__13, Py_EQ)); if (unlikely(__pyx_t_7 < 0)) __PYX_ERR(0, 125, __pyx_L1_error)
     if (__pyx_t_7) {
     } else {
       __pyx_t_5 = __pyx_t_7;
@@ -3611,18 +3676,18 @@ static PyObject *__pyx_f_13jackTokenizer_13JackTokenizer_processLine(struct __py
     __pyx_L15_bool_binop_done:;
     if (__pyx_t_5) {
 
-      /* "jackTokenizer.pyx":124
+      /* "jack_tokenizer.pyx":126
  *                 token = ""
  *             elif sign == ' ' and not flag:
  *                 self.tipulInWord(token, output_file)             # <<<<<<<<<<<<<<
  *                 token = ""
  *             elif sign == '/t' and not flag:
  */
-      __pyx_t_4 = ((struct __pyx_vtabstruct_13jackTokenizer_JackTokenizer *)__pyx_v_self->__pyx_vtab)->tipulInWord(__pyx_v_self, __pyx_v_token, __pyx_v_output_file); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 124, __pyx_L1_error)
+      __pyx_t_4 = ((struct __pyx_vtabstruct_14jack_tokenizer_JackTokenizer *)__pyx_v_self->__pyx_vtab)->tipulInWord(__pyx_v_self, __pyx_v_token, __pyx_v_output_file); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 126, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_4);
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
 
-      /* "jackTokenizer.pyx":125
+      /* "jack_tokenizer.pyx":127
  *             elif sign == ' ' and not flag:
  *                 self.tipulInWord(token, output_file)
  *                 token = ""             # <<<<<<<<<<<<<<
@@ -3632,7 +3697,7 @@ static PyObject *__pyx_f_13jackTokenizer_13JackTokenizer_processLine(struct __py
       __Pyx_INCREF(__pyx_kp_s__8);
       __Pyx_DECREF_SET(__pyx_v_token, __pyx_kp_s__8);
 
-      /* "jackTokenizer.pyx":123
+      /* "jack_tokenizer.pyx":125
  *                     output_file.write("<symbol> " + sign + " </symbol>\n")
  *                 token = ""
  *             elif sign == ' ' and not flag:             # <<<<<<<<<<<<<<
@@ -3642,14 +3707,14 @@ static PyObject *__pyx_f_13jackTokenizer_13JackTokenizer_processLine(struct __py
       goto __pyx_L5;
     }
 
-    /* "jackTokenizer.pyx":126
+    /* "jack_tokenizer.pyx":128
  *                 self.tipulInWord(token, output_file)
  *                 token = ""
  *             elif sign == '/t' and not flag:             # <<<<<<<<<<<<<<
  *                 self.tipulInWord(token, output_file)
  *                 token = ""
  */
-    __pyx_t_7 = (__Pyx_PyString_Equals(__pyx_v_sign, __pyx_kp_s_t, Py_EQ)); if (unlikely(__pyx_t_7 < 0)) __PYX_ERR(0, 126, __pyx_L1_error)
+    __pyx_t_7 = (__Pyx_PyString_Equals(__pyx_v_sign, __pyx_kp_s_t, Py_EQ)); if (unlikely(__pyx_t_7 < 0)) __PYX_ERR(0, 128, __pyx_L1_error)
     if (__pyx_t_7) {
     } else {
       __pyx_t_5 = __pyx_t_7;
@@ -3660,18 +3725,18 @@ static PyObject *__pyx_f_13jackTokenizer_13JackTokenizer_processLine(struct __py
     __pyx_L17_bool_binop_done:;
     if (__pyx_t_5) {
 
-      /* "jackTokenizer.pyx":127
+      /* "jack_tokenizer.pyx":129
  *                 token = ""
  *             elif sign == '/t' and not flag:
  *                 self.tipulInWord(token, output_file)             # <<<<<<<<<<<<<<
  *                 token = ""
  *             elif sign == '"':
  */
-      __pyx_t_4 = ((struct __pyx_vtabstruct_13jackTokenizer_JackTokenizer *)__pyx_v_self->__pyx_vtab)->tipulInWord(__pyx_v_self, __pyx_v_token, __pyx_v_output_file); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 127, __pyx_L1_error)
+      __pyx_t_4 = ((struct __pyx_vtabstruct_14jack_tokenizer_JackTokenizer *)__pyx_v_self->__pyx_vtab)->tipulInWord(__pyx_v_self, __pyx_v_token, __pyx_v_output_file); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 129, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_4);
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
 
-      /* "jackTokenizer.pyx":128
+      /* "jack_tokenizer.pyx":130
  *             elif sign == '/t' and not flag:
  *                 self.tipulInWord(token, output_file)
  *                 token = ""             # <<<<<<<<<<<<<<
@@ -3681,7 +3746,7 @@ static PyObject *__pyx_f_13jackTokenizer_13JackTokenizer_processLine(struct __py
       __Pyx_INCREF(__pyx_kp_s__8);
       __Pyx_DECREF_SET(__pyx_v_token, __pyx_kp_s__8);
 
-      /* "jackTokenizer.pyx":126
+      /* "jack_tokenizer.pyx":128
  *                 self.tipulInWord(token, output_file)
  *                 token = ""
  *             elif sign == '/t' and not flag:             # <<<<<<<<<<<<<<
@@ -3691,17 +3756,17 @@ static PyObject *__pyx_f_13jackTokenizer_13JackTokenizer_processLine(struct __py
       goto __pyx_L5;
     }
 
-    /* "jackTokenizer.pyx":129
+    /* "jack_tokenizer.pyx":131
  *                 self.tipulInWord(token, output_file)
  *                 token = ""
  *             elif sign == '"':             # <<<<<<<<<<<<<<
  *                 if flag:
  *                     output_file.write("<stringConstant> " + token +" </stringConstant>\n")
  */
-    __pyx_t_5 = (__Pyx_PyString_Equals(__pyx_v_sign, __pyx_kp_s__14, Py_EQ)); if (unlikely(__pyx_t_5 < 0)) __PYX_ERR(0, 129, __pyx_L1_error)
+    __pyx_t_5 = (__Pyx_PyString_Equals(__pyx_v_sign, __pyx_kp_s__14, Py_EQ)); if (unlikely(__pyx_t_5 < 0)) __PYX_ERR(0, 131, __pyx_L1_error)
     if (__pyx_t_5) {
 
-      /* "jackTokenizer.pyx":130
+      /* "jack_tokenizer.pyx":132
  *                 token = ""
  *             elif sign == '"':
  *                 if flag:             # <<<<<<<<<<<<<<
@@ -3711,18 +3776,18 @@ static PyObject *__pyx_f_13jackTokenizer_13JackTokenizer_processLine(struct __py
       __pyx_t_5 = (__pyx_v_flag != 0);
       if (__pyx_t_5) {
 
-        /* "jackTokenizer.pyx":131
+        /* "jack_tokenizer.pyx":133
  *             elif sign == '"':
  *                 if flag:
  *                     output_file.write("<stringConstant> " + token +" </stringConstant>\n")             # <<<<<<<<<<<<<<
  *                     flag = False
  *                     token = ""
  */
-        __pyx_t_8 = __Pyx_PyObject_GetAttrStr(__pyx_v_output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 131, __pyx_L1_error)
+        __pyx_t_8 = __Pyx_PyObject_GetAttrStr(__pyx_v_output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 133, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_8);
-        __pyx_t_10 = PyNumber_Add(__pyx_kp_s_stringConstant, __pyx_v_token); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 131, __pyx_L1_error)
+        __pyx_t_10 = PyNumber_Add(__pyx_kp_s_stringConstant, __pyx_v_token); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 133, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_10);
-        __pyx_t_9 = PyNumber_Add(__pyx_t_10, __pyx_kp_s_stringConstant_2); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 131, __pyx_L1_error)
+        __pyx_t_9 = PyNumber_Add(__pyx_t_10, __pyx_kp_s_stringConstant_2); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 133, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_9);
         __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
         __pyx_t_10 = NULL;
@@ -3738,12 +3803,12 @@ static PyObject *__pyx_f_13jackTokenizer_13JackTokenizer_processLine(struct __py
         __pyx_t_4 = (__pyx_t_10) ? __Pyx_PyObject_Call2Args(__pyx_t_8, __pyx_t_10, __pyx_t_9) : __Pyx_PyObject_CallOneArg(__pyx_t_8, __pyx_t_9);
         __Pyx_XDECREF(__pyx_t_10); __pyx_t_10 = 0;
         __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
-        if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 131, __pyx_L1_error)
+        if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 133, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_4);
         __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
         __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
 
-        /* "jackTokenizer.pyx":132
+        /* "jack_tokenizer.pyx":134
  *                 if flag:
  *                     output_file.write("<stringConstant> " + token +" </stringConstant>\n")
  *                     flag = False             # <<<<<<<<<<<<<<
@@ -3752,7 +3817,7 @@ static PyObject *__pyx_f_13jackTokenizer_13JackTokenizer_processLine(struct __py
  */
         __pyx_v_flag = 0;
 
-        /* "jackTokenizer.pyx":133
+        /* "jack_tokenizer.pyx":135
  *                     output_file.write("<stringConstant> " + token +" </stringConstant>\n")
  *                     flag = False
  *                     token = ""             # <<<<<<<<<<<<<<
@@ -3762,7 +3827,7 @@ static PyObject *__pyx_f_13jackTokenizer_13JackTokenizer_processLine(struct __py
         __Pyx_INCREF(__pyx_kp_s__8);
         __Pyx_DECREF_SET(__pyx_v_token, __pyx_kp_s__8);
 
-        /* "jackTokenizer.pyx":130
+        /* "jack_tokenizer.pyx":132
  *                 token = ""
  *             elif sign == '"':
  *                 if flag:             # <<<<<<<<<<<<<<
@@ -3772,7 +3837,7 @@ static PyObject *__pyx_f_13jackTokenizer_13JackTokenizer_processLine(struct __py
         goto __pyx_L19;
       }
 
-      /* "jackTokenizer.pyx":135
+      /* "jack_tokenizer.pyx":137
  *                     token = ""
  *                 else:
  *                     flag = True             # <<<<<<<<<<<<<<
@@ -3784,7 +3849,7 @@ static PyObject *__pyx_f_13jackTokenizer_13JackTokenizer_processLine(struct __py
       }
       __pyx_L19:;
 
-      /* "jackTokenizer.pyx":129
+      /* "jack_tokenizer.pyx":131
  *                 self.tipulInWord(token, output_file)
  *                 token = ""
  *             elif sign == '"':             # <<<<<<<<<<<<<<
@@ -3794,7 +3859,7 @@ static PyObject *__pyx_f_13jackTokenizer_13JackTokenizer_processLine(struct __py
       goto __pyx_L5;
     }
 
-    /* "jackTokenizer.pyx":137
+    /* "jack_tokenizer.pyx":139
  *                     flag = True
  *             else:
  *                 token += sign             # <<<<<<<<<<<<<<
@@ -3802,14 +3867,14 @@ static PyObject *__pyx_f_13jackTokenizer_13JackTokenizer_processLine(struct __py
  * 
  */
     /*else*/ {
-      __pyx_t_4 = PyNumber_InPlaceAdd(__pyx_v_token, __pyx_v_sign); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 137, __pyx_L1_error)
+      __pyx_t_4 = PyNumber_InPlaceAdd(__pyx_v_token, __pyx_v_sign); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 139, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_4);
       __Pyx_DECREF_SET(__pyx_v_token, __pyx_t_4);
       __pyx_t_4 = 0;
     }
     __pyx_L5:;
 
-    /* "jackTokenizer.pyx":111
+    /* "jack_tokenizer.pyx":113
  *         token = ''
  *         flag = False
  *         for sign in line:             # <<<<<<<<<<<<<<
@@ -3819,7 +3884,7 @@ static PyObject *__pyx_f_13jackTokenizer_13JackTokenizer_processLine(struct __py
   }
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "jackTokenizer.pyx":108
+  /* "jack_tokenizer.pyx":110
  * 
  *     # process each line
  *     cdef processLine(self, line, output_file):             # <<<<<<<<<<<<<<
@@ -3836,7 +3901,7 @@ static PyObject *__pyx_f_13jackTokenizer_13JackTokenizer_processLine(struct __py
   __Pyx_XDECREF(__pyx_t_8);
   __Pyx_XDECREF(__pyx_t_9);
   __Pyx_XDECREF(__pyx_t_10);
-  __Pyx_AddTraceback("jackTokenizer.JackTokenizer.processLine", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("jack_tokenizer.JackTokenizer.processLine", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = 0;
   __pyx_L0:;
   __Pyx_XDECREF(__pyx_v_token);
@@ -3846,7 +3911,7 @@ static PyObject *__pyx_f_13jackTokenizer_13JackTokenizer_processLine(struct __py
   return __pyx_r;
 }
 
-/* "jackTokenizer.pyx":142
+/* "jack_tokenizer.pyx":144
  * 
  *     # check the type of the word
  *     cdef tipulInWord(self, word, output_file):             # <<<<<<<<<<<<<<
@@ -3854,7 +3919,7 @@ static PyObject *__pyx_f_13jackTokenizer_13JackTokenizer_processLine(struct __py
  *             return
  */
 
-static PyObject *__pyx_f_13jackTokenizer_13JackTokenizer_tipulInWord(struct __pyx_obj_13jackTokenizer_JackTokenizer *__pyx_v_self, PyObject *__pyx_v_word, PyObject *__pyx_v_output_file) {
+static PyObject *__pyx_f_14jack_tokenizer_13JackTokenizer_tipulInWord(struct __pyx_obj_14jack_tokenizer_JackTokenizer *__pyx_v_self, PyObject *__pyx_v_word, PyObject *__pyx_v_output_file) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   int __pyx_t_1;
@@ -3868,32 +3933,32 @@ static PyObject *__pyx_f_13jackTokenizer_13JackTokenizer_tipulInWord(struct __py
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("tipulInWord", 0);
 
-  /* "jackTokenizer.pyx":143
+  /* "jack_tokenizer.pyx":145
  *     # check the type of the word
  *     cdef tipulInWord(self, word, output_file):
  *         if word==" " or word=="\t" or word=="" or word.strip()=="":             # <<<<<<<<<<<<<<
  *             return
  *         if word in self.KEYWORDS:
  */
-  __pyx_t_2 = (__Pyx_PyString_Equals(__pyx_v_word, __pyx_kp_s__13, Py_EQ)); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 143, __pyx_L1_error)
+  __pyx_t_2 = (__Pyx_PyString_Equals(__pyx_v_word, __pyx_kp_s__13, Py_EQ)); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 145, __pyx_L1_error)
   if (!__pyx_t_2) {
   } else {
     __pyx_t_1 = __pyx_t_2;
     goto __pyx_L4_bool_binop_done;
   }
-  __pyx_t_2 = (__Pyx_PyString_Equals(__pyx_v_word, __pyx_kp_s__15, Py_EQ)); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 143, __pyx_L1_error)
+  __pyx_t_2 = (__Pyx_PyString_Equals(__pyx_v_word, __pyx_kp_s__15, Py_EQ)); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 145, __pyx_L1_error)
   if (!__pyx_t_2) {
   } else {
     __pyx_t_1 = __pyx_t_2;
     goto __pyx_L4_bool_binop_done;
   }
-  __pyx_t_2 = (__Pyx_PyString_Equals(__pyx_v_word, __pyx_kp_s__8, Py_EQ)); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 143, __pyx_L1_error)
+  __pyx_t_2 = (__Pyx_PyString_Equals(__pyx_v_word, __pyx_kp_s__8, Py_EQ)); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 145, __pyx_L1_error)
   if (!__pyx_t_2) {
   } else {
     __pyx_t_1 = __pyx_t_2;
     goto __pyx_L4_bool_binop_done;
   }
-  __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_v_word, __pyx_n_s_strip); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 143, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_v_word, __pyx_n_s_strip); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 145, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
   __pyx_t_5 = NULL;
   if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_4))) {
@@ -3907,16 +3972,16 @@ static PyObject *__pyx_f_13jackTokenizer_13JackTokenizer_tipulInWord(struct __py
   }
   __pyx_t_3 = (__pyx_t_5) ? __Pyx_PyObject_CallOneArg(__pyx_t_4, __pyx_t_5) : __Pyx_PyObject_CallNoArg(__pyx_t_4);
   __Pyx_XDECREF(__pyx_t_5); __pyx_t_5 = 0;
-  if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 143, __pyx_L1_error)
+  if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 145, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  __pyx_t_2 = (__Pyx_PyString_Equals(__pyx_t_3, __pyx_kp_s__8, Py_EQ)); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 143, __pyx_L1_error)
+  __pyx_t_2 = (__Pyx_PyString_Equals(__pyx_t_3, __pyx_kp_s__8, Py_EQ)); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 145, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   __pyx_t_1 = __pyx_t_2;
   __pyx_L4_bool_binop_done:;
   if (__pyx_t_1) {
 
-    /* "jackTokenizer.pyx":144
+    /* "jack_tokenizer.pyx":146
  *     cdef tipulInWord(self, word, output_file):
  *         if word==" " or word=="\t" or word=="" or word.strip()=="":
  *             return             # <<<<<<<<<<<<<<
@@ -3927,7 +3992,7 @@ static PyObject *__pyx_f_13jackTokenizer_13JackTokenizer_tipulInWord(struct __py
     __pyx_r = Py_None; __Pyx_INCREF(Py_None);
     goto __pyx_L0;
 
-    /* "jackTokenizer.pyx":143
+    /* "jack_tokenizer.pyx":145
  *     # check the type of the word
  *     cdef tipulInWord(self, word, output_file):
  *         if word==" " or word=="\t" or word=="" or word.strip()=="":             # <<<<<<<<<<<<<<
@@ -3936,32 +4001,32 @@ static PyObject *__pyx_f_13jackTokenizer_13JackTokenizer_tipulInWord(struct __py
  */
   }
 
-  /* "jackTokenizer.pyx":145
+  /* "jack_tokenizer.pyx":147
  *         if word==" " or word=="\t" or word=="" or word.strip()=="":
  *             return
  *         if word in self.KEYWORDS:             # <<<<<<<<<<<<<<
  *             output_file.write("<keyword> " + word + " </keyword>\n")
  *         elif word.isdigit():
  */
-  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_KEYWORDS); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 145, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_KEYWORDS); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 147, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
-  __pyx_t_1 = (__Pyx_PySequence_ContainsTF(__pyx_v_word, __pyx_t_3, Py_EQ)); if (unlikely(__pyx_t_1 < 0)) __PYX_ERR(0, 145, __pyx_L1_error)
+  __pyx_t_1 = (__Pyx_PySequence_ContainsTF(__pyx_v_word, __pyx_t_3, Py_EQ)); if (unlikely(__pyx_t_1 < 0)) __PYX_ERR(0, 147, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   __pyx_t_2 = (__pyx_t_1 != 0);
   if (__pyx_t_2) {
 
-    /* "jackTokenizer.pyx":146
+    /* "jack_tokenizer.pyx":148
  *             return
  *         if word in self.KEYWORDS:
  *             output_file.write("<keyword> " + word + " </keyword>\n")             # <<<<<<<<<<<<<<
  *         elif word.isdigit():
  *             output_file.write("<integerConstant> " + word + " </integerConstant>\n")
  */
-    __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_v_output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 146, __pyx_L1_error)
+    __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_v_output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 148, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
-    __pyx_t_5 = PyNumber_Add(__pyx_kp_s_keyword, __pyx_v_word); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 146, __pyx_L1_error)
+    __pyx_t_5 = PyNumber_Add(__pyx_kp_s_keyword, __pyx_v_word); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 148, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_5);
-    __pyx_t_6 = PyNumber_Add(__pyx_t_5, __pyx_kp_s_keyword_2); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 146, __pyx_L1_error)
+    __pyx_t_6 = PyNumber_Add(__pyx_t_5, __pyx_kp_s_keyword_2); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 148, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_6);
     __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
     __pyx_t_5 = NULL;
@@ -3977,12 +4042,12 @@ static PyObject *__pyx_f_13jackTokenizer_13JackTokenizer_tipulInWord(struct __py
     __pyx_t_3 = (__pyx_t_5) ? __Pyx_PyObject_Call2Args(__pyx_t_4, __pyx_t_5, __pyx_t_6) : __Pyx_PyObject_CallOneArg(__pyx_t_4, __pyx_t_6);
     __Pyx_XDECREF(__pyx_t_5); __pyx_t_5 = 0;
     __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
-    if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 146, __pyx_L1_error)
+    if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 148, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
 
-    /* "jackTokenizer.pyx":145
+    /* "jack_tokenizer.pyx":147
  *         if word==" " or word=="\t" or word=="" or word.strip()=="":
  *             return
  *         if word in self.KEYWORDS:             # <<<<<<<<<<<<<<
@@ -3992,14 +4057,14 @@ static PyObject *__pyx_f_13jackTokenizer_13JackTokenizer_tipulInWord(struct __py
     goto __pyx_L8;
   }
 
-  /* "jackTokenizer.pyx":147
+  /* "jack_tokenizer.pyx":149
  *         if word in self.KEYWORDS:
  *             output_file.write("<keyword> " + word + " </keyword>\n")
  *         elif word.isdigit():             # <<<<<<<<<<<<<<
  *             output_file.write("<integerConstant> " + word + " </integerConstant>\n")
  *         elif word.startswith('"') and word.endswith('"'):
  */
-  __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_v_word, __pyx_n_s_isdigit); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 147, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_v_word, __pyx_n_s_isdigit); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 149, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
   __pyx_t_6 = NULL;
   if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_4))) {
@@ -4013,25 +4078,25 @@ static PyObject *__pyx_f_13jackTokenizer_13JackTokenizer_tipulInWord(struct __py
   }
   __pyx_t_3 = (__pyx_t_6) ? __Pyx_PyObject_CallOneArg(__pyx_t_4, __pyx_t_6) : __Pyx_PyObject_CallNoArg(__pyx_t_4);
   __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
-  if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 147, __pyx_L1_error)
+  if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 149, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_t_3); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 147, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_t_3); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 149, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   if (__pyx_t_2) {
 
-    /* "jackTokenizer.pyx":148
+    /* "jack_tokenizer.pyx":150
  *             output_file.write("<keyword> " + word + " </keyword>\n")
  *         elif word.isdigit():
  *             output_file.write("<integerConstant> " + word + " </integerConstant>\n")             # <<<<<<<<<<<<<<
  *         elif word.startswith('"') and word.endswith('"'):
  *             output_file.write("<stringConstant> " + word + " </stringConstant>\n")
  */
-    __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_v_output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 148, __pyx_L1_error)
+    __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_v_output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 150, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
-    __pyx_t_6 = PyNumber_Add(__pyx_kp_s_integerConstant, __pyx_v_word); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 148, __pyx_L1_error)
+    __pyx_t_6 = PyNumber_Add(__pyx_kp_s_integerConstant, __pyx_v_word); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 150, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_6);
-    __pyx_t_5 = PyNumber_Add(__pyx_t_6, __pyx_kp_s_integerConstant_2); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 148, __pyx_L1_error)
+    __pyx_t_5 = PyNumber_Add(__pyx_t_6, __pyx_kp_s_integerConstant_2); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 150, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_5);
     __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
     __pyx_t_6 = NULL;
@@ -4047,12 +4112,12 @@ static PyObject *__pyx_f_13jackTokenizer_13JackTokenizer_tipulInWord(struct __py
     __pyx_t_3 = (__pyx_t_6) ? __Pyx_PyObject_Call2Args(__pyx_t_4, __pyx_t_6, __pyx_t_5) : __Pyx_PyObject_CallOneArg(__pyx_t_4, __pyx_t_5);
     __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
     __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-    if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 148, __pyx_L1_error)
+    if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 150, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
 
-    /* "jackTokenizer.pyx":147
+    /* "jack_tokenizer.pyx":149
  *         if word in self.KEYWORDS:
  *             output_file.write("<keyword> " + word + " </keyword>\n")
  *         elif word.isdigit():             # <<<<<<<<<<<<<<
@@ -4062,14 +4127,14 @@ static PyObject *__pyx_f_13jackTokenizer_13JackTokenizer_tipulInWord(struct __py
     goto __pyx_L8;
   }
 
-  /* "jackTokenizer.pyx":149
+  /* "jack_tokenizer.pyx":151
  *         elif word.isdigit():
  *             output_file.write("<integerConstant> " + word + " </integerConstant>\n")
  *         elif word.startswith('"') and word.endswith('"'):             # <<<<<<<<<<<<<<
  *             output_file.write("<stringConstant> " + word + " </stringConstant>\n")
  *         else:
  */
-  __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_v_word, __pyx_n_s_startswith); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 149, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_v_word, __pyx_n_s_startswith); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 151, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
   __pyx_t_5 = NULL;
   if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_4))) {
@@ -4083,17 +4148,17 @@ static PyObject *__pyx_f_13jackTokenizer_13JackTokenizer_tipulInWord(struct __py
   }
   __pyx_t_3 = (__pyx_t_5) ? __Pyx_PyObject_Call2Args(__pyx_t_4, __pyx_t_5, __pyx_kp_s__14) : __Pyx_PyObject_CallOneArg(__pyx_t_4, __pyx_kp_s__14);
   __Pyx_XDECREF(__pyx_t_5); __pyx_t_5 = 0;
-  if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 149, __pyx_L1_error)
+  if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 151, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  __pyx_t_1 = __Pyx_PyObject_IsTrue(__pyx_t_3); if (unlikely(__pyx_t_1 < 0)) __PYX_ERR(0, 149, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_IsTrue(__pyx_t_3); if (unlikely(__pyx_t_1 < 0)) __PYX_ERR(0, 151, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   if (__pyx_t_1) {
   } else {
     __pyx_t_2 = __pyx_t_1;
     goto __pyx_L9_bool_binop_done;
   }
-  __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_v_word, __pyx_n_s_endswith); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 149, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_v_word, __pyx_n_s_endswith); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 151, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
   __pyx_t_5 = NULL;
   if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_4))) {
@@ -4107,27 +4172,27 @@ static PyObject *__pyx_f_13jackTokenizer_13JackTokenizer_tipulInWord(struct __py
   }
   __pyx_t_3 = (__pyx_t_5) ? __Pyx_PyObject_Call2Args(__pyx_t_4, __pyx_t_5, __pyx_kp_s__14) : __Pyx_PyObject_CallOneArg(__pyx_t_4, __pyx_kp_s__14);
   __Pyx_XDECREF(__pyx_t_5); __pyx_t_5 = 0;
-  if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 149, __pyx_L1_error)
+  if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 151, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  __pyx_t_1 = __Pyx_PyObject_IsTrue(__pyx_t_3); if (unlikely(__pyx_t_1 < 0)) __PYX_ERR(0, 149, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_IsTrue(__pyx_t_3); if (unlikely(__pyx_t_1 < 0)) __PYX_ERR(0, 151, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   __pyx_t_2 = __pyx_t_1;
   __pyx_L9_bool_binop_done:;
   if (__pyx_t_2) {
 
-    /* "jackTokenizer.pyx":150
+    /* "jack_tokenizer.pyx":152
  *             output_file.write("<integerConstant> " + word + " </integerConstant>\n")
  *         elif word.startswith('"') and word.endswith('"'):
  *             output_file.write("<stringConstant> " + word + " </stringConstant>\n")             # <<<<<<<<<<<<<<
  *         else:
  *             output_file.write("<identifier> " + word + " </identifier>\n")
  */
-    __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_v_output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 150, __pyx_L1_error)
+    __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_v_output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 152, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
-    __pyx_t_5 = PyNumber_Add(__pyx_kp_s_stringConstant, __pyx_v_word); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 150, __pyx_L1_error)
+    __pyx_t_5 = PyNumber_Add(__pyx_kp_s_stringConstant, __pyx_v_word); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 152, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_5);
-    __pyx_t_6 = PyNumber_Add(__pyx_t_5, __pyx_kp_s_stringConstant_2); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 150, __pyx_L1_error)
+    __pyx_t_6 = PyNumber_Add(__pyx_t_5, __pyx_kp_s_stringConstant_2); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 152, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_6);
     __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
     __pyx_t_5 = NULL;
@@ -4143,12 +4208,12 @@ static PyObject *__pyx_f_13jackTokenizer_13JackTokenizer_tipulInWord(struct __py
     __pyx_t_3 = (__pyx_t_5) ? __Pyx_PyObject_Call2Args(__pyx_t_4, __pyx_t_5, __pyx_t_6) : __Pyx_PyObject_CallOneArg(__pyx_t_4, __pyx_t_6);
     __Pyx_XDECREF(__pyx_t_5); __pyx_t_5 = 0;
     __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
-    if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 150, __pyx_L1_error)
+    if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 152, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
 
-    /* "jackTokenizer.pyx":149
+    /* "jack_tokenizer.pyx":151
  *         elif word.isdigit():
  *             output_file.write("<integerConstant> " + word + " </integerConstant>\n")
  *         elif word.startswith('"') and word.endswith('"'):             # <<<<<<<<<<<<<<
@@ -4158,7 +4223,7 @@ static PyObject *__pyx_f_13jackTokenizer_13JackTokenizer_tipulInWord(struct __py
     goto __pyx_L8;
   }
 
-  /* "jackTokenizer.pyx":152
+  /* "jack_tokenizer.pyx":154
  *             output_file.write("<stringConstant> " + word + " </stringConstant>\n")
  *         else:
  *             output_file.write("<identifier> " + word + " </identifier>\n")             # <<<<<<<<<<<<<<
@@ -4166,11 +4231,11 @@ static PyObject *__pyx_f_13jackTokenizer_13JackTokenizer_tipulInWord(struct __py
  * 
  */
   /*else*/ {
-    __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_v_output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 152, __pyx_L1_error)
+    __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_v_output_file, __pyx_n_s_write); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 154, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
-    __pyx_t_6 = PyNumber_Add(__pyx_kp_s_identifier, __pyx_v_word); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 152, __pyx_L1_error)
+    __pyx_t_6 = PyNumber_Add(__pyx_kp_s_identifier, __pyx_v_word); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 154, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_6);
-    __pyx_t_5 = PyNumber_Add(__pyx_t_6, __pyx_kp_s_identifier_2); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 152, __pyx_L1_error)
+    __pyx_t_5 = PyNumber_Add(__pyx_t_6, __pyx_kp_s_identifier_2); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 154, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_5);
     __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
     __pyx_t_6 = NULL;
@@ -4186,14 +4251,14 @@ static PyObject *__pyx_f_13jackTokenizer_13JackTokenizer_tipulInWord(struct __py
     __pyx_t_3 = (__pyx_t_6) ? __Pyx_PyObject_Call2Args(__pyx_t_4, __pyx_t_6, __pyx_t_5) : __Pyx_PyObject_CallOneArg(__pyx_t_4, __pyx_t_5);
     __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
     __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-    if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 152, __pyx_L1_error)
+    if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 154, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   }
   __pyx_L8:;
 
-  /* "jackTokenizer.pyx":142
+  /* "jack_tokenizer.pyx":144
  * 
  *     # check the type of the word
  *     cdef tipulInWord(self, word, output_file):             # <<<<<<<<<<<<<<
@@ -4209,7 +4274,7 @@ static PyObject *__pyx_f_13jackTokenizer_13JackTokenizer_tipulInWord(struct __py
   __Pyx_XDECREF(__pyx_t_4);
   __Pyx_XDECREF(__pyx_t_5);
   __Pyx_XDECREF(__pyx_t_6);
-  __Pyx_AddTraceback("jackTokenizer.JackTokenizer.tipulInWord", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("jack_tokenizer.JackTokenizer.tipulInWord", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = 0;
   __pyx_L0:;
   __Pyx_XGIVEREF(__pyx_r);
@@ -4224,19 +4289,19 @@ static PyObject *__pyx_f_13jackTokenizer_13JackTokenizer_tipulInWord(struct __py
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_13jackTokenizer_13JackTokenizer_3__reduce_cython__(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
-static PyObject *__pyx_pw_13jackTokenizer_13JackTokenizer_3__reduce_cython__(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
+static PyObject *__pyx_pw_14jack_tokenizer_13JackTokenizer_3__reduce_cython__(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
+static PyObject *__pyx_pw_14jack_tokenizer_13JackTokenizer_3__reduce_cython__(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__reduce_cython__ (wrapper)", 0);
-  __pyx_r = __pyx_pf_13jackTokenizer_13JackTokenizer_2__reduce_cython__(((struct __pyx_obj_13jackTokenizer_JackTokenizer *)__pyx_v_self));
+  __pyx_r = __pyx_pf_14jack_tokenizer_13JackTokenizer_2__reduce_cython__(((struct __pyx_obj_14jack_tokenizer_JackTokenizer *)__pyx_v_self));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_13jackTokenizer_13JackTokenizer_2__reduce_cython__(struct __pyx_obj_13jackTokenizer_JackTokenizer *__pyx_v_self) {
+static PyObject *__pyx_pf_14jack_tokenizer_13JackTokenizer_2__reduce_cython__(struct __pyx_obj_14jack_tokenizer_JackTokenizer *__pyx_v_self) {
   PyObject *__pyx_v_state = 0;
   PyObject *__pyx_v__dict = 0;
   int __pyx_v_use_setstate;
@@ -4465,7 +4530,7 @@ static PyObject *__pyx_pf_13jackTokenizer_13JackTokenizer_2__reduce_cython__(str
   __Pyx_XDECREF(__pyx_t_1);
   __Pyx_XDECREF(__pyx_t_4);
   __Pyx_XDECREF(__pyx_t_6);
-  __Pyx_AddTraceback("jackTokenizer.JackTokenizer.__reduce_cython__", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("jack_tokenizer.JackTokenizer.__reduce_cython__", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   __pyx_L0:;
   __Pyx_XDECREF(__pyx_v_state);
@@ -4483,19 +4548,19 @@ static PyObject *__pyx_pf_13jackTokenizer_13JackTokenizer_2__reduce_cython__(str
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_13jackTokenizer_13JackTokenizer_5__setstate_cython__(PyObject *__pyx_v_self, PyObject *__pyx_v___pyx_state); /*proto*/
-static PyObject *__pyx_pw_13jackTokenizer_13JackTokenizer_5__setstate_cython__(PyObject *__pyx_v_self, PyObject *__pyx_v___pyx_state) {
+static PyObject *__pyx_pw_14jack_tokenizer_13JackTokenizer_5__setstate_cython__(PyObject *__pyx_v_self, PyObject *__pyx_v___pyx_state); /*proto*/
+static PyObject *__pyx_pw_14jack_tokenizer_13JackTokenizer_5__setstate_cython__(PyObject *__pyx_v_self, PyObject *__pyx_v___pyx_state) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__setstate_cython__ (wrapper)", 0);
-  __pyx_r = __pyx_pf_13jackTokenizer_13JackTokenizer_4__setstate_cython__(((struct __pyx_obj_13jackTokenizer_JackTokenizer *)__pyx_v_self), ((PyObject *)__pyx_v___pyx_state));
+  __pyx_r = __pyx_pf_14jack_tokenizer_13JackTokenizer_4__setstate_cython__(((struct __pyx_obj_14jack_tokenizer_JackTokenizer *)__pyx_v_self), ((PyObject *)__pyx_v___pyx_state));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_13jackTokenizer_13JackTokenizer_4__setstate_cython__(struct __pyx_obj_13jackTokenizer_JackTokenizer *__pyx_v_self, PyObject *__pyx_v___pyx_state) {
+static PyObject *__pyx_pf_14jack_tokenizer_13JackTokenizer_4__setstate_cython__(struct __pyx_obj_14jack_tokenizer_JackTokenizer *__pyx_v_self, PyObject *__pyx_v___pyx_state) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
@@ -4510,7 +4575,7 @@ static PyObject *__pyx_pf_13jackTokenizer_13JackTokenizer_4__setstate_cython__(s
  *     __pyx_unpickle_JackTokenizer__set_state(self, __pyx_state)             # <<<<<<<<<<<<<<
  */
   if (!(likely(PyTuple_CheckExact(__pyx_v___pyx_state))||((__pyx_v___pyx_state) == Py_None)||((void)PyErr_Format(PyExc_TypeError, "Expected %.16s, got %.200s", "tuple", Py_TYPE(__pyx_v___pyx_state)->tp_name), 0))) __PYX_ERR(1, 17, __pyx_L1_error)
-  __pyx_t_1 = __pyx_f_13jackTokenizer___pyx_unpickle_JackTokenizer__set_state(__pyx_v_self, ((PyObject*)__pyx_v___pyx_state)); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 17, __pyx_L1_error)
+  __pyx_t_1 = __pyx_f_14jack_tokenizer___pyx_unpickle_JackTokenizer__set_state(__pyx_v_self, ((PyObject*)__pyx_v___pyx_state)); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 17, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
@@ -4526,7 +4591,7 @@ static PyObject *__pyx_pf_13jackTokenizer_13JackTokenizer_4__setstate_cython__(s
   goto __pyx_L0;
   __pyx_L1_error:;
   __Pyx_XDECREF(__pyx_t_1);
-  __Pyx_AddTraceback("jackTokenizer.JackTokenizer.__setstate_cython__", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("jack_tokenizer.JackTokenizer.__setstate_cython__", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   __pyx_L0:;
   __Pyx_XGIVEREF(__pyx_r);
@@ -4541,9 +4606,9 @@ static PyObject *__pyx_pf_13jackTokenizer_13JackTokenizer_4__setstate_cython__(s
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_13jackTokenizer_1__pyx_unpickle_JackTokenizer(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static PyMethodDef __pyx_mdef_13jackTokenizer_1__pyx_unpickle_JackTokenizer = {"__pyx_unpickle_JackTokenizer", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_13jackTokenizer_1__pyx_unpickle_JackTokenizer, METH_VARARGS|METH_KEYWORDS, 0};
-static PyObject *__pyx_pw_13jackTokenizer_1__pyx_unpickle_JackTokenizer(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
+static PyObject *__pyx_pw_14jack_tokenizer_1__pyx_unpickle_JackTokenizer(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
+static PyMethodDef __pyx_mdef_14jack_tokenizer_1__pyx_unpickle_JackTokenizer = {"__pyx_unpickle_JackTokenizer", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_14jack_tokenizer_1__pyx_unpickle_JackTokenizer, METH_VARARGS|METH_KEYWORDS, 0};
+static PyObject *__pyx_pw_14jack_tokenizer_1__pyx_unpickle_JackTokenizer(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   PyObject *__pyx_v___pyx_type = 0;
   long __pyx_v___pyx_checksum;
   PyObject *__pyx_v___pyx_state = 0;
@@ -4605,18 +4670,18 @@ static PyObject *__pyx_pw_13jackTokenizer_1__pyx_unpickle_JackTokenizer(PyObject
   __pyx_L5_argtuple_error:;
   __Pyx_RaiseArgtupleInvalid("__pyx_unpickle_JackTokenizer", 1, 3, 3, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(1, 1, __pyx_L3_error)
   __pyx_L3_error:;
-  __Pyx_AddTraceback("jackTokenizer.__pyx_unpickle_JackTokenizer", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("jack_tokenizer.__pyx_unpickle_JackTokenizer", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
-  __pyx_r = __pyx_pf_13jackTokenizer___pyx_unpickle_JackTokenizer(__pyx_self, __pyx_v___pyx_type, __pyx_v___pyx_checksum, __pyx_v___pyx_state);
+  __pyx_r = __pyx_pf_14jack_tokenizer___pyx_unpickle_JackTokenizer(__pyx_self, __pyx_v___pyx_type, __pyx_v___pyx_checksum, __pyx_v___pyx_state);
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_13jackTokenizer___pyx_unpickle_JackTokenizer(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v___pyx_type, long __pyx_v___pyx_checksum, PyObject *__pyx_v___pyx_state) {
+static PyObject *__pyx_pf_14jack_tokenizer___pyx_unpickle_JackTokenizer(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v___pyx_type, long __pyx_v___pyx_checksum, PyObject *__pyx_v___pyx_state) {
   PyObject *__pyx_v___pyx_PickleError = 0;
   PyObject *__pyx_v___pyx_result = 0;
   PyObject *__pyx_r = NULL;
@@ -4717,7 +4782,7 @@ static PyObject *__pyx_pf_13jackTokenizer___pyx_unpickle_JackTokenizer(CYTHON_UN
  *     if __pyx_state is not None:
  *         __pyx_unpickle_JackTokenizer__set_state(<JackTokenizer> __pyx_result, __pyx_state)
  */
-  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_ptype_13jackTokenizer_JackTokenizer), __pyx_n_s_new); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 7, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_ptype_14jack_tokenizer_JackTokenizer), __pyx_n_s_new); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 7, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_t_5 = NULL;
   if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_1))) {
@@ -4756,7 +4821,7 @@ static PyObject *__pyx_pf_13jackTokenizer___pyx_unpickle_JackTokenizer(CYTHON_UN
  * cdef __pyx_unpickle_JackTokenizer__set_state(JackTokenizer __pyx_result, tuple __pyx_state):
  */
     if (!(likely(PyTuple_CheckExact(__pyx_v___pyx_state))||((__pyx_v___pyx_state) == Py_None)||((void)PyErr_Format(PyExc_TypeError, "Expected %.16s, got %.200s", "tuple", Py_TYPE(__pyx_v___pyx_state)->tp_name), 0))) __PYX_ERR(1, 9, __pyx_L1_error)
-    __pyx_t_4 = __pyx_f_13jackTokenizer___pyx_unpickle_JackTokenizer__set_state(((struct __pyx_obj_13jackTokenizer_JackTokenizer *)__pyx_v___pyx_result), ((PyObject*)__pyx_v___pyx_state)); if (unlikely(!__pyx_t_4)) __PYX_ERR(1, 9, __pyx_L1_error)
+    __pyx_t_4 = __pyx_f_14jack_tokenizer___pyx_unpickle_JackTokenizer__set_state(((struct __pyx_obj_14jack_tokenizer_JackTokenizer *)__pyx_v___pyx_result), ((PyObject*)__pyx_v___pyx_state)); if (unlikely(!__pyx_t_4)) __PYX_ERR(1, 9, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
 
@@ -4793,7 +4858,7 @@ static PyObject *__pyx_pf_13jackTokenizer___pyx_unpickle_JackTokenizer(CYTHON_UN
   __Pyx_XDECREF(__pyx_t_4);
   __Pyx_XDECREF(__pyx_t_5);
   __Pyx_XDECREF(__pyx_t_6);
-  __Pyx_AddTraceback("jackTokenizer.__pyx_unpickle_JackTokenizer", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("jack_tokenizer.__pyx_unpickle_JackTokenizer", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   __pyx_L0:;
   __Pyx_XDECREF(__pyx_v___pyx_PickleError);
@@ -4811,7 +4876,7 @@ static PyObject *__pyx_pf_13jackTokenizer___pyx_unpickle_JackTokenizer(CYTHON_UN
  *     if len(__pyx_state) > 3 and hasattr(__pyx_result, '__dict__'):
  */
 
-static PyObject *__pyx_f_13jackTokenizer___pyx_unpickle_JackTokenizer__set_state(struct __pyx_obj_13jackTokenizer_JackTokenizer *__pyx_v___pyx_result, PyObject *__pyx_v___pyx_state) {
+static PyObject *__pyx_f_14jack_tokenizer___pyx_unpickle_JackTokenizer__set_state(struct __pyx_obj_14jack_tokenizer_JackTokenizer *__pyx_v___pyx_result, PyObject *__pyx_v___pyx_state) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
@@ -4952,17 +5017,17 @@ static PyObject *__pyx_f_13jackTokenizer___pyx_unpickle_JackTokenizer__set_state
   __Pyx_XDECREF(__pyx_t_6);
   __Pyx_XDECREF(__pyx_t_7);
   __Pyx_XDECREF(__pyx_t_8);
-  __Pyx_AddTraceback("jackTokenizer.__pyx_unpickle_JackTokenizer__set_state", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("jack_tokenizer.__pyx_unpickle_JackTokenizer__set_state", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = 0;
   __pyx_L0:;
   __Pyx_XGIVEREF(__pyx_r);
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
-static struct __pyx_vtabstruct_13jackTokenizer_JackTokenizer __pyx_vtable_13jackTokenizer_JackTokenizer;
+static struct __pyx_vtabstruct_14jack_tokenizer_JackTokenizer __pyx_vtable_14jack_tokenizer_JackTokenizer;
 
-static PyObject *__pyx_tp_new_13jackTokenizer_JackTokenizer(PyTypeObject *t, CYTHON_UNUSED PyObject *a, CYTHON_UNUSED PyObject *k) {
-  struct __pyx_obj_13jackTokenizer_JackTokenizer *p;
+static PyObject *__pyx_tp_new_14jack_tokenizer_JackTokenizer(PyTypeObject *t, CYTHON_UNUSED PyObject *a, CYTHON_UNUSED PyObject *k) {
+  struct __pyx_obj_14jack_tokenizer_JackTokenizer *p;
   PyObject *o;
   if (likely((t->tp_flags & Py_TPFLAGS_IS_ABSTRACT) == 0)) {
     o = (*t->tp_alloc)(t, 0);
@@ -4970,16 +5035,16 @@ static PyObject *__pyx_tp_new_13jackTokenizer_JackTokenizer(PyTypeObject *t, CYT
     o = (PyObject *) PyBaseObject_Type.tp_new(t, __pyx_empty_tuple, 0);
   }
   if (unlikely(!o)) return 0;
-  p = ((struct __pyx_obj_13jackTokenizer_JackTokenizer *)o);
-  p->__pyx_vtab = __pyx_vtabptr_13jackTokenizer_JackTokenizer;
+  p = ((struct __pyx_obj_14jack_tokenizer_JackTokenizer *)o);
+  p->__pyx_vtab = __pyx_vtabptr_14jack_tokenizer_JackTokenizer;
   p->input_file_path = ((PyObject*)Py_None); Py_INCREF(Py_None);
   p->current_token = ((PyObject*)Py_None); Py_INCREF(Py_None);
   p->current_token_type = ((PyObject*)Py_None); Py_INCREF(Py_None);
   return o;
 }
 
-static void __pyx_tp_dealloc_13jackTokenizer_JackTokenizer(PyObject *o) {
-  struct __pyx_obj_13jackTokenizer_JackTokenizer *p = (struct __pyx_obj_13jackTokenizer_JackTokenizer *)o;
+static void __pyx_tp_dealloc_14jack_tokenizer_JackTokenizer(PyObject *o) {
+  struct __pyx_obj_14jack_tokenizer_JackTokenizer *p = (struct __pyx_obj_14jack_tokenizer_JackTokenizer *)o;
   #if CYTHON_USE_TP_FINALIZE
   if (unlikely(PyType_HasFeature(Py_TYPE(o), Py_TPFLAGS_HAVE_FINALIZE) && Py_TYPE(o)->tp_finalize) && (!PyType_IS_GC(Py_TYPE(o)) || !_PyGC_FINALIZED(o))) {
     if (PyObject_CallFinalizerFromDealloc(o)) return;
@@ -4991,19 +5056,19 @@ static void __pyx_tp_dealloc_13jackTokenizer_JackTokenizer(PyObject *o) {
   (*Py_TYPE(o)->tp_free)(o);
 }
 
-static PyMethodDef __pyx_methods_13jackTokenizer_JackTokenizer[] = {
-  {"recursive_process", (PyCFunction)__pyx_pw_13jackTokenizer_13JackTokenizer_1recursive_process, METH_O, 0},
-  {"__reduce_cython__", (PyCFunction)__pyx_pw_13jackTokenizer_13JackTokenizer_3__reduce_cython__, METH_NOARGS, 0},
-  {"__setstate_cython__", (PyCFunction)__pyx_pw_13jackTokenizer_13JackTokenizer_5__setstate_cython__, METH_O, 0},
+static PyMethodDef __pyx_methods_14jack_tokenizer_JackTokenizer[] = {
+  {"recursive_process", (PyCFunction)__pyx_pw_14jack_tokenizer_13JackTokenizer_1recursive_process, METH_O, 0},
+  {"__reduce_cython__", (PyCFunction)__pyx_pw_14jack_tokenizer_13JackTokenizer_3__reduce_cython__, METH_NOARGS, 0},
+  {"__setstate_cython__", (PyCFunction)__pyx_pw_14jack_tokenizer_13JackTokenizer_5__setstate_cython__, METH_O, 0},
   {0, 0, 0, 0}
 };
 
-static PyTypeObject __pyx_type_13jackTokenizer_JackTokenizer = {
+static PyTypeObject __pyx_type_14jack_tokenizer_JackTokenizer = {
   PyVarObject_HEAD_INIT(0, 0)
-  "jackTokenizer.JackTokenizer", /*tp_name*/
-  sizeof(struct __pyx_obj_13jackTokenizer_JackTokenizer), /*tp_basicsize*/
+  "jack_tokenizer.JackTokenizer", /*tp_name*/
+  sizeof(struct __pyx_obj_14jack_tokenizer_JackTokenizer), /*tp_basicsize*/
   0, /*tp_itemsize*/
-  __pyx_tp_dealloc_13jackTokenizer_JackTokenizer, /*tp_dealloc*/
+  __pyx_tp_dealloc_14jack_tokenizer_JackTokenizer, /*tp_dealloc*/
   #if PY_VERSION_HEX < 0x030800b4
   0, /*tp_print*/
   #endif
@@ -5036,7 +5101,7 @@ static PyTypeObject __pyx_type_13jackTokenizer_JackTokenizer = {
   0, /*tp_weaklistoffset*/
   0, /*tp_iter*/
   0, /*tp_iternext*/
-  __pyx_methods_13jackTokenizer_JackTokenizer, /*tp_methods*/
+  __pyx_methods_14jack_tokenizer_JackTokenizer, /*tp_methods*/
   0, /*tp_members*/
   0, /*tp_getset*/
   0, /*tp_base*/
@@ -5046,7 +5111,7 @@ static PyTypeObject __pyx_type_13jackTokenizer_JackTokenizer = {
   0, /*tp_dictoffset*/
   0, /*tp_init*/
   0, /*tp_alloc*/
-  __pyx_tp_new_13jackTokenizer_JackTokenizer, /*tp_new*/
+  __pyx_tp_new_14jack_tokenizer_JackTokenizer, /*tp_new*/
   0, /*tp_free*/
   0, /*tp_is_gc*/
   0, /*tp_bases*/
@@ -5077,17 +5142,17 @@ static PyMethodDef __pyx_methods[] = {
 #if PY_MAJOR_VERSION >= 3
 #if CYTHON_PEP489_MULTI_PHASE_INIT
 static PyObject* __pyx_pymod_create(PyObject *spec, PyModuleDef *def); /*proto*/
-static int __pyx_pymod_exec_jackTokenizer(PyObject* module); /*proto*/
+static int __pyx_pymod_exec_jack_tokenizer(PyObject* module); /*proto*/
 static PyModuleDef_Slot __pyx_moduledef_slots[] = {
   {Py_mod_create, (void*)__pyx_pymod_create},
-  {Py_mod_exec, (void*)__pyx_pymod_exec_jackTokenizer},
+  {Py_mod_exec, (void*)__pyx_pymod_exec_jack_tokenizer},
   {0, NULL}
 };
 #endif
 
 static struct PyModuleDef __pyx_moduledef = {
     PyModuleDef_HEAD_INIT,
-    "jackTokenizer",
+    "jack_tokenizer",
     0, /* m_doc */
   #if CYTHON_PEP489_MULTI_PHASE_INIT
     0, /* m_size */
@@ -5116,6 +5181,7 @@ static struct PyModuleDef __pyx_moduledef = {
 #endif
 
 static __Pyx_StringTabEntry __pyx_string_tab[] = {
+  {&__pyx_n_s_CompilationEngine, __pyx_k_CompilationEngine, sizeof(__pyx_k_CompilationEngine), 0, 0, 1, 1},
   {&__pyx_n_s_IDENTIFIER, __pyx_k_IDENTIFIER, sizeof(__pyx_k_IDENTIFIER), 0, 0, 1, 1},
   {&__pyx_n_s_INT_CONST, __pyx_k_INT_CONST, sizeof(__pyx_k_INT_CONST), 0, 0, 1, 1},
   {&__pyx_kp_s_Incompatible_checksums_0x_x_vs_0, __pyx_k_Incompatible_checksums_0x_x_vs_0, sizeof(__pyx_k_Incompatible_checksums_0x_x_vs_0), 0, 0, 1, 0},
@@ -5127,7 +5193,6 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_STRING_CONST, __pyx_k_STRING_CONST, sizeof(__pyx_k_STRING_CONST), 0, 0, 1, 1},
   {&__pyx_n_s_SYMBOL, __pyx_k_SYMBOL, sizeof(__pyx_k_SYMBOL), 0, 0, 1, 1},
   {&__pyx_n_s_SYMBOLS, __pyx_k_SYMBOLS, sizeof(__pyx_k_SYMBOLS), 0, 0, 1, 1},
-  {&__pyx_n_s_T, __pyx_k_T, sizeof(__pyx_k_T), 0, 0, 1, 1},
   {&__pyx_kp_s_T_xml, __pyx_k_T_xml, sizeof(__pyx_k_T_xml), 0, 0, 1, 0},
   {&__pyx_n_s_VmWriter, __pyx_k_VmWriter, sizeof(__pyx_k_VmWriter), 0, 0, 1, 1},
   {&__pyx_kp_s__10, __pyx_k__10, sizeof(__pyx_k__10), 0, 0, 1, 0},
@@ -5164,6 +5229,7 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_class, __pyx_k_class, sizeof(__pyx_k_class), 0, 0, 1, 1},
   {&__pyx_n_s_cline_in_traceback, __pyx_k_cline_in_traceback, sizeof(__pyx_k_cline_in_traceback), 0, 0, 1, 1},
   {&__pyx_n_s_close, __pyx_k_close, sizeof(__pyx_k_close), 0, 0, 1, 1},
+  {&__pyx_n_s_compEngine, __pyx_k_compEngine, sizeof(__pyx_k_compEngine), 0, 0, 1, 1},
   {&__pyx_n_s_compile, __pyx_k_compile, sizeof(__pyx_k_compile), 0, 0, 1, 1},
   {&__pyx_n_s_constructor, __pyx_k_constructor, sizeof(__pyx_k_constructor), 0, 0, 1, 1},
   {&__pyx_n_s_dict, __pyx_k_dict, sizeof(__pyx_k_dict), 0, 0, 1, 1},
@@ -5191,7 +5257,7 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_isdigit, __pyx_k_isdigit, sizeof(__pyx_k_isdigit), 0, 0, 1, 1},
   {&__pyx_kp_s_jack, __pyx_k_jack, sizeof(__pyx_k_jack), 0, 0, 1, 0},
   {&__pyx_n_s_jackAnalyzer, __pyx_k_jackAnalyzer, sizeof(__pyx_k_jackAnalyzer), 0, 0, 1, 1},
-  {&__pyx_n_s_jackTokenizer, __pyx_k_jackTokenizer, sizeof(__pyx_k_jackTokenizer), 0, 0, 1, 1},
+  {&__pyx_n_s_jack_tokenizer, __pyx_k_jack_tokenizer, sizeof(__pyx_k_jack_tokenizer), 0, 0, 1, 1},
   {&__pyx_n_s_join, __pyx_k_join, sizeof(__pyx_k_join), 0, 0, 1, 1},
   {&__pyx_kp_s_keyword, __pyx_k_keyword, sizeof(__pyx_k_keyword), 0, 0, 1, 0},
   {&__pyx_kp_s_keyword_2, __pyx_k_keyword_2, sizeof(__pyx_k_keyword_2), 0, 0, 1, 0},
@@ -5250,11 +5316,10 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_w, __pyx_k_w, sizeof(__pyx_k_w), 0, 0, 1, 1},
   {&__pyx_n_s_while, __pyx_k_while, sizeof(__pyx_k_while), 0, 0, 1, 1},
   {&__pyx_n_s_write, __pyx_k_write, sizeof(__pyx_k_write), 0, 0, 1, 1},
-  {&__pyx_kp_s_xml, __pyx_k_xml, sizeof(__pyx_k_xml), 0, 0, 1, 0},
   {0, 0, 0, 0, 0, 0, 0}
 };
 static CYTHON_SMALL_CODE int __Pyx_InitCachedBuiltins(void) {
-  __pyx_builtin_open = __Pyx_GetBuiltinName(__pyx_n_s_open); if (!__pyx_builtin_open) __PYX_ERR(0, 40, __pyx_L1_error)
+  __pyx_builtin_open = __Pyx_GetBuiltinName(__pyx_n_s_open); if (!__pyx_builtin_open) __PYX_ERR(0, 41, __pyx_L1_error)
   return 0;
   __pyx_L1_error:;
   return -1;
@@ -5264,25 +5329,25 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__Pyx_InitCachedConstants", 0);
 
-  /* "jackTokenizer.pyx":55
+  /* "jack_tokenizer.pyx":56
  * 
  *                 # Build the output file name
- *                 output_file = os.path.join(file_path, output_file_name.replace('T.xml', '.vm'))             # <<<<<<<<<<<<<<
+ *                 output_file1 = os.path.join(file_path, output_file_name.replace('T.xml', '.vm'))             # <<<<<<<<<<<<<<
  * 
  *                 # Open the output file for writing
  */
-  __pyx_tuple_ = PyTuple_Pack(2, __pyx_kp_s_T_xml, __pyx_kp_s_vm); if (unlikely(!__pyx_tuple_)) __PYX_ERR(0, 55, __pyx_L1_error)
+  __pyx_tuple_ = PyTuple_Pack(2, __pyx_kp_s_T_xml, __pyx_kp_s_vm); if (unlikely(!__pyx_tuple_)) __PYX_ERR(0, 56, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple_);
   __Pyx_GIVEREF(__pyx_tuple_);
 
-  /* "jackTokenizer.pyx":75
+  /* "jack_tokenizer.pyx":77
  *         output_file.write("<tokens>\n")
  *         # open the input file
  *         with open(input_file, 'r') as f:             # <<<<<<<<<<<<<<
  *             # open the output file
  *             for line in f:
  */
-  __pyx_tuple__9 = PyTuple_Pack(3, Py_None, Py_None, Py_None); if (unlikely(!__pyx_tuple__9)) __PYX_ERR(0, 75, __pyx_L1_error)
+  __pyx_tuple__9 = PyTuple_Pack(3, Py_None, Py_None, Py_None); if (unlikely(!__pyx_tuple__9)) __PYX_ERR(0, 77, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__9);
   __Pyx_GIVEREF(__pyx_tuple__9);
 
@@ -5362,22 +5427,22 @@ static int __Pyx_modinit_type_init_code(void) {
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("__Pyx_modinit_type_init_code", 0);
   /*--- Type init code ---*/
-  __pyx_vtabptr_13jackTokenizer_JackTokenizer = &__pyx_vtable_13jackTokenizer_JackTokenizer;
-  __pyx_vtable_13jackTokenizer_JackTokenizer.recursive_process = (PyObject *(*)(struct __pyx_obj_13jackTokenizer_JackTokenizer *, PyObject *, int __pyx_skip_dispatch))__pyx_f_13jackTokenizer_13JackTokenizer_recursive_process;
-  __pyx_vtable_13jackTokenizer_JackTokenizer.process_file = (PyObject *(*)(struct __pyx_obj_13jackTokenizer_JackTokenizer *, PyObject *, PyObject *))__pyx_f_13jackTokenizer_13JackTokenizer_process_file;
-  __pyx_vtable_13jackTokenizer_JackTokenizer.processLine = (PyObject *(*)(struct __pyx_obj_13jackTokenizer_JackTokenizer *, PyObject *, PyObject *))__pyx_f_13jackTokenizer_13JackTokenizer_processLine;
-  __pyx_vtable_13jackTokenizer_JackTokenizer.tipulInWord = (PyObject *(*)(struct __pyx_obj_13jackTokenizer_JackTokenizer *, PyObject *, PyObject *))__pyx_f_13jackTokenizer_13JackTokenizer_tipulInWord;
-  if (PyType_Ready(&__pyx_type_13jackTokenizer_JackTokenizer) < 0) __PYX_ERR(0, 9, __pyx_L1_error)
+  __pyx_vtabptr_14jack_tokenizer_JackTokenizer = &__pyx_vtable_14jack_tokenizer_JackTokenizer;
+  __pyx_vtable_14jack_tokenizer_JackTokenizer.recursive_process = (PyObject *(*)(struct __pyx_obj_14jack_tokenizer_JackTokenizer *, PyObject *, int __pyx_skip_dispatch))__pyx_f_14jack_tokenizer_13JackTokenizer_recursive_process;
+  __pyx_vtable_14jack_tokenizer_JackTokenizer.process_file = (PyObject *(*)(struct __pyx_obj_14jack_tokenizer_JackTokenizer *, PyObject *, PyObject *))__pyx_f_14jack_tokenizer_13JackTokenizer_process_file;
+  __pyx_vtable_14jack_tokenizer_JackTokenizer.processLine = (PyObject *(*)(struct __pyx_obj_14jack_tokenizer_JackTokenizer *, PyObject *, PyObject *))__pyx_f_14jack_tokenizer_13JackTokenizer_processLine;
+  __pyx_vtable_14jack_tokenizer_JackTokenizer.tipulInWord = (PyObject *(*)(struct __pyx_obj_14jack_tokenizer_JackTokenizer *, PyObject *, PyObject *))__pyx_f_14jack_tokenizer_13JackTokenizer_tipulInWord;
+  if (PyType_Ready(&__pyx_type_14jack_tokenizer_JackTokenizer) < 0) __PYX_ERR(0, 10, __pyx_L1_error)
   #if PY_VERSION_HEX < 0x030800B1
-  __pyx_type_13jackTokenizer_JackTokenizer.tp_print = 0;
+  __pyx_type_14jack_tokenizer_JackTokenizer.tp_print = 0;
   #endif
-  if ((CYTHON_USE_TYPE_SLOTS && CYTHON_USE_PYTYPE_LOOKUP) && likely(!__pyx_type_13jackTokenizer_JackTokenizer.tp_dictoffset && __pyx_type_13jackTokenizer_JackTokenizer.tp_getattro == PyObject_GenericGetAttr)) {
-    __pyx_type_13jackTokenizer_JackTokenizer.tp_getattro = __Pyx_PyObject_GenericGetAttr;
+  if ((CYTHON_USE_TYPE_SLOTS && CYTHON_USE_PYTYPE_LOOKUP) && likely(!__pyx_type_14jack_tokenizer_JackTokenizer.tp_dictoffset && __pyx_type_14jack_tokenizer_JackTokenizer.tp_getattro == PyObject_GenericGetAttr)) {
+    __pyx_type_14jack_tokenizer_JackTokenizer.tp_getattro = __Pyx_PyObject_GenericGetAttr;
   }
-  if (__Pyx_SetVtable(__pyx_type_13jackTokenizer_JackTokenizer.tp_dict, __pyx_vtabptr_13jackTokenizer_JackTokenizer) < 0) __PYX_ERR(0, 9, __pyx_L1_error)
-  if (PyObject_SetAttr(__pyx_m, __pyx_n_s_JackTokenizer, (PyObject *)&__pyx_type_13jackTokenizer_JackTokenizer) < 0) __PYX_ERR(0, 9, __pyx_L1_error)
-  if (__Pyx_setup_reduce((PyObject*)&__pyx_type_13jackTokenizer_JackTokenizer) < 0) __PYX_ERR(0, 9, __pyx_L1_error)
-  __pyx_ptype_13jackTokenizer_JackTokenizer = &__pyx_type_13jackTokenizer_JackTokenizer;
+  if (__Pyx_SetVtable(__pyx_type_14jack_tokenizer_JackTokenizer.tp_dict, __pyx_vtabptr_14jack_tokenizer_JackTokenizer) < 0) __PYX_ERR(0, 10, __pyx_L1_error)
+  if (PyObject_SetAttr(__pyx_m, __pyx_n_s_JackTokenizer, (PyObject *)&__pyx_type_14jack_tokenizer_JackTokenizer) < 0) __PYX_ERR(0, 10, __pyx_L1_error)
+  if (__Pyx_setup_reduce((PyObject*)&__pyx_type_14jack_tokenizer_JackTokenizer) < 0) __PYX_ERR(0, 10, __pyx_L1_error)
+  __pyx_ptype_14jack_tokenizer_JackTokenizer = &__pyx_type_14jack_tokenizer_JackTokenizer;
   __Pyx_RefNannyFinishContext();
   return 0;
   __pyx_L1_error:;
@@ -5428,11 +5493,11 @@ static int __Pyx_modinit_function_import_code(void) {
 
 
 #if PY_MAJOR_VERSION < 3
-__Pyx_PyMODINIT_FUNC initjackTokenizer(void) CYTHON_SMALL_CODE; /*proto*/
-__Pyx_PyMODINIT_FUNC initjackTokenizer(void)
+__Pyx_PyMODINIT_FUNC initjack_tokenizer(void) CYTHON_SMALL_CODE; /*proto*/
+__Pyx_PyMODINIT_FUNC initjack_tokenizer(void)
 #else
-__Pyx_PyMODINIT_FUNC PyInit_jackTokenizer(void) CYTHON_SMALL_CODE; /*proto*/
-__Pyx_PyMODINIT_FUNC PyInit_jackTokenizer(void)
+__Pyx_PyMODINIT_FUNC PyInit_jack_tokenizer(void) CYTHON_SMALL_CODE; /*proto*/
+__Pyx_PyMODINIT_FUNC PyInit_jack_tokenizer(void)
 #if CYTHON_PEP489_MULTI_PHASE_INIT
 {
   return PyModuleDef_Init(&__pyx_moduledef);
@@ -5499,7 +5564,7 @@ bad:
 }
 
 
-static CYTHON_SMALL_CODE int __pyx_pymod_exec_jackTokenizer(PyObject *__pyx_pyinit_module)
+static CYTHON_SMALL_CODE int __pyx_pymod_exec_jack_tokenizer(PyObject *__pyx_pyinit_module)
 #endif
 #endif
 {
@@ -5512,7 +5577,7 @@ static CYTHON_SMALL_CODE int __pyx_pymod_exec_jackTokenizer(PyObject *__pyx_pyin
   #if CYTHON_PEP489_MULTI_PHASE_INIT
   if (__pyx_m) {
     if (__pyx_m == __pyx_pyinit_module) return 0;
-    PyErr_SetString(PyExc_RuntimeError, "Module 'jackTokenizer' has already been imported. Re-initialisation is not supported.");
+    PyErr_SetString(PyExc_RuntimeError, "Module 'jack_tokenizer' has already been imported. Re-initialisation is not supported.");
     return -1;
   }
   #elif PY_MAJOR_VERSION >= 3
@@ -5527,7 +5592,7 @@ if (!__Pyx_RefNanny) {
       Py_FatalError("failed to import 'refnanny' module");
 }
 #endif
-  __Pyx_RefNannySetupContext("__Pyx_PyMODINIT_FUNC PyInit_jackTokenizer(void)", 0);
+  __Pyx_RefNannySetupContext("__Pyx_PyMODINIT_FUNC PyInit_jack_tokenizer(void)", 0);
   if (__Pyx_check_binary_version() < 0) __PYX_ERR(0, 1, __pyx_L1_error)
   #ifdef __Pxy_PyFrame_Initialize_Offsets
   __Pxy_PyFrame_Initialize_Offsets();
@@ -5564,7 +5629,7 @@ if (!__Pyx_RefNanny) {
   Py_INCREF(__pyx_m);
   #else
   #if PY_MAJOR_VERSION < 3
-  __pyx_m = Py_InitModule4("jackTokenizer", __pyx_methods, 0, 0, PYTHON_API_VERSION); Py_XINCREF(__pyx_m);
+  __pyx_m = Py_InitModule4("jack_tokenizer", __pyx_methods, 0, 0, PYTHON_API_VERSION); Py_XINCREF(__pyx_m);
   #else
   __pyx_m = PyModule_Create(&__pyx_moduledef);
   #endif
@@ -5582,14 +5647,14 @@ if (!__Pyx_RefNanny) {
   #if PY_MAJOR_VERSION < 3 && (__PYX_DEFAULT_STRING_ENCODING_IS_ASCII || __PYX_DEFAULT_STRING_ENCODING_IS_DEFAULT)
   if (__Pyx_init_sys_getdefaultencoding_params() < 0) __PYX_ERR(0, 1, __pyx_L1_error)
   #endif
-  if (__pyx_module_is_main_jackTokenizer) {
+  if (__pyx_module_is_main_jack_tokenizer) {
     if (PyObject_SetAttr(__pyx_m, __pyx_n_s_name_2, __pyx_n_s_main) < 0) __PYX_ERR(0, 1, __pyx_L1_error)
   }
   #if PY_MAJOR_VERSION >= 3
   {
     PyObject *modules = PyImport_GetModuleDict(); if (unlikely(!modules)) __PYX_ERR(0, 1, __pyx_L1_error)
-    if (!PyDict_GetItemString(modules, "jackTokenizer")) {
-      if (unlikely(PyDict_SetItemString(modules, "jackTokenizer", __pyx_m) < 0)) __PYX_ERR(0, 1, __pyx_L1_error)
+    if (!PyDict_GetItemString(modules, "jack_tokenizer")) {
+      if (unlikely(PyDict_SetItemString(modules, "jack_tokenizer", __pyx_m) < 0)) __PYX_ERR(0, 1, __pyx_L1_error)
     }
   }
   #endif
@@ -5610,7 +5675,7 @@ if (!__Pyx_RefNanny) {
   if (__Pyx_patch_abc() < 0) __PYX_ERR(0, 1, __pyx_L1_error)
   #endif
 
-  /* "jackTokenizer.pyx":5
+  /* "jack_tokenizer.pyx":5
  * 
  * 
  * import os             # <<<<<<<<<<<<<<
@@ -5622,12 +5687,12 @@ if (!__Pyx_RefNanny) {
   if (PyDict_SetItem(__pyx_d, __pyx_n_s_os, __pyx_t_1) < 0) __PYX_ERR(0, 5, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "jackTokenizer.pyx":6
+  /* "jack_tokenizer.pyx":6
  * 
  * import os
  * from jackAnalyzer import JackAnalyzer             # <<<<<<<<<<<<<<
  * from vm_writer import VmWriter
- * 
+ * from compEngine import CompilationEngine
  */
   __pyx_t_1 = PyList_New(1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 6, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
@@ -5643,12 +5708,12 @@ if (!__Pyx_RefNanny) {
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-  /* "jackTokenizer.pyx":7
+  /* "jack_tokenizer.pyx":7
  * import os
  * from jackAnalyzer import JackAnalyzer
  * from vm_writer import VmWriter             # <<<<<<<<<<<<<<
+ * from compEngine import CompilationEngine
  * 
- * cdef class JackTokenizer:
  */
   __pyx_t_2 = PyList_New(1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 7, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
@@ -5664,221 +5729,242 @@ if (!__Pyx_RefNanny) {
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "jackTokenizer.pyx":12
+  /* "jack_tokenizer.pyx":8
+ * from jackAnalyzer import JackAnalyzer
+ * from vm_writer import VmWriter
+ * from compEngine import CompilationEngine             # <<<<<<<<<<<<<<
+ * 
+ * cdef class JackTokenizer:
+ */
+  __pyx_t_1 = PyList_New(1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 8, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_INCREF(__pyx_n_s_CompilationEngine);
+  __Pyx_GIVEREF(__pyx_n_s_CompilationEngine);
+  PyList_SET_ITEM(__pyx_t_1, 0, __pyx_n_s_CompilationEngine);
+  __pyx_t_2 = __Pyx_Import(__pyx_n_s_compEngine, __pyx_t_1, -1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 8, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  __pyx_t_1 = __Pyx_ImportFrom(__pyx_t_2, __pyx_n_s_CompilationEngine); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 8, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_CompilationEngine, __pyx_t_1) < 0) __PYX_ERR(0, 8, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+
+  /* "jack_tokenizer.pyx":13
  * 
  *     # Constants
  *     KEYWORDS = ["class", "constructor", "function", "method", "field", "static", "var", "int", "char", "boolean",             # <<<<<<<<<<<<<<
  *                 "void", "true", "false", "null", "this", "let", "do", "if", "else", "while", "return"]
  *     SYMBOLS = ['{', '}', '(', ')', '[', ']', '.', ',', ';', '+', '-', '*', '/', '&', '|', '<', '>', '=', '~']
  */
-  __pyx_t_1 = PyList_New(21); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 12, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
+  __pyx_t_2 = PyList_New(21); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 13, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
   __Pyx_INCREF(__pyx_n_s_class);
   __Pyx_GIVEREF(__pyx_n_s_class);
-  PyList_SET_ITEM(__pyx_t_1, 0, __pyx_n_s_class);
+  PyList_SET_ITEM(__pyx_t_2, 0, __pyx_n_s_class);
   __Pyx_INCREF(__pyx_n_s_constructor);
   __Pyx_GIVEREF(__pyx_n_s_constructor);
-  PyList_SET_ITEM(__pyx_t_1, 1, __pyx_n_s_constructor);
+  PyList_SET_ITEM(__pyx_t_2, 1, __pyx_n_s_constructor);
   __Pyx_INCREF(__pyx_n_s_function);
   __Pyx_GIVEREF(__pyx_n_s_function);
-  PyList_SET_ITEM(__pyx_t_1, 2, __pyx_n_s_function);
+  PyList_SET_ITEM(__pyx_t_2, 2, __pyx_n_s_function);
   __Pyx_INCREF(__pyx_n_s_method);
   __Pyx_GIVEREF(__pyx_n_s_method);
-  PyList_SET_ITEM(__pyx_t_1, 3, __pyx_n_s_method);
+  PyList_SET_ITEM(__pyx_t_2, 3, __pyx_n_s_method);
   __Pyx_INCREF(__pyx_n_s_field);
   __Pyx_GIVEREF(__pyx_n_s_field);
-  PyList_SET_ITEM(__pyx_t_1, 4, __pyx_n_s_field);
+  PyList_SET_ITEM(__pyx_t_2, 4, __pyx_n_s_field);
   __Pyx_INCREF(__pyx_n_s_static);
   __Pyx_GIVEREF(__pyx_n_s_static);
-  PyList_SET_ITEM(__pyx_t_1, 5, __pyx_n_s_static);
+  PyList_SET_ITEM(__pyx_t_2, 5, __pyx_n_s_static);
   __Pyx_INCREF(__pyx_n_s_var);
   __Pyx_GIVEREF(__pyx_n_s_var);
-  PyList_SET_ITEM(__pyx_t_1, 6, __pyx_n_s_var);
+  PyList_SET_ITEM(__pyx_t_2, 6, __pyx_n_s_var);
   __Pyx_INCREF(__pyx_n_s_int);
   __Pyx_GIVEREF(__pyx_n_s_int);
-  PyList_SET_ITEM(__pyx_t_1, 7, __pyx_n_s_int);
+  PyList_SET_ITEM(__pyx_t_2, 7, __pyx_n_s_int);
   __Pyx_INCREF(__pyx_n_s_char);
   __Pyx_GIVEREF(__pyx_n_s_char);
-  PyList_SET_ITEM(__pyx_t_1, 8, __pyx_n_s_char);
+  PyList_SET_ITEM(__pyx_t_2, 8, __pyx_n_s_char);
   __Pyx_INCREF(__pyx_n_s_boolean);
   __Pyx_GIVEREF(__pyx_n_s_boolean);
-  PyList_SET_ITEM(__pyx_t_1, 9, __pyx_n_s_boolean);
+  PyList_SET_ITEM(__pyx_t_2, 9, __pyx_n_s_boolean);
   __Pyx_INCREF(__pyx_n_s_void);
   __Pyx_GIVEREF(__pyx_n_s_void);
-  PyList_SET_ITEM(__pyx_t_1, 10, __pyx_n_s_void);
+  PyList_SET_ITEM(__pyx_t_2, 10, __pyx_n_s_void);
   __Pyx_INCREF(__pyx_n_s_true);
   __Pyx_GIVEREF(__pyx_n_s_true);
-  PyList_SET_ITEM(__pyx_t_1, 11, __pyx_n_s_true);
+  PyList_SET_ITEM(__pyx_t_2, 11, __pyx_n_s_true);
   __Pyx_INCREF(__pyx_n_s_false);
   __Pyx_GIVEREF(__pyx_n_s_false);
-  PyList_SET_ITEM(__pyx_t_1, 12, __pyx_n_s_false);
+  PyList_SET_ITEM(__pyx_t_2, 12, __pyx_n_s_false);
   __Pyx_INCREF(__pyx_n_s_null);
   __Pyx_GIVEREF(__pyx_n_s_null);
-  PyList_SET_ITEM(__pyx_t_1, 13, __pyx_n_s_null);
+  PyList_SET_ITEM(__pyx_t_2, 13, __pyx_n_s_null);
   __Pyx_INCREF(__pyx_n_s_this);
   __Pyx_GIVEREF(__pyx_n_s_this);
-  PyList_SET_ITEM(__pyx_t_1, 14, __pyx_n_s_this);
+  PyList_SET_ITEM(__pyx_t_2, 14, __pyx_n_s_this);
   __Pyx_INCREF(__pyx_n_s_let);
   __Pyx_GIVEREF(__pyx_n_s_let);
-  PyList_SET_ITEM(__pyx_t_1, 15, __pyx_n_s_let);
+  PyList_SET_ITEM(__pyx_t_2, 15, __pyx_n_s_let);
   __Pyx_INCREF(__pyx_n_s_do);
   __Pyx_GIVEREF(__pyx_n_s_do);
-  PyList_SET_ITEM(__pyx_t_1, 16, __pyx_n_s_do);
+  PyList_SET_ITEM(__pyx_t_2, 16, __pyx_n_s_do);
   __Pyx_INCREF(__pyx_n_s_if);
   __Pyx_GIVEREF(__pyx_n_s_if);
-  PyList_SET_ITEM(__pyx_t_1, 17, __pyx_n_s_if);
+  PyList_SET_ITEM(__pyx_t_2, 17, __pyx_n_s_if);
   __Pyx_INCREF(__pyx_n_s_else);
   __Pyx_GIVEREF(__pyx_n_s_else);
-  PyList_SET_ITEM(__pyx_t_1, 18, __pyx_n_s_else);
+  PyList_SET_ITEM(__pyx_t_2, 18, __pyx_n_s_else);
   __Pyx_INCREF(__pyx_n_s_while);
   __Pyx_GIVEREF(__pyx_n_s_while);
-  PyList_SET_ITEM(__pyx_t_1, 19, __pyx_n_s_while);
+  PyList_SET_ITEM(__pyx_t_2, 19, __pyx_n_s_while);
   __Pyx_INCREF(__pyx_n_s_return);
   __Pyx_GIVEREF(__pyx_n_s_return);
-  PyList_SET_ITEM(__pyx_t_1, 20, __pyx_n_s_return);
-  if (PyDict_SetItem((PyObject *)__pyx_ptype_13jackTokenizer_JackTokenizer->tp_dict, __pyx_n_s_KEYWORDS, __pyx_t_1) < 0) __PYX_ERR(0, 12, __pyx_L1_error)
-  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  PyType_Modified(__pyx_ptype_13jackTokenizer_JackTokenizer);
+  PyList_SET_ITEM(__pyx_t_2, 20, __pyx_n_s_return);
+  if (PyDict_SetItem((PyObject *)__pyx_ptype_14jack_tokenizer_JackTokenizer->tp_dict, __pyx_n_s_KEYWORDS, __pyx_t_2) < 0) __PYX_ERR(0, 13, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+  PyType_Modified(__pyx_ptype_14jack_tokenizer_JackTokenizer);
 
-  /* "jackTokenizer.pyx":14
+  /* "jack_tokenizer.pyx":15
  *     KEYWORDS = ["class", "constructor", "function", "method", "field", "static", "var", "int", "char", "boolean",
  *                 "void", "true", "false", "null", "this", "let", "do", "if", "else", "while", "return"]
  *     SYMBOLS = ['{', '}', '(', ')', '[', ']', '.', ',', ';', '+', '-', '*', '/', '&', '|', '<', '>', '=', '~']             # <<<<<<<<<<<<<<
  *     KEYWORD = "KEYWORD"
  *     SYMBOL = "SYMBOL"
  */
-  __pyx_t_1 = PyList_New(19); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 14, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
+  __pyx_t_2 = PyList_New(19); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 15, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
   __Pyx_INCREF(__pyx_kp_s__17);
   __Pyx_GIVEREF(__pyx_kp_s__17);
-  PyList_SET_ITEM(__pyx_t_1, 0, __pyx_kp_s__17);
+  PyList_SET_ITEM(__pyx_t_2, 0, __pyx_kp_s__17);
   __Pyx_INCREF(__pyx_kp_s__18);
   __Pyx_GIVEREF(__pyx_kp_s__18);
-  PyList_SET_ITEM(__pyx_t_1, 1, __pyx_kp_s__18);
+  PyList_SET_ITEM(__pyx_t_2, 1, __pyx_kp_s__18);
   __Pyx_INCREF(__pyx_kp_s__19);
   __Pyx_GIVEREF(__pyx_kp_s__19);
-  PyList_SET_ITEM(__pyx_t_1, 2, __pyx_kp_s__19);
+  PyList_SET_ITEM(__pyx_t_2, 2, __pyx_kp_s__19);
   __Pyx_INCREF(__pyx_kp_s__20);
   __Pyx_GIVEREF(__pyx_kp_s__20);
-  PyList_SET_ITEM(__pyx_t_1, 3, __pyx_kp_s__20);
+  PyList_SET_ITEM(__pyx_t_2, 3, __pyx_kp_s__20);
   __Pyx_INCREF(__pyx_kp_s__21);
   __Pyx_GIVEREF(__pyx_kp_s__21);
-  PyList_SET_ITEM(__pyx_t_1, 4, __pyx_kp_s__21);
+  PyList_SET_ITEM(__pyx_t_2, 4, __pyx_kp_s__21);
   __Pyx_INCREF(__pyx_kp_s__22);
   __Pyx_GIVEREF(__pyx_kp_s__22);
-  PyList_SET_ITEM(__pyx_t_1, 5, __pyx_kp_s__22);
+  PyList_SET_ITEM(__pyx_t_2, 5, __pyx_kp_s__22);
   __Pyx_INCREF(__pyx_kp_s__23);
   __Pyx_GIVEREF(__pyx_kp_s__23);
-  PyList_SET_ITEM(__pyx_t_1, 6, __pyx_kp_s__23);
+  PyList_SET_ITEM(__pyx_t_2, 6, __pyx_kp_s__23);
   __Pyx_INCREF(__pyx_kp_s__24);
   __Pyx_GIVEREF(__pyx_kp_s__24);
-  PyList_SET_ITEM(__pyx_t_1, 7, __pyx_kp_s__24);
+  PyList_SET_ITEM(__pyx_t_2, 7, __pyx_kp_s__24);
   __Pyx_INCREF(__pyx_kp_s__25);
   __Pyx_GIVEREF(__pyx_kp_s__25);
-  PyList_SET_ITEM(__pyx_t_1, 8, __pyx_kp_s__25);
+  PyList_SET_ITEM(__pyx_t_2, 8, __pyx_kp_s__25);
   __Pyx_INCREF(__pyx_kp_s__26);
   __Pyx_GIVEREF(__pyx_kp_s__26);
-  PyList_SET_ITEM(__pyx_t_1, 9, __pyx_kp_s__26);
+  PyList_SET_ITEM(__pyx_t_2, 9, __pyx_kp_s__26);
   __Pyx_INCREF(__pyx_kp_s__27);
   __Pyx_GIVEREF(__pyx_kp_s__27);
-  PyList_SET_ITEM(__pyx_t_1, 10, __pyx_kp_s__27);
+  PyList_SET_ITEM(__pyx_t_2, 10, __pyx_kp_s__27);
   __Pyx_INCREF(__pyx_kp_s__5);
   __Pyx_GIVEREF(__pyx_kp_s__5);
-  PyList_SET_ITEM(__pyx_t_1, 11, __pyx_kp_s__5);
+  PyList_SET_ITEM(__pyx_t_2, 11, __pyx_kp_s__5);
   __Pyx_INCREF(__pyx_kp_s__28);
   __Pyx_GIVEREF(__pyx_kp_s__28);
-  PyList_SET_ITEM(__pyx_t_1, 12, __pyx_kp_s__28);
+  PyList_SET_ITEM(__pyx_t_2, 12, __pyx_kp_s__28);
   __Pyx_INCREF(__pyx_kp_s__12);
   __Pyx_GIVEREF(__pyx_kp_s__12);
-  PyList_SET_ITEM(__pyx_t_1, 13, __pyx_kp_s__12);
+  PyList_SET_ITEM(__pyx_t_2, 13, __pyx_kp_s__12);
   __Pyx_INCREF(__pyx_kp_s__29);
   __Pyx_GIVEREF(__pyx_kp_s__29);
-  PyList_SET_ITEM(__pyx_t_1, 14, __pyx_kp_s__29);
+  PyList_SET_ITEM(__pyx_t_2, 14, __pyx_kp_s__29);
   __Pyx_INCREF(__pyx_kp_s__10);
   __Pyx_GIVEREF(__pyx_kp_s__10);
-  PyList_SET_ITEM(__pyx_t_1, 15, __pyx_kp_s__10);
+  PyList_SET_ITEM(__pyx_t_2, 15, __pyx_kp_s__10);
   __Pyx_INCREF(__pyx_kp_s__11);
   __Pyx_GIVEREF(__pyx_kp_s__11);
-  PyList_SET_ITEM(__pyx_t_1, 16, __pyx_kp_s__11);
+  PyList_SET_ITEM(__pyx_t_2, 16, __pyx_kp_s__11);
   __Pyx_INCREF(__pyx_kp_s__30);
   __Pyx_GIVEREF(__pyx_kp_s__30);
-  PyList_SET_ITEM(__pyx_t_1, 17, __pyx_kp_s__30);
+  PyList_SET_ITEM(__pyx_t_2, 17, __pyx_kp_s__30);
   __Pyx_INCREF(__pyx_kp_s__31);
   __Pyx_GIVEREF(__pyx_kp_s__31);
-  PyList_SET_ITEM(__pyx_t_1, 18, __pyx_kp_s__31);
-  if (PyDict_SetItem((PyObject *)__pyx_ptype_13jackTokenizer_JackTokenizer->tp_dict, __pyx_n_s_SYMBOLS, __pyx_t_1) < 0) __PYX_ERR(0, 14, __pyx_L1_error)
-  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  PyType_Modified(__pyx_ptype_13jackTokenizer_JackTokenizer);
+  PyList_SET_ITEM(__pyx_t_2, 18, __pyx_kp_s__31);
+  if (PyDict_SetItem((PyObject *)__pyx_ptype_14jack_tokenizer_JackTokenizer->tp_dict, __pyx_n_s_SYMBOLS, __pyx_t_2) < 0) __PYX_ERR(0, 15, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+  PyType_Modified(__pyx_ptype_14jack_tokenizer_JackTokenizer);
 
-  /* "jackTokenizer.pyx":15
+  /* "jack_tokenizer.pyx":16
  *                 "void", "true", "false", "null", "this", "let", "do", "if", "else", "while", "return"]
  *     SYMBOLS = ['{', '}', '(', ')', '[', ']', '.', ',', ';', '+', '-', '*', '/', '&', '|', '<', '>', '=', '~']
  *     KEYWORD = "KEYWORD"             # <<<<<<<<<<<<<<
  *     SYMBOL = "SYMBOL"
  *     IDENTIFIER = "IDENTIFIER"
  */
-  if (PyDict_SetItem((PyObject *)__pyx_ptype_13jackTokenizer_JackTokenizer->tp_dict, __pyx_n_s_KEYWORD, __pyx_n_s_KEYWORD) < 0) __PYX_ERR(0, 15, __pyx_L1_error)
-  PyType_Modified(__pyx_ptype_13jackTokenizer_JackTokenizer);
+  if (PyDict_SetItem((PyObject *)__pyx_ptype_14jack_tokenizer_JackTokenizer->tp_dict, __pyx_n_s_KEYWORD, __pyx_n_s_KEYWORD) < 0) __PYX_ERR(0, 16, __pyx_L1_error)
+  PyType_Modified(__pyx_ptype_14jack_tokenizer_JackTokenizer);
 
-  /* "jackTokenizer.pyx":16
+  /* "jack_tokenizer.pyx":17
  *     SYMBOLS = ['{', '}', '(', ')', '[', ']', '.', ',', ';', '+', '-', '*', '/', '&', '|', '<', '>', '=', '~']
  *     KEYWORD = "KEYWORD"
  *     SYMBOL = "SYMBOL"             # <<<<<<<<<<<<<<
  *     IDENTIFIER = "IDENTIFIER"
  *     INT_CONST = "INT_CONST"
  */
-  if (PyDict_SetItem((PyObject *)__pyx_ptype_13jackTokenizer_JackTokenizer->tp_dict, __pyx_n_s_SYMBOL, __pyx_n_s_SYMBOL) < 0) __PYX_ERR(0, 16, __pyx_L1_error)
-  PyType_Modified(__pyx_ptype_13jackTokenizer_JackTokenizer);
+  if (PyDict_SetItem((PyObject *)__pyx_ptype_14jack_tokenizer_JackTokenizer->tp_dict, __pyx_n_s_SYMBOL, __pyx_n_s_SYMBOL) < 0) __PYX_ERR(0, 17, __pyx_L1_error)
+  PyType_Modified(__pyx_ptype_14jack_tokenizer_JackTokenizer);
 
-  /* "jackTokenizer.pyx":17
+  /* "jack_tokenizer.pyx":18
  *     KEYWORD = "KEYWORD"
  *     SYMBOL = "SYMBOL"
  *     IDENTIFIER = "IDENTIFIER"             # <<<<<<<<<<<<<<
  *     INT_CONST = "INT_CONST"
  *     STRING_CONST = "STRING_CONST"
  */
-  if (PyDict_SetItem((PyObject *)__pyx_ptype_13jackTokenizer_JackTokenizer->tp_dict, __pyx_n_s_IDENTIFIER, __pyx_n_s_IDENTIFIER) < 0) __PYX_ERR(0, 17, __pyx_L1_error)
-  PyType_Modified(__pyx_ptype_13jackTokenizer_JackTokenizer);
+  if (PyDict_SetItem((PyObject *)__pyx_ptype_14jack_tokenizer_JackTokenizer->tp_dict, __pyx_n_s_IDENTIFIER, __pyx_n_s_IDENTIFIER) < 0) __PYX_ERR(0, 18, __pyx_L1_error)
+  PyType_Modified(__pyx_ptype_14jack_tokenizer_JackTokenizer);
 
-  /* "jackTokenizer.pyx":18
+  /* "jack_tokenizer.pyx":19
  *     SYMBOL = "SYMBOL"
  *     IDENTIFIER = "IDENTIFIER"
  *     INT_CONST = "INT_CONST"             # <<<<<<<<<<<<<<
  *     STRING_CONST = "STRING_CONST"
  * 
  */
-  if (PyDict_SetItem((PyObject *)__pyx_ptype_13jackTokenizer_JackTokenizer->tp_dict, __pyx_n_s_INT_CONST, __pyx_n_s_INT_CONST) < 0) __PYX_ERR(0, 18, __pyx_L1_error)
-  PyType_Modified(__pyx_ptype_13jackTokenizer_JackTokenizer);
+  if (PyDict_SetItem((PyObject *)__pyx_ptype_14jack_tokenizer_JackTokenizer->tp_dict, __pyx_n_s_INT_CONST, __pyx_n_s_INT_CONST) < 0) __PYX_ERR(0, 19, __pyx_L1_error)
+  PyType_Modified(__pyx_ptype_14jack_tokenizer_JackTokenizer);
 
-  /* "jackTokenizer.pyx":19
+  /* "jack_tokenizer.pyx":20
  *     IDENTIFIER = "IDENTIFIER"
  *     INT_CONST = "INT_CONST"
  *     STRING_CONST = "STRING_CONST"             # <<<<<<<<<<<<<<
  * 
  *     cdef str input_file_path
  */
-  if (PyDict_SetItem((PyObject *)__pyx_ptype_13jackTokenizer_JackTokenizer->tp_dict, __pyx_n_s_STRING_CONST, __pyx_n_s_STRING_CONST) < 0) __PYX_ERR(0, 19, __pyx_L1_error)
-  PyType_Modified(__pyx_ptype_13jackTokenizer_JackTokenizer);
+  if (PyDict_SetItem((PyObject *)__pyx_ptype_14jack_tokenizer_JackTokenizer->tp_dict, __pyx_n_s_STRING_CONST, __pyx_n_s_STRING_CONST) < 0) __PYX_ERR(0, 20, __pyx_L1_error)
+  PyType_Modified(__pyx_ptype_14jack_tokenizer_JackTokenizer);
 
   /* "(tree fragment)":1
  * def __pyx_unpickle_JackTokenizer(__pyx_type, long __pyx_checksum, __pyx_state):             # <<<<<<<<<<<<<<
  *     cdef object __pyx_PickleError
  *     cdef object __pyx_result
  */
-  __pyx_t_1 = PyCFunction_NewEx(&__pyx_mdef_13jackTokenizer_1__pyx_unpickle_JackTokenizer, NULL, __pyx_n_s_jackTokenizer); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 1, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_pyx_unpickle_JackTokenizer, __pyx_t_1) < 0) __PYX_ERR(1, 1, __pyx_L1_error)
-  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  __pyx_t_2 = PyCFunction_NewEx(&__pyx_mdef_14jack_tokenizer_1__pyx_unpickle_JackTokenizer, NULL, __pyx_n_s_jack_tokenizer); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 1, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_pyx_unpickle_JackTokenizer, __pyx_t_2) < 0) __PYX_ERR(1, 1, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-  /* "jackTokenizer.pyx":1
+  /* "jack_tokenizer.pyx":1
  * # class that Ignores all comments and white space, gets the next token,             # <<<<<<<<<<<<<<
  * # and advances the input just beyond it.
  * 
  */
-  __pyx_t_1 = __Pyx_PyDict_NewPresized(0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_test, __pyx_t_1) < 0) __PYX_ERR(0, 1, __pyx_L1_error)
-  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  __pyx_t_2 = __Pyx_PyDict_NewPresized(0); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 1, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_test, __pyx_t_2) < 0) __PYX_ERR(0, 1, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
   /*--- Wrapped vars code ---*/
 
@@ -5888,11 +5974,11 @@ if (!__Pyx_RefNanny) {
   __Pyx_XDECREF(__pyx_t_2);
   if (__pyx_m) {
     if (__pyx_d) {
-      __Pyx_AddTraceback("init jackTokenizer", __pyx_clineno, __pyx_lineno, __pyx_filename);
+      __Pyx_AddTraceback("init jack_tokenizer", __pyx_clineno, __pyx_lineno, __pyx_filename);
     }
     Py_CLEAR(__pyx_m);
   } else if (!PyErr_Occurred()) {
-    PyErr_SetString(PyExc_ImportError, "init jackTokenizer");
+    PyErr_SetString(PyExc_ImportError, "init jack_tokenizer");
   }
   __pyx_L0:;
   __Pyx_RefNannyFinishContext();

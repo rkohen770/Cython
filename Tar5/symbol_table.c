@@ -979,6 +979,10 @@ struct __pyx_obj_12symbol_table_SymbolTable;
 struct __pyx_obj_12symbol_table_SymbolTable {
   PyObject_HEAD
   struct __pyx_vtabstruct_12symbol_table_SymbolTable *__pyx_vtab;
+  PyObject *static_table;
+  PyObject *field_table;
+  PyObject *arg_table;
+  PyObject *var_table;
 };
 
 
@@ -1075,6 +1079,14 @@ static void __Pyx_RaiseArgtupleInvalid(const char* func_name, int exact,
 /* KeywordStringCheck.proto */
 static int __Pyx_CheckKeywordStrings(PyObject *kwdict, const char* function_name, int kw_allowed);
 
+/* RaiseDoubleKeywords.proto */
+static void __Pyx_RaiseDoubleKeywordsError(const char* func_name, PyObject* kw_name);
+
+/* ParseKeywords.proto */
+static int __Pyx_ParseOptionalKeywords(PyObject *kwds, PyObject **argnames[],\
+    PyObject *kwds2, PyObject *values[], Py_ssize_t num_pos_args,\
+    const char* function_name);
+
 /* PyObjectSetAttrStr.proto */
 #if CYTHON_USE_TYPE_SLOTS
 #define __Pyx_PyObject_DelAttrStr(o,n) __Pyx_PyObject_SetAttrStr(o, n, NULL)
@@ -1083,14 +1095,6 @@ static CYTHON_INLINE int __Pyx_PyObject_SetAttrStr(PyObject* obj, PyObject* attr
 #define __Pyx_PyObject_DelAttrStr(o,n)   PyObject_DelAttr(o,n)
 #define __Pyx_PyObject_SetAttrStr(o,n,v) PyObject_SetAttr(o,n,v)
 #endif
-
-/* RaiseDoubleKeywords.proto */
-static void __Pyx_RaiseDoubleKeywordsError(const char* func_name, PyObject* kw_name);
-
-/* ParseKeywords.proto */
-static int __Pyx_ParseOptionalKeywords(PyObject *kwds, PyObject **argnames[],\
-    PyObject *kwds2, PyObject *values[], Py_ssize_t num_pos_args,\
-    const char* function_name);
 
 /* FetchCommonType.proto */
 static PyTypeObject* __Pyx_FetchCommonType(PyTypeObject* type);
@@ -1457,16 +1461,12 @@ static const char __pyx_k_getstate[] = "__getstate__";
 static const char __pyx_k_qualname[] = "__qualname__";
 static const char __pyx_k_setstate[] = "__setstate__";
 static const char __pyx_k_TypeError[] = "TypeError";
-static const char __pyx_k_arg_table[] = "arg_table";
 static const char __pyx_k_metaclass[] = "__metaclass__";
 static const char __pyx_k_reduce_ex[] = "__reduce_ex__";
-static const char __pyx_k_var_table[] = "var_table";
 static const char __pyx_k_Identifier[] = "Identifier";
 static const char __pyx_k_pyx_vtable[] = "__pyx_vtable__";
 static const char __pyx_k_SymbolTable[] = "SymbolTable";
-static const char __pyx_k_field_table[] = "field_table";
 static const char __pyx_k_Invalid_kind[] = "Invalid kind";
-static const char __pyx_k_static_table[] = "static_table";
 static const char __pyx_k_symbol_table[] = "symbol_table";
 static const char __pyx_k_reduce_cython[] = "__reduce_cython__";
 static const char __pyx_k_IdentifierKind[] = "IdentifierKind";
@@ -1488,10 +1488,8 @@ static PyObject *__pyx_n_s_SymbolTable_define_locals_Identi;
 static PyObject *__pyx_n_s_SymbolTable_define_locals_Identi_2;
 static PyObject *__pyx_n_s_TypeError;
 static PyObject *__pyx_n_s_VAR;
-static PyObject *__pyx_n_s_arg_table;
 static PyObject *__pyx_n_s_cline_in_traceback;
 static PyObject *__pyx_n_s_doc;
-static PyObject *__pyx_n_s_field_table;
 static PyObject *__pyx_n_s_getstate;
 static PyObject *__pyx_n_s_identifier_type;
 static PyObject *__pyx_n_s_index;
@@ -1511,12 +1509,10 @@ static PyObject *__pyx_n_s_reduce_ex;
 static PyObject *__pyx_n_s_self;
 static PyObject *__pyx_n_s_setstate;
 static PyObject *__pyx_n_s_setstate_cython;
-static PyObject *__pyx_n_s_static_table;
 static PyObject *__pyx_n_s_symbol_table;
 static PyObject *__pyx_kp_s_symbol_table_pyx;
 static PyObject *__pyx_n_s_test;
 static PyObject *__pyx_n_s_type;
-static PyObject *__pyx_n_s_var_table;
 static int __pyx_pf_12symbol_table_11SymbolTable___cinit__(struct __pyx_obj_12symbol_table_SymbolTable *__pyx_v_self); /* proto */
 static PyObject *__pyx_pf_12symbol_table_11SymbolTable_6define_10Identifier___init__(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_self, PyObject *__pyx_v_identifier_type, PyObject *__pyx_v_kind, PyObject *__pyx_v_index); /* proto */
 static PyObject *__pyx_pf_12symbol_table_11SymbolTable_2__reduce_cython__(CYTHON_UNUSED struct __pyx_obj_12symbol_table_SymbolTable *__pyx_v_self); /* proto */
@@ -1529,7 +1525,7 @@ static PyObject *__pyx_tuple__5;
 static PyObject *__pyx_codeobj__2;
 /* Late includes */
 
-/* "symbol_table.pyx":9
+/* "symbol_table.pyx":15
  * 
  *     # constructor
  *     def __cinit__(self):             # <<<<<<<<<<<<<<
@@ -1562,55 +1558,67 @@ static int __pyx_pf_12symbol_table_11SymbolTable___cinit__(struct __pyx_obj_12sy
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("__cinit__", 0);
 
-  /* "symbol_table.pyx":10
+  /* "symbol_table.pyx":16
  *     # constructor
  *     def __cinit__(self):
  *         self.static_table = {}             # <<<<<<<<<<<<<<
  *         self.field_table = {}
  *         self.arg_table = {}
  */
-  __pyx_t_1 = __Pyx_PyDict_NewPresized(0); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 10, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyDict_NewPresized(0); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 16, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  if (__Pyx_PyObject_SetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_static_table, __pyx_t_1) < 0) __PYX_ERR(1, 10, __pyx_L1_error)
-  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  __Pyx_GIVEREF(__pyx_t_1);
+  __Pyx_GOTREF(__pyx_v_self->static_table);
+  __Pyx_DECREF(__pyx_v_self->static_table);
+  __pyx_v_self->static_table = __pyx_t_1;
+  __pyx_t_1 = 0;
 
-  /* "symbol_table.pyx":11
+  /* "symbol_table.pyx":17
  *     def __cinit__(self):
  *         self.static_table = {}
  *         self.field_table = {}             # <<<<<<<<<<<<<<
  *         self.arg_table = {}
  *         self.var_table = {}
  */
-  __pyx_t_1 = __Pyx_PyDict_NewPresized(0); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 11, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyDict_NewPresized(0); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 17, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  if (__Pyx_PyObject_SetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_field_table, __pyx_t_1) < 0) __PYX_ERR(1, 11, __pyx_L1_error)
-  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  __Pyx_GIVEREF(__pyx_t_1);
+  __Pyx_GOTREF(__pyx_v_self->field_table);
+  __Pyx_DECREF(__pyx_v_self->field_table);
+  __pyx_v_self->field_table = __pyx_t_1;
+  __pyx_t_1 = 0;
 
-  /* "symbol_table.pyx":12
+  /* "symbol_table.pyx":18
  *         self.static_table = {}
  *         self.field_table = {}
  *         self.arg_table = {}             # <<<<<<<<<<<<<<
  *         self.var_table = {}
  * 
  */
-  __pyx_t_1 = __Pyx_PyDict_NewPresized(0); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 12, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyDict_NewPresized(0); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 18, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  if (__Pyx_PyObject_SetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_arg_table, __pyx_t_1) < 0) __PYX_ERR(1, 12, __pyx_L1_error)
-  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  __Pyx_GIVEREF(__pyx_t_1);
+  __Pyx_GOTREF(__pyx_v_self->arg_table);
+  __Pyx_DECREF(__pyx_v_self->arg_table);
+  __pyx_v_self->arg_table = __pyx_t_1;
+  __pyx_t_1 = 0;
 
-  /* "symbol_table.pyx":13
+  /* "symbol_table.pyx":19
  *         self.field_table = {}
  *         self.arg_table = {}
  *         self.var_table = {}             # <<<<<<<<<<<<<<
  * 
  *     # Define a new identifier of a given name, type, and kind and assign it a running index.
  */
-  __pyx_t_1 = __Pyx_PyDict_NewPresized(0); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 13, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyDict_NewPresized(0); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 19, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  if (__Pyx_PyObject_SetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_var_table, __pyx_t_1) < 0) __PYX_ERR(1, 13, __pyx_L1_error)
-  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  __Pyx_GIVEREF(__pyx_t_1);
+  __Pyx_GOTREF(__pyx_v_self->var_table);
+  __Pyx_DECREF(__pyx_v_self->var_table);
+  __pyx_v_self->var_table = __pyx_t_1;
+  __pyx_t_1 = 0;
 
-  /* "symbol_table.pyx":9
+  /* "symbol_table.pyx":15
  * 
  *     # constructor
  *     def __cinit__(self):             # <<<<<<<<<<<<<<
@@ -1630,7 +1638,7 @@ static int __pyx_pf_12symbol_table_11SymbolTable___cinit__(struct __pyx_obj_12sy
   return __pyx_r;
 }
 
-/* "symbol_table.pyx":18
+/* "symbol_table.pyx":24
  *     cdef define(self, name, identifier_type, kind):
  *         class Identifier:
  *             def __init__(self, identifier_type, kind, index):             # <<<<<<<<<<<<<<
@@ -1679,23 +1687,23 @@ static PyObject *__pyx_pw_12symbol_table_11SymbolTable_6define_10Identifier_1__i
         case  1:
         if (likely((values[1] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_identifier_type)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("__init__", 1, 4, 4, 1); __PYX_ERR(1, 18, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("__init__", 1, 4, 4, 1); __PYX_ERR(1, 24, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  2:
         if (likely((values[2] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_kind)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("__init__", 1, 4, 4, 2); __PYX_ERR(1, 18, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("__init__", 1, 4, 4, 2); __PYX_ERR(1, 24, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  3:
         if (likely((values[3] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_index)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("__init__", 1, 4, 4, 3); __PYX_ERR(1, 18, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("__init__", 1, 4, 4, 3); __PYX_ERR(1, 24, __pyx_L3_error)
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "__init__") < 0)) __PYX_ERR(1, 18, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "__init__") < 0)) __PYX_ERR(1, 24, __pyx_L3_error)
       }
     } else if (PyTuple_GET_SIZE(__pyx_args) != 4) {
       goto __pyx_L5_argtuple_error;
@@ -1712,7 +1720,7 @@ static PyObject *__pyx_pw_12symbol_table_11SymbolTable_6define_10Identifier_1__i
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("__init__", 1, 4, 4, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(1, 18, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("__init__", 1, 4, 4, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(1, 24, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("symbol_table.SymbolTable.define.Identifier.__init__", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
@@ -1733,34 +1741,34 @@ static PyObject *__pyx_pf_12symbol_table_11SymbolTable_6define_10Identifier___in
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("__init__", 0);
 
-  /* "symbol_table.pyx":19
+  /* "symbol_table.pyx":25
  *         class Identifier:
  *             def __init__(self, identifier_type, kind, index):
  *                 self.type = identifier_type             # <<<<<<<<<<<<<<
  *                 self.kind = kind
  *                 self.index = index
  */
-  if (__Pyx_PyObject_SetAttrStr(__pyx_v_self, __pyx_n_s_type, __pyx_v_identifier_type) < 0) __PYX_ERR(1, 19, __pyx_L1_error)
+  if (__Pyx_PyObject_SetAttrStr(__pyx_v_self, __pyx_n_s_type, __pyx_v_identifier_type) < 0) __PYX_ERR(1, 25, __pyx_L1_error)
 
-  /* "symbol_table.pyx":20
+  /* "symbol_table.pyx":26
  *             def __init__(self, identifier_type, kind, index):
  *                 self.type = identifier_type
  *                 self.kind = kind             # <<<<<<<<<<<<<<
  *                 self.index = index
  * 
  */
-  if (__Pyx_PyObject_SetAttrStr(__pyx_v_self, __pyx_n_s_kind, __pyx_v_kind) < 0) __PYX_ERR(1, 20, __pyx_L1_error)
+  if (__Pyx_PyObject_SetAttrStr(__pyx_v_self, __pyx_n_s_kind, __pyx_v_kind) < 0) __PYX_ERR(1, 26, __pyx_L1_error)
 
-  /* "symbol_table.pyx":21
+  /* "symbol_table.pyx":27
  *                 self.type = identifier_type
  *                 self.kind = kind
  *                 self.index = index             # <<<<<<<<<<<<<<
  * 
  *         if kind == self.IdentifierKind.index('STATIC'):
  */
-  if (__Pyx_PyObject_SetAttrStr(__pyx_v_self, __pyx_n_s_index, __pyx_v_index) < 0) __PYX_ERR(1, 21, __pyx_L1_error)
+  if (__Pyx_PyObject_SetAttrStr(__pyx_v_self, __pyx_n_s_index, __pyx_v_index) < 0) __PYX_ERR(1, 27, __pyx_L1_error)
 
-  /* "symbol_table.pyx":18
+  /* "symbol_table.pyx":24
  *     cdef define(self, name, identifier_type, kind):
  *         class Identifier:
  *             def __init__(self, identifier_type, kind, index):             # <<<<<<<<<<<<<<
@@ -1780,7 +1788,7 @@ static PyObject *__pyx_pf_12symbol_table_11SymbolTable_6define_10Identifier___in
   return __pyx_r;
 }
 
-/* "symbol_table.pyx":16
+/* "symbol_table.pyx":22
  * 
  *     # Define a new identifier of a given name, type, and kind and assign it a running index.
  *     cdef define(self, name, identifier_type, kind):             # <<<<<<<<<<<<<<
@@ -1802,275 +1810,47 @@ static PyObject *__pyx_f_12symbol_table_11SymbolTable_define(struct __pyx_obj_12
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("define", 0);
 
-  /* "symbol_table.pyx":17
+  /* "symbol_table.pyx":23
  *     # Define a new identifier of a given name, type, and kind and assign it a running index.
  *     cdef define(self, name, identifier_type, kind):
  *         class Identifier:             # <<<<<<<<<<<<<<
  *             def __init__(self, identifier_type, kind, index):
  *                 self.type = identifier_type
  */
-  __pyx_t_1 = __Pyx_Py3MetaclassPrepare((PyObject *) NULL, __pyx_empty_tuple, __pyx_n_s_Identifier, __pyx_n_s_SymbolTable_define_locals_Identi, (PyObject *) NULL, __pyx_n_s_symbol_table, (PyObject *) NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 17, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_Py3MetaclassPrepare((PyObject *) NULL, __pyx_empty_tuple, __pyx_n_s_Identifier, __pyx_n_s_SymbolTable_define_locals_Identi, (PyObject *) NULL, __pyx_n_s_symbol_table, (PyObject *) NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 23, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
 
-  /* "symbol_table.pyx":18
+  /* "symbol_table.pyx":24
  *     cdef define(self, name, identifier_type, kind):
  *         class Identifier:
  *             def __init__(self, identifier_type, kind, index):             # <<<<<<<<<<<<<<
  *                 self.type = identifier_type
  *                 self.kind = kind
  */
-  __pyx_t_2 = __Pyx_CyFunction_New(&__pyx_mdef_12symbol_table_11SymbolTable_6define_10Identifier_1__init__, 0, __pyx_n_s_SymbolTable_define_locals_Identi_2, NULL, __pyx_n_s_symbol_table, __pyx_d, ((PyObject *)__pyx_codeobj__2)); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 18, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_CyFunction_New(&__pyx_mdef_12symbol_table_11SymbolTable_6define_10Identifier_1__init__, 0, __pyx_n_s_SymbolTable_define_locals_Identi_2, NULL, __pyx_n_s_symbol_table, __pyx_d, ((PyObject *)__pyx_codeobj__2)); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 24, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  if (__Pyx_SetNameInClass(__pyx_t_1, __pyx_n_s_init, __pyx_t_2) < 0) __PYX_ERR(1, 18, __pyx_L1_error)
+  if (__Pyx_SetNameInClass(__pyx_t_1, __pyx_n_s_init, __pyx_t_2) < 0) __PYX_ERR(1, 24, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-  /* "symbol_table.pyx":17
+  /* "symbol_table.pyx":23
  *     # Define a new identifier of a given name, type, and kind and assign it a running index.
  *     cdef define(self, name, identifier_type, kind):
  *         class Identifier:             # <<<<<<<<<<<<<<
  *             def __init__(self, identifier_type, kind, index):
  *                 self.type = identifier_type
  */
-  __pyx_t_2 = __Pyx_Py3ClassCreate(((PyObject*)&__Pyx_DefaultClassType), __pyx_n_s_Identifier, __pyx_empty_tuple, __pyx_t_1, NULL, 0, 1); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 17, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_Py3ClassCreate(((PyObject*)&__Pyx_DefaultClassType), __pyx_n_s_Identifier, __pyx_empty_tuple, __pyx_t_1, NULL, 0, 1); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 23, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __pyx_v_Identifier = __pyx_t_2;
   __pyx_t_2 = 0;
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "symbol_table.pyx":23
- *                 self.index = index
- * 
- *         if kind == self.IdentifierKind.index('STATIC'):             # <<<<<<<<<<<<<<
- *             self.static_table[name] = Identifier(identifier_type, kind, len(self.static_table))
- *         elif kind == self.IdentifierKind.index('FIELD'):
- */
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_IdentifierKind); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 23, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_index); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 23, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_3);
-  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  __pyx_t_2 = NULL;
-  if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_3))) {
-    __pyx_t_2 = PyMethod_GET_SELF(__pyx_t_3);
-    if (likely(__pyx_t_2)) {
-      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_3);
-      __Pyx_INCREF(__pyx_t_2);
-      __Pyx_INCREF(function);
-      __Pyx_DECREF_SET(__pyx_t_3, function);
-    }
-  }
-  __pyx_t_1 = (__pyx_t_2) ? __Pyx_PyObject_Call2Args(__pyx_t_3, __pyx_t_2, __pyx_n_s_STATIC) : __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_n_s_STATIC);
-  __Pyx_XDECREF(__pyx_t_2); __pyx_t_2 = 0;
-  if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 23, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  __pyx_t_3 = PyObject_RichCompare(__pyx_v_kind, __pyx_t_1, Py_EQ); __Pyx_XGOTREF(__pyx_t_3); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 23, __pyx_L1_error)
-  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __pyx_t_4 = __Pyx_PyObject_IsTrue(__pyx_t_3); if (unlikely(__pyx_t_4 < 0)) __PYX_ERR(1, 23, __pyx_L1_error)
-  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  if (__pyx_t_4) {
-
-    /* "symbol_table.pyx":24
- * 
- *         if kind == self.IdentifierKind.index('STATIC'):
- *             self.static_table[name] = Identifier(identifier_type, kind, len(self.static_table))             # <<<<<<<<<<<<<<
- *         elif kind == self.IdentifierKind.index('FIELD'):
- *             self.field_table[name] = Identifier(identifier_type, kind, len(self.field_table))
- */
-    __pyx_t_3 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_static_table); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 24, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_3);
-    __pyx_t_5 = PyObject_Length(__pyx_t_3); if (unlikely(__pyx_t_5 == ((Py_ssize_t)-1))) __PYX_ERR(1, 24, __pyx_L1_error)
-    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-    __pyx_t_3 = PyInt_FromSsize_t(__pyx_t_5); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 24, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_3);
-    __pyx_t_1 = PyTuple_New(3); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 24, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_1);
-    __Pyx_INCREF(__pyx_v_identifier_type);
-    __Pyx_GIVEREF(__pyx_v_identifier_type);
-    PyTuple_SET_ITEM(__pyx_t_1, 0, __pyx_v_identifier_type);
-    __Pyx_INCREF(__pyx_v_kind);
-    __Pyx_GIVEREF(__pyx_v_kind);
-    PyTuple_SET_ITEM(__pyx_t_1, 1, __pyx_v_kind);
-    __Pyx_GIVEREF(__pyx_t_3);
-    PyTuple_SET_ITEM(__pyx_t_1, 2, __pyx_t_3);
-    __pyx_t_3 = 0;
-    __pyx_t_3 = __Pyx_PyObject_Call(__pyx_v_Identifier, __pyx_t_1, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 24, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_3);
-    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-    __pyx_t_1 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_static_table); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 24, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_1);
-    if (unlikely(PyObject_SetItem(__pyx_t_1, __pyx_v_name, __pyx_t_3) < 0)) __PYX_ERR(1, 24, __pyx_L1_error)
-    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-
-    /* "symbol_table.pyx":23
- *                 self.index = index
- * 
- *         if kind == self.IdentifierKind.index('STATIC'):             # <<<<<<<<<<<<<<
- *             self.static_table[name] = Identifier(identifier_type, kind, len(self.static_table))
- *         elif kind == self.IdentifierKind.index('FIELD'):
- */
-    goto __pyx_L3;
-  }
-
-  /* "symbol_table.pyx":25
- *         if kind == self.IdentifierKind.index('STATIC'):
- *             self.static_table[name] = Identifier(identifier_type, kind, len(self.static_table))
- *         elif kind == self.IdentifierKind.index('FIELD'):             # <<<<<<<<<<<<<<
- *             self.field_table[name] = Identifier(identifier_type, kind, len(self.field_table))
- *         elif kind == self.IdentifierKind.index('ARG'):
- */
-  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_IdentifierKind); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 25, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_index); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 25, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_2);
-  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __pyx_t_1 = NULL;
-  if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
-    __pyx_t_1 = PyMethod_GET_SELF(__pyx_t_2);
-    if (likely(__pyx_t_1)) {
-      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
-      __Pyx_INCREF(__pyx_t_1);
-      __Pyx_INCREF(function);
-      __Pyx_DECREF_SET(__pyx_t_2, function);
-    }
-  }
-  __pyx_t_3 = (__pyx_t_1) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_1, __pyx_n_s_FIELD) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_n_s_FIELD);
-  __Pyx_XDECREF(__pyx_t_1); __pyx_t_1 = 0;
-  if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 25, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_3);
-  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  __pyx_t_2 = PyObject_RichCompare(__pyx_v_kind, __pyx_t_3, Py_EQ); __Pyx_XGOTREF(__pyx_t_2); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 25, __pyx_L1_error)
-  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  __pyx_t_4 = __Pyx_PyObject_IsTrue(__pyx_t_2); if (unlikely(__pyx_t_4 < 0)) __PYX_ERR(1, 25, __pyx_L1_error)
-  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  if (__pyx_t_4) {
-
-    /* "symbol_table.pyx":26
- *             self.static_table[name] = Identifier(identifier_type, kind, len(self.static_table))
- *         elif kind == self.IdentifierKind.index('FIELD'):
- *             self.field_table[name] = Identifier(identifier_type, kind, len(self.field_table))             # <<<<<<<<<<<<<<
- *         elif kind == self.IdentifierKind.index('ARG'):
- *             self.arg_table[name] = Identifier(identifier_type, kind, len(self.arg_table))
- */
-    __pyx_t_2 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_field_table); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 26, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_2);
-    __pyx_t_5 = PyObject_Length(__pyx_t_2); if (unlikely(__pyx_t_5 == ((Py_ssize_t)-1))) __PYX_ERR(1, 26, __pyx_L1_error)
-    __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-    __pyx_t_2 = PyInt_FromSsize_t(__pyx_t_5); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 26, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_2);
-    __pyx_t_3 = PyTuple_New(3); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 26, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_3);
-    __Pyx_INCREF(__pyx_v_identifier_type);
-    __Pyx_GIVEREF(__pyx_v_identifier_type);
-    PyTuple_SET_ITEM(__pyx_t_3, 0, __pyx_v_identifier_type);
-    __Pyx_INCREF(__pyx_v_kind);
-    __Pyx_GIVEREF(__pyx_v_kind);
-    PyTuple_SET_ITEM(__pyx_t_3, 1, __pyx_v_kind);
-    __Pyx_GIVEREF(__pyx_t_2);
-    PyTuple_SET_ITEM(__pyx_t_3, 2, __pyx_t_2);
-    __pyx_t_2 = 0;
-    __pyx_t_2 = __Pyx_PyObject_Call(__pyx_v_Identifier, __pyx_t_3, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 26, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_2);
-    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-    __pyx_t_3 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_field_table); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 26, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_3);
-    if (unlikely(PyObject_SetItem(__pyx_t_3, __pyx_v_name, __pyx_t_2) < 0)) __PYX_ERR(1, 26, __pyx_L1_error)
-    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-    __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-
-    /* "symbol_table.pyx":25
- *         if kind == self.IdentifierKind.index('STATIC'):
- *             self.static_table[name] = Identifier(identifier_type, kind, len(self.static_table))
- *         elif kind == self.IdentifierKind.index('FIELD'):             # <<<<<<<<<<<<<<
- *             self.field_table[name] = Identifier(identifier_type, kind, len(self.field_table))
- *         elif kind == self.IdentifierKind.index('ARG'):
- */
-    goto __pyx_L3;
-  }
-
-  /* "symbol_table.pyx":27
- *         elif kind == self.IdentifierKind.index('FIELD'):
- *             self.field_table[name] = Identifier(identifier_type, kind, len(self.field_table))
- *         elif kind == self.IdentifierKind.index('ARG'):             # <<<<<<<<<<<<<<
- *             self.arg_table[name] = Identifier(identifier_type, kind, len(self.arg_table))
- *         elif kind == self.IdentifierKind.index('VAR'):
- */
-  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_IdentifierKind); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 27, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_3);
-  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_index); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 27, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  __pyx_t_3 = NULL;
-  if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_1))) {
-    __pyx_t_3 = PyMethod_GET_SELF(__pyx_t_1);
-    if (likely(__pyx_t_3)) {
-      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_1);
-      __Pyx_INCREF(__pyx_t_3);
-      __Pyx_INCREF(function);
-      __Pyx_DECREF_SET(__pyx_t_1, function);
-    }
-  }
-  __pyx_t_2 = (__pyx_t_3) ? __Pyx_PyObject_Call2Args(__pyx_t_1, __pyx_t_3, __pyx_n_s_ARG) : __Pyx_PyObject_CallOneArg(__pyx_t_1, __pyx_n_s_ARG);
-  __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
-  if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 27, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_2);
-  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __pyx_t_1 = PyObject_RichCompare(__pyx_v_kind, __pyx_t_2, Py_EQ); __Pyx_XGOTREF(__pyx_t_1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 27, __pyx_L1_error)
-  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  __pyx_t_4 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_4 < 0)) __PYX_ERR(1, 27, __pyx_L1_error)
-  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  if (__pyx_t_4) {
-
-    /* "symbol_table.pyx":28
- *             self.field_table[name] = Identifier(identifier_type, kind, len(self.field_table))
- *         elif kind == self.IdentifierKind.index('ARG'):
- *             self.arg_table[name] = Identifier(identifier_type, kind, len(self.arg_table))             # <<<<<<<<<<<<<<
- *         elif kind == self.IdentifierKind.index('VAR'):
- *             self.var_table[name] = Identifier(identifier_type, kind, len(self.var_table))
- */
-    __pyx_t_1 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_arg_table); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 28, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_1);
-    __pyx_t_5 = PyObject_Length(__pyx_t_1); if (unlikely(__pyx_t_5 == ((Py_ssize_t)-1))) __PYX_ERR(1, 28, __pyx_L1_error)
-    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-    __pyx_t_1 = PyInt_FromSsize_t(__pyx_t_5); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 28, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_1);
-    __pyx_t_2 = PyTuple_New(3); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 28, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_2);
-    __Pyx_INCREF(__pyx_v_identifier_type);
-    __Pyx_GIVEREF(__pyx_v_identifier_type);
-    PyTuple_SET_ITEM(__pyx_t_2, 0, __pyx_v_identifier_type);
-    __Pyx_INCREF(__pyx_v_kind);
-    __Pyx_GIVEREF(__pyx_v_kind);
-    PyTuple_SET_ITEM(__pyx_t_2, 1, __pyx_v_kind);
-    __Pyx_GIVEREF(__pyx_t_1);
-    PyTuple_SET_ITEM(__pyx_t_2, 2, __pyx_t_1);
-    __pyx_t_1 = 0;
-    __pyx_t_1 = __Pyx_PyObject_Call(__pyx_v_Identifier, __pyx_t_2, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 28, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_1);
-    __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-    __pyx_t_2 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_arg_table); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 28, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_2);
-    if (unlikely(PyObject_SetItem(__pyx_t_2, __pyx_v_name, __pyx_t_1) < 0)) __PYX_ERR(1, 28, __pyx_L1_error)
-    __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-
-    /* "symbol_table.pyx":27
- *         elif kind == self.IdentifierKind.index('FIELD'):
- *             self.field_table[name] = Identifier(identifier_type, kind, len(self.field_table))
- *         elif kind == self.IdentifierKind.index('ARG'):             # <<<<<<<<<<<<<<
- *             self.arg_table[name] = Identifier(identifier_type, kind, len(self.arg_table))
- *         elif kind == self.IdentifierKind.index('VAR'):
- */
-    goto __pyx_L3;
-  }
-
   /* "symbol_table.pyx":29
- *         elif kind == self.IdentifierKind.index('ARG'):
- *             self.arg_table[name] = Identifier(identifier_type, kind, len(self.arg_table))
- *         elif kind == self.IdentifierKind.index('VAR'):             # <<<<<<<<<<<<<<
- *             self.var_table[name] = Identifier(identifier_type, kind, len(self.var_table))
- *         else:
+ *                 self.index = index
+ * 
+ *         if kind == self.IdentifierKind.index('STATIC'):             # <<<<<<<<<<<<<<
+ *             self.static_table[name] = Identifier(identifier_type, kind, len(self.static_table))
+ *         elif kind == self.IdentifierKind.index('FIELD'):
  */
   __pyx_t_2 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_IdentifierKind); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 29, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
@@ -2087,7 +1867,7 @@ static PyObject *__pyx_f_12symbol_table_11SymbolTable_define(struct __pyx_obj_12
       __Pyx_DECREF_SET(__pyx_t_3, function);
     }
   }
-  __pyx_t_1 = (__pyx_t_2) ? __Pyx_PyObject_Call2Args(__pyx_t_3, __pyx_t_2, __pyx_n_s_VAR) : __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_n_s_VAR);
+  __pyx_t_1 = (__pyx_t_2) ? __Pyx_PyObject_Call2Args(__pyx_t_3, __pyx_t_2, __pyx_n_s_STATIC) : __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_n_s_STATIC);
   __Pyx_XDECREF(__pyx_t_2); __pyx_t_2 = 0;
   if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 29, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
@@ -2096,17 +1876,17 @@ static PyObject *__pyx_f_12symbol_table_11SymbolTable_define(struct __pyx_obj_12
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __pyx_t_4 = __Pyx_PyObject_IsTrue(__pyx_t_3); if (unlikely(__pyx_t_4 < 0)) __PYX_ERR(1, 29, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  if (likely(__pyx_t_4)) {
+  if (__pyx_t_4) {
 
     /* "symbol_table.pyx":30
- *             self.arg_table[name] = Identifier(identifier_type, kind, len(self.arg_table))
- *         elif kind == self.IdentifierKind.index('VAR'):
- *             self.var_table[name] = Identifier(identifier_type, kind, len(self.var_table))             # <<<<<<<<<<<<<<
- *         else:
- *             raise Exception('Invalid kind')
+ * 
+ *         if kind == self.IdentifierKind.index('STATIC'):
+ *             self.static_table[name] = Identifier(identifier_type, kind, len(self.static_table))             # <<<<<<<<<<<<<<
+ *         elif kind == self.IdentifierKind.index('FIELD'):
+ *             self.field_table[name] = Identifier(identifier_type, kind, len(self.field_table))
  */
-    __pyx_t_3 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_var_table); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 30, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_3);
+    __pyx_t_3 = __pyx_v_self->static_table;
+    __Pyx_INCREF(__pyx_t_3);
     __pyx_t_5 = PyObject_Length(__pyx_t_3); if (unlikely(__pyx_t_5 == ((Py_ssize_t)-1))) __PYX_ERR(1, 30, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
     __pyx_t_3 = PyInt_FromSsize_t(__pyx_t_5); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 30, __pyx_L1_error)
@@ -2125,13 +1905,229 @@ static PyObject *__pyx_f_12symbol_table_11SymbolTable_define(struct __pyx_obj_12
     __pyx_t_3 = __Pyx_PyObject_Call(__pyx_v_Identifier, __pyx_t_1, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 30, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-    __pyx_t_1 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_var_table); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 30, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_1);
-    if (unlikely(PyObject_SetItem(__pyx_t_1, __pyx_v_name, __pyx_t_3) < 0)) __PYX_ERR(1, 30, __pyx_L1_error)
-    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+    if (unlikely(PyObject_SetItem(__pyx_v_self->static_table, __pyx_v_name, __pyx_t_3) < 0)) __PYX_ERR(1, 30, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
 
     /* "symbol_table.pyx":29
+ *                 self.index = index
+ * 
+ *         if kind == self.IdentifierKind.index('STATIC'):             # <<<<<<<<<<<<<<
+ *             self.static_table[name] = Identifier(identifier_type, kind, len(self.static_table))
+ *         elif kind == self.IdentifierKind.index('FIELD'):
+ */
+    goto __pyx_L3;
+  }
+
+  /* "symbol_table.pyx":31
+ *         if kind == self.IdentifierKind.index('STATIC'):
+ *             self.static_table[name] = Identifier(identifier_type, kind, len(self.static_table))
+ *         elif kind == self.IdentifierKind.index('FIELD'):             # <<<<<<<<<<<<<<
+ *             self.field_table[name] = Identifier(identifier_type, kind, len(self.field_table))
+ *         elif kind == self.IdentifierKind.index('ARG'):
+ */
+  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_IdentifierKind); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 31, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_index); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 31, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  __pyx_t_1 = NULL;
+  if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
+    __pyx_t_1 = PyMethod_GET_SELF(__pyx_t_2);
+    if (likely(__pyx_t_1)) {
+      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
+      __Pyx_INCREF(__pyx_t_1);
+      __Pyx_INCREF(function);
+      __Pyx_DECREF_SET(__pyx_t_2, function);
+    }
+  }
+  __pyx_t_3 = (__pyx_t_1) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_1, __pyx_n_s_FIELD) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_n_s_FIELD);
+  __Pyx_XDECREF(__pyx_t_1); __pyx_t_1 = 0;
+  if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 31, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_3);
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+  __pyx_t_2 = PyObject_RichCompare(__pyx_v_kind, __pyx_t_3, Py_EQ); __Pyx_XGOTREF(__pyx_t_2); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 31, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+  __pyx_t_4 = __Pyx_PyObject_IsTrue(__pyx_t_2); if (unlikely(__pyx_t_4 < 0)) __PYX_ERR(1, 31, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+  if (__pyx_t_4) {
+
+    /* "symbol_table.pyx":32
+ *             self.static_table[name] = Identifier(identifier_type, kind, len(self.static_table))
+ *         elif kind == self.IdentifierKind.index('FIELD'):
+ *             self.field_table[name] = Identifier(identifier_type, kind, len(self.field_table))             # <<<<<<<<<<<<<<
+ *         elif kind == self.IdentifierKind.index('ARG'):
+ *             self.arg_table[name] = Identifier(identifier_type, kind, len(self.arg_table))
+ */
+    __pyx_t_2 = __pyx_v_self->field_table;
+    __Pyx_INCREF(__pyx_t_2);
+    __pyx_t_5 = PyObject_Length(__pyx_t_2); if (unlikely(__pyx_t_5 == ((Py_ssize_t)-1))) __PYX_ERR(1, 32, __pyx_L1_error)
+    __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+    __pyx_t_2 = PyInt_FromSsize_t(__pyx_t_5); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 32, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_2);
+    __pyx_t_3 = PyTuple_New(3); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 32, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_3);
+    __Pyx_INCREF(__pyx_v_identifier_type);
+    __Pyx_GIVEREF(__pyx_v_identifier_type);
+    PyTuple_SET_ITEM(__pyx_t_3, 0, __pyx_v_identifier_type);
+    __Pyx_INCREF(__pyx_v_kind);
+    __Pyx_GIVEREF(__pyx_v_kind);
+    PyTuple_SET_ITEM(__pyx_t_3, 1, __pyx_v_kind);
+    __Pyx_GIVEREF(__pyx_t_2);
+    PyTuple_SET_ITEM(__pyx_t_3, 2, __pyx_t_2);
+    __pyx_t_2 = 0;
+    __pyx_t_2 = __Pyx_PyObject_Call(__pyx_v_Identifier, __pyx_t_3, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 32, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_2);
+    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+    if (unlikely(PyObject_SetItem(__pyx_v_self->field_table, __pyx_v_name, __pyx_t_2) < 0)) __PYX_ERR(1, 32, __pyx_L1_error)
+    __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+
+    /* "symbol_table.pyx":31
+ *         if kind == self.IdentifierKind.index('STATIC'):
+ *             self.static_table[name] = Identifier(identifier_type, kind, len(self.static_table))
+ *         elif kind == self.IdentifierKind.index('FIELD'):             # <<<<<<<<<<<<<<
+ *             self.field_table[name] = Identifier(identifier_type, kind, len(self.field_table))
+ *         elif kind == self.IdentifierKind.index('ARG'):
+ */
+    goto __pyx_L3;
+  }
+
+  /* "symbol_table.pyx":33
+ *         elif kind == self.IdentifierKind.index('FIELD'):
+ *             self.field_table[name] = Identifier(identifier_type, kind, len(self.field_table))
+ *         elif kind == self.IdentifierKind.index('ARG'):             # <<<<<<<<<<<<<<
+ *             self.arg_table[name] = Identifier(identifier_type, kind, len(self.arg_table))
+ *         elif kind == self.IdentifierKind.index('VAR'):
+ */
+  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_IdentifierKind); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 33, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_3);
+  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_index); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 33, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+  __pyx_t_3 = NULL;
+  if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_1))) {
+    __pyx_t_3 = PyMethod_GET_SELF(__pyx_t_1);
+    if (likely(__pyx_t_3)) {
+      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_1);
+      __Pyx_INCREF(__pyx_t_3);
+      __Pyx_INCREF(function);
+      __Pyx_DECREF_SET(__pyx_t_1, function);
+    }
+  }
+  __pyx_t_2 = (__pyx_t_3) ? __Pyx_PyObject_Call2Args(__pyx_t_1, __pyx_t_3, __pyx_n_s_ARG) : __Pyx_PyObject_CallOneArg(__pyx_t_1, __pyx_n_s_ARG);
+  __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
+  if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 33, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  __pyx_t_1 = PyObject_RichCompare(__pyx_v_kind, __pyx_t_2, Py_EQ); __Pyx_XGOTREF(__pyx_t_1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 33, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+  __pyx_t_4 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_4 < 0)) __PYX_ERR(1, 33, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  if (__pyx_t_4) {
+
+    /* "symbol_table.pyx":34
+ *             self.field_table[name] = Identifier(identifier_type, kind, len(self.field_table))
+ *         elif kind == self.IdentifierKind.index('ARG'):
+ *             self.arg_table[name] = Identifier(identifier_type, kind, len(self.arg_table))             # <<<<<<<<<<<<<<
+ *         elif kind == self.IdentifierKind.index('VAR'):
+ *             self.var_table[name] = Identifier(identifier_type, kind, len(self.var_table))
+ */
+    __pyx_t_1 = __pyx_v_self->arg_table;
+    __Pyx_INCREF(__pyx_t_1);
+    __pyx_t_5 = PyObject_Length(__pyx_t_1); if (unlikely(__pyx_t_5 == ((Py_ssize_t)-1))) __PYX_ERR(1, 34, __pyx_L1_error)
+    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+    __pyx_t_1 = PyInt_FromSsize_t(__pyx_t_5); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 34, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_1);
+    __pyx_t_2 = PyTuple_New(3); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 34, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_2);
+    __Pyx_INCREF(__pyx_v_identifier_type);
+    __Pyx_GIVEREF(__pyx_v_identifier_type);
+    PyTuple_SET_ITEM(__pyx_t_2, 0, __pyx_v_identifier_type);
+    __Pyx_INCREF(__pyx_v_kind);
+    __Pyx_GIVEREF(__pyx_v_kind);
+    PyTuple_SET_ITEM(__pyx_t_2, 1, __pyx_v_kind);
+    __Pyx_GIVEREF(__pyx_t_1);
+    PyTuple_SET_ITEM(__pyx_t_2, 2, __pyx_t_1);
+    __pyx_t_1 = 0;
+    __pyx_t_1 = __Pyx_PyObject_Call(__pyx_v_Identifier, __pyx_t_2, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 34, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_1);
+    __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+    if (unlikely(PyObject_SetItem(__pyx_v_self->arg_table, __pyx_v_name, __pyx_t_1) < 0)) __PYX_ERR(1, 34, __pyx_L1_error)
+    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+    /* "symbol_table.pyx":33
+ *         elif kind == self.IdentifierKind.index('FIELD'):
+ *             self.field_table[name] = Identifier(identifier_type, kind, len(self.field_table))
+ *         elif kind == self.IdentifierKind.index('ARG'):             # <<<<<<<<<<<<<<
+ *             self.arg_table[name] = Identifier(identifier_type, kind, len(self.arg_table))
+ *         elif kind == self.IdentifierKind.index('VAR'):
+ */
+    goto __pyx_L3;
+  }
+
+  /* "symbol_table.pyx":35
+ *         elif kind == self.IdentifierKind.index('ARG'):
+ *             self.arg_table[name] = Identifier(identifier_type, kind, len(self.arg_table))
+ *         elif kind == self.IdentifierKind.index('VAR'):             # <<<<<<<<<<<<<<
+ *             self.var_table[name] = Identifier(identifier_type, kind, len(self.var_table))
+ *         else:
+ */
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_IdentifierKind); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 35, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
+  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_index); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 35, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_3);
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+  __pyx_t_2 = NULL;
+  if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_3))) {
+    __pyx_t_2 = PyMethod_GET_SELF(__pyx_t_3);
+    if (likely(__pyx_t_2)) {
+      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_3);
+      __Pyx_INCREF(__pyx_t_2);
+      __Pyx_INCREF(function);
+      __Pyx_DECREF_SET(__pyx_t_3, function);
+    }
+  }
+  __pyx_t_1 = (__pyx_t_2) ? __Pyx_PyObject_Call2Args(__pyx_t_3, __pyx_t_2, __pyx_n_s_VAR) : __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_n_s_VAR);
+  __Pyx_XDECREF(__pyx_t_2); __pyx_t_2 = 0;
+  if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 35, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+  __pyx_t_3 = PyObject_RichCompare(__pyx_v_kind, __pyx_t_1, Py_EQ); __Pyx_XGOTREF(__pyx_t_3); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 35, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  __pyx_t_4 = __Pyx_PyObject_IsTrue(__pyx_t_3); if (unlikely(__pyx_t_4 < 0)) __PYX_ERR(1, 35, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+  if (likely(__pyx_t_4)) {
+
+    /* "symbol_table.pyx":36
+ *             self.arg_table[name] = Identifier(identifier_type, kind, len(self.arg_table))
+ *         elif kind == self.IdentifierKind.index('VAR'):
+ *             self.var_table[name] = Identifier(identifier_type, kind, len(self.var_table))             # <<<<<<<<<<<<<<
+ *         else:
+ *             raise Exception('Invalid kind')
+ */
+    __pyx_t_3 = __pyx_v_self->var_table;
+    __Pyx_INCREF(__pyx_t_3);
+    __pyx_t_5 = PyObject_Length(__pyx_t_3); if (unlikely(__pyx_t_5 == ((Py_ssize_t)-1))) __PYX_ERR(1, 36, __pyx_L1_error)
+    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+    __pyx_t_3 = PyInt_FromSsize_t(__pyx_t_5); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 36, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_3);
+    __pyx_t_1 = PyTuple_New(3); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 36, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_1);
+    __Pyx_INCREF(__pyx_v_identifier_type);
+    __Pyx_GIVEREF(__pyx_v_identifier_type);
+    PyTuple_SET_ITEM(__pyx_t_1, 0, __pyx_v_identifier_type);
+    __Pyx_INCREF(__pyx_v_kind);
+    __Pyx_GIVEREF(__pyx_v_kind);
+    PyTuple_SET_ITEM(__pyx_t_1, 1, __pyx_v_kind);
+    __Pyx_GIVEREF(__pyx_t_3);
+    PyTuple_SET_ITEM(__pyx_t_1, 2, __pyx_t_3);
+    __pyx_t_3 = 0;
+    __pyx_t_3 = __Pyx_PyObject_Call(__pyx_v_Identifier, __pyx_t_1, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 36, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_3);
+    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+    if (unlikely(PyObject_SetItem(__pyx_v_self->var_table, __pyx_v_name, __pyx_t_3) < 0)) __PYX_ERR(1, 36, __pyx_L1_error)
+    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+
+    /* "symbol_table.pyx":35
  *         elif kind == self.IdentifierKind.index('ARG'):
  *             self.arg_table[name] = Identifier(identifier_type, kind, len(self.arg_table))
  *         elif kind == self.IdentifierKind.index('VAR'):             # <<<<<<<<<<<<<<
@@ -2141,7 +2137,7 @@ static PyObject *__pyx_f_12symbol_table_11SymbolTable_define(struct __pyx_obj_12
     goto __pyx_L3;
   }
 
-  /* "symbol_table.pyx":32
+  /* "symbol_table.pyx":38
  *             self.var_table[name] = Identifier(identifier_type, kind, len(self.var_table))
  *         else:
  *             raise Exception('Invalid kind')             # <<<<<<<<<<<<<<
@@ -2149,15 +2145,15 @@ static PyObject *__pyx_f_12symbol_table_11SymbolTable_define(struct __pyx_obj_12
  *     cdef start_subroutin(self):
  */
   /*else*/ {
-    __pyx_t_3 = __Pyx_PyObject_Call(((PyObject *)(&((PyTypeObject*)PyExc_Exception)[0])), __pyx_tuple__3, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 32, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PyObject_Call(((PyObject *)(&((PyTypeObject*)PyExc_Exception)[0])), __pyx_tuple__3, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 38, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __Pyx_Raise(__pyx_t_3, 0, 0, 0);
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-    __PYX_ERR(1, 32, __pyx_L1_error)
+    __PYX_ERR(1, 38, __pyx_L1_error)
   }
   __pyx_L3:;
 
-  /* "symbol_table.pyx":16
+  /* "symbol_table.pyx":22
  * 
  *     # Define a new identifier of a given name, type, and kind and assign it a running index.
  *     cdef define(self, name, identifier_type, kind):             # <<<<<<<<<<<<<<
@@ -2181,7 +2177,7 @@ static PyObject *__pyx_f_12symbol_table_11SymbolTable_define(struct __pyx_obj_12
   return __pyx_r;
 }
 
-/* "symbol_table.pyx":34
+/* "symbol_table.pyx":40
  *             raise Exception('Invalid kind')
  * 
  *     cdef start_subroutin(self):             # <<<<<<<<<<<<<<
@@ -2198,31 +2194,37 @@ static PyObject *__pyx_f_12symbol_table_11SymbolTable_start_subroutin(struct __p
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("start_subroutin", 0);
 
-  /* "symbol_table.pyx":35
+  /* "symbol_table.pyx":41
  * 
  *     cdef start_subroutin(self):
  *         self.arg_table = {}             # <<<<<<<<<<<<<<
  *         self.var_table = {}
  * 
  */
-  __pyx_t_1 = __Pyx_PyDict_NewPresized(0); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 35, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyDict_NewPresized(0); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 41, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  if (__Pyx_PyObject_SetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_arg_table, __pyx_t_1) < 0) __PYX_ERR(1, 35, __pyx_L1_error)
-  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  __Pyx_GIVEREF(__pyx_t_1);
+  __Pyx_GOTREF(__pyx_v_self->arg_table);
+  __Pyx_DECREF(__pyx_v_self->arg_table);
+  __pyx_v_self->arg_table = __pyx_t_1;
+  __pyx_t_1 = 0;
 
-  /* "symbol_table.pyx":36
+  /* "symbol_table.pyx":42
  *     cdef start_subroutin(self):
  *         self.arg_table = {}
  *         self.var_table = {}             # <<<<<<<<<<<<<<
  * 
  *     cdef var_count(self, kind):
  */
-  __pyx_t_1 = __Pyx_PyDict_NewPresized(0); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 36, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyDict_NewPresized(0); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 42, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  if (__Pyx_PyObject_SetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_var_table, __pyx_t_1) < 0) __PYX_ERR(1, 36, __pyx_L1_error)
-  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  __Pyx_GIVEREF(__pyx_t_1);
+  __Pyx_GOTREF(__pyx_v_self->var_table);
+  __Pyx_DECREF(__pyx_v_self->var_table);
+  __pyx_v_self->var_table = __pyx_t_1;
+  __pyx_t_1 = 0;
 
-  /* "symbol_table.pyx":34
+  /* "symbol_table.pyx":40
  *             raise Exception('Invalid kind')
  * 
  *     cdef start_subroutin(self):             # <<<<<<<<<<<<<<
@@ -2243,7 +2245,7 @@ static PyObject *__pyx_f_12symbol_table_11SymbolTable_start_subroutin(struct __p
   return __pyx_r;
 }
 
-/* "symbol_table.pyx":38
+/* "symbol_table.pyx":44
  *         self.var_table = {}
  * 
  *     cdef var_count(self, kind):             # <<<<<<<<<<<<<<
@@ -2264,192 +2266,12 @@ static PyObject *__pyx_f_12symbol_table_11SymbolTable_var_count(struct __pyx_obj
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("var_count", 0);
 
-  /* "symbol_table.pyx":39
- * 
- *     cdef var_count(self, kind):
- *         if kind == self.IdentifierKind.index('STATIC'):             # <<<<<<<<<<<<<<
- *             return len(self.static_table)
- *         elif kind == self.IdentifierKind.index('FIELD'):
- */
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_IdentifierKind); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 39, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_index); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 39, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_3);
-  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  __pyx_t_2 = NULL;
-  if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_3))) {
-    __pyx_t_2 = PyMethod_GET_SELF(__pyx_t_3);
-    if (likely(__pyx_t_2)) {
-      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_3);
-      __Pyx_INCREF(__pyx_t_2);
-      __Pyx_INCREF(function);
-      __Pyx_DECREF_SET(__pyx_t_3, function);
-    }
-  }
-  __pyx_t_1 = (__pyx_t_2) ? __Pyx_PyObject_Call2Args(__pyx_t_3, __pyx_t_2, __pyx_n_s_STATIC) : __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_n_s_STATIC);
-  __Pyx_XDECREF(__pyx_t_2); __pyx_t_2 = 0;
-  if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 39, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  __pyx_t_3 = PyObject_RichCompare(__pyx_v_kind, __pyx_t_1, Py_EQ); __Pyx_XGOTREF(__pyx_t_3); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 39, __pyx_L1_error)
-  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __pyx_t_4 = __Pyx_PyObject_IsTrue(__pyx_t_3); if (unlikely(__pyx_t_4 < 0)) __PYX_ERR(1, 39, __pyx_L1_error)
-  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  if (__pyx_t_4) {
-
-    /* "symbol_table.pyx":40
- *     cdef var_count(self, kind):
- *         if kind == self.IdentifierKind.index('STATIC'):
- *             return len(self.static_table)             # <<<<<<<<<<<<<<
- *         elif kind == self.IdentifierKind.index('FIELD'):
- *             return len(self.field_table)
- */
-    __Pyx_XDECREF(__pyx_r);
-    __pyx_t_3 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_static_table); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 40, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_3);
-    __pyx_t_5 = PyObject_Length(__pyx_t_3); if (unlikely(__pyx_t_5 == ((Py_ssize_t)-1))) __PYX_ERR(1, 40, __pyx_L1_error)
-    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-    __pyx_t_3 = PyInt_FromSsize_t(__pyx_t_5); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 40, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_3);
-    __pyx_r = __pyx_t_3;
-    __pyx_t_3 = 0;
-    goto __pyx_L0;
-
-    /* "symbol_table.pyx":39
- * 
- *     cdef var_count(self, kind):
- *         if kind == self.IdentifierKind.index('STATIC'):             # <<<<<<<<<<<<<<
- *             return len(self.static_table)
- *         elif kind == self.IdentifierKind.index('FIELD'):
- */
-  }
-
-  /* "symbol_table.pyx":41
- *         if kind == self.IdentifierKind.index('STATIC'):
- *             return len(self.static_table)
- *         elif kind == self.IdentifierKind.index('FIELD'):             # <<<<<<<<<<<<<<
- *             return len(self.field_table)
- *         elif kind == self.IdentifierKind.index('ARG'):
- */
-  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_IdentifierKind); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 41, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_index); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 41, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_2);
-  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __pyx_t_1 = NULL;
-  if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
-    __pyx_t_1 = PyMethod_GET_SELF(__pyx_t_2);
-    if (likely(__pyx_t_1)) {
-      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
-      __Pyx_INCREF(__pyx_t_1);
-      __Pyx_INCREF(function);
-      __Pyx_DECREF_SET(__pyx_t_2, function);
-    }
-  }
-  __pyx_t_3 = (__pyx_t_1) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_1, __pyx_n_s_FIELD) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_n_s_FIELD);
-  __Pyx_XDECREF(__pyx_t_1); __pyx_t_1 = 0;
-  if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 41, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_3);
-  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  __pyx_t_2 = PyObject_RichCompare(__pyx_v_kind, __pyx_t_3, Py_EQ); __Pyx_XGOTREF(__pyx_t_2); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 41, __pyx_L1_error)
-  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  __pyx_t_4 = __Pyx_PyObject_IsTrue(__pyx_t_2); if (unlikely(__pyx_t_4 < 0)) __PYX_ERR(1, 41, __pyx_L1_error)
-  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  if (__pyx_t_4) {
-
-    /* "symbol_table.pyx":42
- *             return len(self.static_table)
- *         elif kind == self.IdentifierKind.index('FIELD'):
- *             return len(self.field_table)             # <<<<<<<<<<<<<<
- *         elif kind == self.IdentifierKind.index('ARG'):
- *             return len(self.arg_table)
- */
-    __Pyx_XDECREF(__pyx_r);
-    __pyx_t_2 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_field_table); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 42, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_2);
-    __pyx_t_5 = PyObject_Length(__pyx_t_2); if (unlikely(__pyx_t_5 == ((Py_ssize_t)-1))) __PYX_ERR(1, 42, __pyx_L1_error)
-    __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-    __pyx_t_2 = PyInt_FromSsize_t(__pyx_t_5); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 42, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_2);
-    __pyx_r = __pyx_t_2;
-    __pyx_t_2 = 0;
-    goto __pyx_L0;
-
-    /* "symbol_table.pyx":41
- *         if kind == self.IdentifierKind.index('STATIC'):
- *             return len(self.static_table)
- *         elif kind == self.IdentifierKind.index('FIELD'):             # <<<<<<<<<<<<<<
- *             return len(self.field_table)
- *         elif kind == self.IdentifierKind.index('ARG'):
- */
-  }
-
-  /* "symbol_table.pyx":43
- *         elif kind == self.IdentifierKind.index('FIELD'):
- *             return len(self.field_table)
- *         elif kind == self.IdentifierKind.index('ARG'):             # <<<<<<<<<<<<<<
- *             return len(self.arg_table)
- *         elif kind == self.IdentifierKind.index('VAR'):
- */
-  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_IdentifierKind); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 43, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_3);
-  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_index); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 43, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  __pyx_t_3 = NULL;
-  if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_1))) {
-    __pyx_t_3 = PyMethod_GET_SELF(__pyx_t_1);
-    if (likely(__pyx_t_3)) {
-      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_1);
-      __Pyx_INCREF(__pyx_t_3);
-      __Pyx_INCREF(function);
-      __Pyx_DECREF_SET(__pyx_t_1, function);
-    }
-  }
-  __pyx_t_2 = (__pyx_t_3) ? __Pyx_PyObject_Call2Args(__pyx_t_1, __pyx_t_3, __pyx_n_s_ARG) : __Pyx_PyObject_CallOneArg(__pyx_t_1, __pyx_n_s_ARG);
-  __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
-  if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 43, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_2);
-  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __pyx_t_1 = PyObject_RichCompare(__pyx_v_kind, __pyx_t_2, Py_EQ); __Pyx_XGOTREF(__pyx_t_1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 43, __pyx_L1_error)
-  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  __pyx_t_4 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_4 < 0)) __PYX_ERR(1, 43, __pyx_L1_error)
-  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  if (__pyx_t_4) {
-
-    /* "symbol_table.pyx":44
- *             return len(self.field_table)
- *         elif kind == self.IdentifierKind.index('ARG'):
- *             return len(self.arg_table)             # <<<<<<<<<<<<<<
- *         elif kind == self.IdentifierKind.index('VAR'):
- *             return len(self.var_table)
- */
-    __Pyx_XDECREF(__pyx_r);
-    __pyx_t_1 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_arg_table); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 44, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_1);
-    __pyx_t_5 = PyObject_Length(__pyx_t_1); if (unlikely(__pyx_t_5 == ((Py_ssize_t)-1))) __PYX_ERR(1, 44, __pyx_L1_error)
-    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-    __pyx_t_1 = PyInt_FromSsize_t(__pyx_t_5); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 44, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_1);
-    __pyx_r = __pyx_t_1;
-    __pyx_t_1 = 0;
-    goto __pyx_L0;
-
-    /* "symbol_table.pyx":43
- *         elif kind == self.IdentifierKind.index('FIELD'):
- *             return len(self.field_table)
- *         elif kind == self.IdentifierKind.index('ARG'):             # <<<<<<<<<<<<<<
- *             return len(self.arg_table)
- *         elif kind == self.IdentifierKind.index('VAR'):
- */
-  }
-
   /* "symbol_table.pyx":45
- *         elif kind == self.IdentifierKind.index('ARG'):
- *             return len(self.arg_table)
- *         elif kind == self.IdentifierKind.index('VAR'):             # <<<<<<<<<<<<<<
- *             return len(self.var_table)
- *         else:
+ * 
+ *     cdef var_count(self, kind):
+ *         if kind == self.IdentifierKind.index('STATIC'):             # <<<<<<<<<<<<<<
+ *             return len(self.static_table)
+ *         elif kind == self.IdentifierKind.index('FIELD'):
  */
   __pyx_t_2 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_IdentifierKind); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 45, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
@@ -2466,7 +2288,7 @@ static PyObject *__pyx_f_12symbol_table_11SymbolTable_var_count(struct __pyx_obj
       __Pyx_DECREF_SET(__pyx_t_3, function);
     }
   }
-  __pyx_t_1 = (__pyx_t_2) ? __Pyx_PyObject_Call2Args(__pyx_t_3, __pyx_t_2, __pyx_n_s_VAR) : __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_n_s_VAR);
+  __pyx_t_1 = (__pyx_t_2) ? __Pyx_PyObject_Call2Args(__pyx_t_3, __pyx_t_2, __pyx_n_s_STATIC) : __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_n_s_STATIC);
   __Pyx_XDECREF(__pyx_t_2); __pyx_t_2 = 0;
   if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 45, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
@@ -2475,18 +2297,18 @@ static PyObject *__pyx_f_12symbol_table_11SymbolTable_var_count(struct __pyx_obj
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __pyx_t_4 = __Pyx_PyObject_IsTrue(__pyx_t_3); if (unlikely(__pyx_t_4 < 0)) __PYX_ERR(1, 45, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  if (likely(__pyx_t_4)) {
+  if (__pyx_t_4) {
 
     /* "symbol_table.pyx":46
- *             return len(self.arg_table)
- *         elif kind == self.IdentifierKind.index('VAR'):
- *             return len(self.var_table)             # <<<<<<<<<<<<<<
- *         else:
- *             raise Exception('Invalid kind')
+ *     cdef var_count(self, kind):
+ *         if kind == self.IdentifierKind.index('STATIC'):
+ *             return len(self.static_table)             # <<<<<<<<<<<<<<
+ *         elif kind == self.IdentifierKind.index('FIELD'):
+ *             return len(self.field_table)
  */
     __Pyx_XDECREF(__pyx_r);
-    __pyx_t_3 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_var_table); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 46, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_3);
+    __pyx_t_3 = __pyx_v_self->static_table;
+    __Pyx_INCREF(__pyx_t_3);
     __pyx_t_5 = PyObject_Length(__pyx_t_3); if (unlikely(__pyx_t_5 == ((Py_ssize_t)-1))) __PYX_ERR(1, 46, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
     __pyx_t_3 = PyInt_FromSsize_t(__pyx_t_5); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 46, __pyx_L1_error)
@@ -2496,6 +2318,186 @@ static PyObject *__pyx_f_12symbol_table_11SymbolTable_var_count(struct __pyx_obj
     goto __pyx_L0;
 
     /* "symbol_table.pyx":45
+ * 
+ *     cdef var_count(self, kind):
+ *         if kind == self.IdentifierKind.index('STATIC'):             # <<<<<<<<<<<<<<
+ *             return len(self.static_table)
+ *         elif kind == self.IdentifierKind.index('FIELD'):
+ */
+  }
+
+  /* "symbol_table.pyx":47
+ *         if kind == self.IdentifierKind.index('STATIC'):
+ *             return len(self.static_table)
+ *         elif kind == self.IdentifierKind.index('FIELD'):             # <<<<<<<<<<<<<<
+ *             return len(self.field_table)
+ *         elif kind == self.IdentifierKind.index('ARG'):
+ */
+  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_IdentifierKind); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 47, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_index); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 47, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  __pyx_t_1 = NULL;
+  if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
+    __pyx_t_1 = PyMethod_GET_SELF(__pyx_t_2);
+    if (likely(__pyx_t_1)) {
+      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
+      __Pyx_INCREF(__pyx_t_1);
+      __Pyx_INCREF(function);
+      __Pyx_DECREF_SET(__pyx_t_2, function);
+    }
+  }
+  __pyx_t_3 = (__pyx_t_1) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_1, __pyx_n_s_FIELD) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_n_s_FIELD);
+  __Pyx_XDECREF(__pyx_t_1); __pyx_t_1 = 0;
+  if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 47, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_3);
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+  __pyx_t_2 = PyObject_RichCompare(__pyx_v_kind, __pyx_t_3, Py_EQ); __Pyx_XGOTREF(__pyx_t_2); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 47, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+  __pyx_t_4 = __Pyx_PyObject_IsTrue(__pyx_t_2); if (unlikely(__pyx_t_4 < 0)) __PYX_ERR(1, 47, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+  if (__pyx_t_4) {
+
+    /* "symbol_table.pyx":48
+ *             return len(self.static_table)
+ *         elif kind == self.IdentifierKind.index('FIELD'):
+ *             return len(self.field_table)             # <<<<<<<<<<<<<<
+ *         elif kind == self.IdentifierKind.index('ARG'):
+ *             return len(self.arg_table)
+ */
+    __Pyx_XDECREF(__pyx_r);
+    __pyx_t_2 = __pyx_v_self->field_table;
+    __Pyx_INCREF(__pyx_t_2);
+    __pyx_t_5 = PyObject_Length(__pyx_t_2); if (unlikely(__pyx_t_5 == ((Py_ssize_t)-1))) __PYX_ERR(1, 48, __pyx_L1_error)
+    __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+    __pyx_t_2 = PyInt_FromSsize_t(__pyx_t_5); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 48, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_2);
+    __pyx_r = __pyx_t_2;
+    __pyx_t_2 = 0;
+    goto __pyx_L0;
+
+    /* "symbol_table.pyx":47
+ *         if kind == self.IdentifierKind.index('STATIC'):
+ *             return len(self.static_table)
+ *         elif kind == self.IdentifierKind.index('FIELD'):             # <<<<<<<<<<<<<<
+ *             return len(self.field_table)
+ *         elif kind == self.IdentifierKind.index('ARG'):
+ */
+  }
+
+  /* "symbol_table.pyx":49
+ *         elif kind == self.IdentifierKind.index('FIELD'):
+ *             return len(self.field_table)
+ *         elif kind == self.IdentifierKind.index('ARG'):             # <<<<<<<<<<<<<<
+ *             return len(self.arg_table)
+ *         elif kind == self.IdentifierKind.index('VAR'):
+ */
+  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_IdentifierKind); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 49, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_3);
+  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_index); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 49, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+  __pyx_t_3 = NULL;
+  if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_1))) {
+    __pyx_t_3 = PyMethod_GET_SELF(__pyx_t_1);
+    if (likely(__pyx_t_3)) {
+      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_1);
+      __Pyx_INCREF(__pyx_t_3);
+      __Pyx_INCREF(function);
+      __Pyx_DECREF_SET(__pyx_t_1, function);
+    }
+  }
+  __pyx_t_2 = (__pyx_t_3) ? __Pyx_PyObject_Call2Args(__pyx_t_1, __pyx_t_3, __pyx_n_s_ARG) : __Pyx_PyObject_CallOneArg(__pyx_t_1, __pyx_n_s_ARG);
+  __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
+  if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 49, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  __pyx_t_1 = PyObject_RichCompare(__pyx_v_kind, __pyx_t_2, Py_EQ); __Pyx_XGOTREF(__pyx_t_1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 49, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+  __pyx_t_4 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_4 < 0)) __PYX_ERR(1, 49, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  if (__pyx_t_4) {
+
+    /* "symbol_table.pyx":50
+ *             return len(self.field_table)
+ *         elif kind == self.IdentifierKind.index('ARG'):
+ *             return len(self.arg_table)             # <<<<<<<<<<<<<<
+ *         elif kind == self.IdentifierKind.index('VAR'):
+ *             return len(self.var_table)
+ */
+    __Pyx_XDECREF(__pyx_r);
+    __pyx_t_1 = __pyx_v_self->arg_table;
+    __Pyx_INCREF(__pyx_t_1);
+    __pyx_t_5 = PyObject_Length(__pyx_t_1); if (unlikely(__pyx_t_5 == ((Py_ssize_t)-1))) __PYX_ERR(1, 50, __pyx_L1_error)
+    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+    __pyx_t_1 = PyInt_FromSsize_t(__pyx_t_5); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 50, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_1);
+    __pyx_r = __pyx_t_1;
+    __pyx_t_1 = 0;
+    goto __pyx_L0;
+
+    /* "symbol_table.pyx":49
+ *         elif kind == self.IdentifierKind.index('FIELD'):
+ *             return len(self.field_table)
+ *         elif kind == self.IdentifierKind.index('ARG'):             # <<<<<<<<<<<<<<
+ *             return len(self.arg_table)
+ *         elif kind == self.IdentifierKind.index('VAR'):
+ */
+  }
+
+  /* "symbol_table.pyx":51
+ *         elif kind == self.IdentifierKind.index('ARG'):
+ *             return len(self.arg_table)
+ *         elif kind == self.IdentifierKind.index('VAR'):             # <<<<<<<<<<<<<<
+ *             return len(self.var_table)
+ *         else:
+ */
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_IdentifierKind); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 51, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
+  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_index); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 51, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_3);
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+  __pyx_t_2 = NULL;
+  if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_3))) {
+    __pyx_t_2 = PyMethod_GET_SELF(__pyx_t_3);
+    if (likely(__pyx_t_2)) {
+      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_3);
+      __Pyx_INCREF(__pyx_t_2);
+      __Pyx_INCREF(function);
+      __Pyx_DECREF_SET(__pyx_t_3, function);
+    }
+  }
+  __pyx_t_1 = (__pyx_t_2) ? __Pyx_PyObject_Call2Args(__pyx_t_3, __pyx_t_2, __pyx_n_s_VAR) : __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_n_s_VAR);
+  __Pyx_XDECREF(__pyx_t_2); __pyx_t_2 = 0;
+  if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 51, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+  __pyx_t_3 = PyObject_RichCompare(__pyx_v_kind, __pyx_t_1, Py_EQ); __Pyx_XGOTREF(__pyx_t_3); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 51, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  __pyx_t_4 = __Pyx_PyObject_IsTrue(__pyx_t_3); if (unlikely(__pyx_t_4 < 0)) __PYX_ERR(1, 51, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+  if (likely(__pyx_t_4)) {
+
+    /* "symbol_table.pyx":52
+ *             return len(self.arg_table)
+ *         elif kind == self.IdentifierKind.index('VAR'):
+ *             return len(self.var_table)             # <<<<<<<<<<<<<<
+ *         else:
+ *             raise Exception('Invalid kind')
+ */
+    __Pyx_XDECREF(__pyx_r);
+    __pyx_t_3 = __pyx_v_self->var_table;
+    __Pyx_INCREF(__pyx_t_3);
+    __pyx_t_5 = PyObject_Length(__pyx_t_3); if (unlikely(__pyx_t_5 == ((Py_ssize_t)-1))) __PYX_ERR(1, 52, __pyx_L1_error)
+    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+    __pyx_t_3 = PyInt_FromSsize_t(__pyx_t_5); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 52, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_3);
+    __pyx_r = __pyx_t_3;
+    __pyx_t_3 = 0;
+    goto __pyx_L0;
+
+    /* "symbol_table.pyx":51
  *         elif kind == self.IdentifierKind.index('ARG'):
  *             return len(self.arg_table)
  *         elif kind == self.IdentifierKind.index('VAR'):             # <<<<<<<<<<<<<<
@@ -2504,7 +2506,7 @@ static PyObject *__pyx_f_12symbol_table_11SymbolTable_var_count(struct __pyx_obj
  */
   }
 
-  /* "symbol_table.pyx":48
+  /* "symbol_table.pyx":54
  *             return len(self.var_table)
  *         else:
  *             raise Exception('Invalid kind')             # <<<<<<<<<<<<<<
@@ -2512,14 +2514,14 @@ static PyObject *__pyx_f_12symbol_table_11SymbolTable_var_count(struct __pyx_obj
  *     cdef kind_of(self, name):
  */
   /*else*/ {
-    __pyx_t_3 = __Pyx_PyObject_Call(((PyObject *)(&((PyTypeObject*)PyExc_Exception)[0])), __pyx_tuple__3, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 48, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PyObject_Call(((PyObject *)(&((PyTypeObject*)PyExc_Exception)[0])), __pyx_tuple__3, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 54, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __Pyx_Raise(__pyx_t_3, 0, 0, 0);
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-    __PYX_ERR(1, 48, __pyx_L1_error)
+    __PYX_ERR(1, 54, __pyx_L1_error)
   }
 
-  /* "symbol_table.pyx":38
+  /* "symbol_table.pyx":44
  *         self.var_table = {}
  * 
  *     cdef var_count(self, kind):             # <<<<<<<<<<<<<<
@@ -2540,7 +2542,7 @@ static PyObject *__pyx_f_12symbol_table_11SymbolTable_var_count(struct __pyx_obj
   return __pyx_r;
 }
 
-/* "symbol_table.pyx":50
+/* "symbol_table.pyx":56
  *             raise Exception('Invalid kind')
  * 
  *     cdef kind_of(self, name):             # <<<<<<<<<<<<<<
@@ -2559,30 +2561,30 @@ static PyObject *__pyx_f_12symbol_table_11SymbolTable_kind_of(struct __pyx_obj_1
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("kind_of", 0);
 
-  /* "symbol_table.pyx":51
+  /* "symbol_table.pyx":57
  * 
  *     cdef kind_of(self, name):
  *         cdef str identifier = self.find_by_name(name)             # <<<<<<<<<<<<<<
  *         if identifier:
  *             return identifier.kind
  */
-  __pyx_t_1 = ((struct __pyx_vtabstruct_12symbol_table_SymbolTable *)__pyx_v_self->__pyx_vtab)->find_by_name(__pyx_v_self, __pyx_v_name); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 51, __pyx_L1_error)
+  __pyx_t_1 = ((struct __pyx_vtabstruct_12symbol_table_SymbolTable *)__pyx_v_self->__pyx_vtab)->find_by_name(__pyx_v_self, __pyx_v_name); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 57, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  if (!(likely(PyString_CheckExact(__pyx_t_1))||((__pyx_t_1) == Py_None)||((void)PyErr_Format(PyExc_TypeError, "Expected %.16s, got %.200s", "str", Py_TYPE(__pyx_t_1)->tp_name), 0))) __PYX_ERR(1, 51, __pyx_L1_error)
+  if (!(likely(PyString_CheckExact(__pyx_t_1))||((__pyx_t_1) == Py_None)||((void)PyErr_Format(PyExc_TypeError, "Expected %.16s, got %.200s", "str", Py_TYPE(__pyx_t_1)->tp_name), 0))) __PYX_ERR(1, 57, __pyx_L1_error)
   __pyx_v_identifier = ((PyObject*)__pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "symbol_table.pyx":52
+  /* "symbol_table.pyx":58
  *     cdef kind_of(self, name):
  *         cdef str identifier = self.find_by_name(name)
  *         if identifier:             # <<<<<<<<<<<<<<
  *             return identifier.kind
  *         else:
  */
-  __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_v_identifier); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(1, 52, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_v_identifier); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(1, 58, __pyx_L1_error)
   if (__pyx_t_2) {
 
-    /* "symbol_table.pyx":53
+    /* "symbol_table.pyx":59
  *         cdef str identifier = self.find_by_name(name)
  *         if identifier:
  *             return identifier.kind             # <<<<<<<<<<<<<<
@@ -2590,13 +2592,13 @@ static PyObject *__pyx_f_12symbol_table_11SymbolTable_kind_of(struct __pyx_obj_1
  *             return None
  */
     __Pyx_XDECREF(__pyx_r);
-    __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_identifier, __pyx_n_s_kind); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 53, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_identifier, __pyx_n_s_kind); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 59, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     __pyx_r = __pyx_t_1;
     __pyx_t_1 = 0;
     goto __pyx_L0;
 
-    /* "symbol_table.pyx":52
+    /* "symbol_table.pyx":58
  *     cdef kind_of(self, name):
  *         cdef str identifier = self.find_by_name(name)
  *         if identifier:             # <<<<<<<<<<<<<<
@@ -2605,7 +2607,7 @@ static PyObject *__pyx_f_12symbol_table_11SymbolTable_kind_of(struct __pyx_obj_1
  */
   }
 
-  /* "symbol_table.pyx":55
+  /* "symbol_table.pyx":61
  *             return identifier.kind
  *         else:
  *             return None             # <<<<<<<<<<<<<<
@@ -2618,7 +2620,7 @@ static PyObject *__pyx_f_12symbol_table_11SymbolTable_kind_of(struct __pyx_obj_1
     goto __pyx_L0;
   }
 
-  /* "symbol_table.pyx":50
+  /* "symbol_table.pyx":56
  *             raise Exception('Invalid kind')
  * 
  *     cdef kind_of(self, name):             # <<<<<<<<<<<<<<
@@ -2638,7 +2640,7 @@ static PyObject *__pyx_f_12symbol_table_11SymbolTable_kind_of(struct __pyx_obj_1
   return __pyx_r;
 }
 
-/* "symbol_table.pyx":57
+/* "symbol_table.pyx":63
  *             return None
  * 
  *     cdef type_of(self, name):             # <<<<<<<<<<<<<<
@@ -2656,20 +2658,20 @@ static PyObject *__pyx_f_12symbol_table_11SymbolTable_type_of(struct __pyx_obj_1
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("type_of", 0);
 
-  /* "symbol_table.pyx":58
+  /* "symbol_table.pyx":64
  * 
  *     cdef type_of(self, name):
  *         cdef str identifier = self.find_by_name(name)             # <<<<<<<<<<<<<<
  *         return identifier.type
  * 
  */
-  __pyx_t_1 = ((struct __pyx_vtabstruct_12symbol_table_SymbolTable *)__pyx_v_self->__pyx_vtab)->find_by_name(__pyx_v_self, __pyx_v_name); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 58, __pyx_L1_error)
+  __pyx_t_1 = ((struct __pyx_vtabstruct_12symbol_table_SymbolTable *)__pyx_v_self->__pyx_vtab)->find_by_name(__pyx_v_self, __pyx_v_name); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 64, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  if (!(likely(PyString_CheckExact(__pyx_t_1))||((__pyx_t_1) == Py_None)||((void)PyErr_Format(PyExc_TypeError, "Expected %.16s, got %.200s", "str", Py_TYPE(__pyx_t_1)->tp_name), 0))) __PYX_ERR(1, 58, __pyx_L1_error)
+  if (!(likely(PyString_CheckExact(__pyx_t_1))||((__pyx_t_1) == Py_None)||((void)PyErr_Format(PyExc_TypeError, "Expected %.16s, got %.200s", "str", Py_TYPE(__pyx_t_1)->tp_name), 0))) __PYX_ERR(1, 64, __pyx_L1_error)
   __pyx_v_identifier = ((PyObject*)__pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "symbol_table.pyx":59
+  /* "symbol_table.pyx":65
  *     cdef type_of(self, name):
  *         cdef str identifier = self.find_by_name(name)
  *         return identifier.type             # <<<<<<<<<<<<<<
@@ -2677,13 +2679,13 @@ static PyObject *__pyx_f_12symbol_table_11SymbolTable_type_of(struct __pyx_obj_1
  *     cdef index_of(self, name):
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_identifier, __pyx_n_s_type); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 59, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_identifier, __pyx_n_s_type); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 65, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "symbol_table.pyx":57
+  /* "symbol_table.pyx":63
  *             return None
  * 
  *     cdef type_of(self, name):             # <<<<<<<<<<<<<<
@@ -2703,7 +2705,7 @@ static PyObject *__pyx_f_12symbol_table_11SymbolTable_type_of(struct __pyx_obj_1
   return __pyx_r;
 }
 
-/* "symbol_table.pyx":61
+/* "symbol_table.pyx":67
  *         return identifier.type
  * 
  *     cdef index_of(self, name):             # <<<<<<<<<<<<<<
@@ -2721,20 +2723,20 @@ static PyObject *__pyx_f_12symbol_table_11SymbolTable_index_of(struct __pyx_obj_
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("index_of", 0);
 
-  /* "symbol_table.pyx":62
+  /* "symbol_table.pyx":68
  * 
  *     cdef index_of(self, name):
  *         cdef str identifier = self.find_by_name(name)             # <<<<<<<<<<<<<<
  *         return identifier.index
  * 
  */
-  __pyx_t_1 = ((struct __pyx_vtabstruct_12symbol_table_SymbolTable *)__pyx_v_self->__pyx_vtab)->find_by_name(__pyx_v_self, __pyx_v_name); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 62, __pyx_L1_error)
+  __pyx_t_1 = ((struct __pyx_vtabstruct_12symbol_table_SymbolTable *)__pyx_v_self->__pyx_vtab)->find_by_name(__pyx_v_self, __pyx_v_name); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 68, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  if (!(likely(PyString_CheckExact(__pyx_t_1))||((__pyx_t_1) == Py_None)||((void)PyErr_Format(PyExc_TypeError, "Expected %.16s, got %.200s", "str", Py_TYPE(__pyx_t_1)->tp_name), 0))) __PYX_ERR(1, 62, __pyx_L1_error)
+  if (!(likely(PyString_CheckExact(__pyx_t_1))||((__pyx_t_1) == Py_None)||((void)PyErr_Format(PyExc_TypeError, "Expected %.16s, got %.200s", "str", Py_TYPE(__pyx_t_1)->tp_name), 0))) __PYX_ERR(1, 68, __pyx_L1_error)
   __pyx_v_identifier = ((PyObject*)__pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "symbol_table.pyx":63
+  /* "symbol_table.pyx":69
  *     cdef index_of(self, name):
  *         cdef str identifier = self.find_by_name(name)
  *         return identifier.index             # <<<<<<<<<<<<<<
@@ -2742,13 +2744,13 @@ static PyObject *__pyx_f_12symbol_table_11SymbolTable_index_of(struct __pyx_obj_
  *     cdef find_by_name(self, name):
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_identifier, __pyx_n_s_index); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 63, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_identifier, __pyx_n_s_index); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 69, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "symbol_table.pyx":61
+  /* "symbol_table.pyx":67
  *         return identifier.type
  * 
  *     cdef index_of(self, name):             # <<<<<<<<<<<<<<
@@ -2768,7 +2770,7 @@ static PyObject *__pyx_f_12symbol_table_11SymbolTable_index_of(struct __pyx_obj_
   return __pyx_r;
 }
 
-/* "symbol_table.pyx":65
+/* "symbol_table.pyx":71
  *         return identifier.index
  * 
  *     cdef find_by_name(self, name):             # <<<<<<<<<<<<<<
@@ -2779,30 +2781,26 @@ static PyObject *__pyx_f_12symbol_table_11SymbolTable_index_of(struct __pyx_obj_
 static PyObject *__pyx_f_12symbol_table_11SymbolTable_find_by_name(struct __pyx_obj_12symbol_table_SymbolTable *__pyx_v_self, PyObject *__pyx_v_name) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
-  PyObject *__pyx_t_1 = NULL;
+  int __pyx_t_1;
   int __pyx_t_2;
-  int __pyx_t_3;
-  PyObject *__pyx_t_4 = NULL;
+  PyObject *__pyx_t_3 = NULL;
   int __pyx_lineno = 0;
   const char *__pyx_filename = NULL;
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("find_by_name", 0);
 
-  /* "symbol_table.pyx":66
+  /* "symbol_table.pyx":72
  * 
  *     cdef find_by_name(self, name):
  *         if name in self.static_table:             # <<<<<<<<<<<<<<
  *             return self.static_table[name]
  *         elif name in self.field_table:
  */
-  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_static_table); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 66, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_2 = (__Pyx_PySequence_ContainsTF(__pyx_v_name, __pyx_t_1, Py_EQ)); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(1, 66, __pyx_L1_error)
-  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __pyx_t_3 = (__pyx_t_2 != 0);
-  if (__pyx_t_3) {
+  __pyx_t_1 = (__Pyx_PySequence_ContainsTF(__pyx_v_name, __pyx_v_self->static_table, Py_EQ)); if (unlikely(__pyx_t_1 < 0)) __PYX_ERR(1, 72, __pyx_L1_error)
+  __pyx_t_2 = (__pyx_t_1 != 0);
+  if (__pyx_t_2) {
 
-    /* "symbol_table.pyx":67
+    /* "symbol_table.pyx":73
  *     cdef find_by_name(self, name):
  *         if name in self.static_table:
  *             return self.static_table[name]             # <<<<<<<<<<<<<<
@@ -2810,16 +2808,13 @@ static PyObject *__pyx_f_12symbol_table_11SymbolTable_find_by_name(struct __pyx_
  *             return self.field_table[name]
  */
     __Pyx_XDECREF(__pyx_r);
-    __pyx_t_1 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_static_table); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 67, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_1);
-    __pyx_t_4 = __Pyx_PyObject_GetItem(__pyx_t_1, __pyx_v_name); if (unlikely(!__pyx_t_4)) __PYX_ERR(1, 67, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_4);
-    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-    __pyx_r = __pyx_t_4;
-    __pyx_t_4 = 0;
+    __pyx_t_3 = __Pyx_PyObject_GetItem(__pyx_v_self->static_table, __pyx_v_name); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 73, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_3);
+    __pyx_r = __pyx_t_3;
+    __pyx_t_3 = 0;
     goto __pyx_L0;
 
-    /* "symbol_table.pyx":66
+    /* "symbol_table.pyx":72
  * 
  *     cdef find_by_name(self, name):
  *         if name in self.static_table:             # <<<<<<<<<<<<<<
@@ -2828,21 +2823,18 @@ static PyObject *__pyx_f_12symbol_table_11SymbolTable_find_by_name(struct __pyx_
  */
   }
 
-  /* "symbol_table.pyx":68
+  /* "symbol_table.pyx":74
  *         if name in self.static_table:
  *             return self.static_table[name]
  *         elif name in self.field_table:             # <<<<<<<<<<<<<<
  *             return self.field_table[name]
  *         elif name in self.arg_table:
  */
-  __pyx_t_4 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_field_table); if (unlikely(!__pyx_t_4)) __PYX_ERR(1, 68, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_4);
-  __pyx_t_3 = (__Pyx_PySequence_ContainsTF(__pyx_v_name, __pyx_t_4, Py_EQ)); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(1, 68, __pyx_L1_error)
-  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  __pyx_t_2 = (__pyx_t_3 != 0);
-  if (__pyx_t_2) {
+  __pyx_t_2 = (__Pyx_PySequence_ContainsTF(__pyx_v_name, __pyx_v_self->field_table, Py_EQ)); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(1, 74, __pyx_L1_error)
+  __pyx_t_1 = (__pyx_t_2 != 0);
+  if (__pyx_t_1) {
 
-    /* "symbol_table.pyx":69
+    /* "symbol_table.pyx":75
  *             return self.static_table[name]
  *         elif name in self.field_table:
  *             return self.field_table[name]             # <<<<<<<<<<<<<<
@@ -2850,16 +2842,13 @@ static PyObject *__pyx_f_12symbol_table_11SymbolTable_find_by_name(struct __pyx_
  *             return self.arg_table[name]
  */
     __Pyx_XDECREF(__pyx_r);
-    __pyx_t_4 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_field_table); if (unlikely(!__pyx_t_4)) __PYX_ERR(1, 69, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_4);
-    __pyx_t_1 = __Pyx_PyObject_GetItem(__pyx_t_4, __pyx_v_name); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 69, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_1);
-    __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-    __pyx_r = __pyx_t_1;
-    __pyx_t_1 = 0;
+    __pyx_t_3 = __Pyx_PyObject_GetItem(__pyx_v_self->field_table, __pyx_v_name); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 75, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_3);
+    __pyx_r = __pyx_t_3;
+    __pyx_t_3 = 0;
     goto __pyx_L0;
 
-    /* "symbol_table.pyx":68
+    /* "symbol_table.pyx":74
  *         if name in self.static_table:
  *             return self.static_table[name]
  *         elif name in self.field_table:             # <<<<<<<<<<<<<<
@@ -2868,21 +2857,18 @@ static PyObject *__pyx_f_12symbol_table_11SymbolTable_find_by_name(struct __pyx_
  */
   }
 
-  /* "symbol_table.pyx":70
+  /* "symbol_table.pyx":76
  *         elif name in self.field_table:
  *             return self.field_table[name]
  *         elif name in self.arg_table:             # <<<<<<<<<<<<<<
  *             return self.arg_table[name]
  *         elif name in self.var_table:
  */
-  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_arg_table); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 70, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_2 = (__Pyx_PySequence_ContainsTF(__pyx_v_name, __pyx_t_1, Py_EQ)); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(1, 70, __pyx_L1_error)
-  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __pyx_t_3 = (__pyx_t_2 != 0);
-  if (__pyx_t_3) {
+  __pyx_t_1 = (__Pyx_PySequence_ContainsTF(__pyx_v_name, __pyx_v_self->arg_table, Py_EQ)); if (unlikely(__pyx_t_1 < 0)) __PYX_ERR(1, 76, __pyx_L1_error)
+  __pyx_t_2 = (__pyx_t_1 != 0);
+  if (__pyx_t_2) {
 
-    /* "symbol_table.pyx":71
+    /* "symbol_table.pyx":77
  *             return self.field_table[name]
  *         elif name in self.arg_table:
  *             return self.arg_table[name]             # <<<<<<<<<<<<<<
@@ -2890,16 +2876,13 @@ static PyObject *__pyx_f_12symbol_table_11SymbolTable_find_by_name(struct __pyx_
  *             return self.var_table[name]
  */
     __Pyx_XDECREF(__pyx_r);
-    __pyx_t_1 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_arg_table); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 71, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_1);
-    __pyx_t_4 = __Pyx_PyObject_GetItem(__pyx_t_1, __pyx_v_name); if (unlikely(!__pyx_t_4)) __PYX_ERR(1, 71, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_4);
-    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-    __pyx_r = __pyx_t_4;
-    __pyx_t_4 = 0;
+    __pyx_t_3 = __Pyx_PyObject_GetItem(__pyx_v_self->arg_table, __pyx_v_name); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 77, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_3);
+    __pyx_r = __pyx_t_3;
+    __pyx_t_3 = 0;
     goto __pyx_L0;
 
-    /* "symbol_table.pyx":70
+    /* "symbol_table.pyx":76
  *         elif name in self.field_table:
  *             return self.field_table[name]
  *         elif name in self.arg_table:             # <<<<<<<<<<<<<<
@@ -2908,21 +2891,18 @@ static PyObject *__pyx_f_12symbol_table_11SymbolTable_find_by_name(struct __pyx_
  */
   }
 
-  /* "symbol_table.pyx":72
+  /* "symbol_table.pyx":78
  *         elif name in self.arg_table:
  *             return self.arg_table[name]
  *         elif name in self.var_table:             # <<<<<<<<<<<<<<
  *             return self.var_table[name]
  *         else:
  */
-  __pyx_t_4 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_var_table); if (unlikely(!__pyx_t_4)) __PYX_ERR(1, 72, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_4);
-  __pyx_t_3 = (__Pyx_PySequence_ContainsTF(__pyx_v_name, __pyx_t_4, Py_EQ)); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(1, 72, __pyx_L1_error)
-  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  __pyx_t_2 = (__pyx_t_3 != 0);
-  if (__pyx_t_2) {
+  __pyx_t_2 = (__Pyx_PySequence_ContainsTF(__pyx_v_name, __pyx_v_self->var_table, Py_EQ)); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(1, 78, __pyx_L1_error)
+  __pyx_t_1 = (__pyx_t_2 != 0);
+  if (__pyx_t_1) {
 
-    /* "symbol_table.pyx":73
+    /* "symbol_table.pyx":79
  *             return self.arg_table[name]
  *         elif name in self.var_table:
  *             return self.var_table[name]             # <<<<<<<<<<<<<<
@@ -2930,16 +2910,13 @@ static PyObject *__pyx_f_12symbol_table_11SymbolTable_find_by_name(struct __pyx_
  *             return None
  */
     __Pyx_XDECREF(__pyx_r);
-    __pyx_t_4 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_var_table); if (unlikely(!__pyx_t_4)) __PYX_ERR(1, 73, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_4);
-    __pyx_t_1 = __Pyx_PyObject_GetItem(__pyx_t_4, __pyx_v_name); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 73, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_1);
-    __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-    __pyx_r = __pyx_t_1;
-    __pyx_t_1 = 0;
+    __pyx_t_3 = __Pyx_PyObject_GetItem(__pyx_v_self->var_table, __pyx_v_name); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 79, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_3);
+    __pyx_r = __pyx_t_3;
+    __pyx_t_3 = 0;
     goto __pyx_L0;
 
-    /* "symbol_table.pyx":72
+    /* "symbol_table.pyx":78
  *         elif name in self.arg_table:
  *             return self.arg_table[name]
  *         elif name in self.var_table:             # <<<<<<<<<<<<<<
@@ -2948,7 +2925,7 @@ static PyObject *__pyx_f_12symbol_table_11SymbolTable_find_by_name(struct __pyx_
  */
   }
 
-  /* "symbol_table.pyx":75
+  /* "symbol_table.pyx":81
  *             return self.var_table[name]
  *         else:
  *             return None             # <<<<<<<<<<<<<<
@@ -2959,7 +2936,7 @@ static PyObject *__pyx_f_12symbol_table_11SymbolTable_find_by_name(struct __pyx_
     goto __pyx_L0;
   }
 
-  /* "symbol_table.pyx":65
+  /* "symbol_table.pyx":71
  *         return identifier.index
  * 
  *     cdef find_by_name(self, name):             # <<<<<<<<<<<<<<
@@ -2969,8 +2946,7 @@ static PyObject *__pyx_f_12symbol_table_11SymbolTable_find_by_name(struct __pyx_
 
   /* function exit code */
   __pyx_L1_error:;
-  __Pyx_XDECREF(__pyx_t_1);
-  __Pyx_XDECREF(__pyx_t_4);
+  __Pyx_XDECREF(__pyx_t_3);
   __Pyx_AddTraceback("symbol_table.SymbolTable.find_by_name", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = 0;
   __pyx_L0:;
@@ -3104,6 +3080,10 @@ static PyObject *__pyx_tp_new_12symbol_table_SymbolTable(PyTypeObject *t, CYTHON
   if (unlikely(!o)) return 0;
   p = ((struct __pyx_obj_12symbol_table_SymbolTable *)o);
   p->__pyx_vtab = __pyx_vtabptr_12symbol_table_SymbolTable;
+  p->static_table = Py_None; Py_INCREF(Py_None);
+  p->field_table = Py_None; Py_INCREF(Py_None);
+  p->arg_table = Py_None; Py_INCREF(Py_None);
+  p->var_table = Py_None; Py_INCREF(Py_None);
   if (unlikely(__pyx_pw_12symbol_table_11SymbolTable_1__cinit__(o, __pyx_empty_tuple, NULL) < 0)) goto bad;
   return o;
   bad:
@@ -3112,12 +3092,54 @@ static PyObject *__pyx_tp_new_12symbol_table_SymbolTable(PyTypeObject *t, CYTHON
 }
 
 static void __pyx_tp_dealloc_12symbol_table_SymbolTable(PyObject *o) {
+  struct __pyx_obj_12symbol_table_SymbolTable *p = (struct __pyx_obj_12symbol_table_SymbolTable *)o;
   #if CYTHON_USE_TP_FINALIZE
-  if (unlikely(PyType_HasFeature(Py_TYPE(o), Py_TPFLAGS_HAVE_FINALIZE) && Py_TYPE(o)->tp_finalize) && (!PyType_IS_GC(Py_TYPE(o)) || !_PyGC_FINALIZED(o))) {
+  if (unlikely(PyType_HasFeature(Py_TYPE(o), Py_TPFLAGS_HAVE_FINALIZE) && Py_TYPE(o)->tp_finalize) && !_PyGC_FINALIZED(o)) {
     if (PyObject_CallFinalizerFromDealloc(o)) return;
   }
   #endif
+  PyObject_GC_UnTrack(o);
+  Py_CLEAR(p->static_table);
+  Py_CLEAR(p->field_table);
+  Py_CLEAR(p->arg_table);
+  Py_CLEAR(p->var_table);
   (*Py_TYPE(o)->tp_free)(o);
+}
+
+static int __pyx_tp_traverse_12symbol_table_SymbolTable(PyObject *o, visitproc v, void *a) {
+  int e;
+  struct __pyx_obj_12symbol_table_SymbolTable *p = (struct __pyx_obj_12symbol_table_SymbolTable *)o;
+  if (p->static_table) {
+    e = (*v)(p->static_table, a); if (e) return e;
+  }
+  if (p->field_table) {
+    e = (*v)(p->field_table, a); if (e) return e;
+  }
+  if (p->arg_table) {
+    e = (*v)(p->arg_table, a); if (e) return e;
+  }
+  if (p->var_table) {
+    e = (*v)(p->var_table, a); if (e) return e;
+  }
+  return 0;
+}
+
+static int __pyx_tp_clear_12symbol_table_SymbolTable(PyObject *o) {
+  PyObject* tmp;
+  struct __pyx_obj_12symbol_table_SymbolTable *p = (struct __pyx_obj_12symbol_table_SymbolTable *)o;
+  tmp = ((PyObject*)p->static_table);
+  p->static_table = Py_None; Py_INCREF(Py_None);
+  Py_XDECREF(tmp);
+  tmp = ((PyObject*)p->field_table);
+  p->field_table = Py_None; Py_INCREF(Py_None);
+  Py_XDECREF(tmp);
+  tmp = ((PyObject*)p->arg_table);
+  p->arg_table = Py_None; Py_INCREF(Py_None);
+  Py_XDECREF(tmp);
+  tmp = ((PyObject*)p->var_table);
+  p->var_table = Py_None; Py_INCREF(Py_None);
+  Py_XDECREF(tmp);
+  return 0;
 }
 
 static PyMethodDef __pyx_methods_12symbol_table_SymbolTable[] = {
@@ -3156,10 +3178,10 @@ static PyTypeObject __pyx_type_12symbol_table_SymbolTable = {
   0, /*tp_getattro*/
   0, /*tp_setattro*/
   0, /*tp_as_buffer*/
-  Py_TPFLAGS_DEFAULT|Py_TPFLAGS_HAVE_VERSION_TAG|Py_TPFLAGS_CHECKTYPES|Py_TPFLAGS_HAVE_NEWBUFFER|Py_TPFLAGS_BASETYPE, /*tp_flags*/
+  Py_TPFLAGS_DEFAULT|Py_TPFLAGS_HAVE_VERSION_TAG|Py_TPFLAGS_CHECKTYPES|Py_TPFLAGS_HAVE_NEWBUFFER|Py_TPFLAGS_BASETYPE|Py_TPFLAGS_HAVE_GC, /*tp_flags*/
   0, /*tp_doc*/
-  0, /*tp_traverse*/
-  0, /*tp_clear*/
+  __pyx_tp_traverse_12symbol_table_SymbolTable, /*tp_traverse*/
+  __pyx_tp_clear_12symbol_table_SymbolTable, /*tp_clear*/
   0, /*tp_richcompare*/
   0, /*tp_weaklistoffset*/
   0, /*tp_iter*/
@@ -3255,10 +3277,8 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_SymbolTable_define_locals_Identi_2, __pyx_k_SymbolTable_define_locals_Identi_2, sizeof(__pyx_k_SymbolTable_define_locals_Identi_2), 0, 0, 1, 1},
   {&__pyx_n_s_TypeError, __pyx_k_TypeError, sizeof(__pyx_k_TypeError), 0, 0, 1, 1},
   {&__pyx_n_s_VAR, __pyx_k_VAR, sizeof(__pyx_k_VAR), 0, 0, 1, 1},
-  {&__pyx_n_s_arg_table, __pyx_k_arg_table, sizeof(__pyx_k_arg_table), 0, 0, 1, 1},
   {&__pyx_n_s_cline_in_traceback, __pyx_k_cline_in_traceback, sizeof(__pyx_k_cline_in_traceback), 0, 0, 1, 1},
   {&__pyx_n_s_doc, __pyx_k_doc, sizeof(__pyx_k_doc), 0, 0, 1, 1},
-  {&__pyx_n_s_field_table, __pyx_k_field_table, sizeof(__pyx_k_field_table), 0, 0, 1, 1},
   {&__pyx_n_s_getstate, __pyx_k_getstate, sizeof(__pyx_k_getstate), 0, 0, 1, 1},
   {&__pyx_n_s_identifier_type, __pyx_k_identifier_type, sizeof(__pyx_k_identifier_type), 0, 0, 1, 1},
   {&__pyx_n_s_index, __pyx_k_index, sizeof(__pyx_k_index), 0, 0, 1, 1},
@@ -3278,12 +3298,10 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_self, __pyx_k_self, sizeof(__pyx_k_self), 0, 0, 1, 1},
   {&__pyx_n_s_setstate, __pyx_k_setstate, sizeof(__pyx_k_setstate), 0, 0, 1, 1},
   {&__pyx_n_s_setstate_cython, __pyx_k_setstate_cython, sizeof(__pyx_k_setstate_cython), 0, 0, 1, 1},
-  {&__pyx_n_s_static_table, __pyx_k_static_table, sizeof(__pyx_k_static_table), 0, 0, 1, 1},
   {&__pyx_n_s_symbol_table, __pyx_k_symbol_table, sizeof(__pyx_k_symbol_table), 0, 0, 1, 1},
   {&__pyx_kp_s_symbol_table_pyx, __pyx_k_symbol_table_pyx, sizeof(__pyx_k_symbol_table_pyx), 0, 0, 1, 0},
   {&__pyx_n_s_test, __pyx_k_test, sizeof(__pyx_k_test), 0, 0, 1, 1},
   {&__pyx_n_s_type, __pyx_k_type, sizeof(__pyx_k_type), 0, 0, 1, 1},
-  {&__pyx_n_s_var_table, __pyx_k_var_table, sizeof(__pyx_k_var_table), 0, 0, 1, 1},
   {0, 0, 0, 0, 0, 0, 0}
 };
 static CYTHON_SMALL_CODE int __Pyx_InitCachedBuiltins(void) {
@@ -3297,26 +3315,26 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__Pyx_InitCachedConstants", 0);
 
-  /* "symbol_table.pyx":18
+  /* "symbol_table.pyx":24
  *     cdef define(self, name, identifier_type, kind):
  *         class Identifier:
  *             def __init__(self, identifier_type, kind, index):             # <<<<<<<<<<<<<<
  *                 self.type = identifier_type
  *                 self.kind = kind
  */
-  __pyx_tuple_ = PyTuple_Pack(4, __pyx_n_s_self, __pyx_n_s_identifier_type, __pyx_n_s_kind, __pyx_n_s_index); if (unlikely(!__pyx_tuple_)) __PYX_ERR(1, 18, __pyx_L1_error)
+  __pyx_tuple_ = PyTuple_Pack(4, __pyx_n_s_self, __pyx_n_s_identifier_type, __pyx_n_s_kind, __pyx_n_s_index); if (unlikely(!__pyx_tuple_)) __PYX_ERR(1, 24, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple_);
   __Pyx_GIVEREF(__pyx_tuple_);
-  __pyx_codeobj__2 = (PyObject*)__Pyx_PyCode_New(4, 0, 4, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple_, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_symbol_table_pyx, __pyx_n_s_init, 18, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__2)) __PYX_ERR(1, 18, __pyx_L1_error)
+  __pyx_codeobj__2 = (PyObject*)__Pyx_PyCode_New(4, 0, 4, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple_, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_symbol_table_pyx, __pyx_n_s_init, 24, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__2)) __PYX_ERR(1, 24, __pyx_L1_error)
 
-  /* "symbol_table.pyx":32
+  /* "symbol_table.pyx":38
  *             self.var_table[name] = Identifier(identifier_type, kind, len(self.var_table))
  *         else:
  *             raise Exception('Invalid kind')             # <<<<<<<<<<<<<<
  * 
  *     cdef start_subroutin(self):
  */
-  __pyx_tuple__3 = PyTuple_Pack(1, __pyx_kp_s_Invalid_kind); if (unlikely(!__pyx_tuple__3)) __PYX_ERR(1, 32, __pyx_L1_error)
+  __pyx_tuple__3 = PyTuple_Pack(1, __pyx_kp_s_Invalid_kind); if (unlikely(!__pyx_tuple__3)) __PYX_ERR(1, 38, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__3);
   __Pyx_GIVEREF(__pyx_tuple__3);
 
@@ -3646,7 +3664,7 @@ if (!__Pyx_RefNanny) {
  *     # static, field, arg, var
  *     IdentifierKind = ['STATIC', 'FIELD', 'ARG', 'VAR']             # <<<<<<<<<<<<<<
  * 
- *     # constructor
+ *     cdef static_table
  */
   __pyx_t_1 = PyList_New(4); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 6, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
@@ -3814,20 +3832,6 @@ invalid_keyword:
     return 0;
 }
 
-/* PyObjectSetAttrStr */
-#if CYTHON_USE_TYPE_SLOTS
-static CYTHON_INLINE int __Pyx_PyObject_SetAttrStr(PyObject* obj, PyObject* attr_name, PyObject* value) {
-    PyTypeObject* tp = Py_TYPE(obj);
-    if (likely(tp->tp_setattro))
-        return tp->tp_setattro(obj, attr_name, value);
-#if PY_MAJOR_VERSION < 3
-    if (likely(tp->tp_setattr))
-        return tp->tp_setattr(obj, PyString_AS_STRING(attr_name), value);
-#endif
-    return PyObject_SetAttr(obj, attr_name, value);
-}
-#endif
-
 /* RaiseDoubleKeywords */
 static void __Pyx_RaiseDoubleKeywordsError(
     const char* func_name,
@@ -3943,6 +3947,20 @@ invalid_keyword:
 bad:
     return -1;
 }
+
+/* PyObjectSetAttrStr */
+#if CYTHON_USE_TYPE_SLOTS
+static CYTHON_INLINE int __Pyx_PyObject_SetAttrStr(PyObject* obj, PyObject* attr_name, PyObject* value) {
+    PyTypeObject* tp = Py_TYPE(obj);
+    if (likely(tp->tp_setattro))
+        return tp->tp_setattro(obj, attr_name, value);
+#if PY_MAJOR_VERSION < 3
+    if (likely(tp->tp_setattr))
+        return tp->tp_setattr(obj, PyString_AS_STRING(attr_name), value);
+#endif
+    return PyObject_SetAttr(obj, attr_name, value);
+}
+#endif
 
 /* FetchCommonType */
 static PyTypeObject* __Pyx_FetchCommonType(PyTypeObject* type) {

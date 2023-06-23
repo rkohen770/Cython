@@ -5,6 +5,7 @@
 import os
 from jackAnalyzer import JackAnalyzer
 from vm_writer import VmWriter
+from compEngine import CompilationEngine
 
 cdef class JackTokenizer:
 
@@ -34,7 +35,7 @@ cdef class JackTokenizer:
                 print(file_name)
 
                  # Build the output file name
-                output_file_name = os.path.join(file_path, file_name + 'T' + '.xml')
+                output_file_name = os.path.join(file_path, file_name + '.vm')
         
                 # Open the output file for writing
                 output_file = open(output_file_name, 'w')
@@ -52,13 +53,14 @@ cdef class JackTokenizer:
                 file_name = os.path.splitext(os.path.basename(file_path))[0]
 
                 # Build the output file name
-                output_file = os.path.join(file_path, output_file_name.replace('T.xml', '.vm'))
+                output_file1 = os.path.join(file_path, output_file_name.replace('T.xml', '.vm'))
 
                 # Open the output file for writing
-                output_file = open(output_file, 'w')
+                output_file1 = open(output_file1, 'w')
         
                 # create an instance of the VMWriter class
-                vm_writer = VmWriter(output_file)
+                vm_writer = VmWriter(output_file1)
+                compE = CompilationEngine(file_path, entry.path , vm_writer)
 
 
 

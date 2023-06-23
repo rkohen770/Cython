@@ -5,6 +5,12 @@ cdef class SymbolTable:
     # static, field, arg, var
     IdentifierKind = ['STATIC', 'FIELD', 'ARG', 'VAR']
 
+    cdef static_table
+    cdef field_table
+    cdef arg_table
+    cdef var_table
+    
+
     # constructor
     def __cinit__(self):
         self.static_table = {}
