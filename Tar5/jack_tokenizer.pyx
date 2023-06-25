@@ -3,6 +3,7 @@
 
 
 import os
+import re
 from jackAnalyzer import JackAnalyzer
 from vm_writer import VmWriter
 from compEngine import CompilationEngine
@@ -13,144 +14,157 @@ cdef class JackTokenizer:
     KEYWORDS = ["class", "constructor", "function", "method", "field", "static", "var", "int", "char", "boolean",
                 "void", "true", "false", "null", "this", "let", "do", "if", "else", "while", "return"]
     SYMBOLS = ['{', '}', '(', ')', '[', ']', '.', ',', ';', '+', '-', '*', '/', '&', '|', '<', '>', '=', '~']
-    KEYWORD = "KEYWORD"
     SYMBOL = "SYMBOL"
     IDENTIFIER = "IDENTIFIER"
-    INT_CONST = "INT_CONST"
-    STRING_CONST = "STRING_CONST"
+    IDENTIFIER_PATTERN = re.compile(r'^[A-Za-z_][A-Za-z0-9_]*$')
+    INTEGER_PATTERN = re.compile(r'^[0-9]+$')
+    STRING_PATTERN = re.compile(r'^".*"$')
 
-    cdef str input_file_path
+    cdef int line_num
+    cdef str remained_line
+    cdef remained_tokens
+    cdef readfile
     cdef str current_token
-    cdef str current_token_type
 
-    # recursive function to process each file in the folder
-    cpdef recursive_process(self, file_path):
-        for entry in os.scandir(file_path):
-            print(entry.path)
+    def __cinit__(self, str filepath):
+        global current_token
+        current_token = None
+        self.line_num = 0
+        self.remained_line = ""
+        self.remained_tokens = []
 
-            if entry.is_file() and entry.name.endswith('.jack'):
-            
-                # Extract the name of the file in the path without the extension
-                file_name = os.path.splitext(entry.name)[0]
-                print(file_name)
+        self.readfile = open(filepath, 'r')
 
-                 # Build the output file name
-                output_file_name = os.path.join(file_path, file_name + '.vm')
-        
-                # Open the output file for writing
-                output_file = open(output_file_name, 'w')
-                
-                self.process_file(entry.path, output_file)
-                output_file.close()
+        with open(filepath[:-5] + "T.myImpl.xml", 'w') as writef:
+            writef.write("<tokens>\n")
+            while 1:
+                token = self.parse_next_token()
+                if token != None:
+                    elem_name =''
+                    if token in self.KEYWORDS:
+                        elem_name = "keyword"
+                    elif token in self.SYMBOLS:
+                        if token == '<':
+                            token = '&lt;'
+                        elif token == '>':
+                            token = '&gt;'
+                        elif token == '&':
+                            token = '&amp;'
+                        elem_name = "symbol"
+                    elif self.INTEGER_PATTERN.match(str(token)):
+                        elem_name = "integerConstant"
+                    elif self.IDENTIFIER_PATTERN.match(token):
+                        elem_name = "identifier"
+                    elif self.STRING_PATTERN.match(token):
+                        token = token[1:-1]
+                        elem_name = "stringConstant"
+                    else:
+                        self.raise_exception('Unknown token exists')
 
-                # Create an instance of the JackAnalyzer class
-                analyzer = JackAnalyzer()
-
-                # Call the compile method on the analyzer instance, passing the output file and directory as arguments
-                analyzer.compile(output_file_name, file_path , file_name)
-
-                # Extract the name of the file in the path without the 'T' extension
-                file_name = os.path.splitext(os.path.basename(file_path))[0]
-
-                # Build the output file name
-                output_file1 = os.path.join(file_path, output_file_name.replace('T.xml', '.vm'))
-
-                # Open the output file for writing
-                output_file1 = open(output_file1, 'w')
-        
-                # create an instance of the VMWriter class
-                vm_writer = VmWriter(output_file1)
-                compE = CompilationEngine(file_path, entry.path , vm_writer)
-
-
-
-            elif entry.is_dir():
-                self.recursive_process(entry.path)
-
-
-
-    # process each file
-    cdef process_file(self, input_file, output_file):
-
-        output_file.write("<tokens>\n")
-        # open the input file
-        with open(input_file, 'r') as f:
-            # open the output file
-            for line in f:
-                # remove white spaces and tabs in the beginning and end of the line
-                line = line.strip()
-
-                # ignore comments and empty lines
-                if line.startswith("//") or line.startswith("/**") or line.startswith("\n") or line.startswith("*"):
-                    continue
-                # remove comments
-                elif "//" in line:
-                    line = line[:line.index("//")]
-                elif "/*" in line:
-                    line = line[:line.index("/*")]
-                    while "*/" not in line:
-                        line += next(f)
-                    line = line[line.index("*/"):]
-
-                # remove empty lines
-                if line.strip() == "":
-                    continue
-                # remove white spaces and tabs in the beginning and end of the line
-                line = line.strip()
-                # add the line to the output file
-                self.processLine(line, output_file)
-
-
-                
-
-            output_file.write("</tokens>\n")
-
-
-    # process each line
-    cdef processLine(self, line, output_file):
-        token = ''
-        flag = False
-        for sign in line:
-            if sign in self.SYMBOLS and not flag:
-                self.tipulInWord(token, output_file)
-                if sign =='<' and not flag:
-                    output_file.write("<symbol> &lt; </symbol>\n")
-                elif sign =='>' and not flag:
-                    output_file.write("<symbol> &gt; </symbol>\n")
-                elif sign =='&' and not flag:
-                    output_file.write("<symbol> &amp; </symbol>\n")
+                    self.remained_tokens.append(token)
+                    writef.write("<%s> %s </%s>\n" % (elem_name, token, elem_name))
                 else:
-                    output_file.write("<symbol> " + sign + " </symbol>\n")
-                token = ""
-            elif sign == ' ' and not flag:
-                self.tipulInWord(token, output_file)
-                token = ""
-            elif sign == '/t' and not flag:
-                self.tipulInWord(token, output_file)
-                token = ""
-            elif sign == '"':
-                if flag:
-                    output_file.write("<stringConstant> " + token +" </stringConstant>\n")
-                    flag = False
-                    token = ""
-                else:
-                    flag = True
-            else:
-                token += sign
+                    break
+            writef.write("</tokens>\n")
+            self.readfile.close()
 
-
-
-    # check the type of the word
-    cdef tipulInWord(self, word, output_file):
-        if word==" " or word=="\t" or word=="" or word.strip()=="":
-            return
-        if word in self.KEYWORDS:
-            output_file.write("<keyword> " + word + " </keyword>\n")
-        elif word.isdigit():
-            output_file.write("<integerConstant> " + word + " </integerConstant>\n")
-        elif word.startswith('"') and word.endswith('"'):
-            output_file.write("<stringConstant> " + word + " </stringConstant>\n")
+    cdef _readline(self):
+        self.line_num += 1
+        cdef str line = self.readfile.readline()
+        if line:
+            self.remained_line = line.split("//")[0].strip()
         else:
-            output_file.write("<identifier> " + word + " </identifier>\n")
+            self.remained_line = None
+        return self.remained_line
 
+    cdef parse_next_token(self):
+        while True:
+            # read new line
+            if self.remained_line == '':
 
+                self._readline()
+
+                if self.remained_line is None:
+                    return None
+
+            if self.remained_line:
+                return self._pop_token_from_remained_line()
+
+    cdef _pop_token_from_remained_line(self):
+        self.remained_line = self.remained_line.lstrip()
+        for i in range(1, len(self.remained_line) + 1):
+            t_0 = self.judge_token(self.remained_line[0:i])
+            # it has a comment
+            if t_0 == '/*':
+                while 1:
+                    end_i= self.remained_line.find('*/')
+                    if end_i > -1:
+                        self.remained_line = self.remained_line[end_i + 2:]
+                        if len(self.remained_line) > 0:
+                            return self._pop_token_from_remained_line()
+                        else:
+                            self._readline()
+                            return self._pop_token_from_remained_line()
+
+                    self._readline()
+
+            if  i == len(self.remained_line):
+                if self.judge_token(self.remained_line):
+                    current_token = self.judge_token(self.remained_line[0:i])
+                    self.remained_line = self.remained_line[i:]
+                    return current_token
+                else:
+                    print(self.remained_line)
+                    self.raise_exception('Unknown token exists')
+            else:
+                t_1 = self.judge_token(self.remained_line[0:i + 1])
+                if t_0 != None:
+                    if t_1 != None:
+                        continue
+                    else:
+                        current_token = str(self.judge_token(self.remained_line[0:i]))
+                        self.remained_line = self.remained_line[i:]
+                        return t_0
+
+    cdef current_token_type(self):
+        return self.judge_token(current_token)
+
+    cdef raise_exception(self, str msg):
+        raise Exception("line %d: %s" % (self.line_num, msg))
+
+    cpdef advance(self):
+        if len(self.remained_tokens) > 0:
+            current_token = self.remained_tokens.pop(0)
+        else:
+            current_token = None
+        return current_token
+
+    cdef see_next(self,idx=0):
+        if len(self.remained_tokens) > idx:
+            return self.remained_tokens[idx]
+        else:
+            return None
+
+    cdef judge_token(self, judged_token):
+        if judged_token in self.KEYWORDS:
+            return judged_token
+        elif judged_token in self.SYMBOLS:
+            return judged_token
+        elif self.INTEGER_PATTERN.match(judged_token):
+            try:
+                return int(judged_token)   
+            except Exception as e:
+                self.raise_exception(e.message)
+        elif self.IDENTIFIER_PATTERN.match(judged_token):
+            return str(judged_token)
+        elif self.STRING_PATTERN.match(judged_token):
+            return str(judged_token)
+        else:
+            return None
+            
+
+    cdef token_type(self):
+        return current_token
+
+    cdef close(self):
+        self.readfile.close()

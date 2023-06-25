@@ -10,7 +10,17 @@ cdef class VmWriter():
 
     def __cinit__(self, output_f):
         print('writing to', output_f)
-        self.output_file = output_f
+        self.output_file = open(output_f, 'w')
+
+    def __enter__(self):
+        # Code executed when entering the context
+        return self
+
+    def __exit__(self, exc_type, exc_value, traceback):
+        # Close the output file if it was opened
+        if self.output_file is not None:
+            self.output_file.close()
+
 
     cdef write_code(self, code):
         self.f.write(code + '\n')
