@@ -1,26 +1,26 @@
-# Input: a single fileName.jack, or a folder containing 0 or more such files
-
-# For each file:
-# 1. Creates a JackTokenizer from fileName.jack
-# 2. Creates an output file named fileName.xml
-# 3. Creates a CompilationEngine, and calls the compileClass method
-
 import os
-from compilationEngine import CompilationEngine
+from compEngine import CompilationEngine
+from vm_writer import VmWriter
+import glob
 
 cdef class JackAnalyzer:
 
-    # get the base name of the file and the directory it is in and create new file for output in the same directory
-    cpdef compile(self, xxxT, directory, output_file_name):
+    def __cinit__(self,input_file):
 
-        # Extract the name of the file in the path without the 'T' extension
-        file_name = os.path.splitext(os.path.basename(directory))[0]
+        path = input_file
+        print(path)
 
-        # Build the output file name
-        output_file = os.path.join(directory, output_file_name  + '.xml')
-        
-        # Open the output file for writing
-        xxx = open(output_file, 'w')
+        self.recursionMethod(path)
 
-        # Create a CompilationEngine object
-        compilation_engine =  CompilationEngine(xxxT, xxx)
+    cdef compile(self, filepath):
+        with VmWriter(filepath[:-5] + ".vm") as code_writer:
+            with CompilationEngine(filepath, code_writer) as ce:
+                print ("compiling %s ..." % filepath)
+                ce.compile()
+
+    cdef recursionMethod(self, path):
+        if os.path.isfile(path) and path.endswith('.jack'):
+            self.compile(path)
+        elif os.path.isdir(path):
+            for file in os.listdir(path):
+                self.recursionMethod(path + "/" + file)

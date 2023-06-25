@@ -962,8 +962,8 @@ static const char *__pyx_filename;
 
 
 static const char *__pyx_f[] = {
-  "stringsource",
   "vm_writer.pyx",
+  "stringsource",
 };
 
 /*--- Type declarations ---*/
@@ -1086,11 +1086,11 @@ static int __Pyx_ParseOptionalKeywords(PyObject *kwds, PyObject **argnames[],\
 static void __Pyx_RaiseArgtupleInvalid(const char* func_name, int exact,
     Py_ssize_t num_min, Py_ssize_t num_max, Py_ssize_t num_found);
 
-/* PyCFunctionFastCall.proto */
-#if CYTHON_FAST_PYCCALL
-static CYTHON_INLINE PyObject *__Pyx_PyCFunction_FastCall(PyObject *func, PyObject **args, Py_ssize_t nargs);
+/* PyObjectCall.proto */
+#if CYTHON_COMPILING_IN_CPYTHON
+static CYTHON_INLINE PyObject* __Pyx_PyObject_Call(PyObject *func, PyObject *arg, PyObject *kw);
 #else
-#define __Pyx_PyCFunction_FastCall(func, args, nargs)  (assert(0), NULL)
+#define __Pyx_PyObject_Call(func, arg, kw) PyObject_Call(func, arg, kw)
 #endif
 
 /* PyFunctionFastCall.proto */
@@ -1124,23 +1124,30 @@ static PyObject *__Pyx_PyFunction_FastCallDict(PyObject *func, PyObject **args, 
 #endif // CYTHON_FAST_PYCALL
 #endif
 
-/* PyObjectCall.proto */
-#if CYTHON_COMPILING_IN_CPYTHON
-static CYTHON_INLINE PyObject* __Pyx_PyObject_Call(PyObject *func, PyObject *arg, PyObject *kw);
-#else
-#define __Pyx_PyObject_Call(func, arg, kw) PyObject_Call(func, arg, kw)
-#endif
-
-/* PyObjectCall2Args.proto */
-static CYTHON_UNUSED PyObject* __Pyx_PyObject_Call2Args(PyObject* function, PyObject* arg1, PyObject* arg2);
-
 /* PyObjectCallMethO.proto */
 #if CYTHON_COMPILING_IN_CPYTHON
 static CYTHON_INLINE PyObject* __Pyx_PyObject_CallMethO(PyObject *func, PyObject *arg);
 #endif
 
+/* PyObjectCallNoArg.proto */
+#if CYTHON_COMPILING_IN_CPYTHON
+static CYTHON_INLINE PyObject* __Pyx_PyObject_CallNoArg(PyObject *func);
+#else
+#define __Pyx_PyObject_CallNoArg(func) __Pyx_PyObject_Call(func, __pyx_empty_tuple, NULL)
+#endif
+
+/* PyCFunctionFastCall.proto */
+#if CYTHON_FAST_PYCCALL
+static CYTHON_INLINE PyObject *__Pyx_PyCFunction_FastCall(PyObject *func, PyObject **args, Py_ssize_t nargs);
+#else
+#define __Pyx_PyCFunction_FastCall(func, args, nargs)  (assert(0), NULL)
+#endif
+
 /* PyObjectCallOneArg.proto */
 static CYTHON_INLINE PyObject* __Pyx_PyObject_CallOneArg(PyObject *func, PyObject *arg);
+
+/* PyObjectCall2Args.proto */
+static CYTHON_UNUSED PyObject* __Pyx_PyObject_Call2Args(PyObject* function, PyObject* arg1, PyObject* arg2);
 
 /* StringJoin.proto */
 #if PY_MAJOR_VERSION < 3
@@ -1364,9 +1371,11 @@ extern int __pyx_module_is_main_vm_writer;
 int __pyx_module_is_main_vm_writer = 0;
 
 /* Implementation of 'vm_writer' */
+static PyObject *__pyx_builtin_open;
 static PyObject *__pyx_builtin_TypeError;
 static const char __pyx_k_[] = "\n";
 static const char __pyx_k_f[] = "f";
+static const char __pyx_k_w[] = "w";
 static const char __pyx_k_EQ[] = "EQ";
 static const char __pyx_k_GT[] = "GT";
 static const char __pyx_k_LT[] = "LT";
@@ -1397,12 +1406,14 @@ static const char __pyx_k_file[] = "file";
 static const char __pyx_k_join[] = "join";
 static const char __pyx_k_main[] = "__main__";
 static const char __pyx_k_name[] = "__name__";
+static const char __pyx_k_open[] = "open";
 static const char __pyx_k_temp[] = "temp";
 static const char __pyx_k_test[] = "__test__";
 static const char __pyx_k_that[] = "that";
 static const char __pyx_k_this[] = "this";
 static const char __pyx_k_CONST[] = "CONST";
 static const char __pyx_k_LOCAL[] = "LOCAL";
+static const char __pyx_k_close[] = "close";
 static const char __pyx_k_local[] = "local";
 static const char __pyx_k_print[] = "print";
 static const char __pyx_k_write[] = "write";
@@ -1420,13 +1431,16 @@ static const char __pyx_k_VmWriter[] = "VmWriter";
 static const char __pyx_k_argument[] = "argument";
 static const char __pyx_k_call_s_d[] = "call %s %d";
 static const char __pyx_k_constant[] = "constant";
+static const char __pyx_k_exc_type[] = "exc_type";
 static const char __pyx_k_getstate[] = "__getstate__";
 static const char __pyx_k_output_f[] = "output_f";
 static const char __pyx_k_push_s_d[] = "push %s %d";
 static const char __pyx_k_setstate[] = "__setstate__";
 static const char __pyx_k_TypeError[] = "TypeError";
+static const char __pyx_k_exc_value[] = "exc_value";
 static const char __pyx_k_if_goto_s[] = "if-goto %s";
 static const char __pyx_k_reduce_ex[] = "__reduce_ex__";
+static const char __pyx_k_traceback[] = "traceback";
 static const char __pyx_k_pyx_vtable[] = "__pyx_vtable__";
 static const char __pyx_k_writing_to[] = "writing to";
 static const char __pyx_k_function_s_d[] = "function %s %d";
@@ -1461,9 +1475,12 @@ static PyObject *__pyx_n_s_and;
 static PyObject *__pyx_n_s_argument;
 static PyObject *__pyx_kp_s_call_s_d;
 static PyObject *__pyx_n_s_cline_in_traceback;
+static PyObject *__pyx_n_s_close;
 static PyObject *__pyx_n_s_constant;
 static PyObject *__pyx_n_s_end;
 static PyObject *__pyx_n_s_eq;
+static PyObject *__pyx_n_s_exc_type;
+static PyObject *__pyx_n_s_exc_value;
 static PyObject *__pyx_n_s_f;
 static PyObject *__pyx_n_s_file;
 static PyObject *__pyx_kp_s_function_s_d;
@@ -1481,6 +1498,7 @@ static PyObject *__pyx_n_s_name;
 static PyObject *__pyx_n_s_neg;
 static PyObject *__pyx_kp_s_no_default___reduce___due_to_non;
 static PyObject *__pyx_n_s_not;
+static PyObject *__pyx_n_s_open;
 static PyObject *__pyx_n_s_or;
 static PyObject *__pyx_n_s_os;
 static PyObject *__pyx_n_s_output_f;
@@ -1503,13 +1521,17 @@ static PyObject *__pyx_n_s_temp;
 static PyObject *__pyx_n_s_test;
 static PyObject *__pyx_n_s_that;
 static PyObject *__pyx_n_s_this;
+static PyObject *__pyx_n_s_traceback;
 static PyObject *__pyx_kp_s_unknown_command_s;
 static PyObject *__pyx_kp_s_unknown_segment_s;
+static PyObject *__pyx_n_s_w;
 static PyObject *__pyx_n_s_write;
 static PyObject *__pyx_kp_s_writing_to;
 static int __pyx_pf_9vm_writer_8VmWriter___cinit__(struct __pyx_obj_9vm_writer_VmWriter *__pyx_v_self, PyObject *__pyx_v_output_f); /* proto */
-static PyObject *__pyx_pf_9vm_writer_8VmWriter_2__reduce_cython__(CYTHON_UNUSED struct __pyx_obj_9vm_writer_VmWriter *__pyx_v_self); /* proto */
-static PyObject *__pyx_pf_9vm_writer_8VmWriter_4__setstate_cython__(CYTHON_UNUSED struct __pyx_obj_9vm_writer_VmWriter *__pyx_v_self, CYTHON_UNUSED PyObject *__pyx_v___pyx_state); /* proto */
+static PyObject *__pyx_pf_9vm_writer_8VmWriter_2__enter__(struct __pyx_obj_9vm_writer_VmWriter *__pyx_v_self); /* proto */
+static PyObject *__pyx_pf_9vm_writer_8VmWriter_4__exit__(struct __pyx_obj_9vm_writer_VmWriter *__pyx_v_self, CYTHON_UNUSED PyObject *__pyx_v_exc_type, CYTHON_UNUSED PyObject *__pyx_v_exc_value, CYTHON_UNUSED PyObject *__pyx_v_traceback); /* proto */
+static PyObject *__pyx_pf_9vm_writer_8VmWriter_6__reduce_cython__(CYTHON_UNUSED struct __pyx_obj_9vm_writer_VmWriter *__pyx_v_self); /* proto */
+static PyObject *__pyx_pf_9vm_writer_8VmWriter_8__setstate_cython__(CYTHON_UNUSED struct __pyx_obj_9vm_writer_VmWriter *__pyx_v_self, CYTHON_UNUSED PyObject *__pyx_v___pyx_state); /* proto */
 static PyObject *__pyx_tp_new_9vm_writer_VmWriter(PyTypeObject *t, PyObject *a, PyObject *k); /*proto*/
 static PyObject *__pyx_tuple__2;
 static PyObject *__pyx_tuple__3;
@@ -1520,7 +1542,7 @@ static PyObject *__pyx_tuple__3;
  * 
  *     def __cinit__(self, output_f):             # <<<<<<<<<<<<<<
  *         print('writing to', output_f)
- *         self.output_file = output_f
+ *         self.output_file = open(output_f, 'w')
  */
 
 /* Python wrapper */
@@ -1552,7 +1574,7 @@ static int __pyx_pw_9vm_writer_8VmWriter_1__cinit__(PyObject *__pyx_v_self, PyOb
         else goto __pyx_L5_argtuple_error;
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "__cinit__") < 0)) __PYX_ERR(1, 11, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "__cinit__") < 0)) __PYX_ERR(0, 11, __pyx_L3_error)
       }
     } else if (PyTuple_GET_SIZE(__pyx_args) != 1) {
       goto __pyx_L5_argtuple_error;
@@ -1563,7 +1585,7 @@ static int __pyx_pw_9vm_writer_8VmWriter_1__cinit__(PyObject *__pyx_v_self, PyOb
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("__cinit__", 1, 1, 1, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(1, 11, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("__cinit__", 1, 1, 1, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 11, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("vm_writer.VmWriter.__cinit__", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
@@ -1580,6 +1602,7 @@ static int __pyx_pf_9vm_writer_8VmWriter___cinit__(struct __pyx_obj_9vm_writer_V
   int __pyx_r;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
+  PyObject *__pyx_t_2 = NULL;
   int __pyx_lineno = 0;
   const char *__pyx_filename = NULL;
   int __pyx_clineno = 0;
@@ -1589,10 +1612,10 @@ static int __pyx_pf_9vm_writer_8VmWriter___cinit__(struct __pyx_obj_9vm_writer_V
  * 
  *     def __cinit__(self, output_f):
  *         print('writing to', output_f)             # <<<<<<<<<<<<<<
- *         self.output_file = output_f
+ *         self.output_file = open(output_f, 'w')
  * 
  */
-  __pyx_t_1 = PyTuple_New(2); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 12, __pyx_L1_error)
+  __pyx_t_1 = PyTuple_New(2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 12, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_INCREF(__pyx_kp_s_writing_to);
   __Pyx_GIVEREF(__pyx_kp_s_writing_to);
@@ -1600,28 +1623,39 @@ static int __pyx_pf_9vm_writer_8VmWriter___cinit__(struct __pyx_obj_9vm_writer_V
   __Pyx_INCREF(__pyx_v_output_f);
   __Pyx_GIVEREF(__pyx_v_output_f);
   PyTuple_SET_ITEM(__pyx_t_1, 1, __pyx_v_output_f);
-  if (__Pyx_PrintOne(0, __pyx_t_1) < 0) __PYX_ERR(1, 12, __pyx_L1_error)
+  if (__Pyx_PrintOne(0, __pyx_t_1) < 0) __PYX_ERR(0, 12, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
   /* "vm_writer.pyx":13
  *     def __cinit__(self, output_f):
  *         print('writing to', output_f)
- *         self.output_file = output_f             # <<<<<<<<<<<<<<
+ *         self.output_file = open(output_f, 'w')             # <<<<<<<<<<<<<<
  * 
- *     cdef write_code(self, code):
+ *     def __enter__(self):
  */
+  __pyx_t_1 = PyTuple_New(2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 13, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
   __Pyx_INCREF(__pyx_v_output_f);
   __Pyx_GIVEREF(__pyx_v_output_f);
+  PyTuple_SET_ITEM(__pyx_t_1, 0, __pyx_v_output_f);
+  __Pyx_INCREF(__pyx_n_s_w);
+  __Pyx_GIVEREF(__pyx_n_s_w);
+  PyTuple_SET_ITEM(__pyx_t_1, 1, __pyx_n_s_w);
+  __pyx_t_2 = __Pyx_PyObject_Call(__pyx_builtin_open, __pyx_t_1, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 13, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  __Pyx_GIVEREF(__pyx_t_2);
   __Pyx_GOTREF(__pyx_v_self->output_file);
   __Pyx_DECREF(__pyx_v_self->output_file);
-  __pyx_v_self->output_file = __pyx_v_output_f;
+  __pyx_v_self->output_file = __pyx_t_2;
+  __pyx_t_2 = 0;
 
   /* "vm_writer.pyx":11
  * 
  * 
  *     def __cinit__(self, output_f):             # <<<<<<<<<<<<<<
  *         print('writing to', output_f)
- *         self.output_file = output_f
+ *         self.output_file = open(output_f, 'w')
  */
 
   /* function exit code */
@@ -1629,6 +1663,7 @@ static int __pyx_pf_9vm_writer_8VmWriter___cinit__(struct __pyx_obj_9vm_writer_V
   goto __pyx_L0;
   __pyx_L1_error:;
   __Pyx_XDECREF(__pyx_t_1);
+  __Pyx_XDECREF(__pyx_t_2);
   __Pyx_AddTraceback("vm_writer.VmWriter.__cinit__", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = -1;
   __pyx_L0:;
@@ -1637,7 +1672,225 @@ static int __pyx_pf_9vm_writer_8VmWriter___cinit__(struct __pyx_obj_9vm_writer_V
 }
 
 /* "vm_writer.pyx":15
- *         self.output_file = output_f
+ *         self.output_file = open(output_f, 'w')
+ * 
+ *     def __enter__(self):             # <<<<<<<<<<<<<<
+ *         # Code executed when entering the context
+ *         return self
+ */
+
+/* Python wrapper */
+static PyObject *__pyx_pw_9vm_writer_8VmWriter_3__enter__(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
+static PyObject *__pyx_pw_9vm_writer_8VmWriter_3__enter__(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
+  PyObject *__pyx_r = 0;
+  __Pyx_RefNannyDeclarations
+  __Pyx_RefNannySetupContext("__enter__ (wrapper)", 0);
+  __pyx_r = __pyx_pf_9vm_writer_8VmWriter_2__enter__(((struct __pyx_obj_9vm_writer_VmWriter *)__pyx_v_self));
+
+  /* function exit code */
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+static PyObject *__pyx_pf_9vm_writer_8VmWriter_2__enter__(struct __pyx_obj_9vm_writer_VmWriter *__pyx_v_self) {
+  PyObject *__pyx_r = NULL;
+  __Pyx_RefNannyDeclarations
+  __Pyx_RefNannySetupContext("__enter__", 0);
+
+  /* "vm_writer.pyx":17
+ *     def __enter__(self):
+ *         # Code executed when entering the context
+ *         return self             # <<<<<<<<<<<<<<
+ * 
+ *     def __exit__(self, exc_type, exc_value, traceback):
+ */
+  __Pyx_XDECREF(__pyx_r);
+  __Pyx_INCREF(((PyObject *)__pyx_v_self));
+  __pyx_r = ((PyObject *)__pyx_v_self);
+  goto __pyx_L0;
+
+  /* "vm_writer.pyx":15
+ *         self.output_file = open(output_f, 'w')
+ * 
+ *     def __enter__(self):             # <<<<<<<<<<<<<<
+ *         # Code executed when entering the context
+ *         return self
+ */
+
+  /* function exit code */
+  __pyx_L0:;
+  __Pyx_XGIVEREF(__pyx_r);
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+/* "vm_writer.pyx":19
+ *         return self
+ * 
+ *     def __exit__(self, exc_type, exc_value, traceback):             # <<<<<<<<<<<<<<
+ *         # Close the output file if it was opened
+ *         if self.output_file is not None:
+ */
+
+/* Python wrapper */
+static PyObject *__pyx_pw_9vm_writer_8VmWriter_5__exit__(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
+static PyObject *__pyx_pw_9vm_writer_8VmWriter_5__exit__(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
+  CYTHON_UNUSED PyObject *__pyx_v_exc_type = 0;
+  CYTHON_UNUSED PyObject *__pyx_v_exc_value = 0;
+  CYTHON_UNUSED PyObject *__pyx_v_traceback = 0;
+  int __pyx_lineno = 0;
+  const char *__pyx_filename = NULL;
+  int __pyx_clineno = 0;
+  PyObject *__pyx_r = 0;
+  __Pyx_RefNannyDeclarations
+  __Pyx_RefNannySetupContext("__exit__ (wrapper)", 0);
+  {
+    static PyObject **__pyx_pyargnames[] = {&__pyx_n_s_exc_type,&__pyx_n_s_exc_value,&__pyx_n_s_traceback,0};
+    PyObject* values[3] = {0,0,0};
+    if (unlikely(__pyx_kwds)) {
+      Py_ssize_t kw_args;
+      const Py_ssize_t pos_args = PyTuple_GET_SIZE(__pyx_args);
+      switch (pos_args) {
+        case  3: values[2] = PyTuple_GET_ITEM(__pyx_args, 2);
+        CYTHON_FALLTHROUGH;
+        case  2: values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
+        CYTHON_FALLTHROUGH;
+        case  1: values[0] = PyTuple_GET_ITEM(__pyx_args, 0);
+        CYTHON_FALLTHROUGH;
+        case  0: break;
+        default: goto __pyx_L5_argtuple_error;
+      }
+      kw_args = PyDict_Size(__pyx_kwds);
+      switch (pos_args) {
+        case  0:
+        if (likely((values[0] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_exc_type)) != 0)) kw_args--;
+        else goto __pyx_L5_argtuple_error;
+        CYTHON_FALLTHROUGH;
+        case  1:
+        if (likely((values[1] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_exc_value)) != 0)) kw_args--;
+        else {
+          __Pyx_RaiseArgtupleInvalid("__exit__", 1, 3, 3, 1); __PYX_ERR(0, 19, __pyx_L3_error)
+        }
+        CYTHON_FALLTHROUGH;
+        case  2:
+        if (likely((values[2] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_traceback)) != 0)) kw_args--;
+        else {
+          __Pyx_RaiseArgtupleInvalid("__exit__", 1, 3, 3, 2); __PYX_ERR(0, 19, __pyx_L3_error)
+        }
+      }
+      if (unlikely(kw_args > 0)) {
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "__exit__") < 0)) __PYX_ERR(0, 19, __pyx_L3_error)
+      }
+    } else if (PyTuple_GET_SIZE(__pyx_args) != 3) {
+      goto __pyx_L5_argtuple_error;
+    } else {
+      values[0] = PyTuple_GET_ITEM(__pyx_args, 0);
+      values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
+      values[2] = PyTuple_GET_ITEM(__pyx_args, 2);
+    }
+    __pyx_v_exc_type = values[0];
+    __pyx_v_exc_value = values[1];
+    __pyx_v_traceback = values[2];
+  }
+  goto __pyx_L4_argument_unpacking_done;
+  __pyx_L5_argtuple_error:;
+  __Pyx_RaiseArgtupleInvalid("__exit__", 1, 3, 3, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 19, __pyx_L3_error)
+  __pyx_L3_error:;
+  __Pyx_AddTraceback("vm_writer.VmWriter.__exit__", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_RefNannyFinishContext();
+  return NULL;
+  __pyx_L4_argument_unpacking_done:;
+  __pyx_r = __pyx_pf_9vm_writer_8VmWriter_4__exit__(((struct __pyx_obj_9vm_writer_VmWriter *)__pyx_v_self), __pyx_v_exc_type, __pyx_v_exc_value, __pyx_v_traceback);
+
+  /* function exit code */
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+static PyObject *__pyx_pf_9vm_writer_8VmWriter_4__exit__(struct __pyx_obj_9vm_writer_VmWriter *__pyx_v_self, CYTHON_UNUSED PyObject *__pyx_v_exc_type, CYTHON_UNUSED PyObject *__pyx_v_exc_value, CYTHON_UNUSED PyObject *__pyx_v_traceback) {
+  PyObject *__pyx_r = NULL;
+  __Pyx_RefNannyDeclarations
+  int __pyx_t_1;
+  int __pyx_t_2;
+  PyObject *__pyx_t_3 = NULL;
+  PyObject *__pyx_t_4 = NULL;
+  PyObject *__pyx_t_5 = NULL;
+  int __pyx_lineno = 0;
+  const char *__pyx_filename = NULL;
+  int __pyx_clineno = 0;
+  __Pyx_RefNannySetupContext("__exit__", 0);
+
+  /* "vm_writer.pyx":21
+ *     def __exit__(self, exc_type, exc_value, traceback):
+ *         # Close the output file if it was opened
+ *         if self.output_file is not None:             # <<<<<<<<<<<<<<
+ *             self.output_file.close()
+ * 
+ */
+  __pyx_t_1 = (__pyx_v_self->output_file != Py_None);
+  __pyx_t_2 = (__pyx_t_1 != 0);
+  if (__pyx_t_2) {
+
+    /* "vm_writer.pyx":22
+ *         # Close the output file if it was opened
+ *         if self.output_file is not None:
+ *             self.output_file.close()             # <<<<<<<<<<<<<<
+ * 
+ * 
+ */
+    __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->output_file, __pyx_n_s_close); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 22, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_4);
+    __pyx_t_5 = NULL;
+    if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_4))) {
+      __pyx_t_5 = PyMethod_GET_SELF(__pyx_t_4);
+      if (likely(__pyx_t_5)) {
+        PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_4);
+        __Pyx_INCREF(__pyx_t_5);
+        __Pyx_INCREF(function);
+        __Pyx_DECREF_SET(__pyx_t_4, function);
+      }
+    }
+    __pyx_t_3 = (__pyx_t_5) ? __Pyx_PyObject_CallOneArg(__pyx_t_4, __pyx_t_5) : __Pyx_PyObject_CallNoArg(__pyx_t_4);
+    __Pyx_XDECREF(__pyx_t_5); __pyx_t_5 = 0;
+    if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 22, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_3);
+    __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+
+    /* "vm_writer.pyx":21
+ *     def __exit__(self, exc_type, exc_value, traceback):
+ *         # Close the output file if it was opened
+ *         if self.output_file is not None:             # <<<<<<<<<<<<<<
+ *             self.output_file.close()
+ * 
+ */
+  }
+
+  /* "vm_writer.pyx":19
+ *         return self
+ * 
+ *     def __exit__(self, exc_type, exc_value, traceback):             # <<<<<<<<<<<<<<
+ *         # Close the output file if it was opened
+ *         if self.output_file is not None:
+ */
+
+  /* function exit code */
+  __pyx_r = Py_None; __Pyx_INCREF(Py_None);
+  goto __pyx_L0;
+  __pyx_L1_error:;
+  __Pyx_XDECREF(__pyx_t_3);
+  __Pyx_XDECREF(__pyx_t_4);
+  __Pyx_XDECREF(__pyx_t_5);
+  __Pyx_AddTraceback("vm_writer.VmWriter.__exit__", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __pyx_r = NULL;
+  __pyx_L0:;
+  __Pyx_XGIVEREF(__pyx_r);
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+/* "vm_writer.pyx":25
+ * 
  * 
  *     cdef write_code(self, code):             # <<<<<<<<<<<<<<
  *         self.f.write(code + '\n')
@@ -1656,19 +1909,19 @@ static PyObject *__pyx_f_9vm_writer_8VmWriter_write_code(struct __pyx_obj_9vm_wr
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("write_code", 0);
 
-  /* "vm_writer.pyx":16
+  /* "vm_writer.pyx":26
  * 
  *     cdef write_code(self, code):
  *         self.f.write(code + '\n')             # <<<<<<<<<<<<<<
  * 
  *     cdef write_codes(self, codes):
  */
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_f); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 16, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_f); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 26, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_write); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 16, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_write); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 26, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  __pyx_t_2 = PyNumber_Add(__pyx_v_code, __pyx_kp_s_); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 16, __pyx_L1_error)
+  __pyx_t_2 = PyNumber_Add(__pyx_v_code, __pyx_kp_s_); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 26, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __pyx_t_4 = NULL;
   if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_3))) {
@@ -1683,13 +1936,13 @@ static PyObject *__pyx_f_9vm_writer_8VmWriter_write_code(struct __pyx_obj_9vm_wr
   __pyx_t_1 = (__pyx_t_4) ? __Pyx_PyObject_Call2Args(__pyx_t_3, __pyx_t_4, __pyx_t_2) : __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_t_2);
   __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 16, __pyx_L1_error)
+  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 26, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "vm_writer.pyx":15
- *         self.output_file = output_f
+  /* "vm_writer.pyx":25
+ * 
  * 
  *     cdef write_code(self, code):             # <<<<<<<<<<<<<<
  *         self.f.write(code + '\n')
@@ -1712,7 +1965,7 @@ static PyObject *__pyx_f_9vm_writer_8VmWriter_write_code(struct __pyx_obj_9vm_wr
   return __pyx_r;
 }
 
-/* "vm_writer.pyx":18
+/* "vm_writer.pyx":28
  *         self.f.write(code + '\n')
  * 
  *     cdef write_codes(self, codes):             # <<<<<<<<<<<<<<
@@ -1730,21 +1983,21 @@ static PyObject *__pyx_f_9vm_writer_8VmWriter_write_codes(struct __pyx_obj_9vm_w
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("write_codes", 0);
 
-  /* "vm_writer.pyx":19
+  /* "vm_writer.pyx":29
  * 
  *     cdef write_codes(self, codes):
  *         self.write_code('\n'.join(codes))             # <<<<<<<<<<<<<<
  * 
  *     cdef write_push(self, segment, index):
  */
-  __pyx_t_1 = __Pyx_PyString_Join(__pyx_kp_s_, __pyx_v_codes); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 19, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyString_Join(__pyx_kp_s_, __pyx_v_codes); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 29, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_2 = ((struct __pyx_vtabstruct_9vm_writer_VmWriter *)__pyx_v_self->__pyx_vtab)->write_code(__pyx_v_self, __pyx_t_1); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 19, __pyx_L1_error)
+  __pyx_t_2 = ((struct __pyx_vtabstruct_9vm_writer_VmWriter *)__pyx_v_self->__pyx_vtab)->write_code(__pyx_v_self, __pyx_t_1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 29, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-  /* "vm_writer.pyx":18
+  /* "vm_writer.pyx":28
  *         self.f.write(code + '\n')
  * 
  *     cdef write_codes(self, codes):             # <<<<<<<<<<<<<<
@@ -1766,7 +2019,7 @@ static PyObject *__pyx_f_9vm_writer_8VmWriter_write_codes(struct __pyx_obj_9vm_w
   return __pyx_r;
 }
 
-/* "vm_writer.pyx":21
+/* "vm_writer.pyx":31
  *         self.write_code('\n'.join(codes))
  * 
  *     cdef write_push(self, segment, index):             # <<<<<<<<<<<<<<
@@ -1785,18 +2038,18 @@ static PyObject *__pyx_f_9vm_writer_8VmWriter_write_push(struct __pyx_obj_9vm_wr
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("write_push", 0);
 
-  /* "vm_writer.pyx":22
+  /* "vm_writer.pyx":32
  * 
  *     cdef write_push(self, segment, index):
  *         self.write_code('push %s %d' % (self._get_segment_str(segment), int(index)))             # <<<<<<<<<<<<<<
  * 
  *     cdef write_pop(self, segment, index):
  */
-  __pyx_t_1 = ((struct __pyx_vtabstruct_9vm_writer_VmWriter *)__pyx_v_self->__pyx_vtab)->_get_segment_str(__pyx_v_self, __pyx_v_segment); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 22, __pyx_L1_error)
+  __pyx_t_1 = ((struct __pyx_vtabstruct_9vm_writer_VmWriter *)__pyx_v_self->__pyx_vtab)->_get_segment_str(__pyx_v_self, __pyx_v_segment); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 32, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_2 = __Pyx_PyNumber_Int(__pyx_v_index); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 22, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyNumber_Int(__pyx_v_index); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 32, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_3 = PyTuple_New(2); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 22, __pyx_L1_error)
+  __pyx_t_3 = PyTuple_New(2); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 32, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_GIVEREF(__pyx_t_1);
   PyTuple_SET_ITEM(__pyx_t_3, 0, __pyx_t_1);
@@ -1804,15 +2057,15 @@ static PyObject *__pyx_f_9vm_writer_8VmWriter_write_push(struct __pyx_obj_9vm_wr
   PyTuple_SET_ITEM(__pyx_t_3, 1, __pyx_t_2);
   __pyx_t_1 = 0;
   __pyx_t_2 = 0;
-  __pyx_t_2 = __Pyx_PyString_Format(__pyx_kp_s_push_s_d, __pyx_t_3); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 22, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyString_Format(__pyx_kp_s_push_s_d, __pyx_t_3); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 32, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  __pyx_t_3 = ((struct __pyx_vtabstruct_9vm_writer_VmWriter *)__pyx_v_self->__pyx_vtab)->write_code(__pyx_v_self, __pyx_t_2); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 22, __pyx_L1_error)
+  __pyx_t_3 = ((struct __pyx_vtabstruct_9vm_writer_VmWriter *)__pyx_v_self->__pyx_vtab)->write_code(__pyx_v_self, __pyx_t_2); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 32, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
 
-  /* "vm_writer.pyx":21
+  /* "vm_writer.pyx":31
  *         self.write_code('\n'.join(codes))
  * 
  *     cdef write_push(self, segment, index):             # <<<<<<<<<<<<<<
@@ -1835,7 +2088,7 @@ static PyObject *__pyx_f_9vm_writer_8VmWriter_write_push(struct __pyx_obj_9vm_wr
   return __pyx_r;
 }
 
-/* "vm_writer.pyx":24
+/* "vm_writer.pyx":34
  *         self.write_code('push %s %d' % (self._get_segment_str(segment), int(index)))
  * 
  *     cdef write_pop(self, segment, index):             # <<<<<<<<<<<<<<
@@ -1854,18 +2107,18 @@ static PyObject *__pyx_f_9vm_writer_8VmWriter_write_pop(struct __pyx_obj_9vm_wri
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("write_pop", 0);
 
-  /* "vm_writer.pyx":25
+  /* "vm_writer.pyx":35
  * 
  *     cdef write_pop(self, segment, index):
  *         self.write_code('pop %s %d' % (self._get_segment_str(segment), int(index)))             # <<<<<<<<<<<<<<
  * 
  *     cdef write_arithmetic(self, command):
  */
-  __pyx_t_1 = ((struct __pyx_vtabstruct_9vm_writer_VmWriter *)__pyx_v_self->__pyx_vtab)->_get_segment_str(__pyx_v_self, __pyx_v_segment); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 25, __pyx_L1_error)
+  __pyx_t_1 = ((struct __pyx_vtabstruct_9vm_writer_VmWriter *)__pyx_v_self->__pyx_vtab)->_get_segment_str(__pyx_v_self, __pyx_v_segment); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 35, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_2 = __Pyx_PyNumber_Int(__pyx_v_index); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 25, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyNumber_Int(__pyx_v_index); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 35, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_3 = PyTuple_New(2); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 25, __pyx_L1_error)
+  __pyx_t_3 = PyTuple_New(2); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 35, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_GIVEREF(__pyx_t_1);
   PyTuple_SET_ITEM(__pyx_t_3, 0, __pyx_t_1);
@@ -1873,15 +2126,15 @@ static PyObject *__pyx_f_9vm_writer_8VmWriter_write_pop(struct __pyx_obj_9vm_wri
   PyTuple_SET_ITEM(__pyx_t_3, 1, __pyx_t_2);
   __pyx_t_1 = 0;
   __pyx_t_2 = 0;
-  __pyx_t_2 = __Pyx_PyString_Format(__pyx_kp_s_pop_s_d, __pyx_t_3); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 25, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyString_Format(__pyx_kp_s_pop_s_d, __pyx_t_3); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 35, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  __pyx_t_3 = ((struct __pyx_vtabstruct_9vm_writer_VmWriter *)__pyx_v_self->__pyx_vtab)->write_code(__pyx_v_self, __pyx_t_2); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 25, __pyx_L1_error)
+  __pyx_t_3 = ((struct __pyx_vtabstruct_9vm_writer_VmWriter *)__pyx_v_self->__pyx_vtab)->write_code(__pyx_v_self, __pyx_t_2); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 35, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
 
-  /* "vm_writer.pyx":24
+  /* "vm_writer.pyx":34
  *         self.write_code('push %s %d' % (self._get_segment_str(segment), int(index)))
  * 
  *     cdef write_pop(self, segment, index):             # <<<<<<<<<<<<<<
@@ -1904,7 +2157,7 @@ static PyObject *__pyx_f_9vm_writer_8VmWriter_write_pop(struct __pyx_obj_9vm_wri
   return __pyx_r;
 }
 
-/* "vm_writer.pyx":27
+/* "vm_writer.pyx":37
  *         self.write_code('pop %s %d' % (self._get_segment_str(segment), int(index)))
  * 
  *     cdef write_arithmetic(self, command):             # <<<<<<<<<<<<<<
@@ -1923,28 +2176,28 @@ static PyObject *__pyx_f_9vm_writer_8VmWriter_write_arithmetic(struct __pyx_obj_
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("write_arithmetic", 0);
 
-  /* "vm_writer.pyx":28
+  /* "vm_writer.pyx":38
  * 
  *     cdef write_arithmetic(self, command):
  *         if command == 'ADD':             # <<<<<<<<<<<<<<
  *             self.write_code('add')
  *         elif command == 'SUB':
  */
-  __pyx_t_1 = (__Pyx_PyString_Equals(__pyx_v_command, __pyx_n_s_ADD, Py_EQ)); if (unlikely(__pyx_t_1 < 0)) __PYX_ERR(1, 28, __pyx_L1_error)
+  __pyx_t_1 = (__Pyx_PyString_Equals(__pyx_v_command, __pyx_n_s_ADD, Py_EQ)); if (unlikely(__pyx_t_1 < 0)) __PYX_ERR(0, 38, __pyx_L1_error)
   if (__pyx_t_1) {
 
-    /* "vm_writer.pyx":29
+    /* "vm_writer.pyx":39
  *     cdef write_arithmetic(self, command):
  *         if command == 'ADD':
  *             self.write_code('add')             # <<<<<<<<<<<<<<
  *         elif command == 'SUB':
  *             self.write_code('sub')
  */
-    __pyx_t_2 = ((struct __pyx_vtabstruct_9vm_writer_VmWriter *)__pyx_v_self->__pyx_vtab)->write_code(__pyx_v_self, __pyx_n_s_add); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 29, __pyx_L1_error)
+    __pyx_t_2 = ((struct __pyx_vtabstruct_9vm_writer_VmWriter *)__pyx_v_self->__pyx_vtab)->write_code(__pyx_v_self, __pyx_n_s_add); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 39, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-    /* "vm_writer.pyx":28
+    /* "vm_writer.pyx":38
  * 
  *     cdef write_arithmetic(self, command):
  *         if command == 'ADD':             # <<<<<<<<<<<<<<
@@ -1954,28 +2207,28 @@ static PyObject *__pyx_f_9vm_writer_8VmWriter_write_arithmetic(struct __pyx_obj_
     goto __pyx_L3;
   }
 
-  /* "vm_writer.pyx":30
+  /* "vm_writer.pyx":40
  *         if command == 'ADD':
  *             self.write_code('add')
  *         elif command == 'SUB':             # <<<<<<<<<<<<<<
  *             self.write_code('sub')
  *         elif command == 'NEG':
  */
-  __pyx_t_1 = (__Pyx_PyString_Equals(__pyx_v_command, __pyx_n_s_SUB, Py_EQ)); if (unlikely(__pyx_t_1 < 0)) __PYX_ERR(1, 30, __pyx_L1_error)
+  __pyx_t_1 = (__Pyx_PyString_Equals(__pyx_v_command, __pyx_n_s_SUB, Py_EQ)); if (unlikely(__pyx_t_1 < 0)) __PYX_ERR(0, 40, __pyx_L1_error)
   if (__pyx_t_1) {
 
-    /* "vm_writer.pyx":31
+    /* "vm_writer.pyx":41
  *             self.write_code('add')
  *         elif command == 'SUB':
  *             self.write_code('sub')             # <<<<<<<<<<<<<<
  *         elif command == 'NEG':
  *             self.write_code('neg')
  */
-    __pyx_t_2 = ((struct __pyx_vtabstruct_9vm_writer_VmWriter *)__pyx_v_self->__pyx_vtab)->write_code(__pyx_v_self, __pyx_n_s_sub); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 31, __pyx_L1_error)
+    __pyx_t_2 = ((struct __pyx_vtabstruct_9vm_writer_VmWriter *)__pyx_v_self->__pyx_vtab)->write_code(__pyx_v_self, __pyx_n_s_sub); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 41, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-    /* "vm_writer.pyx":30
+    /* "vm_writer.pyx":40
  *         if command == 'ADD':
  *             self.write_code('add')
  *         elif command == 'SUB':             # <<<<<<<<<<<<<<
@@ -1985,28 +2238,28 @@ static PyObject *__pyx_f_9vm_writer_8VmWriter_write_arithmetic(struct __pyx_obj_
     goto __pyx_L3;
   }
 
-  /* "vm_writer.pyx":32
+  /* "vm_writer.pyx":42
  *         elif command == 'SUB':
  *             self.write_code('sub')
  *         elif command == 'NEG':             # <<<<<<<<<<<<<<
  *             self.write_code('neg')
  *         elif command == 'EQ':
  */
-  __pyx_t_1 = (__Pyx_PyString_Equals(__pyx_v_command, __pyx_n_s_NEG, Py_EQ)); if (unlikely(__pyx_t_1 < 0)) __PYX_ERR(1, 32, __pyx_L1_error)
+  __pyx_t_1 = (__Pyx_PyString_Equals(__pyx_v_command, __pyx_n_s_NEG, Py_EQ)); if (unlikely(__pyx_t_1 < 0)) __PYX_ERR(0, 42, __pyx_L1_error)
   if (__pyx_t_1) {
 
-    /* "vm_writer.pyx":33
+    /* "vm_writer.pyx":43
  *             self.write_code('sub')
  *         elif command == 'NEG':
  *             self.write_code('neg')             # <<<<<<<<<<<<<<
  *         elif command == 'EQ':
  *             self.write_code('eq')
  */
-    __pyx_t_2 = ((struct __pyx_vtabstruct_9vm_writer_VmWriter *)__pyx_v_self->__pyx_vtab)->write_code(__pyx_v_self, __pyx_n_s_neg); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 33, __pyx_L1_error)
+    __pyx_t_2 = ((struct __pyx_vtabstruct_9vm_writer_VmWriter *)__pyx_v_self->__pyx_vtab)->write_code(__pyx_v_self, __pyx_n_s_neg); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 43, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-    /* "vm_writer.pyx":32
+    /* "vm_writer.pyx":42
  *         elif command == 'SUB':
  *             self.write_code('sub')
  *         elif command == 'NEG':             # <<<<<<<<<<<<<<
@@ -2016,28 +2269,28 @@ static PyObject *__pyx_f_9vm_writer_8VmWriter_write_arithmetic(struct __pyx_obj_
     goto __pyx_L3;
   }
 
-  /* "vm_writer.pyx":34
+  /* "vm_writer.pyx":44
  *         elif command == 'NEG':
  *             self.write_code('neg')
  *         elif command == 'EQ':             # <<<<<<<<<<<<<<
  *             self.write_code('eq')
  *         elif command == 'GT':
  */
-  __pyx_t_1 = (__Pyx_PyString_Equals(__pyx_v_command, __pyx_n_s_EQ, Py_EQ)); if (unlikely(__pyx_t_1 < 0)) __PYX_ERR(1, 34, __pyx_L1_error)
+  __pyx_t_1 = (__Pyx_PyString_Equals(__pyx_v_command, __pyx_n_s_EQ, Py_EQ)); if (unlikely(__pyx_t_1 < 0)) __PYX_ERR(0, 44, __pyx_L1_error)
   if (__pyx_t_1) {
 
-    /* "vm_writer.pyx":35
+    /* "vm_writer.pyx":45
  *             self.write_code('neg')
  *         elif command == 'EQ':
  *             self.write_code('eq')             # <<<<<<<<<<<<<<
  *         elif command == 'GT':
  *             self.write_code('gt')
  */
-    __pyx_t_2 = ((struct __pyx_vtabstruct_9vm_writer_VmWriter *)__pyx_v_self->__pyx_vtab)->write_code(__pyx_v_self, __pyx_n_s_eq); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 35, __pyx_L1_error)
+    __pyx_t_2 = ((struct __pyx_vtabstruct_9vm_writer_VmWriter *)__pyx_v_self->__pyx_vtab)->write_code(__pyx_v_self, __pyx_n_s_eq); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 45, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-    /* "vm_writer.pyx":34
+    /* "vm_writer.pyx":44
  *         elif command == 'NEG':
  *             self.write_code('neg')
  *         elif command == 'EQ':             # <<<<<<<<<<<<<<
@@ -2047,28 +2300,28 @@ static PyObject *__pyx_f_9vm_writer_8VmWriter_write_arithmetic(struct __pyx_obj_
     goto __pyx_L3;
   }
 
-  /* "vm_writer.pyx":36
+  /* "vm_writer.pyx":46
  *         elif command == 'EQ':
  *             self.write_code('eq')
  *         elif command == 'GT':             # <<<<<<<<<<<<<<
  *             self.write_code('gt')
  *         elif command == 'LT':
  */
-  __pyx_t_1 = (__Pyx_PyString_Equals(__pyx_v_command, __pyx_n_s_GT, Py_EQ)); if (unlikely(__pyx_t_1 < 0)) __PYX_ERR(1, 36, __pyx_L1_error)
+  __pyx_t_1 = (__Pyx_PyString_Equals(__pyx_v_command, __pyx_n_s_GT, Py_EQ)); if (unlikely(__pyx_t_1 < 0)) __PYX_ERR(0, 46, __pyx_L1_error)
   if (__pyx_t_1) {
 
-    /* "vm_writer.pyx":37
+    /* "vm_writer.pyx":47
  *             self.write_code('eq')
  *         elif command == 'GT':
  *             self.write_code('gt')             # <<<<<<<<<<<<<<
  *         elif command == 'LT':
  *             self.write_code('lt')
  */
-    __pyx_t_2 = ((struct __pyx_vtabstruct_9vm_writer_VmWriter *)__pyx_v_self->__pyx_vtab)->write_code(__pyx_v_self, __pyx_n_s_gt); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 37, __pyx_L1_error)
+    __pyx_t_2 = ((struct __pyx_vtabstruct_9vm_writer_VmWriter *)__pyx_v_self->__pyx_vtab)->write_code(__pyx_v_self, __pyx_n_s_gt); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 47, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-    /* "vm_writer.pyx":36
+    /* "vm_writer.pyx":46
  *         elif command == 'EQ':
  *             self.write_code('eq')
  *         elif command == 'GT':             # <<<<<<<<<<<<<<
@@ -2078,28 +2331,28 @@ static PyObject *__pyx_f_9vm_writer_8VmWriter_write_arithmetic(struct __pyx_obj_
     goto __pyx_L3;
   }
 
-  /* "vm_writer.pyx":38
+  /* "vm_writer.pyx":48
  *         elif command == 'GT':
  *             self.write_code('gt')
  *         elif command == 'LT':             # <<<<<<<<<<<<<<
  *             self.write_code('lt')
  *         elif command == 'AND':
  */
-  __pyx_t_1 = (__Pyx_PyString_Equals(__pyx_v_command, __pyx_n_s_LT, Py_EQ)); if (unlikely(__pyx_t_1 < 0)) __PYX_ERR(1, 38, __pyx_L1_error)
+  __pyx_t_1 = (__Pyx_PyString_Equals(__pyx_v_command, __pyx_n_s_LT, Py_EQ)); if (unlikely(__pyx_t_1 < 0)) __PYX_ERR(0, 48, __pyx_L1_error)
   if (__pyx_t_1) {
 
-    /* "vm_writer.pyx":39
+    /* "vm_writer.pyx":49
  *             self.write_code('gt')
  *         elif command == 'LT':
  *             self.write_code('lt')             # <<<<<<<<<<<<<<
  *         elif command == 'AND':
  *             self.write_code('and')
  */
-    __pyx_t_2 = ((struct __pyx_vtabstruct_9vm_writer_VmWriter *)__pyx_v_self->__pyx_vtab)->write_code(__pyx_v_self, __pyx_n_s_lt); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 39, __pyx_L1_error)
+    __pyx_t_2 = ((struct __pyx_vtabstruct_9vm_writer_VmWriter *)__pyx_v_self->__pyx_vtab)->write_code(__pyx_v_self, __pyx_n_s_lt); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 49, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-    /* "vm_writer.pyx":38
+    /* "vm_writer.pyx":48
  *         elif command == 'GT':
  *             self.write_code('gt')
  *         elif command == 'LT':             # <<<<<<<<<<<<<<
@@ -2109,28 +2362,28 @@ static PyObject *__pyx_f_9vm_writer_8VmWriter_write_arithmetic(struct __pyx_obj_
     goto __pyx_L3;
   }
 
-  /* "vm_writer.pyx":40
+  /* "vm_writer.pyx":50
  *         elif command == 'LT':
  *             self.write_code('lt')
  *         elif command == 'AND':             # <<<<<<<<<<<<<<
  *             self.write_code('and')
  *         elif command == 'OR':
  */
-  __pyx_t_1 = (__Pyx_PyString_Equals(__pyx_v_command, __pyx_n_s_AND, Py_EQ)); if (unlikely(__pyx_t_1 < 0)) __PYX_ERR(1, 40, __pyx_L1_error)
+  __pyx_t_1 = (__Pyx_PyString_Equals(__pyx_v_command, __pyx_n_s_AND, Py_EQ)); if (unlikely(__pyx_t_1 < 0)) __PYX_ERR(0, 50, __pyx_L1_error)
   if (__pyx_t_1) {
 
-    /* "vm_writer.pyx":41
+    /* "vm_writer.pyx":51
  *             self.write_code('lt')
  *         elif command == 'AND':
  *             self.write_code('and')             # <<<<<<<<<<<<<<
  *         elif command == 'OR':
  *             self.write_code('or')
  */
-    __pyx_t_2 = ((struct __pyx_vtabstruct_9vm_writer_VmWriter *)__pyx_v_self->__pyx_vtab)->write_code(__pyx_v_self, __pyx_n_s_and); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 41, __pyx_L1_error)
+    __pyx_t_2 = ((struct __pyx_vtabstruct_9vm_writer_VmWriter *)__pyx_v_self->__pyx_vtab)->write_code(__pyx_v_self, __pyx_n_s_and); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 51, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-    /* "vm_writer.pyx":40
+    /* "vm_writer.pyx":50
  *         elif command == 'LT':
  *             self.write_code('lt')
  *         elif command == 'AND':             # <<<<<<<<<<<<<<
@@ -2140,28 +2393,28 @@ static PyObject *__pyx_f_9vm_writer_8VmWriter_write_arithmetic(struct __pyx_obj_
     goto __pyx_L3;
   }
 
-  /* "vm_writer.pyx":42
+  /* "vm_writer.pyx":52
  *         elif command == 'AND':
  *             self.write_code('and')
  *         elif command == 'OR':             # <<<<<<<<<<<<<<
  *             self.write_code('or')
  *         elif command == 'NOT':
  */
-  __pyx_t_1 = (__Pyx_PyString_Equals(__pyx_v_command, __pyx_n_s_OR, Py_EQ)); if (unlikely(__pyx_t_1 < 0)) __PYX_ERR(1, 42, __pyx_L1_error)
+  __pyx_t_1 = (__Pyx_PyString_Equals(__pyx_v_command, __pyx_n_s_OR, Py_EQ)); if (unlikely(__pyx_t_1 < 0)) __PYX_ERR(0, 52, __pyx_L1_error)
   if (__pyx_t_1) {
 
-    /* "vm_writer.pyx":43
+    /* "vm_writer.pyx":53
  *             self.write_code('and')
  *         elif command == 'OR':
  *             self.write_code('or')             # <<<<<<<<<<<<<<
  *         elif command == 'NOT':
  *             self.write_code('not')
  */
-    __pyx_t_2 = ((struct __pyx_vtabstruct_9vm_writer_VmWriter *)__pyx_v_self->__pyx_vtab)->write_code(__pyx_v_self, __pyx_n_s_or); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 43, __pyx_L1_error)
+    __pyx_t_2 = ((struct __pyx_vtabstruct_9vm_writer_VmWriter *)__pyx_v_self->__pyx_vtab)->write_code(__pyx_v_self, __pyx_n_s_or); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 53, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-    /* "vm_writer.pyx":42
+    /* "vm_writer.pyx":52
  *         elif command == 'AND':
  *             self.write_code('and')
  *         elif command == 'OR':             # <<<<<<<<<<<<<<
@@ -2171,28 +2424,28 @@ static PyObject *__pyx_f_9vm_writer_8VmWriter_write_arithmetic(struct __pyx_obj_
     goto __pyx_L3;
   }
 
-  /* "vm_writer.pyx":44
+  /* "vm_writer.pyx":54
  *         elif command == 'OR':
  *             self.write_code('or')
  *         elif command == 'NOT':             # <<<<<<<<<<<<<<
  *             self.write_code('not')
  *         else:
  */
-  __pyx_t_1 = (__Pyx_PyString_Equals(__pyx_v_command, __pyx_n_s_NOT, Py_EQ)); if (unlikely(__pyx_t_1 < 0)) __PYX_ERR(1, 44, __pyx_L1_error)
+  __pyx_t_1 = (__Pyx_PyString_Equals(__pyx_v_command, __pyx_n_s_NOT, Py_EQ)); if (unlikely(__pyx_t_1 < 0)) __PYX_ERR(0, 54, __pyx_L1_error)
   if (likely(__pyx_t_1)) {
 
-    /* "vm_writer.pyx":45
+    /* "vm_writer.pyx":55
  *             self.write_code('or')
  *         elif command == 'NOT':
  *             self.write_code('not')             # <<<<<<<<<<<<<<
  *         else:
  *             raise Exception('unknown command %s' % command)
  */
-    __pyx_t_2 = ((struct __pyx_vtabstruct_9vm_writer_VmWriter *)__pyx_v_self->__pyx_vtab)->write_code(__pyx_v_self, __pyx_n_s_not); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 45, __pyx_L1_error)
+    __pyx_t_2 = ((struct __pyx_vtabstruct_9vm_writer_VmWriter *)__pyx_v_self->__pyx_vtab)->write_code(__pyx_v_self, __pyx_n_s_not); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 55, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-    /* "vm_writer.pyx":44
+    /* "vm_writer.pyx":54
  *         elif command == 'OR':
  *             self.write_code('or')
  *         elif command == 'NOT':             # <<<<<<<<<<<<<<
@@ -2202,7 +2455,7 @@ static PyObject *__pyx_f_9vm_writer_8VmWriter_write_arithmetic(struct __pyx_obj_
     goto __pyx_L3;
   }
 
-  /* "vm_writer.pyx":47
+  /* "vm_writer.pyx":57
  *             self.write_code('not')
  *         else:
  *             raise Exception('unknown command %s' % command)             # <<<<<<<<<<<<<<
@@ -2210,18 +2463,18 @@ static PyObject *__pyx_f_9vm_writer_8VmWriter_write_arithmetic(struct __pyx_obj_
  *     cdef write_label(self, label):
  */
   /*else*/ {
-    __pyx_t_2 = __Pyx_PyString_FormatSafe(__pyx_kp_s_unknown_command_s, __pyx_v_command); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 47, __pyx_L1_error)
+    __pyx_t_2 = __Pyx_PyString_FormatSafe(__pyx_kp_s_unknown_command_s, __pyx_v_command); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 57, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
-    __pyx_t_3 = __Pyx_PyObject_CallOneArg(((PyObject *)(&((PyTypeObject*)PyExc_Exception)[0])), __pyx_t_2); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 47, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PyObject_CallOneArg(((PyObject *)(&((PyTypeObject*)PyExc_Exception)[0])), __pyx_t_2); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 57, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
     __Pyx_Raise(__pyx_t_3, 0, 0, 0);
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-    __PYX_ERR(1, 47, __pyx_L1_error)
+    __PYX_ERR(0, 57, __pyx_L1_error)
   }
   __pyx_L3:;
 
-  /* "vm_writer.pyx":27
+  /* "vm_writer.pyx":37
  *         self.write_code('pop %s %d' % (self._get_segment_str(segment), int(index)))
  * 
  *     cdef write_arithmetic(self, command):             # <<<<<<<<<<<<<<
@@ -2243,7 +2496,7 @@ static PyObject *__pyx_f_9vm_writer_8VmWriter_write_arithmetic(struct __pyx_obj_
   return __pyx_r;
 }
 
-/* "vm_writer.pyx":49
+/* "vm_writer.pyx":59
  *             raise Exception('unknown command %s' % command)
  * 
  *     cdef write_label(self, label):             # <<<<<<<<<<<<<<
@@ -2261,21 +2514,21 @@ static PyObject *__pyx_f_9vm_writer_8VmWriter_write_label(struct __pyx_obj_9vm_w
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("write_label", 0);
 
-  /* "vm_writer.pyx":50
+  /* "vm_writer.pyx":60
  * 
  *     cdef write_label(self, label):
  *         self.write_code('label %s' % label)             # <<<<<<<<<<<<<<
  * 
  *     cdef write_goto(self, label):
  */
-  __pyx_t_1 = __Pyx_PyString_FormatSafe(__pyx_kp_s_label_s, __pyx_v_label); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 50, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyString_FormatSafe(__pyx_kp_s_label_s, __pyx_v_label); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 60, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_2 = ((struct __pyx_vtabstruct_9vm_writer_VmWriter *)__pyx_v_self->__pyx_vtab)->write_code(__pyx_v_self, __pyx_t_1); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 50, __pyx_L1_error)
+  __pyx_t_2 = ((struct __pyx_vtabstruct_9vm_writer_VmWriter *)__pyx_v_self->__pyx_vtab)->write_code(__pyx_v_self, __pyx_t_1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 60, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-  /* "vm_writer.pyx":49
+  /* "vm_writer.pyx":59
  *             raise Exception('unknown command %s' % command)
  * 
  *     cdef write_label(self, label):             # <<<<<<<<<<<<<<
@@ -2297,7 +2550,7 @@ static PyObject *__pyx_f_9vm_writer_8VmWriter_write_label(struct __pyx_obj_9vm_w
   return __pyx_r;
 }
 
-/* "vm_writer.pyx":52
+/* "vm_writer.pyx":62
  *         self.write_code('label %s' % label)
  * 
  *     cdef write_goto(self, label):             # <<<<<<<<<<<<<<
@@ -2315,21 +2568,21 @@ static PyObject *__pyx_f_9vm_writer_8VmWriter_write_goto(struct __pyx_obj_9vm_wr
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("write_goto", 0);
 
-  /* "vm_writer.pyx":53
+  /* "vm_writer.pyx":63
  * 
  *     cdef write_goto(self, label):
  *         self.write_code('goto %s' % label)             # <<<<<<<<<<<<<<
  * 
  *     cdef write_if(self, label):
  */
-  __pyx_t_1 = __Pyx_PyString_FormatSafe(__pyx_kp_s_goto_s, __pyx_v_label); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 53, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyString_FormatSafe(__pyx_kp_s_goto_s, __pyx_v_label); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 63, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_2 = ((struct __pyx_vtabstruct_9vm_writer_VmWriter *)__pyx_v_self->__pyx_vtab)->write_code(__pyx_v_self, __pyx_t_1); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 53, __pyx_L1_error)
+  __pyx_t_2 = ((struct __pyx_vtabstruct_9vm_writer_VmWriter *)__pyx_v_self->__pyx_vtab)->write_code(__pyx_v_self, __pyx_t_1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 63, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-  /* "vm_writer.pyx":52
+  /* "vm_writer.pyx":62
  *         self.write_code('label %s' % label)
  * 
  *     cdef write_goto(self, label):             # <<<<<<<<<<<<<<
@@ -2351,7 +2604,7 @@ static PyObject *__pyx_f_9vm_writer_8VmWriter_write_goto(struct __pyx_obj_9vm_wr
   return __pyx_r;
 }
 
-/* "vm_writer.pyx":55
+/* "vm_writer.pyx":65
  *         self.write_code('goto %s' % label)
  * 
  *     cdef write_if(self, label):             # <<<<<<<<<<<<<<
@@ -2369,21 +2622,21 @@ static PyObject *__pyx_f_9vm_writer_8VmWriter_write_if(struct __pyx_obj_9vm_writ
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("write_if", 0);
 
-  /* "vm_writer.pyx":56
+  /* "vm_writer.pyx":66
  * 
  *     cdef write_if(self, label):
  *         self.write_code('if-goto %s' % label)             # <<<<<<<<<<<<<<
  * 
  *     cdef write_call(self, name, n_args):
  */
-  __pyx_t_1 = __Pyx_PyString_FormatSafe(__pyx_kp_s_if_goto_s, __pyx_v_label); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 56, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyString_FormatSafe(__pyx_kp_s_if_goto_s, __pyx_v_label); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 66, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_2 = ((struct __pyx_vtabstruct_9vm_writer_VmWriter *)__pyx_v_self->__pyx_vtab)->write_code(__pyx_v_self, __pyx_t_1); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 56, __pyx_L1_error)
+  __pyx_t_2 = ((struct __pyx_vtabstruct_9vm_writer_VmWriter *)__pyx_v_self->__pyx_vtab)->write_code(__pyx_v_self, __pyx_t_1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 66, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-  /* "vm_writer.pyx":55
+  /* "vm_writer.pyx":65
  *         self.write_code('goto %s' % label)
  * 
  *     cdef write_if(self, label):             # <<<<<<<<<<<<<<
@@ -2405,7 +2658,7 @@ static PyObject *__pyx_f_9vm_writer_8VmWriter_write_if(struct __pyx_obj_9vm_writ
   return __pyx_r;
 }
 
-/* "vm_writer.pyx":58
+/* "vm_writer.pyx":68
  *         self.write_code('if-goto %s' % label)
  * 
  *     cdef write_call(self, name, n_args):             # <<<<<<<<<<<<<<
@@ -2423,16 +2676,16 @@ static PyObject *__pyx_f_9vm_writer_8VmWriter_write_call(struct __pyx_obj_9vm_wr
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("write_call", 0);
 
-  /* "vm_writer.pyx":59
+  /* "vm_writer.pyx":69
  * 
  *     cdef write_call(self, name, n_args):
  *         self.write_code('call %s %d' % (name, int(n_args)))             # <<<<<<<<<<<<<<
  * 
  *     cdef write_function(self, name, n_locals):
  */
-  __pyx_t_1 = __Pyx_PyNumber_Int(__pyx_v_n_args); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 59, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyNumber_Int(__pyx_v_n_args); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 69, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_2 = PyTuple_New(2); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 59, __pyx_L1_error)
+  __pyx_t_2 = PyTuple_New(2); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 69, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_INCREF(__pyx_v_name);
   __Pyx_GIVEREF(__pyx_v_name);
@@ -2440,15 +2693,15 @@ static PyObject *__pyx_f_9vm_writer_8VmWriter_write_call(struct __pyx_obj_9vm_wr
   __Pyx_GIVEREF(__pyx_t_1);
   PyTuple_SET_ITEM(__pyx_t_2, 1, __pyx_t_1);
   __pyx_t_1 = 0;
-  __pyx_t_1 = __Pyx_PyString_Format(__pyx_kp_s_call_s_d, __pyx_t_2); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 59, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyString_Format(__pyx_kp_s_call_s_d, __pyx_t_2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 69, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  __pyx_t_2 = ((struct __pyx_vtabstruct_9vm_writer_VmWriter *)__pyx_v_self->__pyx_vtab)->write_code(__pyx_v_self, __pyx_t_1); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 59, __pyx_L1_error)
+  __pyx_t_2 = ((struct __pyx_vtabstruct_9vm_writer_VmWriter *)__pyx_v_self->__pyx_vtab)->write_code(__pyx_v_self, __pyx_t_1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 69, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-  /* "vm_writer.pyx":58
+  /* "vm_writer.pyx":68
  *         self.write_code('if-goto %s' % label)
  * 
  *     cdef write_call(self, name, n_args):             # <<<<<<<<<<<<<<
@@ -2470,7 +2723,7 @@ static PyObject *__pyx_f_9vm_writer_8VmWriter_write_call(struct __pyx_obj_9vm_wr
   return __pyx_r;
 }
 
-/* "vm_writer.pyx":61
+/* "vm_writer.pyx":71
  *         self.write_code('call %s %d' % (name, int(n_args)))
  * 
  *     cdef write_function(self, name, n_locals):             # <<<<<<<<<<<<<<
@@ -2488,16 +2741,16 @@ static PyObject *__pyx_f_9vm_writer_8VmWriter_write_function(struct __pyx_obj_9v
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("write_function", 0);
 
-  /* "vm_writer.pyx":62
+  /* "vm_writer.pyx":72
  * 
  *     cdef write_function(self, name, n_locals):
  *         self.write_code('function %s %d' % (name, int(n_locals)))             # <<<<<<<<<<<<<<
  * 
  *     cdef write_return(self):
  */
-  __pyx_t_1 = __Pyx_PyNumber_Int(__pyx_v_n_locals); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 62, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyNumber_Int(__pyx_v_n_locals); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 72, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_2 = PyTuple_New(2); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 62, __pyx_L1_error)
+  __pyx_t_2 = PyTuple_New(2); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 72, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_INCREF(__pyx_v_name);
   __Pyx_GIVEREF(__pyx_v_name);
@@ -2505,15 +2758,15 @@ static PyObject *__pyx_f_9vm_writer_8VmWriter_write_function(struct __pyx_obj_9v
   __Pyx_GIVEREF(__pyx_t_1);
   PyTuple_SET_ITEM(__pyx_t_2, 1, __pyx_t_1);
   __pyx_t_1 = 0;
-  __pyx_t_1 = __Pyx_PyString_Format(__pyx_kp_s_function_s_d, __pyx_t_2); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 62, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyString_Format(__pyx_kp_s_function_s_d, __pyx_t_2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 72, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  __pyx_t_2 = ((struct __pyx_vtabstruct_9vm_writer_VmWriter *)__pyx_v_self->__pyx_vtab)->write_code(__pyx_v_self, __pyx_t_1); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 62, __pyx_L1_error)
+  __pyx_t_2 = ((struct __pyx_vtabstruct_9vm_writer_VmWriter *)__pyx_v_self->__pyx_vtab)->write_code(__pyx_v_self, __pyx_t_1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 72, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-  /* "vm_writer.pyx":61
+  /* "vm_writer.pyx":71
  *         self.write_code('call %s %d' % (name, int(n_args)))
  * 
  *     cdef write_function(self, name, n_locals):             # <<<<<<<<<<<<<<
@@ -2535,7 +2788,7 @@ static PyObject *__pyx_f_9vm_writer_8VmWriter_write_function(struct __pyx_obj_9v
   return __pyx_r;
 }
 
-/* "vm_writer.pyx":64
+/* "vm_writer.pyx":74
  *         self.write_code('function %s %d' % (name, int(n_locals)))
  * 
  *     cdef write_return(self):             # <<<<<<<<<<<<<<
@@ -2552,18 +2805,18 @@ static PyObject *__pyx_f_9vm_writer_8VmWriter_write_return(struct __pyx_obj_9vm_
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("write_return", 0);
 
-  /* "vm_writer.pyx":65
+  /* "vm_writer.pyx":75
  * 
  *     cdef write_return(self):
  *         self.write_code('return')             # <<<<<<<<<<<<<<
  * 
  *     cdef _get_segment_str(self, segment):
  */
-  __pyx_t_1 = ((struct __pyx_vtabstruct_9vm_writer_VmWriter *)__pyx_v_self->__pyx_vtab)->write_code(__pyx_v_self, __pyx_n_s_return); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 65, __pyx_L1_error)
+  __pyx_t_1 = ((struct __pyx_vtabstruct_9vm_writer_VmWriter *)__pyx_v_self->__pyx_vtab)->write_code(__pyx_v_self, __pyx_n_s_return); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 75, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "vm_writer.pyx":64
+  /* "vm_writer.pyx":74
  *         self.write_code('function %s %d' % (name, int(n_locals)))
  * 
  *     cdef write_return(self):             # <<<<<<<<<<<<<<
@@ -2584,7 +2837,7 @@ static PyObject *__pyx_f_9vm_writer_8VmWriter_write_return(struct __pyx_obj_9vm_
   return __pyx_r;
 }
 
-/* "vm_writer.pyx":67
+/* "vm_writer.pyx":77
  *         self.write_code('return')
  * 
  *     cdef _get_segment_str(self, segment):             # <<<<<<<<<<<<<<
@@ -2603,17 +2856,17 @@ static PyObject *__pyx_f_9vm_writer_8VmWriter__get_segment_str(CYTHON_UNUSED str
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("_get_segment_str", 0);
 
-  /* "vm_writer.pyx":68
+  /* "vm_writer.pyx":78
  * 
  *     cdef _get_segment_str(self, segment):
  *         if segment == 'CONST':             # <<<<<<<<<<<<<<
  *             return 'constant'
  *         elif segment == 'ARG':
  */
-  __pyx_t_1 = (__Pyx_PyString_Equals(__pyx_v_segment, __pyx_n_s_CONST, Py_EQ)); if (unlikely(__pyx_t_1 < 0)) __PYX_ERR(1, 68, __pyx_L1_error)
+  __pyx_t_1 = (__Pyx_PyString_Equals(__pyx_v_segment, __pyx_n_s_CONST, Py_EQ)); if (unlikely(__pyx_t_1 < 0)) __PYX_ERR(0, 78, __pyx_L1_error)
   if (__pyx_t_1) {
 
-    /* "vm_writer.pyx":69
+    /* "vm_writer.pyx":79
  *     cdef _get_segment_str(self, segment):
  *         if segment == 'CONST':
  *             return 'constant'             # <<<<<<<<<<<<<<
@@ -2625,7 +2878,7 @@ static PyObject *__pyx_f_9vm_writer_8VmWriter__get_segment_str(CYTHON_UNUSED str
     __pyx_r = __pyx_n_s_constant;
     goto __pyx_L0;
 
-    /* "vm_writer.pyx":68
+    /* "vm_writer.pyx":78
  * 
  *     cdef _get_segment_str(self, segment):
  *         if segment == 'CONST':             # <<<<<<<<<<<<<<
@@ -2634,17 +2887,17 @@ static PyObject *__pyx_f_9vm_writer_8VmWriter__get_segment_str(CYTHON_UNUSED str
  */
   }
 
-  /* "vm_writer.pyx":70
+  /* "vm_writer.pyx":80
  *         if segment == 'CONST':
  *             return 'constant'
  *         elif segment == 'ARG':             # <<<<<<<<<<<<<<
  *             return 'argument'
  *         elif segment == 'LOCAL':
  */
-  __pyx_t_1 = (__Pyx_PyString_Equals(__pyx_v_segment, __pyx_n_s_ARG, Py_EQ)); if (unlikely(__pyx_t_1 < 0)) __PYX_ERR(1, 70, __pyx_L1_error)
+  __pyx_t_1 = (__Pyx_PyString_Equals(__pyx_v_segment, __pyx_n_s_ARG, Py_EQ)); if (unlikely(__pyx_t_1 < 0)) __PYX_ERR(0, 80, __pyx_L1_error)
   if (__pyx_t_1) {
 
-    /* "vm_writer.pyx":71
+    /* "vm_writer.pyx":81
  *             return 'constant'
  *         elif segment == 'ARG':
  *             return 'argument'             # <<<<<<<<<<<<<<
@@ -2656,7 +2909,7 @@ static PyObject *__pyx_f_9vm_writer_8VmWriter__get_segment_str(CYTHON_UNUSED str
     __pyx_r = __pyx_n_s_argument;
     goto __pyx_L0;
 
-    /* "vm_writer.pyx":70
+    /* "vm_writer.pyx":80
  *         if segment == 'CONST':
  *             return 'constant'
  *         elif segment == 'ARG':             # <<<<<<<<<<<<<<
@@ -2665,17 +2918,17 @@ static PyObject *__pyx_f_9vm_writer_8VmWriter__get_segment_str(CYTHON_UNUSED str
  */
   }
 
-  /* "vm_writer.pyx":72
+  /* "vm_writer.pyx":82
  *         elif segment == 'ARG':
  *             return 'argument'
  *         elif segment == 'LOCAL':             # <<<<<<<<<<<<<<
  *             return 'local'
  *         elif segment == 'STATIC':
  */
-  __pyx_t_1 = (__Pyx_PyString_Equals(__pyx_v_segment, __pyx_n_s_LOCAL, Py_EQ)); if (unlikely(__pyx_t_1 < 0)) __PYX_ERR(1, 72, __pyx_L1_error)
+  __pyx_t_1 = (__Pyx_PyString_Equals(__pyx_v_segment, __pyx_n_s_LOCAL, Py_EQ)); if (unlikely(__pyx_t_1 < 0)) __PYX_ERR(0, 82, __pyx_L1_error)
   if (__pyx_t_1) {
 
-    /* "vm_writer.pyx":73
+    /* "vm_writer.pyx":83
  *             return 'argument'
  *         elif segment == 'LOCAL':
  *             return 'local'             # <<<<<<<<<<<<<<
@@ -2687,7 +2940,7 @@ static PyObject *__pyx_f_9vm_writer_8VmWriter__get_segment_str(CYTHON_UNUSED str
     __pyx_r = __pyx_n_s_local;
     goto __pyx_L0;
 
-    /* "vm_writer.pyx":72
+    /* "vm_writer.pyx":82
  *         elif segment == 'ARG':
  *             return 'argument'
  *         elif segment == 'LOCAL':             # <<<<<<<<<<<<<<
@@ -2696,17 +2949,17 @@ static PyObject *__pyx_f_9vm_writer_8VmWriter__get_segment_str(CYTHON_UNUSED str
  */
   }
 
-  /* "vm_writer.pyx":74
+  /* "vm_writer.pyx":84
  *         elif segment == 'LOCAL':
  *             return 'local'
  *         elif segment == 'STATIC':             # <<<<<<<<<<<<<<
  *             return 'static'
  *         elif segment == 'THIS':
  */
-  __pyx_t_1 = (__Pyx_PyString_Equals(__pyx_v_segment, __pyx_n_s_STATIC, Py_EQ)); if (unlikely(__pyx_t_1 < 0)) __PYX_ERR(1, 74, __pyx_L1_error)
+  __pyx_t_1 = (__Pyx_PyString_Equals(__pyx_v_segment, __pyx_n_s_STATIC, Py_EQ)); if (unlikely(__pyx_t_1 < 0)) __PYX_ERR(0, 84, __pyx_L1_error)
   if (__pyx_t_1) {
 
-    /* "vm_writer.pyx":75
+    /* "vm_writer.pyx":85
  *             return 'local'
  *         elif segment == 'STATIC':
  *             return 'static'             # <<<<<<<<<<<<<<
@@ -2718,7 +2971,7 @@ static PyObject *__pyx_f_9vm_writer_8VmWriter__get_segment_str(CYTHON_UNUSED str
     __pyx_r = __pyx_n_s_static;
     goto __pyx_L0;
 
-    /* "vm_writer.pyx":74
+    /* "vm_writer.pyx":84
  *         elif segment == 'LOCAL':
  *             return 'local'
  *         elif segment == 'STATIC':             # <<<<<<<<<<<<<<
@@ -2727,17 +2980,17 @@ static PyObject *__pyx_f_9vm_writer_8VmWriter__get_segment_str(CYTHON_UNUSED str
  */
   }
 
-  /* "vm_writer.pyx":76
+  /* "vm_writer.pyx":86
  *         elif segment == 'STATIC':
  *             return 'static'
  *         elif segment == 'THIS':             # <<<<<<<<<<<<<<
  *             return 'this'
  *         elif segment == 'THAT':
  */
-  __pyx_t_1 = (__Pyx_PyString_Equals(__pyx_v_segment, __pyx_n_s_THIS, Py_EQ)); if (unlikely(__pyx_t_1 < 0)) __PYX_ERR(1, 76, __pyx_L1_error)
+  __pyx_t_1 = (__Pyx_PyString_Equals(__pyx_v_segment, __pyx_n_s_THIS, Py_EQ)); if (unlikely(__pyx_t_1 < 0)) __PYX_ERR(0, 86, __pyx_L1_error)
   if (__pyx_t_1) {
 
-    /* "vm_writer.pyx":77
+    /* "vm_writer.pyx":87
  *             return 'static'
  *         elif segment == 'THIS':
  *             return 'this'             # <<<<<<<<<<<<<<
@@ -2749,7 +3002,7 @@ static PyObject *__pyx_f_9vm_writer_8VmWriter__get_segment_str(CYTHON_UNUSED str
     __pyx_r = __pyx_n_s_this;
     goto __pyx_L0;
 
-    /* "vm_writer.pyx":76
+    /* "vm_writer.pyx":86
  *         elif segment == 'STATIC':
  *             return 'static'
  *         elif segment == 'THIS':             # <<<<<<<<<<<<<<
@@ -2758,17 +3011,17 @@ static PyObject *__pyx_f_9vm_writer_8VmWriter__get_segment_str(CYTHON_UNUSED str
  */
   }
 
-  /* "vm_writer.pyx":78
+  /* "vm_writer.pyx":88
  *         elif segment == 'THIS':
  *             return 'this'
  *         elif segment == 'THAT':             # <<<<<<<<<<<<<<
  *             return 'that'
  *         elif segment == 'POINTER':
  */
-  __pyx_t_1 = (__Pyx_PyString_Equals(__pyx_v_segment, __pyx_n_s_THAT, Py_EQ)); if (unlikely(__pyx_t_1 < 0)) __PYX_ERR(1, 78, __pyx_L1_error)
+  __pyx_t_1 = (__Pyx_PyString_Equals(__pyx_v_segment, __pyx_n_s_THAT, Py_EQ)); if (unlikely(__pyx_t_1 < 0)) __PYX_ERR(0, 88, __pyx_L1_error)
   if (__pyx_t_1) {
 
-    /* "vm_writer.pyx":79
+    /* "vm_writer.pyx":89
  *             return 'this'
  *         elif segment == 'THAT':
  *             return 'that'             # <<<<<<<<<<<<<<
@@ -2780,7 +3033,7 @@ static PyObject *__pyx_f_9vm_writer_8VmWriter__get_segment_str(CYTHON_UNUSED str
     __pyx_r = __pyx_n_s_that;
     goto __pyx_L0;
 
-    /* "vm_writer.pyx":78
+    /* "vm_writer.pyx":88
  *         elif segment == 'THIS':
  *             return 'this'
  *         elif segment == 'THAT':             # <<<<<<<<<<<<<<
@@ -2789,17 +3042,17 @@ static PyObject *__pyx_f_9vm_writer_8VmWriter__get_segment_str(CYTHON_UNUSED str
  */
   }
 
-  /* "vm_writer.pyx":80
+  /* "vm_writer.pyx":90
  *         elif segment == 'THAT':
  *             return 'that'
  *         elif segment == 'POINTER':             # <<<<<<<<<<<<<<
  *             return 'pointer'
  *         elif segment == 'TEMP':
  */
-  __pyx_t_1 = (__Pyx_PyString_Equals(__pyx_v_segment, __pyx_n_s_POINTER, Py_EQ)); if (unlikely(__pyx_t_1 < 0)) __PYX_ERR(1, 80, __pyx_L1_error)
+  __pyx_t_1 = (__Pyx_PyString_Equals(__pyx_v_segment, __pyx_n_s_POINTER, Py_EQ)); if (unlikely(__pyx_t_1 < 0)) __PYX_ERR(0, 90, __pyx_L1_error)
   if (__pyx_t_1) {
 
-    /* "vm_writer.pyx":81
+    /* "vm_writer.pyx":91
  *             return 'that'
  *         elif segment == 'POINTER':
  *             return 'pointer'             # <<<<<<<<<<<<<<
@@ -2811,7 +3064,7 @@ static PyObject *__pyx_f_9vm_writer_8VmWriter__get_segment_str(CYTHON_UNUSED str
     __pyx_r = __pyx_n_s_pointer;
     goto __pyx_L0;
 
-    /* "vm_writer.pyx":80
+    /* "vm_writer.pyx":90
  *         elif segment == 'THAT':
  *             return 'that'
  *         elif segment == 'POINTER':             # <<<<<<<<<<<<<<
@@ -2820,17 +3073,17 @@ static PyObject *__pyx_f_9vm_writer_8VmWriter__get_segment_str(CYTHON_UNUSED str
  */
   }
 
-  /* "vm_writer.pyx":82
+  /* "vm_writer.pyx":92
  *         elif segment == 'POINTER':
  *             return 'pointer'
  *         elif segment == 'TEMP':             # <<<<<<<<<<<<<<
  *             return 'temp'
  *         else:
  */
-  __pyx_t_1 = (__Pyx_PyString_Equals(__pyx_v_segment, __pyx_n_s_TEMP, Py_EQ)); if (unlikely(__pyx_t_1 < 0)) __PYX_ERR(1, 82, __pyx_L1_error)
+  __pyx_t_1 = (__Pyx_PyString_Equals(__pyx_v_segment, __pyx_n_s_TEMP, Py_EQ)); if (unlikely(__pyx_t_1 < 0)) __PYX_ERR(0, 92, __pyx_L1_error)
   if (likely(__pyx_t_1)) {
 
-    /* "vm_writer.pyx":83
+    /* "vm_writer.pyx":93
  *             return 'pointer'
  *         elif segment == 'TEMP':
  *             return 'temp'             # <<<<<<<<<<<<<<
@@ -2842,7 +3095,7 @@ static PyObject *__pyx_f_9vm_writer_8VmWriter__get_segment_str(CYTHON_UNUSED str
     __pyx_r = __pyx_n_s_temp;
     goto __pyx_L0;
 
-    /* "vm_writer.pyx":82
+    /* "vm_writer.pyx":92
  *         elif segment == 'POINTER':
  *             return 'pointer'
  *         elif segment == 'TEMP':             # <<<<<<<<<<<<<<
@@ -2851,23 +3104,23 @@ static PyObject *__pyx_f_9vm_writer_8VmWriter__get_segment_str(CYTHON_UNUSED str
  */
   }
 
-  /* "vm_writer.pyx":85
+  /* "vm_writer.pyx":95
  *             return 'temp'
  *         else:
  *             raise Exception('unknown segment %s' % segment)             # <<<<<<<<<<<<<<
  */
   /*else*/ {
-    __pyx_t_2 = __Pyx_PyString_FormatSafe(__pyx_kp_s_unknown_segment_s, __pyx_v_segment); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 85, __pyx_L1_error)
+    __pyx_t_2 = __Pyx_PyString_FormatSafe(__pyx_kp_s_unknown_segment_s, __pyx_v_segment); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 95, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
-    __pyx_t_3 = __Pyx_PyObject_CallOneArg(((PyObject *)(&((PyTypeObject*)PyExc_Exception)[0])), __pyx_t_2); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 85, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PyObject_CallOneArg(((PyObject *)(&((PyTypeObject*)PyExc_Exception)[0])), __pyx_t_2); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 95, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
     __Pyx_Raise(__pyx_t_3, 0, 0, 0);
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-    __PYX_ERR(1, 85, __pyx_L1_error)
+    __PYX_ERR(0, 95, __pyx_L1_error)
   }
 
-  /* "vm_writer.pyx":67
+  /* "vm_writer.pyx":77
  *         self.write_code('return')
  * 
  *     cdef _get_segment_str(self, segment):             # <<<<<<<<<<<<<<
@@ -2894,19 +3147,19 @@ static PyObject *__pyx_f_9vm_writer_8VmWriter__get_segment_str(CYTHON_UNUSED str
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_9vm_writer_8VmWriter_3__reduce_cython__(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
-static PyObject *__pyx_pw_9vm_writer_8VmWriter_3__reduce_cython__(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
+static PyObject *__pyx_pw_9vm_writer_8VmWriter_7__reduce_cython__(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
+static PyObject *__pyx_pw_9vm_writer_8VmWriter_7__reduce_cython__(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__reduce_cython__ (wrapper)", 0);
-  __pyx_r = __pyx_pf_9vm_writer_8VmWriter_2__reduce_cython__(((struct __pyx_obj_9vm_writer_VmWriter *)__pyx_v_self));
+  __pyx_r = __pyx_pf_9vm_writer_8VmWriter_6__reduce_cython__(((struct __pyx_obj_9vm_writer_VmWriter *)__pyx_v_self));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_9vm_writer_8VmWriter_2__reduce_cython__(CYTHON_UNUSED struct __pyx_obj_9vm_writer_VmWriter *__pyx_v_self) {
+static PyObject *__pyx_pf_9vm_writer_8VmWriter_6__reduce_cython__(CYTHON_UNUSED struct __pyx_obj_9vm_writer_VmWriter *__pyx_v_self) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
@@ -2921,11 +3174,11 @@ static PyObject *__pyx_pf_9vm_writer_8VmWriter_2__reduce_cython__(CYTHON_UNUSED 
  * def __setstate_cython__(self, __pyx_state):
  *     raise TypeError("no default __reduce__ due to non-trivial __cinit__")
  */
-  __pyx_t_1 = __Pyx_PyObject_Call(__pyx_builtin_TypeError, __pyx_tuple__2, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 2, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_Call(__pyx_builtin_TypeError, __pyx_tuple__2, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 2, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_Raise(__pyx_t_1, 0, 0, 0);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __PYX_ERR(0, 2, __pyx_L1_error)
+  __PYX_ERR(1, 2, __pyx_L1_error)
 
   /* "(tree fragment)":1
  * def __reduce_cython__(self):             # <<<<<<<<<<<<<<
@@ -2951,19 +3204,19 @@ static PyObject *__pyx_pf_9vm_writer_8VmWriter_2__reduce_cython__(CYTHON_UNUSED 
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_9vm_writer_8VmWriter_5__setstate_cython__(PyObject *__pyx_v_self, PyObject *__pyx_v___pyx_state); /*proto*/
-static PyObject *__pyx_pw_9vm_writer_8VmWriter_5__setstate_cython__(PyObject *__pyx_v_self, PyObject *__pyx_v___pyx_state) {
+static PyObject *__pyx_pw_9vm_writer_8VmWriter_9__setstate_cython__(PyObject *__pyx_v_self, PyObject *__pyx_v___pyx_state); /*proto*/
+static PyObject *__pyx_pw_9vm_writer_8VmWriter_9__setstate_cython__(PyObject *__pyx_v_self, PyObject *__pyx_v___pyx_state) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__setstate_cython__ (wrapper)", 0);
-  __pyx_r = __pyx_pf_9vm_writer_8VmWriter_4__setstate_cython__(((struct __pyx_obj_9vm_writer_VmWriter *)__pyx_v_self), ((PyObject *)__pyx_v___pyx_state));
+  __pyx_r = __pyx_pf_9vm_writer_8VmWriter_8__setstate_cython__(((struct __pyx_obj_9vm_writer_VmWriter *)__pyx_v_self), ((PyObject *)__pyx_v___pyx_state));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_9vm_writer_8VmWriter_4__setstate_cython__(CYTHON_UNUSED struct __pyx_obj_9vm_writer_VmWriter *__pyx_v_self, CYTHON_UNUSED PyObject *__pyx_v___pyx_state) {
+static PyObject *__pyx_pf_9vm_writer_8VmWriter_8__setstate_cython__(CYTHON_UNUSED struct __pyx_obj_9vm_writer_VmWriter *__pyx_v_self, CYTHON_UNUSED PyObject *__pyx_v___pyx_state) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
@@ -2977,11 +3230,11 @@ static PyObject *__pyx_pf_9vm_writer_8VmWriter_4__setstate_cython__(CYTHON_UNUSE
  * def __setstate_cython__(self, __pyx_state):
  *     raise TypeError("no default __reduce__ due to non-trivial __cinit__")             # <<<<<<<<<<<<<<
  */
-  __pyx_t_1 = __Pyx_PyObject_Call(__pyx_builtin_TypeError, __pyx_tuple__3, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 4, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_Call(__pyx_builtin_TypeError, __pyx_tuple__3, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 4, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_Raise(__pyx_t_1, 0, 0, 0);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __PYX_ERR(0, 4, __pyx_L1_error)
+  __PYX_ERR(1, 4, __pyx_L1_error)
 
   /* "(tree fragment)":3
  * def __reduce_cython__(self):
@@ -3051,8 +3304,10 @@ static int __pyx_tp_clear_9vm_writer_VmWriter(PyObject *o) {
 }
 
 static PyMethodDef __pyx_methods_9vm_writer_VmWriter[] = {
-  {"__reduce_cython__", (PyCFunction)__pyx_pw_9vm_writer_8VmWriter_3__reduce_cython__, METH_NOARGS, 0},
-  {"__setstate_cython__", (PyCFunction)__pyx_pw_9vm_writer_8VmWriter_5__setstate_cython__, METH_O, 0},
+  {"__enter__", (PyCFunction)__pyx_pw_9vm_writer_8VmWriter_3__enter__, METH_NOARGS, 0},
+  {"__exit__", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_9vm_writer_8VmWriter_5__exit__, METH_VARARGS|METH_KEYWORDS, 0},
+  {"__reduce_cython__", (PyCFunction)__pyx_pw_9vm_writer_8VmWriter_7__reduce_cython__, METH_NOARGS, 0},
+  {"__setstate_cython__", (PyCFunction)__pyx_pw_9vm_writer_8VmWriter_9__setstate_cython__, METH_O, 0},
   {0, 0, 0, 0}
 };
 
@@ -3199,9 +3454,12 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_argument, __pyx_k_argument, sizeof(__pyx_k_argument), 0, 0, 1, 1},
   {&__pyx_kp_s_call_s_d, __pyx_k_call_s_d, sizeof(__pyx_k_call_s_d), 0, 0, 1, 0},
   {&__pyx_n_s_cline_in_traceback, __pyx_k_cline_in_traceback, sizeof(__pyx_k_cline_in_traceback), 0, 0, 1, 1},
+  {&__pyx_n_s_close, __pyx_k_close, sizeof(__pyx_k_close), 0, 0, 1, 1},
   {&__pyx_n_s_constant, __pyx_k_constant, sizeof(__pyx_k_constant), 0, 0, 1, 1},
   {&__pyx_n_s_end, __pyx_k_end, sizeof(__pyx_k_end), 0, 0, 1, 1},
   {&__pyx_n_s_eq, __pyx_k_eq, sizeof(__pyx_k_eq), 0, 0, 1, 1},
+  {&__pyx_n_s_exc_type, __pyx_k_exc_type, sizeof(__pyx_k_exc_type), 0, 0, 1, 1},
+  {&__pyx_n_s_exc_value, __pyx_k_exc_value, sizeof(__pyx_k_exc_value), 0, 0, 1, 1},
   {&__pyx_n_s_f, __pyx_k_f, sizeof(__pyx_k_f), 0, 0, 1, 1},
   {&__pyx_n_s_file, __pyx_k_file, sizeof(__pyx_k_file), 0, 0, 1, 1},
   {&__pyx_kp_s_function_s_d, __pyx_k_function_s_d, sizeof(__pyx_k_function_s_d), 0, 0, 1, 0},
@@ -3219,6 +3477,7 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_neg, __pyx_k_neg, sizeof(__pyx_k_neg), 0, 0, 1, 1},
   {&__pyx_kp_s_no_default___reduce___due_to_non, __pyx_k_no_default___reduce___due_to_non, sizeof(__pyx_k_no_default___reduce___due_to_non), 0, 0, 1, 0},
   {&__pyx_n_s_not, __pyx_k_not, sizeof(__pyx_k_not), 0, 0, 1, 1},
+  {&__pyx_n_s_open, __pyx_k_open, sizeof(__pyx_k_open), 0, 0, 1, 1},
   {&__pyx_n_s_or, __pyx_k_or, sizeof(__pyx_k_or), 0, 0, 1, 1},
   {&__pyx_n_s_os, __pyx_k_os, sizeof(__pyx_k_os), 0, 0, 1, 1},
   {&__pyx_n_s_output_f, __pyx_k_output_f, sizeof(__pyx_k_output_f), 0, 0, 1, 1},
@@ -3241,14 +3500,17 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_test, __pyx_k_test, sizeof(__pyx_k_test), 0, 0, 1, 1},
   {&__pyx_n_s_that, __pyx_k_that, sizeof(__pyx_k_that), 0, 0, 1, 1},
   {&__pyx_n_s_this, __pyx_k_this, sizeof(__pyx_k_this), 0, 0, 1, 1},
+  {&__pyx_n_s_traceback, __pyx_k_traceback, sizeof(__pyx_k_traceback), 0, 0, 1, 1},
   {&__pyx_kp_s_unknown_command_s, __pyx_k_unknown_command_s, sizeof(__pyx_k_unknown_command_s), 0, 0, 1, 0},
   {&__pyx_kp_s_unknown_segment_s, __pyx_k_unknown_segment_s, sizeof(__pyx_k_unknown_segment_s), 0, 0, 1, 0},
+  {&__pyx_n_s_w, __pyx_k_w, sizeof(__pyx_k_w), 0, 0, 1, 1},
   {&__pyx_n_s_write, __pyx_k_write, sizeof(__pyx_k_write), 0, 0, 1, 1},
   {&__pyx_kp_s_writing_to, __pyx_k_writing_to, sizeof(__pyx_k_writing_to), 0, 0, 1, 0},
   {0, 0, 0, 0, 0, 0, 0}
 };
 static CYTHON_SMALL_CODE int __Pyx_InitCachedBuiltins(void) {
-  __pyx_builtin_TypeError = __Pyx_GetBuiltinName(__pyx_n_s_TypeError); if (!__pyx_builtin_TypeError) __PYX_ERR(0, 2, __pyx_L1_error)
+  __pyx_builtin_open = __Pyx_GetBuiltinName(__pyx_n_s_open); if (!__pyx_builtin_open) __PYX_ERR(0, 13, __pyx_L1_error)
+  __pyx_builtin_TypeError = __Pyx_GetBuiltinName(__pyx_n_s_TypeError); if (!__pyx_builtin_TypeError) __PYX_ERR(1, 2, __pyx_L1_error)
   return 0;
   __pyx_L1_error:;
   return -1;
@@ -3264,7 +3526,7 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
  * def __setstate_cython__(self, __pyx_state):
  *     raise TypeError("no default __reduce__ due to non-trivial __cinit__")
  */
-  __pyx_tuple__2 = PyTuple_Pack(1, __pyx_kp_s_no_default___reduce___due_to_non); if (unlikely(!__pyx_tuple__2)) __PYX_ERR(0, 2, __pyx_L1_error)
+  __pyx_tuple__2 = PyTuple_Pack(1, __pyx_kp_s_no_default___reduce___due_to_non); if (unlikely(!__pyx_tuple__2)) __PYX_ERR(1, 2, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__2);
   __Pyx_GIVEREF(__pyx_tuple__2);
 
@@ -3273,7 +3535,7 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
  * def __setstate_cython__(self, __pyx_state):
  *     raise TypeError("no default __reduce__ due to non-trivial __cinit__")             # <<<<<<<<<<<<<<
  */
-  __pyx_tuple__3 = PyTuple_Pack(1, __pyx_kp_s_no_default___reduce___due_to_non); if (unlikely(!__pyx_tuple__3)) __PYX_ERR(0, 4, __pyx_L1_error)
+  __pyx_tuple__3 = PyTuple_Pack(1, __pyx_kp_s_no_default___reduce___due_to_non); if (unlikely(!__pyx_tuple__3)) __PYX_ERR(1, 4, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__3);
   __Pyx_GIVEREF(__pyx_tuple__3);
   __Pyx_RefNannyFinishContext();
@@ -3284,7 +3546,7 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
 }
 
 static CYTHON_SMALL_CODE int __Pyx_InitGlobals(void) {
-  if (__Pyx_InitStrings(__pyx_string_tab) < 0) __PYX_ERR(1, 2, __pyx_L1_error)
+  if (__Pyx_InitStrings(__pyx_string_tab) < 0) __PYX_ERR(0, 2, __pyx_L1_error)
   return 0;
   __pyx_L1_error:;
   return -1;
@@ -3342,16 +3604,16 @@ static int __Pyx_modinit_type_init_code(void) {
   __pyx_vtable_9vm_writer_VmWriter.write_function = (PyObject *(*)(struct __pyx_obj_9vm_writer_VmWriter *, PyObject *, PyObject *))__pyx_f_9vm_writer_8VmWriter_write_function;
   __pyx_vtable_9vm_writer_VmWriter.write_return = (PyObject *(*)(struct __pyx_obj_9vm_writer_VmWriter *))__pyx_f_9vm_writer_8VmWriter_write_return;
   __pyx_vtable_9vm_writer_VmWriter._get_segment_str = (PyObject *(*)(struct __pyx_obj_9vm_writer_VmWriter *, PyObject *))__pyx_f_9vm_writer_8VmWriter__get_segment_str;
-  if (PyType_Ready(&__pyx_type_9vm_writer_VmWriter) < 0) __PYX_ERR(1, 6, __pyx_L1_error)
+  if (PyType_Ready(&__pyx_type_9vm_writer_VmWriter) < 0) __PYX_ERR(0, 6, __pyx_L1_error)
   #if PY_VERSION_HEX < 0x030800B1
   __pyx_type_9vm_writer_VmWriter.tp_print = 0;
   #endif
   if ((CYTHON_USE_TYPE_SLOTS && CYTHON_USE_PYTYPE_LOOKUP) && likely(!__pyx_type_9vm_writer_VmWriter.tp_dictoffset && __pyx_type_9vm_writer_VmWriter.tp_getattro == PyObject_GenericGetAttr)) {
     __pyx_type_9vm_writer_VmWriter.tp_getattro = __Pyx_PyObject_GenericGetAttr;
   }
-  if (__Pyx_SetVtable(__pyx_type_9vm_writer_VmWriter.tp_dict, __pyx_vtabptr_9vm_writer_VmWriter) < 0) __PYX_ERR(1, 6, __pyx_L1_error)
-  if (PyObject_SetAttr(__pyx_m, __pyx_n_s_VmWriter, (PyObject *)&__pyx_type_9vm_writer_VmWriter) < 0) __PYX_ERR(1, 6, __pyx_L1_error)
-  if (__Pyx_setup_reduce((PyObject*)&__pyx_type_9vm_writer_VmWriter) < 0) __PYX_ERR(1, 6, __pyx_L1_error)
+  if (__Pyx_SetVtable(__pyx_type_9vm_writer_VmWriter.tp_dict, __pyx_vtabptr_9vm_writer_VmWriter) < 0) __PYX_ERR(0, 6, __pyx_L1_error)
+  if (PyObject_SetAttr(__pyx_m, __pyx_n_s_VmWriter, (PyObject *)&__pyx_type_9vm_writer_VmWriter) < 0) __PYX_ERR(0, 6, __pyx_L1_error)
+  if (__Pyx_setup_reduce((PyObject*)&__pyx_type_9vm_writer_VmWriter) < 0) __PYX_ERR(0, 6, __pyx_L1_error)
   __pyx_ptype_9vm_writer_VmWriter = &__pyx_type_9vm_writer_VmWriter;
   __Pyx_RefNannyFinishContext();
   return 0;
@@ -3502,30 +3764,30 @@ if (!__Pyx_RefNanny) {
 }
 #endif
   __Pyx_RefNannySetupContext("__Pyx_PyMODINIT_FUNC PyInit_vm_writer(void)", 0);
-  if (__Pyx_check_binary_version() < 0) __PYX_ERR(1, 2, __pyx_L1_error)
+  if (__Pyx_check_binary_version() < 0) __PYX_ERR(0, 2, __pyx_L1_error)
   #ifdef __Pxy_PyFrame_Initialize_Offsets
   __Pxy_PyFrame_Initialize_Offsets();
   #endif
-  __pyx_empty_tuple = PyTuple_New(0); if (unlikely(!__pyx_empty_tuple)) __PYX_ERR(1, 2, __pyx_L1_error)
-  __pyx_empty_bytes = PyBytes_FromStringAndSize("", 0); if (unlikely(!__pyx_empty_bytes)) __PYX_ERR(1, 2, __pyx_L1_error)
-  __pyx_empty_unicode = PyUnicode_FromStringAndSize("", 0); if (unlikely(!__pyx_empty_unicode)) __PYX_ERR(1, 2, __pyx_L1_error)
+  __pyx_empty_tuple = PyTuple_New(0); if (unlikely(!__pyx_empty_tuple)) __PYX_ERR(0, 2, __pyx_L1_error)
+  __pyx_empty_bytes = PyBytes_FromStringAndSize("", 0); if (unlikely(!__pyx_empty_bytes)) __PYX_ERR(0, 2, __pyx_L1_error)
+  __pyx_empty_unicode = PyUnicode_FromStringAndSize("", 0); if (unlikely(!__pyx_empty_unicode)) __PYX_ERR(0, 2, __pyx_L1_error)
   #ifdef __Pyx_CyFunction_USED
-  if (__pyx_CyFunction_init() < 0) __PYX_ERR(1, 2, __pyx_L1_error)
+  if (__pyx_CyFunction_init() < 0) __PYX_ERR(0, 2, __pyx_L1_error)
   #endif
   #ifdef __Pyx_FusedFunction_USED
-  if (__pyx_FusedFunction_init() < 0) __PYX_ERR(1, 2, __pyx_L1_error)
+  if (__pyx_FusedFunction_init() < 0) __PYX_ERR(0, 2, __pyx_L1_error)
   #endif
   #ifdef __Pyx_Coroutine_USED
-  if (__pyx_Coroutine_init() < 0) __PYX_ERR(1, 2, __pyx_L1_error)
+  if (__pyx_Coroutine_init() < 0) __PYX_ERR(0, 2, __pyx_L1_error)
   #endif
   #ifdef __Pyx_Generator_USED
-  if (__pyx_Generator_init() < 0) __PYX_ERR(1, 2, __pyx_L1_error)
+  if (__pyx_Generator_init() < 0) __PYX_ERR(0, 2, __pyx_L1_error)
   #endif
   #ifdef __Pyx_AsyncGen_USED
-  if (__pyx_AsyncGen_init() < 0) __PYX_ERR(1, 2, __pyx_L1_error)
+  if (__pyx_AsyncGen_init() < 0) __PYX_ERR(0, 2, __pyx_L1_error)
   #endif
   #ifdef __Pyx_StopAsyncIteration_USED
-  if (__pyx_StopAsyncIteration_init() < 0) __PYX_ERR(1, 2, __pyx_L1_error)
+  if (__pyx_StopAsyncIteration_init() < 0) __PYX_ERR(0, 2, __pyx_L1_error)
   #endif
   /*--- Library function declarations ---*/
   /*--- Threads initialization code ---*/
@@ -3542,46 +3804,46 @@ if (!__Pyx_RefNanny) {
   #else
   __pyx_m = PyModule_Create(&__pyx_moduledef);
   #endif
-  if (unlikely(!__pyx_m)) __PYX_ERR(1, 2, __pyx_L1_error)
+  if (unlikely(!__pyx_m)) __PYX_ERR(0, 2, __pyx_L1_error)
   #endif
-  __pyx_d = PyModule_GetDict(__pyx_m); if (unlikely(!__pyx_d)) __PYX_ERR(1, 2, __pyx_L1_error)
+  __pyx_d = PyModule_GetDict(__pyx_m); if (unlikely(!__pyx_d)) __PYX_ERR(0, 2, __pyx_L1_error)
   Py_INCREF(__pyx_d);
-  __pyx_b = PyImport_AddModule(__Pyx_BUILTIN_MODULE_NAME); if (unlikely(!__pyx_b)) __PYX_ERR(1, 2, __pyx_L1_error)
+  __pyx_b = PyImport_AddModule(__Pyx_BUILTIN_MODULE_NAME); if (unlikely(!__pyx_b)) __PYX_ERR(0, 2, __pyx_L1_error)
   Py_INCREF(__pyx_b);
-  __pyx_cython_runtime = PyImport_AddModule((char *) "cython_runtime"); if (unlikely(!__pyx_cython_runtime)) __PYX_ERR(1, 2, __pyx_L1_error)
+  __pyx_cython_runtime = PyImport_AddModule((char *) "cython_runtime"); if (unlikely(!__pyx_cython_runtime)) __PYX_ERR(0, 2, __pyx_L1_error)
   Py_INCREF(__pyx_cython_runtime);
-  if (PyObject_SetAttrString(__pyx_m, "__builtins__", __pyx_b) < 0) __PYX_ERR(1, 2, __pyx_L1_error)
+  if (PyObject_SetAttrString(__pyx_m, "__builtins__", __pyx_b) < 0) __PYX_ERR(0, 2, __pyx_L1_error)
   /*--- Initialize various global constants etc. ---*/
-  if (__Pyx_InitGlobals() < 0) __PYX_ERR(1, 2, __pyx_L1_error)
+  if (__Pyx_InitGlobals() < 0) __PYX_ERR(0, 2, __pyx_L1_error)
   #if PY_MAJOR_VERSION < 3 && (__PYX_DEFAULT_STRING_ENCODING_IS_ASCII || __PYX_DEFAULT_STRING_ENCODING_IS_DEFAULT)
-  if (__Pyx_init_sys_getdefaultencoding_params() < 0) __PYX_ERR(1, 2, __pyx_L1_error)
+  if (__Pyx_init_sys_getdefaultencoding_params() < 0) __PYX_ERR(0, 2, __pyx_L1_error)
   #endif
   if (__pyx_module_is_main_vm_writer) {
-    if (PyObject_SetAttr(__pyx_m, __pyx_n_s_name, __pyx_n_s_main) < 0) __PYX_ERR(1, 2, __pyx_L1_error)
+    if (PyObject_SetAttr(__pyx_m, __pyx_n_s_name, __pyx_n_s_main) < 0) __PYX_ERR(0, 2, __pyx_L1_error)
   }
   #if PY_MAJOR_VERSION >= 3
   {
-    PyObject *modules = PyImport_GetModuleDict(); if (unlikely(!modules)) __PYX_ERR(1, 2, __pyx_L1_error)
+    PyObject *modules = PyImport_GetModuleDict(); if (unlikely(!modules)) __PYX_ERR(0, 2, __pyx_L1_error)
     if (!PyDict_GetItemString(modules, "vm_writer")) {
-      if (unlikely(PyDict_SetItemString(modules, "vm_writer", __pyx_m) < 0)) __PYX_ERR(1, 2, __pyx_L1_error)
+      if (unlikely(PyDict_SetItemString(modules, "vm_writer", __pyx_m) < 0)) __PYX_ERR(0, 2, __pyx_L1_error)
     }
   }
   #endif
   /*--- Builtin init code ---*/
-  if (__Pyx_InitCachedBuiltins() < 0) __PYX_ERR(1, 2, __pyx_L1_error)
+  if (__Pyx_InitCachedBuiltins() < 0) __PYX_ERR(0, 2, __pyx_L1_error)
   /*--- Constants init code ---*/
-  if (__Pyx_InitCachedConstants() < 0) __PYX_ERR(1, 2, __pyx_L1_error)
+  if (__Pyx_InitCachedConstants() < 0) __PYX_ERR(0, 2, __pyx_L1_error)
   /*--- Global type/function init code ---*/
   (void)__Pyx_modinit_global_init_code();
   (void)__Pyx_modinit_variable_export_code();
   (void)__Pyx_modinit_function_export_code();
-  if (unlikely(__Pyx_modinit_type_init_code() < 0)) __PYX_ERR(1, 2, __pyx_L1_error)
+  if (unlikely(__Pyx_modinit_type_init_code() < 0)) __PYX_ERR(0, 2, __pyx_L1_error)
   (void)__Pyx_modinit_type_import_code();
   (void)__Pyx_modinit_variable_import_code();
   (void)__Pyx_modinit_function_import_code();
   /*--- Execution code ---*/
   #if defined(__Pyx_Generator_USED) || defined(__Pyx_Coroutine_USED)
-  if (__Pyx_patch_abc() < 0) __PYX_ERR(1, 2, __pyx_L1_error)
+  if (__Pyx_patch_abc() < 0) __PYX_ERR(0, 2, __pyx_L1_error)
   #endif
 
   /* "vm_writer.pyx":2
@@ -3590,9 +3852,9 @@ if (!__Pyx_RefNanny) {
  * import sys
  * import re
  */
-  __pyx_t_1 = __Pyx_Import(__pyx_n_s_os, 0, -1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 2, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_Import(__pyx_n_s_os, 0, -1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 2, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_os, __pyx_t_1) < 0) __PYX_ERR(1, 2, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_os, __pyx_t_1) < 0) __PYX_ERR(0, 2, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
   /* "vm_writer.pyx":3
@@ -3602,9 +3864,9 @@ if (!__Pyx_RefNanny) {
  * import re
  * 
  */
-  __pyx_t_1 = __Pyx_Import(__pyx_n_s_sys, 0, -1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 3, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_Import(__pyx_n_s_sys, 0, -1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 3, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_sys, __pyx_t_1) < 0) __PYX_ERR(1, 3, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_sys, __pyx_t_1) < 0) __PYX_ERR(0, 3, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
   /* "vm_writer.pyx":4
@@ -3614,9 +3876,9 @@ if (!__Pyx_RefNanny) {
  * 
  * cdef class VmWriter():
  */
-  __pyx_t_1 = __Pyx_Import(__pyx_n_s_re, 0, -1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 4, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_Import(__pyx_n_s_re, 0, -1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 4, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_re, __pyx_t_1) < 0) __PYX_ERR(1, 4, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_re, __pyx_t_1) < 0) __PYX_ERR(0, 4, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
   /* "vm_writer.pyx":2
@@ -3625,9 +3887,9 @@ if (!__Pyx_RefNanny) {
  * import sys
  * import re
  */
-  __pyx_t_1 = __Pyx_PyDict_NewPresized(0); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 2, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyDict_NewPresized(0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 2, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_test, __pyx_t_1) < 0) __PYX_ERR(1, 2, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_test, __pyx_t_1) < 0) __PYX_ERR(0, 2, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
   /*--- Wrapped vars code ---*/
@@ -3842,26 +4104,23 @@ static void __Pyx_RaiseArgtupleInvalid(
                  (num_expected == 1) ? "" : "s", num_found);
 }
 
-/* PyCFunctionFastCall */
-#if CYTHON_FAST_PYCCALL
-static CYTHON_INLINE PyObject * __Pyx_PyCFunction_FastCall(PyObject *func_obj, PyObject **args, Py_ssize_t nargs) {
-    PyCFunctionObject *func = (PyCFunctionObject*)func_obj;
-    PyCFunction meth = PyCFunction_GET_FUNCTION(func);
-    PyObject *self = PyCFunction_GET_SELF(func);
-    int flags = PyCFunction_GET_FLAGS(func);
-    assert(PyCFunction_Check(func));
-    assert(METH_FASTCALL == (flags & ~(METH_CLASS | METH_STATIC | METH_COEXIST | METH_KEYWORDS | METH_STACKLESS)));
-    assert(nargs >= 0);
-    assert(nargs == 0 || args != NULL);
-    /* _PyCFunction_FastCallDict() must not be called with an exception set,
-       because it may clear it (directly or indirectly) and so the
-       caller loses its exception */
-    assert(!PyErr_Occurred());
-    if ((PY_VERSION_HEX < 0x030700A0) || unlikely(flags & METH_KEYWORDS)) {
-        return (*((__Pyx_PyCFunctionFastWithKeywords)(void*)meth)) (self, args, nargs, NULL);
-    } else {
-        return (*((__Pyx_PyCFunctionFast)(void*)meth)) (self, args, nargs);
+/* PyObjectCall */
+#if CYTHON_COMPILING_IN_CPYTHON
+static CYTHON_INLINE PyObject* __Pyx_PyObject_Call(PyObject *func, PyObject *arg, PyObject *kw) {
+    PyObject *result;
+    ternaryfunc call = Py_TYPE(func)->tp_call;
+    if (unlikely(!call))
+        return PyObject_Call(func, arg, kw);
+    if (unlikely(Py_EnterRecursiveCall((char*)" while calling a Python object")))
+        return NULL;
+    result = (*call)(func, arg, kw);
+    Py_LeaveRecursiveCall();
+    if (unlikely(!result) && unlikely(!PyErr_Occurred())) {
+        PyErr_SetString(
+            PyExc_SystemError,
+            "NULL result without error in PyObject_Call");
     }
+    return result;
 }
 #endif
 
@@ -3984,55 +4243,6 @@ done:
 #endif
 #endif
 
-/* PyObjectCall */
-#if CYTHON_COMPILING_IN_CPYTHON
-static CYTHON_INLINE PyObject* __Pyx_PyObject_Call(PyObject *func, PyObject *arg, PyObject *kw) {
-    PyObject *result;
-    ternaryfunc call = Py_TYPE(func)->tp_call;
-    if (unlikely(!call))
-        return PyObject_Call(func, arg, kw);
-    if (unlikely(Py_EnterRecursiveCall((char*)" while calling a Python object")))
-        return NULL;
-    result = (*call)(func, arg, kw);
-    Py_LeaveRecursiveCall();
-    if (unlikely(!result) && unlikely(!PyErr_Occurred())) {
-        PyErr_SetString(
-            PyExc_SystemError,
-            "NULL result without error in PyObject_Call");
-    }
-    return result;
-}
-#endif
-
-/* PyObjectCall2Args */
-static CYTHON_UNUSED PyObject* __Pyx_PyObject_Call2Args(PyObject* function, PyObject* arg1, PyObject* arg2) {
-    PyObject *args, *result = NULL;
-    #if CYTHON_FAST_PYCALL
-    if (PyFunction_Check(function)) {
-        PyObject *args[2] = {arg1, arg2};
-        return __Pyx_PyFunction_FastCall(function, args, 2);
-    }
-    #endif
-    #if CYTHON_FAST_PYCCALL
-    if (__Pyx_PyFastCFunction_Check(function)) {
-        PyObject *args[2] = {arg1, arg2};
-        return __Pyx_PyCFunction_FastCall(function, args, 2);
-    }
-    #endif
-    args = PyTuple_New(2);
-    if (unlikely(!args)) goto done;
-    Py_INCREF(arg1);
-    PyTuple_SET_ITEM(args, 0, arg1);
-    Py_INCREF(arg2);
-    PyTuple_SET_ITEM(args, 1, arg2);
-    Py_INCREF(function);
-    result = __Pyx_PyObject_Call(function, args, NULL);
-    Py_DECREF(args);
-    Py_DECREF(function);
-done:
-    return result;
-}
-
 /* PyObjectCallMethO */
 #if CYTHON_COMPILING_IN_CPYTHON
 static CYTHON_INLINE PyObject* __Pyx_PyObject_CallMethO(PyObject *func, PyObject *arg) {
@@ -4050,6 +4260,51 @@ static CYTHON_INLINE PyObject* __Pyx_PyObject_CallMethO(PyObject *func, PyObject
             "NULL result without error in PyObject_Call");
     }
     return result;
+}
+#endif
+
+/* PyObjectCallNoArg */
+#if CYTHON_COMPILING_IN_CPYTHON
+static CYTHON_INLINE PyObject* __Pyx_PyObject_CallNoArg(PyObject *func) {
+#if CYTHON_FAST_PYCALL
+    if (PyFunction_Check(func)) {
+        return __Pyx_PyFunction_FastCall(func, NULL, 0);
+    }
+#endif
+#if defined(__Pyx_CyFunction_USED) && defined(NDEBUG)
+    if (likely(PyCFunction_Check(func) || __Pyx_CyFunction_Check(func)))
+#else
+    if (likely(PyCFunction_Check(func)))
+#endif
+    {
+        if (likely(PyCFunction_GET_FLAGS(func) & METH_NOARGS)) {
+            return __Pyx_PyObject_CallMethO(func, NULL);
+        }
+    }
+    return __Pyx_PyObject_Call(func, __pyx_empty_tuple, NULL);
+}
+#endif
+
+/* PyCFunctionFastCall */
+#if CYTHON_FAST_PYCCALL
+static CYTHON_INLINE PyObject * __Pyx_PyCFunction_FastCall(PyObject *func_obj, PyObject **args, Py_ssize_t nargs) {
+    PyCFunctionObject *func = (PyCFunctionObject*)func_obj;
+    PyCFunction meth = PyCFunction_GET_FUNCTION(func);
+    PyObject *self = PyCFunction_GET_SELF(func);
+    int flags = PyCFunction_GET_FLAGS(func);
+    assert(PyCFunction_Check(func));
+    assert(METH_FASTCALL == (flags & ~(METH_CLASS | METH_STATIC | METH_COEXIST | METH_KEYWORDS | METH_STACKLESS)));
+    assert(nargs >= 0);
+    assert(nargs == 0 || args != NULL);
+    /* _PyCFunction_FastCallDict() must not be called with an exception set,
+       because it may clear it (directly or indirectly) and so the
+       caller loses its exception */
+    assert(!PyErr_Occurred());
+    if ((PY_VERSION_HEX < 0x030700A0) || unlikely(flags & METH_KEYWORDS)) {
+        return (*((__Pyx_PyCFunctionFastWithKeywords)(void*)meth)) (self, args, nargs, NULL);
+    } else {
+        return (*((__Pyx_PyCFunctionFast)(void*)meth)) (self, args, nargs);
+    }
 }
 #endif
 
@@ -4092,6 +4347,35 @@ static CYTHON_INLINE PyObject* __Pyx_PyObject_CallOneArg(PyObject *func, PyObjec
     return result;
 }
 #endif
+
+/* PyObjectCall2Args */
+static CYTHON_UNUSED PyObject* __Pyx_PyObject_Call2Args(PyObject* function, PyObject* arg1, PyObject* arg2) {
+    PyObject *args, *result = NULL;
+    #if CYTHON_FAST_PYCALL
+    if (PyFunction_Check(function)) {
+        PyObject *args[2] = {arg1, arg2};
+        return __Pyx_PyFunction_FastCall(function, args, 2);
+    }
+    #endif
+    #if CYTHON_FAST_PYCCALL
+    if (__Pyx_PyFastCFunction_Check(function)) {
+        PyObject *args[2] = {arg1, arg2};
+        return __Pyx_PyCFunction_FastCall(function, args, 2);
+    }
+    #endif
+    args = PyTuple_New(2);
+    if (unlikely(!args)) goto done;
+    Py_INCREF(arg1);
+    PyTuple_SET_ITEM(args, 0, arg1);
+    Py_INCREF(arg2);
+    PyTuple_SET_ITEM(args, 1, arg2);
+    Py_INCREF(function);
+    result = __Pyx_PyObject_Call(function, args, NULL);
+    Py_DECREF(args);
+    Py_DECREF(function);
+done:
+    return result;
+}
 
 /* StringJoin */
 #if !CYTHON_COMPILING_IN_CPYTHON

@@ -3,57 +3,35 @@ from symbol_table import SymbolTable
 import os
 
 cdef class CompilationEngine():
-    cdef int pointer
-    cdef str current_token
-    cdef str next_token
-    cdef str temp
     cdef wf
-    cdef input_file
+    cdef tokenizer
     cdef symbol_table
     cdef vmw
     cdef compiled_class_name
     cdef label_num
 
     
-    
-    
-    
-    def __cinit__(self, filepath, input_file, vm_writer):
+    # Constructor
+    def __cinit__(self, filepath, vm_writer):
         self.wf = open(filepath[:-5] + ".myImpl.xml", 'w')
-        self.input_file =  open(input_file, 'r').readlines()
+        self.tokenizer = JackTokenizer(filepath)
         self.symbol_table = SymbolTable()
         self.vmw = vm_writer
-        self.current_token = None
         self.compiled_class_name = None
-        self.label_num = 0
-        self.pointer = 0
-        
-        self.advance() # get the first token <tokens>
-
-        self.compile()
+        self.label_num = 0 
 
 
-    cdef __enter__(self):
+    def __enter__(self):
         return self
 
-    cdef __exit__(self, exc_type, exc_val, exc_tb):
+    def __exit__(self, exc_type, exc_val, exc_tb):
         self.wf.close()
-
-    cdef advance(self):
-        self.current_token = self.next_token
-        self.next_token = self.input_file[self.pointer].strip()
-        self.pointer += 1
-
-    # reverse the last advance
-    cdef reverse(self):
-        self.pointer -= 1
 
     cdef get_new_label(self):
         self.label_num += 1
         return 'LABEL_%d' % self.label_num
 
-    cdef compile(self):
-        self.advance()
+    cpdef compile(self):
         self.compile_class()
 
     cdef compile_class(self):
@@ -93,12 +71,10 @@ cdef class CompilationEngine():
             self.compile_var_name(declaration=True, type=type, kind=kind)
 
         self.compile_symbol(';')
-
         self.write_element_end('classVarDec')
 
     cdef int compile_var_dec(self):
         self.write_element_start('varDec')
-
         self.compile_keyword('var')
         type = self.compile_type().token
         cdef int var_num = 0
@@ -122,7 +98,7 @@ cdef class CompilationEngine():
         self.symbol_table.start_subroutine()
 
         token = self.compile_keyword(['constructor', 'function', 'method'])
-        if self.next_token == 'void':
+        if self.tokenizer.see_next().token == 'void':
             self.compile_keyword('void')
         else:
             self.compile_type()
@@ -149,27 +125,27 @@ cdef class CompilationEngine():
 
     cdef compile_var_name(self, declaration=False, type=None, kind=None, let=False, call=False):
         if declaration:
-            self.symbol_table.define(self.next_token, type, kind)
+            self.symbol_table.define(self.tokenizer.see_next().token, type, kind)
         elif let:
             pass
         elif call:
             pass
         else:
-            kind = self.symbol_table.kind_of(self.next_token)
+            kind = self.symbol_table.kind_of(self.tokenizer.see_next().token)
             if kind == 'arg':
-                self.vmw.write_push('argument', self.symbol_table.index_of(self.next_token))
+                self.vmw.write_push('argument', self.symbol_table.index_of(self.tokenizer.see_next().token))
             elif kind == 'var':
-                self.vmw.write_push('local', self.symbol_table.index_of(self.next_token))
+                self.vmw.write_push('local', self.symbol_table.index_of(self.tokenizer.see_next().token))
             elif kind == 'static':
-                self.vmw.write_push('static', self.symbol_table.index_of(self.next_token))
+                self.vmw.write_push('static', self.symbol_table.index_of(self.tokenizer.see_next().token))
             elif kind == 'field':
-                self.vmw.write_push('this', self.symbol_table.index_of(self.next_token))
+                self.vmw.write_push('this', self.symbol_table.index_of(self.tokenizer.see_next().token))
             else:
                 self.raise_syntax_error('Unexpected token')
 
         self.write_identifier_info('declaration: %s, kind: %s, index: %d' % (
-            declaration, self.symbol_table.kind_of(self.next_token),
-            self.symbol_table.index_of(self.next_token)))
+            declaration, self.symbol_table.kind_of(self.tokenizer.see_next().token),
+            self.symbol_table.index_of(self.tokenizer.see_next().token)))
         return self.compile_identifier()
 
     cdef write_identifier_info(self, info):
@@ -178,7 +154,7 @@ cdef class CompilationEngine():
     cdef compile_parameter_list(self):
         self.write_element_start('parameterList')
 
-        if self.next_token in ['int', 'char', 'boolean'] or isinstance(self.next_token, 'identifier'):
+        if self.tokenizer.see_next().token in ['int', 'char', 'boolean'] or isinstance(self.tokenizer.see_next().token, 2):
             type = self.compile_type().token
             self.compile_var_name(declaration=True, type=type, kind='ARG')
 
@@ -364,7 +340,7 @@ cdef class CompilationEngine():
             self.vmw.write_call('%s.%s' % (self.compiled_class_name, subroutine_name), arg_num + 1)
 
         else:
-            identifier_str = self.next_token
+            identifier_str = self.tokenizer.see_next().token
             if self.symbol_table.kind_of(identifier_str) != None:
                 instance_name = self.compile_var_name(declaration=False, type=None, kind=None, let=False, call=True).token
                 self.compile_symbol('.')
@@ -398,7 +374,7 @@ cdef class CompilationEngine():
     cdef compile_expression_list(self):
         self.write_element_start('expressionList')
 
-        cdef int arg_num = 0
+        arg_num = 0
         if not self.next_is(')'):
             self.compile_expression()
             arg_num += 1
@@ -499,10 +475,10 @@ cdef class CompilationEngine():
         self.write_element_end('term')
 
     cdef next_type_is(self, token_type):
-        return self.next_token_type == token_type
+        return self.tokenizer.see_next().token_type == token_type
 
     cdef compile_type(self):
-        token = self.next_token
+        token = self.tokenizer.see_next()
 
         if self.next_is(['int', 'char', 'boolean']):
             self.compile_keyword(['int', 'char', 'boolean'])
@@ -515,9 +491,9 @@ cdef class CompilationEngine():
 
     cdef next_is(self, token, idx=0):
         if type(token, list):
-            return self.next_token in token
+            return self.tokenizer.see_next().token in token
         else:
-            return self.next_token == token
+            return self.tokenizer.see_next().token == token
 
     cdef next_is_class_var_dec(self):
         return self.next_is(['static', 'field'])
@@ -526,57 +502,61 @@ cdef class CompilationEngine():
         return self.next_is(['constructor', 'function', 'method'])
 
     cdef compile_symbol(self, symbol):
-        self.advance()
+        self.tokenizer.advance()
         if type(symbol) == list:
-            if self.current_token in symbol:
-                self.write_element('symbol', self.current_token.token_escaped)
-                return self.current_token
+            if self.tokenizer.current_token in symbol:
+                self.write_element('symbol', self.tokenizer.current_token)
+                return self.tokenizer.current_token
             else:
                 self.raise_syntax_error('Unexpected token')
         else:
-            if self.current_token == symbol:
-                self.write_element('symbol', self.current_token.token_escaped)
-                return self.current_token
+            if self.tokenizer.current_token == symbol:
+                self.write_element('symbol', self.tokenizer.current_token)
+                return self.tokenizer.current_token
             else:
                 self.raise_syntax_error('Unexpected token')
 
     cdef compile_keyword(self, keyword):
-        self.advance()
+        self.tokenizer.advance()
         if type(keyword) == list:
-            if self.current_token in keyword:
-                self.write_element('keyword', self.current_token.token_escaped)
-                return self.current_token
+            if self.tokenizer.current_token in keyword:
+                self.write_element('keyword', self.tokenizer.current_token)
+                return self.tokenizer.current_token 
             else:
                 self.raise_syntax_error('Unexpected token')
         else:
-            if self.current_token == keyword:
-                self.write_element('keyword', self.current_token.token_escaped)
-                return self.current_token
+            if self.tokenizer.current_token == keyword:
+                self.write_element('keyword', self.tokenizer.current_token)
+                return self.tokenizer.current_token
             else:
-                print(self.current_token)
+                print(self.tokenizer.current_token)
                 self.raise_syntax_error('Unexpected token')
 
     cdef compile_identifier(self):
-        self.advance()
-        if self.current_token_type == 'identifier':
-            self.write_element('identifier', self.current_token.token_escaped)
-            return self.current_token
+        self.tokenizer.advance()
+        if isinstance(self.tokenizer.current_token, 2):
+            identifier_str = self.tokenizer.current_token
+            self.write_element(
+                'identifier',
+                identifier_str
+            )
+            return self.tokenizer.current_token        
         else:
             self.raise_syntax_error('Unexpected token')
 
     cdef compile_integer_constant(self):
-        self.advance()
+        self.tokenizer.advance()
         if self.current_token_type == 'integerConstant':
-            self.write_element('integerConstant', self.current_token.token_escaped)
-            return self.current_token.token_escaped
+            self.write_element('integerConstant',self.tokenizer.current_token)
+            return self.tokenizer.current_token
         else:
             self.raise_syntax_error('Unexpected token')
 
     cdef compile_string_constant(self):
-        self.advance()
-        if isinstance(self.current_token, 'stringConstant'):
-            string = self.current_token.token_escaped
-            self.write_element('stringConstant', string)
+        self.tokenizer.advance()
+        if isinstance(self.tokenizer.current_token, 4):
+            string = self.tokenizer.current_token.token
+            self.write_element('stringConstant', self.tokenizer.current_token)
             self.vmw.write_push('constant', len(string))
             self.vmw.write_call('String.new', 1)
             for char in string:
