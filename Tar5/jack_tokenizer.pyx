@@ -26,6 +26,18 @@ cdef class JackTokenizer:
     cdef readfile
     cdef str current_token
 
+    cpdef str get_current_token(self):
+        return self.current_token
+
+    cpdef get_identifier_pattern(self):
+        return self.IDENTIFIER_PATTERN
+
+    cpdef get_integer_pattern(self):
+        return self.INTEGER_PATTERN
+
+    cpdef get_string_pattern(self):
+        return self.STRING_PATTERN
+
     def __cinit__(self, str filepath):
         self.current_token = None
         self.line_num = 0
@@ -138,7 +150,7 @@ cdef class JackTokenizer:
             self.current_token = None
         return self.current_token
 
-    cdef see_next(self,idx=0):
+    cpdef see_next(self,idx=0):
         if len(self.remained_tokens) > idx:
             return self.remained_tokens[idx]
         else:

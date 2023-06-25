@@ -23,7 +23,7 @@ cdef class VmWriter():
 
 
     cdef write_code(self, code):
-        self.f.write(code + '\n')
+        self.output_file.write(code + '\n')
 
     cdef write_codes(self, codes):
         self.write_code('\n'.join(codes))
@@ -68,7 +68,7 @@ cdef class VmWriter():
     cdef write_call(self, name, n_args):
         self.write_code('call %s %d' % (name, int(n_args)))
 
-    cdef write_function(self, name, n_locals):
+    cpdef write_function(self, name, n_locals):
         self.write_code('function %s %d' % (name, int(n_locals)))
 
     cdef write_return(self):
