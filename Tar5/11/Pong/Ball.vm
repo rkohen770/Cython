@@ -1,0 +1,270 @@
+function Ball.dispose 0
+push argument 0
+pop pointer 0
+push pointer 0
+call Memory.deAlloc 1
+pop temp 0
+push constant 0
+return
+function Ball.hide 0
+push argument 0
+pop pointer 0
+push constant 0
+call Screen.setColor 1
+pop temp 0
+push pointer 0
+call Ball.draw 1
+pop temp 0
+push constant 0
+return
+function Ball.getLeft 0
+push argument 0
+pop pointer 0
+return
+function Ball.setDestination 3
+push argument 0
+pop pointer 0
+sub
+pop this 2
+sub
+pop this 3
+call Math.abs 1
+pop local 0
+call Math.abs 1
+pop local 1
+pop this 7
+not
+if-goto LABEL_1
+pop local 2
+pop local 0
+pop local 1
+pop this 8
+pop this 9
+goto LABEL_2
+label LABEL_1
+pop this 8
+pop this 9
+label LABEL_2
+push constant 2
+call Math.multiply 2
+sub
+pop this 4
+push constant 2
+call Math.multiply 2
+pop this 5
+push constant 2
+sub
+call Math.multiply 2
+pop this 6
+push constant 0
+return
+function Ball.move 0
+push argument 0
+pop pointer 0
+push pointer 0
+call Ball.hide 1
+pop temp 0
+push constant 0
+not
+if-goto LABEL_3
+add
+pop this 4
+goto LABEL_4
+label LABEL_3
+add
+pop this 4
+not
+if-goto LABEL_5
+not
+if-goto LABEL_7
+push constant 4
+add
+pop this 0
+goto LABEL_8
+label LABEL_7
+push constant 4
+add
+pop this 1
+label LABEL_8
+goto LABEL_6
+label LABEL_5
+not
+if-goto LABEL_9
+push constant 4
+sub
+pop this 0
+goto LABEL_10
+label LABEL_9
+push constant 4
+sub
+pop this 1
+label LABEL_10
+label LABEL_6
+label LABEL_4
+not
+if-goto LABEL_11
+not
+if-goto LABEL_13
+push constant 4
+add
+pop this 1
+goto LABEL_14
+label LABEL_13
+push constant 4
+add
+pop this 0
+label LABEL_14
+goto LABEL_12
+label LABEL_11
+not
+if-goto LABEL_15
+push constant 4
+sub
+pop this 1
+goto LABEL_16
+label LABEL_15
+push constant 4
+sub
+pop this 0
+label LABEL_16
+label LABEL_12
+not
+not
+if-goto LABEL_17
+push constant 1
+pop this 14
+pop this 0
+goto LABEL_18
+label LABEL_17
+label LABEL_18
+not
+not
+if-goto LABEL_19
+push constant 2
+pop this 14
+pop this 0
+goto LABEL_20
+label LABEL_19
+label LABEL_20
+not
+not
+if-goto LABEL_21
+push constant 3
+pop this 14
+pop this 1
+goto LABEL_22
+label LABEL_21
+label LABEL_22
+not
+not
+if-goto LABEL_23
+push constant 4
+pop this 14
+pop this 1
+goto LABEL_24
+label LABEL_23
+label LABEL_24
+push pointer 0
+call Ball.show 1
+pop temp 0
+return
+function Ball.bounce 5
+push argument 0
+pop pointer 0
+push constant 10
+call Math.divide 2
+pop local 2
+push constant 10
+call Math.divide 2
+pop local 3
+push constant 0
+eq
+not
+if-goto LABEL_25
+push constant 10
+pop local 4
+goto LABEL_26
+label LABEL_25
+push constant 0
+not
+push constant 1
+eq
+push constant 0
+push constant 1
+neg
+eq
+or
+not
+if-goto LABEL_27
+push constant 20
+pop local 4
+goto LABEL_28
+label LABEL_27
+push constant 5
+pop local 4
+label LABEL_28
+label LABEL_26
+push constant 1
+eq
+not
+if-goto LABEL_29
+push constant 506
+pop local 0
+push constant 50
+neg
+call Math.multiply 2
+call Math.divide 2
+pop local 1
+call Math.multiply 2
+add
+pop local 1
+goto LABEL_30
+label LABEL_29
+push constant 2
+eq
+not
+if-goto LABEL_31
+push constant 0
+pop local 0
+push constant 50
+call Math.multiply 2
+call Math.divide 2
+pop local 1
+call Math.multiply 2
+add
+pop local 1
+goto LABEL_32
+label LABEL_31
+push constant 3
+eq
+not
+if-goto LABEL_33
+push constant 250
+pop local 1
+push constant 25
+neg
+call Math.multiply 2
+call Math.divide 2
+pop local 0
+call Math.multiply 2
+add
+pop local 0
+goto LABEL_34
+label LABEL_33
+push constant 0
+pop local 1
+push constant 25
+call Math.multiply 2
+call Math.divide 2
+pop local 0
+call Math.multiply 2
+add
+pop local 0
+label LABEL_34
+label LABEL_32
+label LABEL_30
+push pointer 0
+call Ball.setDestination 3
+pop temp 0
+push constant 0
+return

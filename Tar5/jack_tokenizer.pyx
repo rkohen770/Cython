@@ -84,7 +84,7 @@ cdef class JackTokenizer:
         cdef str line = self.readfile.readline()
         if line:
             self.remained_line = line.split("//")[0].strip()
-            if self.remained_line == '/*' or self.remained_line == '/**':
+            if self.remained_line[0:2] == '/*':
                 while 1:
                     line = self.readfile.readline()
                     if line.find('*/') > -1:
