@@ -1,5 +1,6 @@
 from jack_tokenizer import JackTokenizer
 from symbol_table import SymbolTable
+import re
 import os
 
 cdef class CompilationEngine():
@@ -14,7 +15,9 @@ cdef class CompilationEngine():
                 "void", "true", "false", "null", "this", "let", "do", "if", "else", "while", "return"]
     SYMBOLS = ['{', '}', '(', ')', '[', ']', '.', ',', ';', '+', '-', '*', '/', '&', '|', '<', '>', '=', '~']
     
-
+    IDENTIFIER_PATTERN = re.compile(r'^[A-Za-z_][A-Za-z0-9_]*$')
+    INTEGER_PATTERN = re.compile(r'^[0-9]+$')
+    STRING_PATTERN = re.compile(r'^".*"$')
     
     # Constructor
     def __cinit__(self, filepath, vm_writer):
@@ -175,9 +178,10 @@ cdef class CompilationEngine():
         print(subroutine_name, subroutine_dec_token)
 
         self.compile_symbol('{')
-        cdef int var_num = 0
+        cdef int local_num = 0
         while self.next_is('var'):
-            var_num += self.compile_var_dec()
+            var_num = self.compile_var_dec()
+            local_num += var_num
 
         self.vmw.write_function('%s.%s' % (self.compiled_class_name, subroutine_name), var_num)
 
@@ -188,6 +192,10 @@ cdef class CompilationEngine():
         elif subroutine_dec_token == 'method':
             self.vmw.write_push('argument', 0)
             self.vmw.write_pop('pointer', 0)
+        elif subroutine_dec_token == 'function':
+            pass
+        else:
+            self.raise_syntax_error('Invalid token')
 
         self.compile_statements()
         self.compile_symbol('}')
@@ -196,12 +204,20 @@ cdef class CompilationEngine():
 
         print("=====================================")
 
-        for key in self.symbol_table.arg_table:
-            print (self.symbol_table.arg_table[key].type,key,"kind:",self.symbol_table.arg_table[key].kind,"index:",self.symbol_table.arg_table[key].index)
+        for key in self.symbol_table.get_arg_table():
+            print (self.symbol_table.get_arg_table()[key].type,key,"kind:",self.symbol_table.get_arg_table()[key].kind,"index:",self.symbol_table.get_arg_table()[key].index)
 
-        return var_num
+        return local_num
 
     cdef compile_statements(self):
+        self.write_element_start('statements')
+
+        while self.next_is_statement():
+            self.compile_statement()
+
+        self.write_element_end('statements')
+
+    cdef compile_statement(self):
         if self.next_is('let'):
             self.write_element_start('letStatement')
             self.compile_keyword('let')
@@ -215,16 +231,14 @@ cdef class CompilationEngine():
 
                 # base address 
                 kind = self.symbol_table.kind_of(let_var)
-                if kind == 'arg':
+                if kind == 'ARG':
                     self.vmw.write_push('argument', self.symbol_table.index_of(let_var))
-                elif kind == 'var':
+                elif kind == 'VAR':
                     self.vmw.write_push('local', self.symbol_table.index_of(let_var))
-                elif kind == 'static':
+                elif kind == 'STATIC':
                     self.vmw.write_push('static', self.symbol_table.index_of(let_var))
-                elif kind == 'field':
+                elif kind == 'FIELD':
                     self.vmw.write_push('this', self.symbol_table.index_of(let_var))
-                else:
-                    self.raise_syntax_error('Unexpected token')
 
                 # temp_2 <- base + index
                 self.vmw.write_arithmetic('add')
@@ -246,16 +260,15 @@ cdef class CompilationEngine():
                 self.compile_symbol(';')
 
                 kind = self.symbol_table.kind_of(let_var)
-                if kind == 'arg':
+                print("kind:",kind)
+                if kind == 'ARG':
                     self.vmw.write_pop('argument', self.symbol_table.index_of(let_var))
-                elif kind == 'var':
+                elif kind == 'VAR':
                     self.vmw.write_pop('local', self.symbol_table.index_of(let_var))
-                elif kind == 'static':
+                elif kind == 'STATIC':
                     self.vmw.write_pop('static', self.symbol_table.index_of(let_var))
-                elif kind == 'field':
+                elif kind == 'FIELD':
                     self.vmw.write_pop('this', self.symbol_table.index_of(let_var))
-                else:
-                    self.raise_syntax_error('Unexpected token')
 
             self.write_element_end('letStatement')
 
@@ -266,10 +279,11 @@ cdef class CompilationEngine():
             self.compile_expression()
             self.compile_symbol(')')
 
+            self.vmw.write_arithmetic('not')
+
             label1 = self.get_new_label()
             label2 = self.get_new_label()
 
-            self.vmw.write_arithmetic('not')
             self.vmw.write_if(label1)
 
             self.compile_symbol('{')
@@ -291,11 +305,11 @@ cdef class CompilationEngine():
 
         elif self.next_is('while'):
             self.write_element_start('whileStatement')
-            self.compile_keyword('while')
 
             label1 = self.get_new_label()
             label2 = self.get_new_label()
-
+            
+            self.compile_keyword('while')
             self.vmw.write_label(label1)
 
             self.compile_symbol('(')
@@ -399,8 +413,8 @@ cdef class CompilationEngine():
 
         self.compile_term()
 
-        while self.next_is(['+', '-', '*', '/', '&', '|', '<', '>', '=']):
-            op = self.compile_symbol(['+', '-', '*', '/', '&', '|', '<', '>', '='])
+        while self.next_is(['+', '-', '*', '/', '&amp;', '|', '&lt;', '&gt;', '=']):
+            op = self.compile_symbol(['+', '-', '*', '/', '&amp;', '|', '&lt;', '&gt;', '='])
             self.compile_term()
 
             if op == '+':
@@ -481,18 +495,20 @@ cdef class CompilationEngine():
         self.write_element_end('term')
 
     cdef next_type_is(self):
-        print(self.tokenizer.see_next())
-        if self.tokenizer.see_next() in self.SYMBOLS:
+        next_token = str(self.tokenizer.see_next())
+        print(next_token, 499)
+        if next_token in self.SYMBOLS:
             return "symbol"
-        elif self.tokenizer.see_next() in self.KEYWORDS:
+        elif next_token in self.KEYWORDS:
             return "keyword"
-        elif self.tokenizer.get_identifier_pattern().match(self.tokenizer.see_next()):
+        elif self.IDENTIFIER_PATTERN.match(next_token):
             return "identifier"
-        elif self.tokenizer.get_integer_pattern().match(self.tokenizer.see_next()):
+        elif self.INTEGER_PATTERN.match(next_token):
             return "integerConstant"
-        elif self.tokenizer.get_string_pattern().match(self.tokenizer.see_next()):
+        elif self.STRING_PATTERN.match(next_token):
             return "stringConstant"
         else:
+            print(next_token, 510)
             self.raise_syntax_error('Unexpected token')
 
     cdef compile_type(self):
@@ -521,9 +537,9 @@ cdef class CompilationEngine():
 
     cdef compile_symbol(self, symbol):
         self.tokenizer.advance()
-        print(self.tokenizer.get_current_token())
+        print(self.tokenizer.get_current_token(),symbol, 531)
         if type(symbol) == list:
-            if self.tokenizer.get_current_token() == symbol:
+            if self.tokenizer.get_current_token() in symbol:
                 self.write_element('symbol', self.tokenizer.get_current_token())
                 return self.tokenizer.get_current_token()
             else:
@@ -538,7 +554,7 @@ cdef class CompilationEngine():
     cdef compile_keyword(self, keyword):
         self.tokenizer.advance()
         if type(keyword) == list:
-            if self.tokenizer.get_current_token() in self.KEYWORDS:
+            if self.tokenizer.get_current_token() in keyword:
                 self.write_element('keyword', self.tokenizer.get_current_token())
                 return self.tokenizer.get_current_token() 
             else:

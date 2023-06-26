@@ -31,6 +31,18 @@ cdef class SymbolTable:
     cdef dict arg_table
     cdef dict var_table
 
+    cpdef get_static_table(self):
+        return self.static_table
+
+    cpdef get_field_table(self):
+        return self.field_table
+
+    cpdef get_arg_table(self):
+        return self.arg_table
+
+    cpdef get_var_table(self):
+        return self.var_table
+
     # constructor
     def __cinit__(self):
         self.static_table = {}
@@ -74,7 +86,7 @@ cdef class SymbolTable:
     cpdef kind_of(self, name):
         identifier = self.find_by_name(name)
         if identifier:
-            return identifier
+            return identifier.get_kind()
         else:
             return None
 

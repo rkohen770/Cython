@@ -24,9 +24,9 @@ cdef class JackTokenizer:
     cdef str remained_line
     cdef remained_tokens
     cdef readfile
-    cdef str current_token
+    cdef current_token
 
-    cpdef str get_current_token(self):
+    cpdef get_current_token(self):
         return self.current_token
 
     cpdef get_identifier_pattern(self):
@@ -67,7 +67,7 @@ cdef class JackTokenizer:
                     elif self.IDENTIFIER_PATTERN.match(token):
                         elem_name = "identifier"
                     elif self.STRING_PATTERN.match(token):
-                        token = token[1:-1]
+                        # token = token[1:-1]
                         elem_name = "stringConstant"
                     else:
                         self.raise_exception('Unknown token exists')
@@ -133,9 +133,9 @@ cdef class JackTokenizer:
                     if t_1 != None:
                         continue
                     else:
-                        self.current_token = str(self.judge_token(self.remained_line[0:i]))
+                        self.current_token = self.judge_token(self.remained_line[0:i])
                         self.remained_line = self.remained_line[i:]
-                        return t_0
+                        return self.current_token
 
     cdef current_token_type(self):
         return self.judge_token(self.current_token)

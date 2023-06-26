@@ -22,74 +22,75 @@ cdef class VmWriter():
             self.output_file.close()
 
 
-    cdef write_code(self, code):
+    cpdef write_code(self, code):
         self.output_file.write(code + '\n')
 
-    cdef write_codes(self, codes):
+    cpdef write_codes(self, codes):
         self.write_code('\n'.join(codes))
 
-    cdef write_push(self, segment, index):
+    cpdef write_push(self, segment, index):
+        print('push', segment, index)
         self.write_code('push %s %d' % (self._get_segment_str(segment), int(index)))
 
-    cdef write_pop(self, segment, index):
+    cpdef write_pop(self, segment, index):
         self.write_code('pop %s %d' % (self._get_segment_str(segment), int(index)))
 
-    cdef write_arithmetic(self, command):
-        if command == 'ADD':
+    cpdef write_arithmetic(self, command):
+        if command == 'add':
             self.write_code('add')
-        elif command == 'SUB':
+        elif command == 'sub':
             self.write_code('sub')
-        elif command == 'NEG':
+        elif command == 'neg':
             self.write_code('neg')
-        elif command == 'EQ':
+        elif command == 'eq':
             self.write_code('eq')
-        elif command == 'GT':
+        elif command == 'gt':
             self.write_code('gt')
-        elif command == 'LT':
+        elif command == 'lt':
             self.write_code('lt')
-        elif command == 'AND':
+        elif command == 'and':
             self.write_code('and')
-        elif command == 'OR':
+        elif command == 'or':
             self.write_code('or')
-        elif command == 'NOT':
+        elif command == 'not':
             self.write_code('not')
         else:
             raise Exception('unknown command %s' % command)
 
-    cdef write_label(self, label):
+    cpdef write_label(self, label):
         self.write_code('label %s' % label)
 
-    cdef write_goto(self, label):
+    cpdef write_goto(self, label):
         self.write_code('goto %s' % label)
 
-    cdef write_if(self, label):
+    cpdef write_if(self, label):
         self.write_code('if-goto %s' % label)
 
-    cdef write_call(self, name, n_args):
+    cpdef write_call(self, name, n_args):
         self.write_code('call %s %d' % (name, int(n_args)))
 
     cpdef write_function(self, name, n_locals):
         self.write_code('function %s %d' % (name, int(n_locals)))
 
-    cdef write_return(self):
+    cpdef write_return(self):
         self.write_code('return')
 
-    cdef _get_segment_str(self, segment):
-        if segment == 'CONST':
+    cpdef _get_segment_str(self, segment):
+        if segment == 'CONST' or segment == 'constant':
             return 'constant'
-        elif segment == 'ARG':
+        elif segment == 'ARG' or segment == 'argument':
             return 'argument'
-        elif segment == 'LOCAL':
+        elif segment == 'LOCAL' or segment == 'local':
             return 'local'
-        elif segment == 'STATIC':
+        elif segment == 'STATIC' or segment == 'static':
             return 'static'
-        elif segment == 'THIS':
+        elif segment == 'THIS' or segment == 'this':
             return 'this'
-        elif segment == 'THAT':
+        elif segment == 'THAT' or segment == 'that':
             return 'that'
-        elif segment == 'POINTER':
+        elif segment == 'POINTER' or segment == 'pointer':
             return 'pointer'
-        elif segment == 'TEMP':
+        elif segment == 'TEMP' or segment == 'temp':
             return 'temp'
         else:
             raise Exception('unknown segment %s' % segment)
