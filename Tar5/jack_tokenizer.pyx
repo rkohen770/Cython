@@ -84,6 +84,12 @@ cdef class JackTokenizer:
         cdef str line = self.readfile.readline()
         if line:
             self.remained_line = line.split("//")[0].strip()
+            if self.remained_line == '/*' or self.remained_line == '/**':
+                while 1:
+                    line = self.readfile.readline()
+                    if line.find('*/') > -1:
+                        self.remained_line = line[line.find('*/') + 2:].strip()
+                        break
         else:
             self.remained_line = None
         return self.remained_line
@@ -102,11 +108,12 @@ cdef class JackTokenizer:
                 return self._pop_token_from_remained_line()
 
     cdef _pop_token_from_remained_line(self):
-        self.remained_line = self.remained_line.lstrip()
+        self.remained_line = self.remained_line.lstrip()  
         for i in range(1, len(self.remained_line) + 1):
             t_0 = self.judge_token(self.remained_line[0:i])
             # it has a comment
             if t_0 == '/*':
+                print("t_0 is:", t_0)
                 while 1:
                     end_i= self.remained_line.find('*/')
                     if end_i > -1:

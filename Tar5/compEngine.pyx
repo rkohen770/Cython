@@ -162,7 +162,7 @@ cdef class CompilationEngine():
     cdef compile_parameter_list(self):
         self.write_element_start('parameterList')
 
-        if self.tokenizer.see_next() in ['int', 'char', 'boolean'] or self.tokenizer.get_string_pattern().match(self.tokenizer.see_next()):
+        if self.tokenizer.see_next() in ['int', 'char', 'boolean'] or self.tokenizer.get_identifier_pattern().match(self.tokenizer.see_next()):
             type = self.compile_type()
             self.compile_var_name(declaration=True, type=type, kind='ARG')
 
@@ -179,6 +179,7 @@ cdef class CompilationEngine():
 
         self.compile_symbol('{')
         cdef int local_num = 0
+        cdef int var_num = 0
         while self.next_is('var'):
             var_num = self.compile_var_dec()
             local_num += var_num
@@ -205,7 +206,11 @@ cdef class CompilationEngine():
         print("=====================================")
 
         for key in self.symbol_table.get_arg_table():
-            print (self.symbol_table.get_arg_table()[key].type,key,"kind:",self.symbol_table.get_arg_table()[key].kind,"index:",self.symbol_table.get_arg_table()[key].index)
+            print (self.symbol_table.get_arg_table()[key].get_type(),key,"kind:",self.symbol_table.get_arg_table()[key].get_kind(),"index:",self.symbol_table.get_arg_table()[key].get_index())
+        for key in self.symbol_table.get_var_table():
+            print (self.symbol_table.get_var_table()[key].get_type(),key,"kind:",self.symbol_table.get_var_table()[key].get_kind(),"index:",self.symbol_table.get_var_table()[key].get_index())
+        print("=====================================")
+
 
         return local_num
 
@@ -260,7 +265,6 @@ cdef class CompilationEngine():
                 self.compile_symbol(';')
 
                 kind = self.symbol_table.kind_of(let_var)
-                print("kind:",kind)
                 if kind == 'ARG':
                     self.vmw.write_pop('argument', self.symbol_table.index_of(let_var))
                 elif kind == 'VAR':
@@ -361,7 +365,6 @@ cdef class CompilationEngine():
         else:
             identifier_str = self.tokenizer.see_next()
             if self.symbol_table.kind_of(identifier_str) != None:
-                print(self.tokenizer.see_next(), 350)
                 instance_name = self.compile_var_name(declaration=False, type=None, kind=None, let=False, call=True)
                 self.compile_symbol('.')
                 subroutinename = self.compile_subroutine_name()
@@ -496,7 +499,6 @@ cdef class CompilationEngine():
 
     cdef next_type_is(self):
         next_token = str(self.tokenizer.see_next())
-        print(next_token, 499)
         if next_token in self.SYMBOLS:
             return "symbol"
         elif next_token in self.KEYWORDS:
@@ -537,7 +539,6 @@ cdef class CompilationEngine():
 
     cdef compile_symbol(self, symbol):
         self.tokenizer.advance()
-        print(self.tokenizer.get_current_token(),symbol, 531)
         if type(symbol) == list:
             if self.tokenizer.get_current_token() in symbol:
                 self.write_element('symbol', self.tokenizer.get_current_token())
@@ -564,12 +565,10 @@ cdef class CompilationEngine():
                 self.write_element('keyword', self.tokenizer.get_current_token())
                 return self.tokenizer.get_current_token()
             else:
-                print(self.tokenizer.get_current_token())
                 self.raise_syntax_error('Unexpected token')
 
     cdef compile_identifier(self):
         self.tokenizer.advance()
-        print(self.tokenizer.get_current_token(),537)
         if self.tokenizer.get_identifier_pattern().match(self.tokenizer.get_current_token()):
             identifier_str = self.tokenizer.get_current_token()
             self.write_element(
@@ -611,5 +610,6 @@ cdef class CompilationEngine():
         self.wf.write('</%s>\n' % element)
 
     cdef raise_syntax_error(self, message):
+        print(self.tokenizer.get_current_token())
         raise Exception('Syntax error: %s' % message)
         

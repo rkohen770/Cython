@@ -29,7 +29,6 @@ cdef class VmWriter():
         self.write_code('\n'.join(codes))
 
     cpdef write_push(self, segment, index):
-        print('push', segment, index)
         self.write_code('push %s %d' % (self._get_segment_str(segment), int(index)))
 
     cpdef write_pop(self, segment, index):
