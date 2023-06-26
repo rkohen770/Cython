@@ -32,6 +32,7 @@ push constant 4
 push temp 2
 pop pointer 1
 pop that 0
+push local 0
 push constant 3
 add
 pop pointer 1
@@ -39,6 +40,7 @@ push that 0
 push local 1
 add
 pop temp 2
+push local 0
 push constant 3
 add
 pop pointer 1
@@ -48,6 +50,8 @@ add
 push temp 2
 pop pointer 1
 pop that 0
+push local 1
+push local 0
 push constant 3
 add
 pop pointer 1
@@ -58,6 +62,8 @@ push that 0
 push local 0
 add
 pop temp 2
+push local 0
+push local 0
 push constant 5
 add
 pop pointer 1
@@ -65,7 +71,9 @@ push that 0
 add
 pop pointer 1
 push that 0
+push local 1
 push constant 7
+push local 0
 push constant 3
 add
 pop pointer 1
@@ -91,6 +99,7 @@ push constant 0
 push temp 2
 pop pointer 1
 pop that 0
+push local 2
 push constant 0
 add
 pop pointer 1
@@ -190,6 +199,7 @@ push constant 34
 call String.appendChar 2
 call Output.printString 1
 pop temp 0
+push local 1
 push constant 2
 add
 pop pointer 1
@@ -294,6 +304,7 @@ push constant 34
 call String.appendChar 2
 call Output.printString 1
 pop temp 0
+push local 0
 push constant 5
 add
 pop pointer 1
@@ -396,19 +407,23 @@ push constant 34
 call String.appendChar 2
 call Output.printString 1
 pop temp 0
+push local 2
 call Output.printInt 1
 pop temp 0
 call Output.println 0
 pop temp 0
 push constant 0
 pop local 2
+push local 2
 push constant 0
 eq
 not
 if-goto LABEL_1
+push local 0
 push constant 10
 call Main.fill 2
 pop temp 0
+push local 0
 push constant 3
 add
 pop pointer 1
@@ -422,6 +437,7 @@ push constant 33
 push temp 2
 pop pointer 1
 pop that 0
+push local 0
 push constant 7
 add
 pop pointer 1
@@ -435,6 +451,7 @@ push constant 77
 push temp 2
 pop pointer 1
 pop that 0
+push local 0
 push constant 3
 add
 pop pointer 1
@@ -444,10 +461,12 @@ push constant 1
 push local 1
 add
 pop temp 2
+push local 1
 push constant 1
 add
 pop pointer 1
 push that 0
+push local 2
 push constant 1
 add
 pop pointer 1
@@ -555,6 +574,7 @@ push constant 34
 call String.appendChar 2
 call Output.printString 1
 pop temp 0
+push local 2
 push constant 1
 add
 pop pointer 1
@@ -661,6 +681,7 @@ push constant 34
 call String.appendChar 2
 call Output.printString 1
 pop temp 0
+push local 1
 push constant 1
 add
 pop pointer 1
@@ -672,17 +693,21 @@ pop temp 0
 push constant 0
 return
 function Main.double 0
+push argument 0
 push constant 2
 call Math.multiply 2
 return
 function Main.fill 0
 label LABEL_3
+push argument 1
 push constant 0
 not
 if-goto LABEL_4
+push argument 1
 push constant 1
 sub
 pop argument 1
+push argument 1
 push argument 0
 add
 pop temp 2

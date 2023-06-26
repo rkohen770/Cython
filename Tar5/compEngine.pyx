@@ -21,7 +21,7 @@ cdef class CompilationEngine():
     
     # Constructor
     def __cinit__(self, filepath, vm_writer):
-        self.wf = open(filepath[:-5] + ".myImpl.xml", 'w')
+        self.wf = open(filepath[:-5] + ".xml", 'w')
         self.tokenizer = JackTokenizer(filepath)
         self.symbol_table = SymbolTable()
         self.vmw = vm_writer
@@ -139,7 +139,7 @@ cdef class CompilationEngine():
         elif call:
             pass
         else:
-            kind = self.symbol_table.kind_of(self.tokenizer.see_next())
+            kind = self.symbol_table.kind_of(self.tokenizer.see_next()).lower()
             if kind == 'arg':
                 self.vmw.write_push('argument', self.symbol_table.index_of(self.tokenizer.see_next()))
             elif kind == 'var':
@@ -369,7 +369,8 @@ cdef class CompilationEngine():
                 self.compile_symbol('.')
                 subroutinename = self.compile_subroutine_name()
                 self.compile_symbol('(')
-                kind = self.symbol_table.kind_of(instance_name)
+                kind = self.symbol_table.kind_of(instance_name).lower()
+                print(kind,373)
                 if kind == 'arg':
                     self.vmw.write_push('argument', self.symbol_table.index_of(instance_name))
                 elif kind == 'var':

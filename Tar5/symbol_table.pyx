@@ -52,7 +52,9 @@ cdef class SymbolTable:
 
     # Define a new identifier of a given name, type, and kind and assign it a running index.
     cpdef define(self, name, identifier_type, kind):
+        kind = kind.upper()
         print('define', name, identifier_type, kind)
+
         if kind == 'STATIC':
             self.static_table[name] = Identifier(identifier_type, kind, len(self.static_table))
         elif kind == 'FIELD':
@@ -71,14 +73,16 @@ cdef class SymbolTable:
         self.arg_table = {}
         self.var_table = {}
 
-    cdef var_count(self, kind):
-        if kind == self.IdentifierKind.index('STATIC'):
+    cpdef var_count(self, kind):
+        kind = kind.upper()
+        print('var_count', kind)
+        if kind == 'STATIC':
             return len(self.static_table)
-        elif kind == self.IdentifierKind.index('FIELD'):
+        elif kind == 'FIELD':
             return len(self.field_table)
-        elif kind == self.IdentifierKind.index('ARG'):
+        elif kind == 'ARG':
             return len(self.arg_table)
-        elif kind == self.IdentifierKind.index('VAR'):
+        elif kind == 'VAR':
             return len(self.var_table)
         else:
             raise Exception('Invalid kind')

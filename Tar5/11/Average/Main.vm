@@ -43,13 +43,17 @@ push constant 34
 call String.appendChar 2
 call Keyboard.readInt 1
 pop local 1
+push local 1
 call Array.new 1
 pop local 0
 push constant 0
 pop local 2
 label LABEL_1
+push local 2
+push local 1
 not
 if-goto LABEL_2
+push local 2
 push local 0
 add
 pop temp 2
@@ -95,11 +99,15 @@ call Keyboard.readInt 1
 push temp 2
 pop pointer 1
 pop that 0
+push local 3
+push local 0
+push local 2
 add
 pop pointer 1
 push that 0
 add
 pop local 3
+push local 2
 push constant 1
 add
 pop local 2
@@ -143,6 +151,8 @@ push constant 34
 call String.appendChar 2
 call Output.printString 1
 pop temp 0
+push local 3
+push local 1
 call Math.divide 2
 call Output.printInt 1
 pop temp 0

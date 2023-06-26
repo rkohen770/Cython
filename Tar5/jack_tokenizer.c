@@ -1622,6 +1622,7 @@ static const char __pyx_k_test[] = "__test__";
 static const char __pyx_k_this[] = "this";
 static const char __pyx_k_true[] = "true";
 static const char __pyx_k_void[] = "void";
+static const char __pyx_k_T_xml[] = "T.xml";
 static const char __pyx_k_class[] = "class";
 static const char __pyx_k_close[] = "close";
 static const char __pyx_k_enter[] = "__enter__";
@@ -1671,7 +1672,6 @@ static const char __pyx_k_identifier[] = "identifier";
 static const char __pyx_k_pyx_vtable[] = "__pyx_vtable__";
 static const char __pyx_k_constructor[] = "constructor";
 static const char __pyx_k_JackAnalyzer[] = "JackAnalyzer";
-static const char __pyx_k_T_myImpl_xml[] = "T.myImpl.xml";
 static const char __pyx_k_jackAnalyzer[] = "jackAnalyzer";
 static const char __pyx_k_JackTokenizer[] = "JackTokenizer";
 static const char __pyx_k_reduce_cython[] = "__reduce_cython__";
@@ -1703,7 +1703,7 @@ static PyObject *__pyx_n_s_KEYWORDS;
 static PyObject *__pyx_n_s_STRING_PATTERN;
 static PyObject *__pyx_n_s_SYMBOL;
 static PyObject *__pyx_n_s_SYMBOLS;
-static PyObject *__pyx_kp_s_T_myImpl_xml;
+static PyObject *__pyx_kp_s_T_xml;
 static PyObject *__pyx_n_s_TypeError;
 static PyObject *__pyx_kp_s_Unknown_token_exists;
 static PyObject *__pyx_n_s_VmWriter;
@@ -2542,7 +2542,7 @@ static int __pyx_pf_14jack_tokenizer_13JackTokenizer_8__cinit__(struct __pyx_obj
  * 
  *         self.readfile = open(filepath, 'r')             # <<<<<<<<<<<<<<
  * 
- *         with open(filepath[:-5] + "T.myImpl.xml", 'w') as writef:
+ *         with open(filepath[:-5] + "T.xml", 'w') as writef:
  */
   __pyx_t_1 = PyTuple_New(2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 47, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
@@ -2564,7 +2564,7 @@ static int __pyx_pf_14jack_tokenizer_13JackTokenizer_8__cinit__(struct __pyx_obj
   /* "jack_tokenizer.pyx":49
  *         self.readfile = open(filepath, 'r')
  * 
- *         with open(filepath[:-5] + "T.myImpl.xml", 'w') as writef:             # <<<<<<<<<<<<<<
+ *         with open(filepath[:-5] + "T.xml", 'w') as writef:             # <<<<<<<<<<<<<<
  *             writef.write("<tokens>\n")
  *             while 1:
  */
@@ -2575,7 +2575,7 @@ static int __pyx_pf_14jack_tokenizer_13JackTokenizer_8__cinit__(struct __pyx_obj
     }
     __pyx_t_2 = PySequence_GetSlice(__pyx_v_filepath, 0, -5L); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 49, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
-    __pyx_t_1 = PyNumber_Add(__pyx_t_2, __pyx_kp_s_T_myImpl_xml); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 49, __pyx_L1_error)
+    __pyx_t_1 = PyNumber_Add(__pyx_t_2, __pyx_kp_s_T_xml); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 49, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
     __pyx_t_2 = PyTuple_New(2); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 49, __pyx_L1_error)
@@ -2625,7 +2625,7 @@ static int __pyx_pf_14jack_tokenizer_13JackTokenizer_8__cinit__(struct __pyx_obj
 
           /* "jack_tokenizer.pyx":50
  * 
- *         with open(filepath[:-5] + "T.myImpl.xml", 'w') as writef:
+ *         with open(filepath[:-5] + "T.xml", 'w') as writef:
  *             writef.write("<tokens>\n")             # <<<<<<<<<<<<<<
  *             while 1:
  *                 token = self.parse_next_token()
@@ -2650,7 +2650,7 @@ static int __pyx_pf_14jack_tokenizer_13JackTokenizer_8__cinit__(struct __pyx_obj
           __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
 
           /* "jack_tokenizer.pyx":51
- *         with open(filepath[:-5] + "T.myImpl.xml", 'w') as writef:
+ *         with open(filepath[:-5] + "T.xml", 'w') as writef:
  *             writef.write("<tokens>\n")
  *             while 1:             # <<<<<<<<<<<<<<
  *                 token = self.parse_next_token()
@@ -3149,7 +3149,7 @@ static int __pyx_pf_14jack_tokenizer_13JackTokenizer_8__cinit__(struct __pyx_obj
           /* "jack_tokenizer.pyx":49
  *         self.readfile = open(filepath, 'r')
  * 
- *         with open(filepath[:-5] + "T.myImpl.xml", 'w') as writef:             # <<<<<<<<<<<<<<
+ *         with open(filepath[:-5] + "T.xml", 'w') as writef:             # <<<<<<<<<<<<<<
  *             writef.write("<tokens>\n")
  *             while 1:
  */
@@ -3366,7 +3366,7 @@ static PyObject *__pyx_f_14jack_tokenizer_13JackTokenizer__readline(struct __pyx
  *             self.remained_line = line.split("//")[0].strip()
  *             if self.remained_line[0:2] == '/[inserted by cython to avoid comment start]*':             # <<<<<<<<<<<<<<
  *                 while 1:
- *                     line = self.readfile.readline()
+ *                     if line.find('*[inserted by cython to avoid comment closer]/') > -1:
  */
     if (unlikely(__pyx_v_self->remained_line == Py_None)) {
       PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
@@ -3383,81 +3383,53 @@ static PyObject *__pyx_f_14jack_tokenizer_13JackTokenizer__readline(struct __pyx
  *             self.remained_line = line.split("//")[0].strip()
  *             if self.remained_line[0:2] == '/[inserted by cython to avoid comment start]*':
  *                 while 1:             # <<<<<<<<<<<<<<
- *                     line = self.readfile.readline()
  *                     if line.find('*[inserted by cython to avoid comment closer]/') > -1:
+ *                         self.remained_line = line[line.find('*[inserted by cython to avoid comment closer]/') + 2:].strip()
  */
       while (1) {
 
         /* "jack_tokenizer.pyx":89
  *             if self.remained_line[0:2] == '/[inserted by cython to avoid comment start]*':
  *                 while 1:
- *                     line = self.readfile.readline()             # <<<<<<<<<<<<<<
- *                     if line.find('*[inserted by cython to avoid comment closer]/') > -1:
- *                         self.remained_line = line[line.find('*[inserted by cython to avoid comment closer]/') + 2:].strip()
- */
-        __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->readfile, __pyx_n_s_readline); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 89, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_2);
-        __pyx_t_3 = NULL;
-        if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
-          __pyx_t_3 = PyMethod_GET_SELF(__pyx_t_2);
-          if (likely(__pyx_t_3)) {
-            PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
-            __Pyx_INCREF(__pyx_t_3);
-            __Pyx_INCREF(function);
-            __Pyx_DECREF_SET(__pyx_t_2, function);
-          }
-        }
-        __pyx_t_1 = (__pyx_t_3) ? __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_3) : __Pyx_PyObject_CallNoArg(__pyx_t_2);
-        __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
-        if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 89, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_1);
-        __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-        if (!(likely(PyString_CheckExact(__pyx_t_1))||((__pyx_t_1) == Py_None)||((void)PyErr_Format(PyExc_TypeError, "Expected %.16s, got %.200s", "str", Py_TYPE(__pyx_t_1)->tp_name), 0))) __PYX_ERR(0, 89, __pyx_L1_error)
-        __Pyx_DECREF_SET(__pyx_v_line, ((PyObject*)__pyx_t_1));
-        __pyx_t_1 = 0;
-
-        /* "jack_tokenizer.pyx":90
- *                 while 1:
- *                     line = self.readfile.readline()
  *                     if line.find('*[inserted by cython to avoid comment closer]/') > -1:             # <<<<<<<<<<<<<<
  *                         self.remained_line = line[line.find('*[inserted by cython to avoid comment closer]/') + 2:].strip()
  *                         break
  */
-        __pyx_t_1 = __Pyx_CallUnboundCMethod1(&__pyx_umethod_PyString_Type_find, __pyx_v_line, __pyx_kp_s__8); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 90, __pyx_L1_error)
+        __pyx_t_1 = __Pyx_CallUnboundCMethod1(&__pyx_umethod_PyString_Type_find, __pyx_v_line, __pyx_kp_s__8); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 89, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_1);
-        __pyx_t_2 = PyObject_RichCompare(__pyx_t_1, __pyx_int_neg_1, Py_GT); __Pyx_XGOTREF(__pyx_t_2); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 90, __pyx_L1_error)
+        __pyx_t_2 = PyObject_RichCompare(__pyx_t_1, __pyx_int_neg_1, Py_GT); __Pyx_XGOTREF(__pyx_t_2); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 89, __pyx_L1_error)
         __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-        __pyx_t_5 = __Pyx_PyObject_IsTrue(__pyx_t_2); if (unlikely(__pyx_t_5 < 0)) __PYX_ERR(0, 90, __pyx_L1_error)
+        __pyx_t_5 = __Pyx_PyObject_IsTrue(__pyx_t_2); if (unlikely(__pyx_t_5 < 0)) __PYX_ERR(0, 89, __pyx_L1_error)
         __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
         if (__pyx_t_5) {
 
-          /* "jack_tokenizer.pyx":91
- *                     line = self.readfile.readline()
+          /* "jack_tokenizer.pyx":90
+ *                 while 1:
  *                     if line.find('*[inserted by cython to avoid comment closer]/') > -1:
  *                         self.remained_line = line[line.find('*[inserted by cython to avoid comment closer]/') + 2:].strip()             # <<<<<<<<<<<<<<
  *                         break
- *         else:
+ *                     line = self.readfile.readline()
  */
           if (unlikely(__pyx_v_line == Py_None)) {
             PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
-            __PYX_ERR(0, 91, __pyx_L1_error)
+            __PYX_ERR(0, 90, __pyx_L1_error)
           }
-          __pyx_t_1 = __Pyx_CallUnboundCMethod1(&__pyx_umethod_PyString_Type_find, __pyx_v_line, __pyx_kp_s__8); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 91, __pyx_L1_error)
+          __pyx_t_1 = __Pyx_CallUnboundCMethod1(&__pyx_umethod_PyString_Type_find, __pyx_v_line, __pyx_kp_s__8); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 90, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_1);
-          __pyx_t_3 = __Pyx_PyInt_AddObjC(__pyx_t_1, __pyx_int_2, 2, 0, 0); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 91, __pyx_L1_error)
+          __pyx_t_3 = __Pyx_PyInt_AddObjC(__pyx_t_1, __pyx_int_2, 2, 0, 0); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 90, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_3);
           __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
           __pyx_t_5 = (__pyx_t_3 == Py_None);
           if (__pyx_t_5) {
             __pyx_t_6 = 0;
           } else {
-            __pyx_t_7 = __Pyx_PyIndex_AsSsize_t(__pyx_t_3); if (unlikely((__pyx_t_7 == (Py_ssize_t)-1) && PyErr_Occurred())) __PYX_ERR(0, 91, __pyx_L1_error)
+            __pyx_t_7 = __Pyx_PyIndex_AsSsize_t(__pyx_t_3); if (unlikely((__pyx_t_7 == (Py_ssize_t)-1) && PyErr_Occurred())) __PYX_ERR(0, 90, __pyx_L1_error)
             __pyx_t_6 = __pyx_t_7;
           }
           __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-          __pyx_t_3 = PySequence_GetSlice(__pyx_v_line, __pyx_t_6, PY_SSIZE_T_MAX); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 91, __pyx_L1_error)
+          __pyx_t_3 = PySequence_GetSlice(__pyx_v_line, __pyx_t_6, PY_SSIZE_T_MAX); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 90, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_3);
-          __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_strip); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 91, __pyx_L1_error)
+          __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_strip); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 90, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_1);
           __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
           __pyx_t_3 = NULL;
@@ -3472,33 +3444,61 @@ static PyObject *__pyx_f_14jack_tokenizer_13JackTokenizer__readline(struct __pyx
           }
           __pyx_t_2 = (__pyx_t_3) ? __Pyx_PyObject_CallOneArg(__pyx_t_1, __pyx_t_3) : __Pyx_PyObject_CallNoArg(__pyx_t_1);
           __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
-          if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 91, __pyx_L1_error)
+          if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 90, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_2);
           __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-          if (!(likely(PyString_CheckExact(__pyx_t_2))||((__pyx_t_2) == Py_None)||((void)PyErr_Format(PyExc_TypeError, "Expected %.16s, got %.200s", "str", Py_TYPE(__pyx_t_2)->tp_name), 0))) __PYX_ERR(0, 91, __pyx_L1_error)
+          if (!(likely(PyString_CheckExact(__pyx_t_2))||((__pyx_t_2) == Py_None)||((void)PyErr_Format(PyExc_TypeError, "Expected %.16s, got %.200s", "str", Py_TYPE(__pyx_t_2)->tp_name), 0))) __PYX_ERR(0, 90, __pyx_L1_error)
           __Pyx_GIVEREF(__pyx_t_2);
           __Pyx_GOTREF(__pyx_v_self->remained_line);
           __Pyx_DECREF(__pyx_v_self->remained_line);
           __pyx_v_self->remained_line = ((PyObject*)__pyx_t_2);
           __pyx_t_2 = 0;
 
-          /* "jack_tokenizer.pyx":92
+          /* "jack_tokenizer.pyx":91
  *                     if line.find('*[inserted by cython to avoid comment closer]/') > -1:
  *                         self.remained_line = line[line.find('*[inserted by cython to avoid comment closer]/') + 2:].strip()
  *                         break             # <<<<<<<<<<<<<<
+ *                     line = self.readfile.readline()
  *         else:
- *             self.remained_line = None
  */
           goto __pyx_L6_break;
 
-          /* "jack_tokenizer.pyx":90
+          /* "jack_tokenizer.pyx":89
+ *             if self.remained_line[0:2] == '/[inserted by cython to avoid comment start]*':
  *                 while 1:
- *                     line = self.readfile.readline()
  *                     if line.find('*[inserted by cython to avoid comment closer]/') > -1:             # <<<<<<<<<<<<<<
  *                         self.remained_line = line[line.find('*[inserted by cython to avoid comment closer]/') + 2:].strip()
  *                         break
  */
         }
+
+        /* "jack_tokenizer.pyx":92
+ *                         self.remained_line = line[line.find('*[inserted by cython to avoid comment closer]/') + 2:].strip()
+ *                         break
+ *                     line = self.readfile.readline()             # <<<<<<<<<<<<<<
+ *         else:
+ *             self.remained_line = None
+ */
+        __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->readfile, __pyx_n_s_readline); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 92, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_1);
+        __pyx_t_3 = NULL;
+        if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_1))) {
+          __pyx_t_3 = PyMethod_GET_SELF(__pyx_t_1);
+          if (likely(__pyx_t_3)) {
+            PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_1);
+            __Pyx_INCREF(__pyx_t_3);
+            __Pyx_INCREF(function);
+            __Pyx_DECREF_SET(__pyx_t_1, function);
+          }
+        }
+        __pyx_t_2 = (__pyx_t_3) ? __Pyx_PyObject_CallOneArg(__pyx_t_1, __pyx_t_3) : __Pyx_PyObject_CallNoArg(__pyx_t_1);
+        __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
+        if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 92, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_2);
+        __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+        if (!(likely(PyString_CheckExact(__pyx_t_2))||((__pyx_t_2) == Py_None)||((void)PyErr_Format(PyExc_TypeError, "Expected %.16s, got %.200s", "str", Py_TYPE(__pyx_t_2)->tp_name), 0))) __PYX_ERR(0, 92, __pyx_L1_error)
+        __Pyx_DECREF_SET(__pyx_v_line, ((PyObject*)__pyx_t_2));
+        __pyx_t_2 = 0;
       }
       __pyx_L6_break:;
 
@@ -3507,7 +3507,7 @@ static PyObject *__pyx_f_14jack_tokenizer_13JackTokenizer__readline(struct __pyx
  *             self.remained_line = line.split("//")[0].strip()
  *             if self.remained_line[0:2] == '/[inserted by cython to avoid comment start]*':             # <<<<<<<<<<<<<<
  *                 while 1:
- *                     line = self.readfile.readline()
+ *                     if line.find('*[inserted by cython to avoid comment closer]/') > -1:
  */
     }
 
@@ -3522,7 +3522,7 @@ static PyObject *__pyx_f_14jack_tokenizer_13JackTokenizer__readline(struct __pyx
   }
 
   /* "jack_tokenizer.pyx":94
- *                         break
+ *                     line = self.readfile.readline()
  *         else:
  *             self.remained_line = None             # <<<<<<<<<<<<<<
  *         return self.remained_line
@@ -5799,7 +5799,7 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_STRING_PATTERN, __pyx_k_STRING_PATTERN, sizeof(__pyx_k_STRING_PATTERN), 0, 0, 1, 1},
   {&__pyx_n_s_SYMBOL, __pyx_k_SYMBOL, sizeof(__pyx_k_SYMBOL), 0, 0, 1, 1},
   {&__pyx_n_s_SYMBOLS, __pyx_k_SYMBOLS, sizeof(__pyx_k_SYMBOLS), 0, 0, 1, 1},
-  {&__pyx_kp_s_T_myImpl_xml, __pyx_k_T_myImpl_xml, sizeof(__pyx_k_T_myImpl_xml), 0, 0, 1, 0},
+  {&__pyx_kp_s_T_xml, __pyx_k_T_xml, sizeof(__pyx_k_T_xml), 0, 0, 1, 0},
   {&__pyx_n_s_TypeError, __pyx_k_TypeError, sizeof(__pyx_k_TypeError), 0, 0, 1, 1},
   {&__pyx_kp_s_Unknown_token_exists, __pyx_k_Unknown_token_exists, sizeof(__pyx_k_Unknown_token_exists), 0, 0, 1, 0},
   {&__pyx_n_s_VmWriter, __pyx_k_VmWriter, sizeof(__pyx_k_VmWriter), 0, 0, 1, 1},
@@ -5925,7 +5925,7 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
   /* "jack_tokenizer.pyx":49
  *         self.readfile = open(filepath, 'r')
  * 
- *         with open(filepath[:-5] + "T.myImpl.xml", 'w') as writef:             # <<<<<<<<<<<<<<
+ *         with open(filepath[:-5] + "T.xml", 'w') as writef:             # <<<<<<<<<<<<<<
  *             writef.write("<tokens>\n")
  *             while 1:
  */

@@ -46,7 +46,7 @@ cdef class JackTokenizer:
 
         self.readfile = open(filepath, 'r')
 
-        with open(filepath[:-5] + "T.myImpl.xml", 'w') as writef:
+        with open(filepath[:-5] + "T.xml", 'w') as writef:
             writef.write("<tokens>\n")
             while 1:
                 token = self.parse_next_token()
@@ -86,10 +86,10 @@ cdef class JackTokenizer:
             self.remained_line = line.split("//")[0].strip()
             if self.remained_line[0:2] == '/*':
                 while 1:
-                    line = self.readfile.readline()
                     if line.find('*/') > -1:
                         self.remained_line = line[line.find('*/') + 2:].strip()
                         break
+                    line = self.readfile.readline()
         else:
             self.remained_line = None
         return self.remained_line
